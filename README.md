@@ -1,12 +1,12 @@
 # Procurement Intelligence Lab
 
-An interview portfolio artifact for designing trustworthy knowledge and automation systems around construction procurement.
+An artifact for designing trustworthy knowledge and automation systems around construction procurement.
 
-This repository demonstrates how a small team could turn messy BOMs, vendor documents, and project schedules into explainable procurement signals. It is intentionally generic and synthetic: it does not contain employer-confidential information, production credentials, or claims of operational deployment.
+This repository demonstrates how a small team could turn messy BOMs, vendor documents, and project schedules into explainable procurement signals.
 
 ## Why this problem
 
-Procurement risk is rarely hidden in one database. It emerges when a requested item, a vendor commitment, a delivery event, and a project milestone disagree. The core design challenge is therefore not “add a chatbot”; it is building a durable evidence layer that connects documents, canonical entities, expected state, observed state, and decisions.
+Procurement risk is rarely hidden in one database. It emerges when a requested item, a vendor commitment, a delivery event, and a project milestone disagree. The core design challenge is therefore to build a durable evidence layer that connects documents, canonical entities, expected state, observed state, and decisions.
 
 ## What is included
 
@@ -49,11 +49,11 @@ flowchart LR
 
 ## Scope and non-claims
 
-This is a design and implementation sample, not a production system. It does not claim live access to vendors, data centers, construction systems, proprietary APIs, fleet-scale performance, or production forecasting accuracy. The “vector” and “graph” concepts are represented by interfaces and lightweight local scoring so the design can be run without infrastructure.
+This is a design and implementation sample. The “vector” and “graph” concepts are represented by interfaces and lightweight local scoring so the design can be run without infrastructure.
 
-## Portfolio narrative
+## Purpose
 
-The Principal/L7 signal is problem framing plus leverage: define a reusable evidence model, make uncertainty visible, identify the seams between teams and systems, and still implement a thin vertical slice that can be evaluated. The prototype intentionally favors transparent seams over premature platform complexity.
+Define a reusable evidence model, make uncertainty visible, identify the seams between teams and systems, and still implement a thin vertical slice that can be evaluated. The prototype intentionally favors transparent seams over premature platform complexity.
 
 ## Repository map
 
@@ -70,4 +70,4 @@ The Principal/L7 signal is problem framing plus leverage: define a reusable evid
 
 ## License
 
-MIT. Synthetic examples only.
+MIT.
