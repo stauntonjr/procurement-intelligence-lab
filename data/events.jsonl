@@ -1,0 +1,2 @@
+{"event_id":"evt-1","commitment_id":"cmt-1001","event_type":"vendor_update","observed_date":"2026-09-25","status":"delayed","source_id":"doc-vector-update-09"}
+{"event_id":"evt-2","commitment_id":"cmt-1002","event_type":"warehouse_receipt","observed_date":"2026-09-08","status":"received","source_id":"wms-receipt-22"}

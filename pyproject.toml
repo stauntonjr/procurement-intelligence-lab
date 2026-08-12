@@ -1,0 +1,5 @@
+[project]
+name = "procurement-intelligence-lab"
+version = "0.1.0"
+description = "Synthetic, evidence-first procurement intelligence portfolio prototype"
+requires-python = ">=3.10"
