@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,7 +15,9 @@ def normalize(text: str) -> str:
     return " ".join(text.lower().replace("-", " ").split())
 
 
-def resolve(query: str, records: list[dict], field: str = "description") -> list[tuple[float, dict]]:
+def resolve(
+    query: str, records: list[dict], field: str = "description"
+) -> list[tuple[float, dict]]:
     q = set(normalize(query).split())
     scored = []
     for record in records:
@@ -34,7 +35,15 @@ def anomalies(commitments: list[dict], events: list[dict]) -> list[dict]:
     for c in commitments:
         e = by_commitment.get(c["commitment_id"])
         if e and e["observed_date"] > c["promised_date"]:
-            results.append({"commitment_id": c["commitment_id"], "kind": "late_delivery", "expected": c["promised_date"], "observed": e["observed_date"], "evidence": [c["source_id"], e["source_id"]]})
+            results.append(
+                {
+                    "commitment_id": c["commitment_id"],
+                    "kind": "late_delivery",
+                    "expected": c["promised_date"],
+                    "observed": e["observed_date"],
+                    "evidence": [c["source_id"], e["source_id"]],
+                }
+            )
     return results
 
 
@@ -47,7 +56,9 @@ def main() -> None:
     print("Resolved:", resolve("24C OS2 fiber trunk", items)[0])
     print("Vendor match:", resolve("Vector Cable", vendors, "name")[0])
     print("Anomalies:", json.dumps(anomalies(commitments, events), indent=2))
-    print("Action proposal: notify project analyst (approval required; no external write performed).")
+    print(
+        "Action proposal: notify project analyst (approval required; no external write performed)."
+    )
 
 
 if __name__ == "__main__":
