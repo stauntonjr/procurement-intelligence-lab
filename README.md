@@ -1,73 +1,29 @@
 # Procurement Intelligence Lab
 
-An artifact for designing trustworthy knowledge and automation systems around construction procurement.
+Procurement Intelligence Lab is a public, synthetic-data reference architecture for trustworthy BOM and procurement intelligence. It turns semi-structured documents into provenance-preserving knowledge, keeps source assertions distinct from truth, reconciles them into operational state, and exposes deterministic and AI-assisted investigation tools.
 
-This repository demonstrates how a small team could turn messy BOMs, vendor documents, and project schedules into explainable procurement signals.
+## Showcase
 
-## Why this problem
+The intended showcase is a chat interface paired with an evidence inspector and source viewer. A material answer claim can be opened from calculation, through operational state, reconciliation, canonical entities, resolution decisions, source assertions, mapped fields, document structure, and the original synthetic document. Epistemic status and correction/review actions remain visible.
 
-Procurement risk is rarely hidden in one database. It emerges when a requested item, a vendor commitment, a delivery event, and a project milestone disagree. The core design challenge is therefore to build a durable evidence layer that connects documents, canonical entities, expected state, observed state, and decisions.
+## Architecture
 
-## What is included
+Artifacts flow through `StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence`. Postgres is the canonical store; search, vector, and graph systems are projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
 
-- Canonical entity model for projects, items, vendors, documents, commitments, events, and schedule milestones.
-- Synthetic BOM/vendor/schedule data with source references and conflicting observations.
-- A lightweight Python prototype for normalization, deterministic entity resolution, hybrid-style retrieval, and expected-vs-observed anomaly detection.
-- Architecture and tradeoff documentation with Mermaid diagrams.
-- Agent workflow design with authorization, human approval, idempotency, and audit requirements.
-- ADRs, evaluation plan, security/guardrail notes, and a staged roadmap.
+## Status
 
-## Quick start
+M0 is the engineering and architecture harness. Product behavior is intentionally not implemented. The first tiny implementation target is one synthetic XLSX BOM parsed into intermediate/domain structures and displayed or persisted through a CLI.
+
+## Local entry points
 
 ```bash
-python3 -m procurement_lab
+uv sync --all-groups
+make check
+make eval
+make demo
 ```
 
-Expected output includes resolved item/vendor entities, an explainable delivery anomaly, a ranked retrieval result, and an approval-gated action proposal.
+## Public-data disclaimer
 
-No third-party dependencies are required. The prototype uses only the Python standard library and JSON Lines fixtures.
+This repository contains no confidential, proprietary, export-controlled, or operational procurement data. Examples and future fixtures must be synthetic or demonstrably public. This is an architectural lab, not a production procurement or decision authority.
 
-## Architecture at a glance
-
-```mermaid
-flowchart LR
-  A[Documents and operational feeds] --> B[Ingestion + provenance]
-  B --> C[Canonical entities]
-  C --> D[Entity resolution]
-  C --> E[Expected / observed state]
-  C --> F[Search indexes]
-  F --> G[Hybrid retrieval]
-  E --> H[Risk and anomaly signals]
-  G --> I[Analyst or agent workflow]
-  H --> I
-  I --> J{Approval policy}
-  J -->|approved| K[Idempotent action]
-  J -->|review| L[Human queue]
-  K --> M[Audit ledger]
-  L --> M
-```
-
-## Scope and non-claims
-
-This is a design and implementation sample. The “vector” and “graph” concepts are represented by interfaces and lightweight local scoring so the design can be run without infrastructure.
-
-## Purpose
-
-Define a reusable evidence model, make uncertainty visible, identify the seams between teams and systems, and still implement a thin vertical slice that can be evaluated. The prototype intentionally favors transparent seams over premature platform complexity.
-
-## Repository map
-
-| Path | Purpose |
-|---|---|
-| `docs/architecture.md` | System boundaries, data flow, and tradeoffs |
-| `docs/agent-workflows.md` | Authenticated, approval-gated automation |
-| `docs/evaluation.md` | Quality, latency, safety, and usefulness measures |
-| `docs/security.md` | Threat model and guardrails |
-| `docs/adr/` | Architecture decision records |
-| `data/` | Synthetic JSONL fixtures |
-| `procurement_lab/` | Runnable standard-library prototype |
-| `ROADMAP.md` | Sequenced path from demo to production-ready discovery |
-
-## License
-
-MIT.
