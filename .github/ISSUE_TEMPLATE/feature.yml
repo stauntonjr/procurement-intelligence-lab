@@ -1,5 +1,41 @@
 name: Executable specification
 description: Propose a bounded, evidence-backed change
+title: "[M0] "
+labels:
+  - "area:architecture"
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What outcome is required?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+  - type: textarea
+    id: interface
+    attributes:
+      label: Interface
+      description: Inputs, outputs, and boundaries
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Non-goals and Architectural Constraints
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence Required
+name: Executable specification
+description: Propose a bounded, evidence-backed change
 body:
   - type: textarea
     id: goal
