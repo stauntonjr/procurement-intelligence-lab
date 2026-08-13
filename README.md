@@ -10,6 +10,16 @@ The intended showcase is a chat interface paired with an evidence inspector and 
 
 Artifacts flow through `StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence`. Postgres is the canonical store; search, vector, and graph systems are projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
 
+## Use-case anchors
+
+The first synthetic showcase is organized around three procurement questions:
+
+- which distinct SKUs are required for the next data center;
+- how many GPUs are required, ordered, received, and outstanding;
+- what a proposed BOM would cost, with explicit prices, assumptions, and missing evidence.
+
+See [the use-case and query contracts](docs/product/use-cases.md) for their evidence, ambiguity, and evaluation requirements.
+
 ## Status
 
 M0 is the engineering and architecture harness. Product behavior is intentionally not implemented. The first tiny implementation target is one synthetic XLSX BOM parsed into intermediate/domain structures and displayed or persisted through a CLI.
@@ -26,4 +36,3 @@ make demo
 ## Public-data disclaimer
 
 This repository contains no confidential, proprietary, export-controlled, or operational procurement data. Examples and future fixtures must be synthetic or demonstrably public. This is an architectural lab, not a production procurement or decision authority.
-
