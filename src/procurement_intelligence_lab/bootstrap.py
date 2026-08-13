@@ -3,4 +3,4 @@
 
 def build_application() -> None:
     """Placeholder for explicit dependency-injection composition."""
-    return None
+    return
