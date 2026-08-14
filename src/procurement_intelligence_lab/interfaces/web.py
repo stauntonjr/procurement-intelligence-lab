@@ -32,6 +32,7 @@ const form=document.querySelector("form"),answer=document.querySelector("#answer
 form.addEventListener("submit",async event=>{event.preventDefault();const q=new URLSearchParams(new FormData(form));const response=await fetch("/api/ask?"+q);const data=await response.json();if(!response.ok){answer.textContent=data.error;return}answer.textContent=JSON.stringify(data,null,2);trace.innerHTML=data.execution_trace.nodes.map(n=>'<div class="stage"><b>'+n.label+'</b><small>'+n.status+'</small></div>').join("")});
 </script></main></body></html>"""
 
+
 def _fixture() -> Path:
     return Path(__file__).resolve().parents[3] / "examples" / "synthetic_bom.xlsx"
 
