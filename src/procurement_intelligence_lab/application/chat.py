@@ -6,6 +6,7 @@ from procurement_intelligence_lab.application.evidence_service import (
     inspect_bom_claims,
 )
 from procurement_intelligence_lab.domain.bom import Bom
+from procurement_intelligence_lab.domain.scope import RequestContext
 
 
 class UnsupportedQuestionError(ValueError):
@@ -13,7 +14,11 @@ class UnsupportedQuestionError(ValueError):
 
 
 def answer_question(
-    question: str, bom: Bom, canonical_candidates: tuple[str, ...]
+    question: str,
+    bom: Bom,
+    canonical_candidates: tuple[str, ...],
+    *,
+    request_context: RequestContext,
 ) -> EvidenceBackedClaim:
     normalized = " ".join(question.casefold().replace("-", " ").split())
     if "gpu" in normalized and any(token in normalized for token in ("how many", "quantity")):
@@ -26,5 +31,11 @@ def answer_question(
         raise UnsupportedQuestionError("no approved deterministic claim route for this question")
 
     return next(
-        claim for claim in inspect_bom_claims(bom, canonical_candidates) if claim.kind is kind
+        claim
+        for claim in inspect_bom_claims(
+            bom,
+            canonical_candidates,
+            request_context=request_context,
+        )
+        if claim.kind is kind
     )
