@@ -14,7 +14,7 @@ Artifacts flow through StructuredDocument → MappedDocument → normalized obse
 
 The initial evidence-first vertical slice is complete: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, a claims/evidence service, constrained chat routing, and a local HTTP inspector with source lookup and reproducible review context.
 
-M7 now includes the append-only assertion-ledger boundary, timezone-aware as-of reads, and the first evidence-backed anomaly taxonomy. Durable database storage, broader anomaly orchestration, temporal correction events, retrieval projections, and product-feedback persistence remain later slices.
+M7 now includes the append-only assertion-ledger boundary, timezone-aware as-of reads, the first evidence-backed anomaly taxonomy, and an injectable execution/decision provenance contract. The example execution manifest shows how resolved Compose/configuration values become immutable run and component identities. Durable database storage, broader anomaly orchestration, temporal correction events, retrieval projections, and product-feedback persistence remain later slices.
 
 The canonical delivery map is docs/development/milestone-map.md. Changes to architecture or delivery status must follow the synchronization policy in ADR-012.
 
