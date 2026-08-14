@@ -47,9 +47,7 @@ def claim_payload(question: str) -> dict[str, object]:
         "claim_id": claim.claim_id,
         "value": value,
         "status": claim.status,
-        "evidence": [
-            {**ref.__dict__, "evidence_id": ref.evidence_id} for ref in claim.evidence
-        ],
+        "evidence": [{**ref.__dict__, "evidence_id": ref.evidence_id} for ref in claim.evidence],
         "execution_trace": {
             "claim": claim.execution_trace.claim,
             "claim_id": claim.execution_trace.claim_id,
