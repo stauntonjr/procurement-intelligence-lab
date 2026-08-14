@@ -32,6 +32,10 @@ AI review is advisory. High-confidence findings should be resolved or explicitly
 
 Focus on correctness, maintainability, typed failure behavior, dependency direction, and whether the implementation satisfies the Issue/PR acceptance criteria. Avoid duplicating formatter/linter output.
 
+### Domain-logic reviewer
+
+For changes to domain calculations, reconciliation, state transitions, or policy logic, reviewers use [the domain-logic review procedure](../../.github/skills/domain-logic-review/SKILL.md). It applies a concrete scenario matrix—scope, time/as-of, duplicates, partial/stale/unknown inputs, quantity boundaries, and conflicting evidence—to find semantic defects and turn them into executable tests. This is a focused responsibility for the existing Copilot and Gemini reviewers, not an additional merge gate or generic bot.
+
 ### Architecture Guardian
 
 Architecture is partly deterministic and partly judgment-based.
