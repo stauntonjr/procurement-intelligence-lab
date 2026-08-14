@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import StrEnum
 
+from procurement_intelligence_lab.domain.identity import stable_id
+
 
 class EpistemicStatus(StrEnum):
     OBSERVED = "observed"
@@ -18,6 +20,17 @@ class EvidenceRef:
     sheet: str
     row: int
     cells: tuple[str, ...]
+
+    @property
+    def evidence_id(self) -> str:
+        return stable_id(
+            "evidence",
+            self.artifact_id,
+            self.content_hash,
+            self.sheet,
+            self.row,
+            self.cells,
+        )
 
 
 @dataclass(frozen=True)
