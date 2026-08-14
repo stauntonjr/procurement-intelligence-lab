@@ -23,8 +23,12 @@ def test_bom_pipeline_preserves_layers_and_excludes_unresolved_state() -> None:
         ResolutionStatus.RESOLVED,
         ResolutionStatus.UNRESOLVED,
     ]
+    assert {decision.provenance.component_name for decision in result.decisions} == {
+        "normalized-exact-resolver"
+    }
     assert result.reconciled_lines[0].canonical_key == "GPU-A"
     assert result.reconciled_lines[0].quantity == Decimal(4)
+    assert result.reconciled_lines[0].provenance.component_name == "deterministic-reconciliation"
     assert [node.kind for node in result.evidence.nodes] == [
         EvidenceNodeKind.SOURCE_ASSERTION,
         EvidenceNodeKind.RESOLUTION,
