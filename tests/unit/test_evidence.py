@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from procurement_intelligence_lab.domain.bom import EvidenceRef
 from procurement_intelligence_lab.domain.evidence import (
     EvidenceNodeKind,
@@ -9,7 +11,6 @@ from procurement_intelligence_lab.domain.resolution import (
     ResolutionStatus,
 )
 from procurement_intelligence_lab.domain.state import OperationalBomLine
-from decimal import Decimal
 
 
 def test_evidence_chain_is_ui_framework_independent() -> None:
