@@ -19,7 +19,7 @@ def _entries() -> tuple[AssertionLedgerEntry, ...]:
     ledger = InMemoryAssertionLedger()
     evidence = EvidenceRef("bom.xlsx", "hash", "BOM", 2, ("A", "B"))
     first = ledger.append(
-        SourceAssertion("GPU-A", AssertionPredicate.HAS_QUANTITY, Decimal("4"), evidence),
+        SourceAssertion("GPU-A", AssertionPredicate.HAS_QUANTITY, Decimal(4), evidence),
         observed_at=datetime(2026, 1, 1, tzinfo=UTC),
     )
     second = ledger.append(
@@ -79,10 +79,10 @@ def test_failed_or_deleted_projection_cannot_silently_serve_stale_results() -> N
 
 def test_projection_requires_explicit_lifecycle_inputs() -> None:
     with pytest.raises(ValueError, match="timezone-aware"):
-        ProjectionBuildRequest(  # noqa: DTZ001
+        ProjectionBuildRequest(
             "lexical-bom",
             ProjectionKind.LEXICAL,
             "1",
             "config-v1",
-            datetime(2026, 1, 3),
+            datetime(2026, 1, 3),  # noqa: DTZ001
         )
