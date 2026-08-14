@@ -4,17 +4,19 @@ Procurement Intelligence Lab is a public, synthetic-data reference architecture 
 
 ## Showcase
 
-The intended showcase is a chat interface paired with an evidence inspector and source viewer. A material answer claim can be opened from calculation, through operational state, reconciliation, canonical entities, resolution decisions, source assertions, mapped fields, document structure, and the original synthetic document. Epistemic status and correction/review actions remain visible.
+The showcase is a chat interface paired with an evidence inspector and source viewer. A material answer claim can be opened from calculation, through operational state, reconciliation, canonical entities, resolution decisions, source assertions, mapped fields, document structure, and the original synthetic document. Epistemic status and correction/review actions remain visible.
 
 ## Architecture
 
-Artifacts flow through `StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence`. Postgres is the canonical store; search, vector, and graph systems are projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
+Artifacts flow through `StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence`. Postgres is the intended canonical store; search, vector, and graph systems are replaceable projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
 
 ## Status
 
-M1 is implemented: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, and a framework-independent evidence chain.
+The initial vertical slice is complete: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, and a framework-independent evidence chain.
 
-The runnable demo parses a committed synthetic workbook and emits deterministic claims, reconciled operational state, and the evidence stages needed for drill-down. Production document structuring, persistence, review UI, and broader XLSX support remain later slices.
+The current implementation also includes the claims/evidence service and a constrained chat adapter. A dependency-free local HTTP chat/evidence inspector is in progress in [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82). Durable identifiers, persistence, review workflows, retrieval projections, and product-feedback capture remain planned.
+
+The canonical delivery map is [docs/development/milestone-map.md](docs/development/milestone-map.md). Changes to architecture or delivery status must follow the synchronization policy in [ADR-012](docs/adr/012-plan-and-milestone-synchronization.md).
 
 ## Local entry points
 
