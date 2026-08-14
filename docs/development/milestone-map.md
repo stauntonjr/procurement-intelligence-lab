@@ -9,8 +9,8 @@ This is the canonical map from the current implementation to the architecture. M
 | M2 | Evidence contract and golden tests | Complete | `tests/unit/test_evidence_contract.py` |
 | M3 | Claims/evidence application service | Complete | `application/evidence_service.py` |
 | M4 | Constrained deterministic chat routing | Complete | `application/chat.py` |
-| M5 | Local HTTP chat/evidence inspector | In progress | [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82) |
-| M6 | Durable identifiers, source viewer, and review context | Planned | Stable claim/assertion/mention/decision IDs |
+| M5 | Local HTTP chat/evidence inspector | Complete | [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82) |
+| M6 | Durable identifiers, source viewer, and review context | In progress | [Issue #85](https://github.com/stauntonjr/procurement-intelligence-lab/issues/85), ADR-013 |
 | M7 | Append-only persistence and temporal/as-of state | Planned | Ledger schema, migrations, rebuildable projections |
 | M8 | Retrieval projections and review UI | Planned | Labeled retrieval evaluation and review workflows |
 | M9 | Guarded actions, product signals, and integrated evaluation | Planned | Approval gates, sanitized feedback loop, release evidence |
@@ -31,6 +31,7 @@ The merged implementation sequence is:
 - M2: PR #79
 - M3: PR #80
 - M4: PR #81
-- M5: PR #82, pending merge
+- M5: PR #82
+- M6: Issue #85, implementation in progress
 
 This mapping is deliberately explicit so future agents do not infer milestone status from PR numbers or filenames.
