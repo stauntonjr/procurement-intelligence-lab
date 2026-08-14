@@ -8,4 +8,4 @@ check:
 eval:
 	@echo 'M0 evaluation harness is scaffolded; benchmark manifests are not yet populated.'
 demo:
-	@echo 'M0 demo: no product features yet. Next demo is the one-synthetic-XLSX BOM vertical slice.'
+	uv run python -m procurement_intelligence_lab

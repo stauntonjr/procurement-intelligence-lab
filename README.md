@@ -12,7 +12,9 @@ Artifacts flow through `StructuredDocument → MappedDocument → normalized obs
 
 ## Status
 
-M0 is the engineering and architecture harness. Product behavior is intentionally not implemented. The first tiny implementation target is one synthetic XLSX BOM parsed into intermediate/domain structures and displayed or persisted through a CLI.
+M1 is implemented: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, and a framework-independent evidence chain.
+
+The runnable demo parses a committed synthetic workbook and emits deterministic claims, reconciled operational state, and the evidence stages needed for drill-down. Production document structuring, persistence, review UI, and broader XLSX support remain later slices.
 
 ## Local entry points
 
@@ -23,7 +25,8 @@ make eval
 make demo
 ```
 
+`make demo` is equivalent to `uv run python -m procurement_intelligence_lab`. Pass `--help` to inspect its synthetic-BOM and canonical-candidate inputs.
+
 ## Public-data disclaimer
 
 This repository contains no confidential, proprietary, export-controlled, or operational procurement data. Examples and future fixtures must be synthetic or demonstrably public. This is an architectural lab, not a production procurement or decision authority.
-
