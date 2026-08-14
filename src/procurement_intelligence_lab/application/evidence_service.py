@@ -114,11 +114,11 @@ def _claim(
         status = "reconciled"
 
     if kind is ClaimKind.DISTINCT_SKUS:
-        value: object = None if unresolved else tuple(sorted(canonical_keys))
+        value: object = None if status != "reconciled" else tuple(sorted(canonical_keys))
     elif kind is ClaimKind.GPU_QUANTITY:
         value = (
             None
-            if unresolved
+            if status != "reconciled"
             else sum(
                 (line.quantity for line in relevant_reconciled),
                 Decimal(0),
@@ -130,7 +130,7 @@ def _claim(
             status = "unresolved"
         value = (
             None
-            if unresolved or conflicts or missing_price
+            if status != "reconciled"
             else sum(
                 (
                     line.quantity * line.unit_price

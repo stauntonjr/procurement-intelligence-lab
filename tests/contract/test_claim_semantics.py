@@ -81,3 +81,12 @@ def test_missing_price_makes_cost_value_and_trace_unresolved() -> None:
     assert claim.value is None
     assert claim.status == "unresolved"
     assert claim.execution_trace.nodes[-1].status == "unresolved"
+
+
+@pytest.mark.contract
+def test_empty_inputs_never_emit_authoritative_zero_or_empty_values() -> None:
+    claims = inspect_bom_claims(Bom("bom.xlsx", ()), (), request_context=_context())
+
+    assert all(claim.value is None for claim in claims)
+    assert all(claim.status == "unresolved" for claim in claims)
+    assert all(claim.execution_trace.nodes[-1].status == "unresolved" for claim in claims)

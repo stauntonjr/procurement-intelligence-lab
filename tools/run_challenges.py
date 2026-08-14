@@ -7,7 +7,7 @@ import json
 import shlex
 import subprocess
 from pathlib import Path
-from typing import TypedDict
+from typing import TypedDict, cast
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFESTS = ROOT / "evals" / "development_agents" / "challenges"
@@ -27,7 +27,10 @@ def load_challenges() -> tuple[Challenge, ...]:
     challenges: list[Challenge] = []
     seen: set[str] = set()
     for path in sorted(MANIFESTS.glob("C*.json")):
-        value = json.loads(path.read_text(encoding="utf-8"))
+        raw_value: object = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(raw_value, dict):
+            raise TypeError(f"{path.relative_to(ROOT)} must be a JSON object")
+        value = cast(dict[str, object], raw_value)
         required = {
             "id",
             "title",
@@ -40,14 +43,24 @@ def load_challenges() -> tuple[Challenge, ...]:
         missing = required - value.keys()
         if missing:
             raise ValueError(f"{path.relative_to(ROOT)} missing {sorted(missing)!r}")
-        if value["id"] in seen:
-            raise ValueError(f"duplicate challenge ID {value['id']!r}")
-        if path.stem != value["id"]:
-            raise ValueError(f"{path.name} does not match challenge ID {value['id']!r}")
-        if not isinstance(value["test_command"], list) or not value["test_command"]:
-            raise ValueError(f"{value['id']} requires a non-empty argv test_command")
-        seen.add(value["id"])
-        challenges.append(value)
+        for field in ("id", "title", "finding_commit", "oracle"):
+            if not isinstance(value[field], str) or not value[field]:
+                raise ValueError(f"{path.name} requires a non-empty string {field}")
+        for field in ("test_command", "surfaces", "prevention"):
+            entries = value[field]
+            if (
+                not isinstance(entries, list)
+                or not entries
+                or not all(isinstance(entry, str) and entry for entry in entries)
+            ):
+                raise ValueError(f"{value['id']} requires non-empty string entries in {field}")
+        challenge = cast(Challenge, value)
+        if challenge["id"] in seen:
+            raise ValueError(f"duplicate challenge ID {challenge['id']!r}")
+        if path.stem != challenge["id"]:
+            raise ValueError(f"{path.name} does not match challenge ID {challenge['id']!r}")
+        seen.add(challenge["id"])
+        challenges.append(challenge)
     expected = {f"C{number:03d}" for number in range(1, 9)}
     if seen != expected:
         raise ValueError(

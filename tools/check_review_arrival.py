@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import os
 import time
+from typing import cast
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 HTTP_TIMEOUT_SECONDS = 10
@@ -20,6 +22,7 @@ def main() -> int:
         headers={
             "Accept": "application/vnd.github+json",
             "Authorization": f"Bearer {token}",
+            "User-Agent": "procurement-intelligence-lab-review-arrival",
             "X-GitHub-Api-Version": "2022-11-28",
         },
     )
@@ -31,12 +34,26 @@ def main() -> int:
         "copilot-pull-request-reviewer[bot]",
     }
     while True:
-        with urlopen(request, timeout=HTTP_TIMEOUT_SECONDS) as response:
-            reviews = json.load(response)
+        try:
+            with urlopen(request, timeout=HTTP_TIMEOUT_SECONDS) as response:
+                raw_reviews: object = json.load(response)
+            if not isinstance(raw_reviews, list):
+                raise TypeError("GitHub reviews response must be a JSON array")
+            reviews = cast(list[object], raw_reviews)
+        except HTTPError as error:
+            if error.code < 500:
+                raise
+            reviews = []
+            print(f"transient GitHub API error {error.code}; retrying")
+        except (URLError, TimeoutError) as error:
+            reviews = []
+            print(f"transient GitHub API error {error}; retrying")
         matching = [
             review
             for review in reviews
-            if review.get("user", {}).get("login") in accepted
+            if isinstance(review, dict)
+            and isinstance(review.get("user"), dict)
+            and review["user"].get("login") in accepted
             and review.get("commit_id") == head_sha
         ]
         if matching:
