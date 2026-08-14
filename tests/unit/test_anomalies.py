@@ -95,6 +95,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         AnomalyStatus.OPEN,
         multi_evidence,
         "default-v1",
+        provenance,
         detected_at,
     )
     reordered = Anomaly(
@@ -106,6 +107,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         AnomalyStatus.OPEN,
         tuple(reversed(multi_evidence)),
         "default-v1",
+        provenance,
         detected_at,
     )
 
