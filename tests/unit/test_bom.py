@@ -30,9 +30,9 @@ def test_deterministic_queries_preserve_evidence():
         ),
     )
     assert distinct_skus(bom).value == ("CPU-A", "GPU-A")
-    assert gpu_quantity(bom).value == Decimal("4")
+    assert gpu_quantity(bom).value == Decimal(4)
     result = bom_cost(bom)
-    assert result.value == Decimal("500")
+    assert result.value == Decimal(500)
     assert result.status is EpistemicStatus.OBSERVED
     assert len(result.evidence) == 2
 

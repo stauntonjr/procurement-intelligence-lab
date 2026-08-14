@@ -15,6 +15,6 @@ def test_reads_synthetic_xlsx_with_cell_provenance(tmp_path):
         archive.writestr("xl/_rels/workbook.xml.rels", rels)
         archive.writestr("xl/worksheets/sheet1.xml", content)
     bom = read_bom(path)
-    assert gpu_quantity(bom).value == Decimal("4")
-    assert bom_cost(bom).value == Decimal("400")
+    assert gpu_quantity(bom).value == Decimal(4)
+    assert bom_cost(bom).value == Decimal(400)
     assert bom.lines[0].evidence.row == 2

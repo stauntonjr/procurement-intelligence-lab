@@ -3,10 +3,11 @@
 from decimal import Decimal
 from hashlib import sha256
 from pathlib import Path
-from zipfile import ZipFile
 from xml.etree import ElementTree as ET
+from zipfile import ZipFile
 
 from ..domain.bom import Bom, BomLine, EvidenceRef
+
 
 _NS = {
     "x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
