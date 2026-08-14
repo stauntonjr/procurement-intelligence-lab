@@ -77,9 +77,7 @@ def demo_payload(bom: Bom, canonical_candidates: tuple[str, ...]) -> dict[str, A
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Run the synthetic BOM evidence-backed pipeline."
-    )
+    parser = argparse.ArgumentParser(description="Run the synthetic BOM evidence-backed pipeline.")
     parser.add_argument(
         "--bom",
         type=Path,
