@@ -46,7 +46,7 @@ def test_pipeline_chain_exposes_all_drilldown_stages() -> None:
         "exact",
         _provenance(),
     )
-    line = OperationalBomLine("gpu", Decimal(4), Decimal(100), "bom.xlsx")
+    line = OperationalBomLine("gpu", Decimal(4), Decimal(100), "bom.xlsx", evidence)
 
     chain = pipeline_chain("GPU quantity", (evidence,), (decision,), (line,), "reconciled")
 

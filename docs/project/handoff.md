@@ -8,7 +8,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes temporal correction, durable storage, and anomaly/state modeling. See the [canonical milestone map](../development/milestone-map.md) and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60).
+- **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes expected-versus-observed state, temporal correction, durable storage, and anomaly orchestration. See the [canonical milestone map](../development/milestone-map.md), [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47), and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60).
 - **M8 — Retrieval projections and review UI:** in progress. The rebuildable projection lifecycle foundation is complete; later adapter work remains. See [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
 - **M9 — Guarded actions, product signals, and integrated evaluation:** planned.
 - The initial M0–M6 evidence-first vertical slice is complete on `main`; the [root README](../../README.md) records the current product boundary and runnable entry points.
@@ -30,9 +30,9 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- [Issue #51](https://github.com/stauntonjr/procurement-intelligence-lab/issues/51) is the active cross-cutting scope slice: it establishes an explicit request context before later lexical retrieval, operational state, or action paths expand.
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is the active state slice: it separates scoped expected requirements from observed procurement state before anomaly orchestration.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) is complete. Follow-on M8 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
-- M6 follow-on review work remains tracked by [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
+- M6 identity, source-viewer, and review-context work is complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
 ## Settled decisions
 
@@ -46,14 +46,14 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Open decisions and questions
 
-- Which append-only persistence/database adapter should follow the M7 port, and what temporal correction evidence is required? Start with [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91) and the ADRs linked from that issue.
-- How should the request-scope contract evolve from the synthetic fixture boundary to authenticated multi-project adapters? Start with [Issue #51](https://github.com/stauntonjr/procurement-intelligence-lab/issues/51).
+- How should scoped expected and observed procurement records be populated from append-only inputs, and what temporal correction evidence is required? Start with [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) and [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91).
+- How should the request-scope contract evolve from the synthetic fixture boundary to authenticated multi-project adapters? See [ADR-019](../adr/019-explicit-request-scope.md).
 - Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
 
 ## Recommended next work
 
-1. Complete and review [Issue #51](https://github.com/stauntonjr/procurement-intelligence-lab/issues/51) before implementing lexical retrieval; scope filters must run before ranking.
+1. Complete and review [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) before extending anomaly orchestration; expected and observed state must remain explicit and scoped.
 2. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
 3. Sequence later retrieval adapters only after their prerequisites, scope filters, and evaluation evidence are ready.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.
