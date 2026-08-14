@@ -126,6 +126,8 @@ def _claim(
         )
     else:
         missing_price = any(line.unit_price is None for line in relevant_reconciled)
+        if missing_price and status == "reconciled":
+            status = "unresolved"
         value = (
             None
             if unresolved or conflicts or missing_price

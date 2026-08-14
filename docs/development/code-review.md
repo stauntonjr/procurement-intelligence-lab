@@ -60,6 +60,8 @@ As the evidence architecture matures, material user-facing claims must remain tr
 
 Repository administrators should enable automatic GitHub Copilot code review for pull requests and re-review on new pushes. This is a repository/ruleset setting rather than a workflow file. Keep Copilot's judgment advisory; use deterministic PR-contract and review-arrival checks plus conversation resolution to prevent premature merge.
 
+The review-arrival job runs when a same-repository PR becomes reviewable and after each new head commit. It polls for a bounded window because a review submitted by a GitHub App cannot itself start another Actions workflow. Draft PRs skip the gate until `ready_for_review`; a missing current-commit review fails closed after the wait window.
+
 ## Runner security
 
 All PR review workflows run on GitHub-hosted runners. Future trusted self-hosted/GPU runners must not execute arbitrary code from untrusted public pull requests. Expensive or trusted-machine evaluations should be triggered only through reviewed/authorized paths.

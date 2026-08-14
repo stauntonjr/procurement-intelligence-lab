@@ -2,9 +2,7 @@ name: Review Arrival
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-  pull_request_review:
-    types: [submitted]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -12,8 +10,11 @@ permissions:
 
 jobs:
   copilot-current-commit:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - name: Require advisory review arrival
@@ -21,4 +22,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REVIEW_WAIT_SECONDS: "600"
+          REVIEW_POLL_SECONDS: "15"
         run: python tools/check_review_arrival.py

@@ -61,3 +61,23 @@ def test_each_claim_trace_contains_only_material_source_evidence() -> None:
     assert all(node.evidence == (gpu.evidence,) for node in gpu_claim.execution_trace.nodes)
     assert cost_claim.evidence == (gpu.evidence, cpu.evidence)
     assert gpu_claim.execution_trace.chain_id != cost_claim.execution_trace.chain_id
+
+
+@pytest.mark.contract
+def test_missing_price_makes_cost_value_and_trace_unresolved() -> None:
+    evidence = EvidenceRef("bom.xlsx", "hash", "BOM", 2, ("A", "B", "C", "D"))
+    line = BomLine("GPU-A", "GPU accelerator", Decimal(4), None, evidence)
+
+    claim = next(
+        item
+        for item in inspect_bom_claims(
+            Bom("bom.xlsx", (line,)),
+            ("GPU-A",),
+            request_context=_context(),
+        )
+        if item.kind is ClaimKind.BOM_COST
+    )
+
+    assert claim.value is None
+    assert claim.status == "unresolved"
+    assert claim.execution_trace.nodes[-1].status == "unresolved"

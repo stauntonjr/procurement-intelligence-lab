@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from urllib.request import Request, urlopen
+
+HTTP_TIMEOUT_SECONDS = 10
 
 
 def main() -> int:
@@ -20,22 +23,30 @@ def main() -> int:
             "X-GitHub-Api-Version": "2022-11-28",
         },
     )
-    with urlopen(request) as response:
-        reviews = json.load(response)
+    wait_seconds = max(float(os.environ.get("REVIEW_WAIT_SECONDS", "0")), 0)
+    poll_seconds = max(float(os.environ.get("REVIEW_POLL_SECONDS", "15")), 1)
+    deadline = time.monotonic() + wait_seconds
     accepted = {
         "copilot-pull-request-reviewer",
         "copilot-pull-request-reviewer[bot]",
     }
-    matching = [
-        review
-        for review in reviews
-        if review.get("user", {}).get("login") in accepted and review.get("commit_id") == head_sha
-    ]
-    if not matching:
-        print("Copilot review has not arrived for the current pull-request commit.")
-        return 1
-    print("advisory Copilot review arrived for the current commit")
-    return 0
+    while True:
+        with urlopen(request, timeout=HTTP_TIMEOUT_SECONDS) as response:
+            reviews = json.load(response)
+        matching = [
+            review
+            for review in reviews
+            if review.get("user", {}).get("login") in accepted
+            and review.get("commit_id") == head_sha
+        ]
+        if matching:
+            print("advisory Copilot review arrived for the current commit")
+            return 0
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            print("Copilot review has not arrived for the current pull-request commit.")
+            return 1
+        time.sleep(min(poll_seconds, remaining))
 
 
 if __name__ == "__main__":
