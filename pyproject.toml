@@ -53,6 +53,7 @@ branch = true
 source = ["procurement_intelligence_lab"]
 
 [tool.coverage.report]
+precision = 2
 show_missing = true
 skip_covered = true
 

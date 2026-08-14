@@ -5,7 +5,8 @@ from __future__ import annotations
 import argparse
 import json
 from decimal import Decimal
-from importlib.resources import files
+from importlib.resources import as_file, files
+from importlib.resources.abc import Traversable
 from pathlib import Path
 from typing import Any
 
@@ -20,8 +21,8 @@ from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef
 from procurement_intelligence_lab.domain.scope import Permission, RequestContext
 
 
-def _default_bom_path() -> Path:
-    return Path(str(files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")))
+def _default_bom_resource() -> Traversable:
+    return files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")
 
 
 def _evidence_payload(evidence: EvidenceRef) -> dict[str, object]:
@@ -98,7 +99,7 @@ def main() -> None:
     parser.add_argument(
         "--bom",
         type=Path,
-        default=_default_bom_path(),
+        default=None,
         help="Path to a constrained synthetic XLSX BOM fixture.",
     )
     parser.add_argument(
@@ -108,7 +109,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    bom = read_bom(args.bom)
+    if args.bom is None:
+        with as_file(_default_bom_resource()) as bom_path:
+            bom = read_bom(bom_path)
+    else:
+        bom = read_bom(args.bom)
     candidates = tuple(args.candidate) if args.candidate else tuple(line.sku for line in bom.lines)
     print(json.dumps(demo_payload(bom, candidates), indent=2))
 

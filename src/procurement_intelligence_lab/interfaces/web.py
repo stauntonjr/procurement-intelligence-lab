@@ -5,8 +5,7 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from importlib.resources import files
-from pathlib import Path
+from importlib.resources import as_file, files
 from urllib.parse import parse_qs, urlparse
 
 from procurement_intelligence_lab.adapters.xlsx import read_bom
@@ -15,6 +14,7 @@ from procurement_intelligence_lab.application.chat import (
     answer_question,
 )
 from procurement_intelligence_lab.application.review import review_context_for_claim
+from procurement_intelligence_lab.domain.bom import Bom
 from procurement_intelligence_lab.domain.scope import (
     Permission,
     RequestContext,
@@ -51,8 +51,10 @@ class ReviewContextNotFoundError(LookupError):
     """Raised when a claim ID is not present in the committed fixture."""
 
 
-def _fixture() -> Path:
-    return Path(str(files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")))
+def _read_fixture_bom() -> Bom:
+    resource = files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")
+    with as_file(resource) as path:
+        return read_bom(path)
 
 
 def _request_context(
@@ -73,7 +75,7 @@ def _request_context(
 
 
 def claim_payload(question: str, *, request_context: RequestContext) -> dict[str, object]:
-    bom = read_bom(_fixture())
+    bom = _read_fixture_bom()
     claim = answer_question(
         question,
         bom,
@@ -112,7 +114,7 @@ def source_payload(
     request_context: RequestContext,
 ) -> dict[str, object]:
     request_context.require(Permission.READ_EVIDENCE)
-    bom = read_bom(_fixture())
+    bom = _read_fixture_bom()
     for line in bom.lines:
         evidence = line.evidence
         if evidence.evidence_id == evidence_id:
@@ -135,7 +137,7 @@ def review_context_payload(
     request_context: RequestContext,
 ) -> dict[str, object]:
     request_context.require(Permission.REVIEW)
-    bom = read_bom(_fixture())
+    bom = _read_fixture_bom()
     try:
         context = review_context_for_claim(
             claim_id,
