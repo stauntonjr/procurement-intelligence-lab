@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import StrEnum
 
-from procurement_intelligence_lab.domain.bom import EvidenceRef
+from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef
 
 
 class AssertionPredicate(StrEnum):
@@ -40,3 +40,18 @@ def assertions_for_bom_line(
     return assertions + (
         SourceAssertion(sku, AssertionPredicate.HAS_UNIT_PRICE, unit_price, evidence),
     )
+
+
+def assertions_for_bom(bom: Bom) -> tuple[SourceAssertion, ...]:
+    assertions: list[SourceAssertion] = []
+    for line in bom.lines:
+        assertions.extend(
+            assertions_for_bom_line(
+                line.sku,
+                line.description,
+                line.quantity,
+                line.unit_price,
+                line.evidence,
+            )
+        )
+    return tuple(assertions)

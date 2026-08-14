@@ -2,9 +2,10 @@ from decimal import Decimal
 
 from procurement_intelligence_lab.domain.assertions import (
     AssertionPredicate,
+    assertions_for_bom,
     assertions_for_bom_line,
 )
-from procurement_intelligence_lab.domain.bom import EvidenceRef
+from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
 
 
 def test_assertions_preserve_source_evidence_and_omit_missing_values() -> None:
@@ -15,5 +16,23 @@ def test_assertions_preserve_source_evidence_and_omit_missing_values() -> None:
         AssertionPredicate.HAS_SKU,
         AssertionPredicate.HAS_DESCRIPTION,
         AssertionPredicate.HAS_QUANTITY,
+    ]
+    assert all(item.evidence == evidence for item in assertions)
+
+
+def test_bom_assertions_are_flat_and_replayable() -> None:
+    evidence = EvidenceRef("fixture.xlsx", "hash", "BOM", 2, ("A", "B", "C", "D"))
+    bom = Bom(
+        "fixture.xlsx",
+        (BomLine("GPU-A", "GPU accelerator", Decimal(4), Decimal(100), evidence),),
+    )
+
+    assertions = assertions_for_bom(bom)
+
+    assert [item.predicate for item in assertions] == [
+        AssertionPredicate.HAS_SKU,
+        AssertionPredicate.HAS_DESCRIPTION,
+        AssertionPredicate.HAS_QUANTITY,
+        AssertionPredicate.HAS_UNIT_PRICE,
     ]
     assert all(item.evidence == evidence for item in assertions)
