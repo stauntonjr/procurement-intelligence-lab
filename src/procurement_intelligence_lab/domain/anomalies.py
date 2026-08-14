@@ -68,6 +68,8 @@ class Anomaly:
     detected_at: datetime
 
     def __post_init__(self) -> None:
+        if not self.policy_id:
+            raise ValueError("policy_id must not be empty")
         if self.detected_at.tzinfo is None:
             raise ValueError("detected_at must be timezone-aware")
 
