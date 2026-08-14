@@ -5,7 +5,7 @@ from procurement_intelligence_lab.domain.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-from procurement_intelligence_lab.domain.state import project_operational_lines
+from procurement_intelligence_lab.domain.state import OperationalBomLine, project_operational_lines
 
 
 def test_only_resolved_lines_enter_operational_state() -> None:
@@ -18,14 +18,10 @@ def test_only_resolved_lines_enter_operational_state() -> None:
         ),
     )
     decisions = (
-        ResolutionDecision(
-            "GPU-A", "gpu-canonical", ResolutionStatus.RESOLVED, (), "exact"
-        ),
+        ResolutionDecision("GPU-A", "gpu-canonical", ResolutionStatus.RESOLVED, (), "exact"),
         ResolutionDecision("UNKNOWN", None, ResolutionStatus.UNRESOLVED, (), "missing"),
     )
 
     lines = project_operational_lines(bom, decisions)
 
-    assert lines == (
-        OperationalBomLine("gpu-canonical", Decimal(4), Decimal(100), "fixture.xlsx"),
-    )
+    assert lines == (OperationalBomLine("gpu-canonical", Decimal(4), Decimal(100), "fixture.xlsx"),)
