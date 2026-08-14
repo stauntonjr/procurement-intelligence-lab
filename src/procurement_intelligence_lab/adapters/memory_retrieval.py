@@ -66,13 +66,9 @@ class InMemoryLexicalProjection:
             matched = sum(term in text for term in terms)
             if matched:
                 hits.append(RetrievalHit(entry, matched / len(terms), manifest.manifest_id))
-        return tuple(
-            sorted(hits, key=lambda hit: (-hit.score, hit.entry.entry_id))[:limit]
-        )
+        return tuple(sorted(hits, key=lambda hit: (-hit.score, hit.entry.entry_id))[:limit])
 
-    def fail(
-        self, projection_id: str, *, reason: str, recorded_at: datetime
-    ) -> ProjectionManifest:
+    def fail(self, projection_id: str, *, reason: str, recorded_at: datetime) -> ProjectionManifest:
         if recorded_at.tzinfo is None:
             raise ValueError("recorded_at must be timezone-aware")
         previous = self._require_manifest(projection_id)
@@ -89,9 +85,7 @@ class InMemoryLexicalProjection:
             raise ValueError("recorded_at must be timezone-aware")
         previous = self._require_manifest(projection_id)
         self._entries.pop(projection_id, None)
-        return self._record(
-            previous, status=ProjectionStatus.DELETED, recorded_at=recorded_at
-        )
+        return self._record(previous, status=ProjectionStatus.DELETED, recorded_at=recorded_at)
 
     def _require_manifest(self, projection_id: str) -> ProjectionManifest:
         manifest = self._manifests.get(projection_id)
