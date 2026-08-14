@@ -85,8 +85,32 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         provenance,
         detected_at,
     )
+    multi_evidence = evidence + (EvidenceRef("bom.xlsx", "hash", "BOM", 3, ("C", "D")),)
+    multi = Anomaly(
+        "GPU-A",
+        AnomalyKind.QUANTITY_MISMATCH,
+        Decimal(4),
+        Decimal(8),
+        AnomalySeverity.WARNING,
+        AnomalyStatus.OPEN,
+        multi_evidence,
+        "default-v1",
+        detected_at,
+    )
+    reordered = Anomaly(
+        "GPU-A",
+        AnomalyKind.QUANTITY_MISMATCH,
+        Decimal(4),
+        Decimal(8),
+        AnomalySeverity.WARNING,
+        AnomalyStatus.OPEN,
+        tuple(reversed(multi_evidence)),
+        "default-v1",
+        detected_at,
+    )
 
     assert anomaly.anomaly_id == equivalent.anomaly_id
+    assert multi.anomaly_id == reordered.anomaly_id
     assert anomaly.anomaly_id != different_evidence.anomaly_id
     assert anomaly.provenance.provenance_id == provenance.provenance_id
 
