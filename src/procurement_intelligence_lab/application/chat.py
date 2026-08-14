@@ -23,12 +23,8 @@ def answer_question(
     elif "sku" in normalized:
         kind = ClaimKind.DISTINCT_SKUS
     else:
-        raise UnsupportedQuestionError(
-            "no approved deterministic claim route for this question"
-        )
+        raise UnsupportedQuestionError("no approved deterministic claim route for this question")
 
     return next(
-        claim
-        for claim in inspect_bom_claims(bom, canonical_candidates)
-        if claim.kind is kind
+        claim for claim in inspect_bom_claims(bom, canonical_candidates) if claim.kind is kind
     )
