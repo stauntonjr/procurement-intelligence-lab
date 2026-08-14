@@ -71,9 +71,7 @@ class DecisionProvenance:
         if self.component_kind is ComponentKind.MODEL and not (
             self.model_provider and self.model_id and self.model_revision
         ):
-            raise ValueError(
-                "model decisions require provider, model ID, and model revision"
-            )
+            raise ValueError("model decisions require provider, model ID, and model revision")
 
     @property
     def provenance_id(self) -> str:
