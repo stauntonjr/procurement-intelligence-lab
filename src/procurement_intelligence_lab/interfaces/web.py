@@ -66,7 +66,7 @@ def _request_context(
         scope[0],
         scope[1],
         scope[2],
-        frozenset({permission}),
+        frozenset({permission, Permission.READ_STATE}),
         "http-demo",
     )
 
@@ -136,7 +136,12 @@ def review_context_payload(
     request_context.require(Permission.REVIEW)
     bom = read_bom(_fixture())
     try:
-        context = review_context_for_claim(claim_id, bom, tuple(line.sku for line in bom.lines))
+        context = review_context_for_claim(
+            claim_id,
+            bom,
+            tuple(line.sku for line in bom.lines),
+            request_context=request_context,
+        )
     except LookupError as error:
         raise ReviewContextNotFoundError(str(error)) from error
     value = (
