@@ -1,15 +1,19 @@
 from decimal import Decimal
 
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
-from procurement_intelligence_lab.domain.bom import Bom, BomLine, EpistemicStatus, EvidenceRef, bom_cost
+from procurement_intelligence_lab.domain.bom import (
+    Bom,
+    BomLine,
+    EpistemicStatus,
+    EvidenceRef,
+    bom_cost,
+)
 from procurement_intelligence_lab.domain.evidence import EvidenceNodeKind
-from procurement_intelligence_lab.domain.state import OperationalBomLine
 from procurement_intelligence_lab.domain.reconciliation import reconcile_lines
+from procurement_intelligence_lab.domain.state import OperationalBomLine
 
 
-def line(
-    sku: str, quantity: str, price: str | None, row: int
-) -> BomLine:
+def line(sku: str, quantity: str, price: str | None, row: int) -> BomLine:
     return BomLine(
         sku,
         "GPU accelerator" if sku.startswith("GPU") else "CPU",
@@ -32,7 +36,10 @@ def test_resolved_claim_preserves_complete_evidence_contract() -> None:
         EvidenceNodeKind.OPERATIONAL_STATE,
         EvidenceNodeKind.RECONCILIATION,
     ]
-    assert all(node.evidence == tuple(item.evidence for item in bom.lines) for node in result.evidence.nodes)
+    assert all(
+        node.evidence == tuple(item.evidence for item in bom.lines)
+        for node in result.evidence.nodes
+    )
     assert {ref.sheet for ref in result.evidence.nodes[0].evidence} == {"BOM"}
     assert {ref.row for ref in result.evidence.nodes[0].evidence} == {2, 3}
     assert all(ref.cells == ("A", "B", "C", "D") for ref in result.evidence.nodes[0].evidence)
