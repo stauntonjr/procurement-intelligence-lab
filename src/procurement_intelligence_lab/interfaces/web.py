@@ -96,9 +96,7 @@ def source_payload(evidence_id: str) -> dict[str, object]:
 def review_context_payload(claim_id: str) -> dict[str, object]:
     bom = read_bom(_fixture())
     try:
-        context = review_context_for_claim(
-            claim_id, bom, tuple(line.sku for line in bom.lines)
-        )
+        context = review_context_for_claim(claim_id, bom, tuple(line.sku for line in bom.lines))
     except LookupError as error:
         raise ReviewContextNotFoundError(str(error)) from error
     value = (
