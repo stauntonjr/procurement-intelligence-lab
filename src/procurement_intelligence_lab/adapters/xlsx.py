@@ -19,6 +19,13 @@ def _text(node: ET.Element | None) -> str:
     return "".join(node.itertext()) if node is not None else ""
 
 
+def _cell_value(cell: ET.Element, shared_strings: list[str]) -> str:
+    if cell.attrib.get("t") == "inlineStr":
+        return _text(cell.find("x:is", _NS))
+    value = _text(cell.find("x:v", _NS))
+    return shared_strings[int(value)] if cell.attrib.get("t") == "s" else value
+
+
 def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
     raw = Path(path).read_bytes()
     with ZipFile(path) as archive:
@@ -48,13 +55,7 @@ def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
         root = ET.fromstring(archive.read(worksheet))
         rows: list[list[str]] = []
         for row in root.findall(".//x:sheetData/x:row", _NS):
-            values: list[str] = []
-            for cell in row.findall("x:c", _NS):
-                value = _text(cell.find("x:v", _NS))
-                if cell.attrib.get("t") == "s":
-                    value = shared[int(value)]
-                values.append(value)
-            rows.append(values)
+            rows.append([_cell_value(cell, shared) for cell in row.findall("x:c", _NS)])
 
     if not rows or rows[0][:4] != ["SKU", "Description", "Quantity", "Unit Price"]:
         raise ValueError("expected BOM headers: SKU, Description, Quantity, Unit Price")
