@@ -3,8 +3,8 @@
 from decimal import Decimal
 from hashlib import sha256
 from pathlib import Path
-from xml.etree import ElementTree as ET
 from zipfile import ZipFile
+from xml.etree import ElementTree as ET
 
 from ..domain.bom import Bom, BomLine, EvidenceRef
 
