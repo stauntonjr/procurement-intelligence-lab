@@ -47,6 +47,4 @@ def test_xlsx_structuring_records_event_and_carries_it_into_assertions(
         and edge.target_id == f"artifact:{result.bom.lines[0].evidence.content_hash}"
         for edge in result.transformation.input_edges
     )
-    assert {item.transformation_event_id for item in assertions} == {
-        result.transformation.event_id
-    }
+    assert {item.transformation_event_id for item in assertions} == {result.transformation.event_id}
