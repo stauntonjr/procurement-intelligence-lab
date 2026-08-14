@@ -3,17 +3,17 @@
 from datetime import datetime
 
 from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
-from procurement_intelligence_lab.domain.scope import (
-    Permission,
-    RequestContext,
-    ScopeAuthorizationError,
-)
 from procurement_intelligence_lab.domain.retrieval import (
     ProjectionBuildRequest,
     ProjectionManifest,
     ProjectionStatus,
     RetrievalHit,
     source_entry_ids,
+)
+from procurement_intelligence_lab.domain.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
 )
 
 
