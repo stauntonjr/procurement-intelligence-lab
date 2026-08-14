@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 
 import pytest
@@ -23,8 +23,8 @@ def test_assertion_ids_are_stable() -> None:
 
 def test_in_memory_ledger_is_append_only_and_ordered() -> None:
     ledger = InMemoryAssertionLedger()
-    first_time = datetime(2026, 1, 1, tzinfo=timezone.utc)
-    second_time = datetime(2026, 1, 2, tzinfo=timezone.utc)
+    first_time = datetime(2026, 1, 1, tzinfo=UTC)
+    second_time = datetime(2026, 1, 2, tzinfo=UTC)
 
     first = ledger.append(_assertion("4"), observed_at=first_time)
     second = ledger.append(_assertion("8"), observed_at=second_time)
@@ -39,4 +39,4 @@ def test_ledger_requires_timezone_aware_timestamps() -> None:
     ledger = InMemoryAssertionLedger()
 
     with pytest.raises(ValueError, match="timezone-aware"):
-        ledger.append(_assertion("4"), observed_at=datetime(2026, 1, 1))
+        ledger.append(_assertion("4"), observed_at=datetime(2026, 1, 1))  # noqa: DTZ001
