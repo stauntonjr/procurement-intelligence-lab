@@ -8,6 +8,9 @@ dist/
 build/
 *.egg-info/
 .DS_Store
+vision_chat.txt
+Fluidstack Anthropic $50B Deal.md
+*.code-workspace
 
 # Gemini CLI local state / credentials
 .gemini/

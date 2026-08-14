@@ -10,6 +10,16 @@ The showcase is a chat interface paired with an evidence inspector and source vi
 
 Artifacts flow through StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence. Postgres is the intended canonical store; search, vector, and graph systems are replaceable projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
 
+## Use-case anchors
+
+The first synthetic showcase is organized around three procurement questions:
+
+- which distinct SKUs are required for the next data center;
+- how many GPUs are required, ordered, received, and outstanding;
+- what a proposed BOM would cost, with explicit prices, assumptions, and missing evidence.
+
+See [the use-case and query contracts](docs/product/use-cases.md) for their evidence, ambiguity, and evaluation requirements.
+
 ## Status
 
 The initial evidence-first vertical slice is complete: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, a claims/evidence service, constrained chat routing, and a local HTTP inspector with source lookup and reproducible review context.
