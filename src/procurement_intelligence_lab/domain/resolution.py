@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from procurement_intelligence_lab.domain.assertions import AssertionPredicate, SourceAssertion
+from procurement_intelligence_lab.domain.provenance import DecisionProvenance
 
 
 class ResolutionStatus(StrEnum):
@@ -18,6 +19,7 @@ class ResolutionDecision:
     status: ResolutionStatus
     evidence: tuple[SourceAssertion, ...]
     rationale: str
+    provenance: DecisionProvenance
 
 
 def normalize_identifier(value: str) -> str:
@@ -28,6 +30,8 @@ def resolve_identifier(
     mention: str,
     candidates: tuple[str, ...],
     assertions: tuple[SourceAssertion, ...] = (),
+    *,
+    provenance: DecisionProvenance,
 ) -> ResolutionDecision:
     normalized = normalize_identifier(mention)
     matches = tuple(
@@ -46,10 +50,16 @@ def resolve_identifier(
             ResolutionStatus.RESOLVED,
             relevant_assertions,
             "normalized exact identifier match",
+            provenance,
         )
     rationale = (
         "no normalized candidate match" if not matches else "ambiguous normalized candidate match"
     )
     return ResolutionDecision(
-        mention, None, ResolutionStatus.UNRESOLVED, relevant_assertions, rationale
+        mention,
+        None,
+        ResolutionStatus.UNRESOLVED,
+        relevant_assertions,
+        rationale,
+        provenance,
     )
