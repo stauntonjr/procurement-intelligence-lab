@@ -58,8 +58,15 @@ def pipeline_chain(
     return EvidenceChain(
         claim,
         (
-            EvidenceNode(EvidenceNodeKind.SOURCE_ASSERTION, "source assertions", evidence, "observed"),
-            EvidenceNode(EvidenceNodeKind.RESOLUTION, "entity resolution", evidence, resolution_status),
+            EvidenceNode(
+                EvidenceNodeKind.SOURCE_ASSERTION, "source assertions", evidence, "observed"
+            ),
+            EvidenceNode(
+                EvidenceNodeKind.RESOLUTION,
+                "entity resolution",
+                evidence,
+                resolution_status,
+            ),
             EvidenceNode(
                 EvidenceNodeKind.OPERATIONAL_STATE,
                 "operational state",
