@@ -18,6 +18,8 @@ The manually dispatched or weekly workflow snapshots GitHub Issues, pull request
 
 The report must distinguish confirmed drift from questions requiring maintainer judgment.
 
+GitHub Project field state is reviewed deliberately by the maintainer. The workflow uses the repository-scoped GitHub Actions token and does not receive a separate user-Project credential. Add a read-only Project integration only after explicitly choosing and scoping that credential; never grant the steward permission to change Project fields.
+
 ## Boundaries
 
 - GitHub Issues, ADRs, docs, PRs, and the Project board are durable project state.
@@ -29,7 +31,7 @@ The report must distinguish confirmed drift from questions requiring maintainer 
 ## Maintainer protocol
 
 1. Run the **Roadmap stewardship audit** before a major new slice, after a merge wave, or when roadmap uncertainty is material.
-2. Review the workflow summary alongside the relevant code, tests, ADRs, and Issue acceptance criteria.
+2. Review the workflow summary alongside the relevant code, tests, ADRs, Issue acceptance criteria, and current GitHub Project view.
 3. Make durable corrections through a normal PR or Issue update. Add new work to the GitHub Project deliberately.
 4. Update `docs/project/handoff.md` when the current milestone, active work, settled decisions, or recommended next work materially changes.
 5. In a PR, record whether chat/Work exploration produced a material decision that has been captured durably.
