@@ -14,6 +14,7 @@ Use this skill whenever planning, implementing, reviewing, or reporting reposito
 3. Identify the smallest vertical delivery slice.
 4. Associate it with one primary milestone and GitHub issue.
 5. Decide whether the change affects an invariant, boundary, or public contract.
+6. Before a major new slice or after a merge wave, run the read-only roadmap stewardship audit and review the current GitHub Project deliberately. Treat its report as evidence, not authority.
 
 ## During coding
 
@@ -31,8 +32,10 @@ Confirm that the PR states:
 - tests/evaluation performed;
 - documentation and ADR impact.
 
-Update the README, roadmap, milestone map, or ADRs when the change makes them stale. Use an ADR for durable architecture decisions, not for routine status bookkeeping.
+Update the README, roadmap, milestone map, handoff, GitHub Issue status, or Project fields when the change makes them stale. Use an ADR for durable architecture decisions, not for routine status bookkeeping.
+
+Use `Closes #<issue>` only when the Issue is fully complete. Otherwise use `Part of #<issue>` and leave the Issue open.
 
 ## Before declaring completion
 
-A milestone is complete only when implementation, tests, documentation, and acceptance evidence are merged to `main`. Report any remaining drift explicitly.
+A milestone is complete only when implementation, tests, documentation, and acceptance evidence are merged to `main`. Close the linked Issue only when its acceptance criteria are complete, then refresh the handoff and Project status as appropriate. Report any remaining drift explicitly.
