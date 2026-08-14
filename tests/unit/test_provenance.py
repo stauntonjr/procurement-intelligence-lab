@@ -6,6 +6,9 @@ from procurement_intelligence_lab.domain.provenance import (
     ComponentKind,
     DecisionProvenance,
     ProvenanceContext,
+    ProvenanceEdge,
+    ProvenanceRelation,
+    TransformationEvent,
 )
 
 
@@ -53,3 +56,54 @@ def test_decision_provenance_links_component_to_execution_context() -> None:
 
     assert provenance.context.context_id == _context().context_id
     assert provenance.provenance_id.startswith("decision-provenance:")
+
+
+def test_transformation_event_identity_changes_with_implementation_version() -> None:
+    first = TransformationEvent(
+        "document-structuring",
+        DecisionProvenance(
+            _context(),
+            "xlsx-bom-structurer",
+            ComponentKind.DETERMINISTIC,
+            "1",
+            schema_version="bom-xlsx-v1",
+        ),
+        (ProvenanceEdge(ProvenanceRelation.USED_INPUT, "artifact:hash"),),
+        ("structured-bom:hash:BOM",),
+    )
+    second = TransformationEvent(
+        "document-structuring",
+        DecisionProvenance(
+            _context(),
+            "xlsx-bom-structurer",
+            ComponentKind.DETERMINISTIC,
+            "2",
+            schema_version="bom-xlsx-v1",
+        ),
+        (ProvenanceEdge(ProvenanceRelation.USED_INPUT, "artifact:hash"),),
+        ("structured-bom:hash:BOM",),
+    )
+
+    assert first.event_id != second.event_id
+
+
+def test_model_transformation_retains_resolved_model_and_schema_identity() -> None:
+    event = TransformationEvent(
+        "document-structuring",
+        DecisionProvenance(
+            _context(),
+            "model-structurer",
+            ComponentKind.MODEL,
+            "1",
+            model_provider="provider",
+            model_id="model",
+            model_revision="2026-01-01",
+            prompt_version="prompt-v1",
+            schema_version="bom-schema-v2",
+        ),
+        (ProvenanceEdge(ProvenanceRelation.USED_INPUT, "artifact:hash"),),
+        ("structured-bom:hash",),
+    )
+
+    assert event.provenance.model_revision == "2026-01-01"
+    assert event.provenance.schema_version == "bom-schema-v2"

@@ -1,4 +1,4 @@
-"""Immutable execution and decision provenance contracts."""
+"""Immutable execution, decision, and transformation provenance contracts."""
 
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -11,6 +11,16 @@ class ComponentKind(StrEnum):
     DETERMINISTIC = "deterministic"
     MODEL = "model"
     HUMAN = "human"
+
+
+class ProvenanceRelation(StrEnum):
+    DERIVED_FROM = "derived_from"
+    USED_INPUT = "used_input"
+    USED_SCHEMA = "used_schema"
+    USED_MODEL = "used_model"
+    SUPERSEDES = "supersedes"
+    REVIEWED_BY = "reviewed_by"
+    OVERRIDES = "overrides"
 
 
 @dataclass(frozen=True)
@@ -87,6 +97,44 @@ class DecisionProvenance:
             self.model_revision,
             self.prompt_version,
             self.schema_version,
+        )
+
+
+@dataclass(frozen=True)
+class ProvenanceEdge:
+    """A typed relationship from a transformation event to another durable ID."""
+
+    relation: ProvenanceRelation
+    target_id: str
+
+
+@dataclass(frozen=True)
+class TransformationEvent:
+    """Immutable event connecting a transformation to its inputs and outputs."""
+
+    event_type: str
+    provenance: DecisionProvenance
+    input_edges: tuple[ProvenanceEdge, ...]
+    output_ids: tuple[str, ...]
+    parent_event_ids: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.event_type:
+            raise ValueError("event_type must not be empty")
+        if not self.output_ids:
+            raise ValueError("transformation events require at least one output")
+        if any(not edge.target_id for edge in self.input_edges):
+            raise ValueError("provenance edge targets must not be empty")
+
+    @property
+    def event_id(self) -> str:
+        return stable_id(
+            "transformation-event",
+            self.event_type,
+            self.provenance.provenance_id,
+            tuple((edge.relation.value, edge.target_id) for edge in self.input_edges),
+            self.output_ids,
+            self.parent_event_ids,
         )
 
 

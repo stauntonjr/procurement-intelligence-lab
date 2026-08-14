@@ -9,7 +9,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 ## Current milestone and status
 
 - **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes temporal correction, durable storage, and complete transformation provenance. See the [canonical milestone map](../development/milestone-map.md), [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), and [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
-- **M8 — Retrieval projections and review UI:** in progress. The rebuildable projection lifecycle foundation is [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
+- **M8 — Retrieval projections and review UI:** in progress. The rebuildable projection lifecycle foundation is complete; later adapter work remains. See [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
 - **M9 — Guarded actions, product signals, and integrated evaluation:** planned.
 - The initial M0–M6 evidence-first vertical slice is complete on `main`; the [root README](../../README.md) records the current product boundary and runnable entry points.
 
@@ -25,12 +25,12 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M7 ledger boundary and initial anomaly/execution-provenance contract; see [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92) and [PR #94](https://github.com/stauntonjr/procurement-intelligence-lab/pull/94).
 - Layered deterministic and advisory PR review governance; see [PR #93](https://github.com/stauntonjr/procurement-intelligence-lab/pull/93).
 - Canonical shared project-memory convention; see [PR #96](https://github.com/stauntonjr/procurement-intelligence-lab/pull/96).
+- M8 rebuildable lexical retrieval-projection lifecycle foundation; see [PR #101](https://github.com/stauntonjr/procurement-intelligence-lab/pull/101) and [ADR-018](../adr/018-rebuildable-retrieval-projections.md).
 
 ## Active work and PRs
 
-- The retrieval lifecycle slice for [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) is active; it adds a derived, rebuildable lexical reference projection without selecting a search, vector, or graph store.
-- [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) scopes end-to-end transformation provenance from artifacts through structuring, mapping, assertions, and decisions.
-- [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) scopes rebuildable retrieval projection ports and lifecycle.
+- [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) is the active M7.2 slice: it establishes an immutable transformation-event contract and first traces the deterministic XLSX structurer into source assertions.
+- [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) is complete. Follow-on M8 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - M6 follow-on review work remains tracked by [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
 ## Settled decisions
@@ -46,15 +46,15 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 ## Open decisions and questions
 
 - Which append-only persistence/database adapter should follow the M7 port, and what temporal correction evidence is required? Start with [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91) and the ADRs linked from that issue.
-- How should transformation provenance be represented from artifacts through structure, mapping, assertions, and decisions? Start with [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
-- Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #54, #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
+- How should transformation provenance extend from the deterministic XLSX slice to mapping, model-backed structuring, and downstream decisions? Start with [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
+- Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
 
 ## Recommended next work
 
-1. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
-2. Prioritize [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) before model-backed structuring or graph/hypergraph persistence decisions.
-3. Complete and review [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54); use its lifecycle contract as the boundary for later lexical, vector, and graph adapters.
+1. Complete and review [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98); retain the deterministic XLSX vertical as the reference before extending it to model-backed structuring or graph/hypergraph persistence.
+2. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
+3. Sequence later retrieval adapters only after their prerequisites, scope filters, and evaluation evidence are ready.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.
 
 ## Refresh protocol

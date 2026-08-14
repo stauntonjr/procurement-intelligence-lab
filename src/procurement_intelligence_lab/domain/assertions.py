@@ -22,6 +22,7 @@ class SourceAssertion:
     value: str | Decimal
     evidence: EvidenceRef
     source_system: str = "document"
+    transformation_event_id: str | None = None
 
     @property
     def assertion_id(self) -> str:
@@ -32,6 +33,7 @@ class SourceAssertion:
             str(self.value),
             self.evidence.evidence_id,
             self.source_system,
+            self.transformation_event_id,
         )
 
 
@@ -41,20 +43,48 @@ def assertions_for_bom_line(
     quantity: Decimal,
     unit_price: Decimal | None,
     evidence: EvidenceRef,
+    transformation_event_id: str | None = None,
 ) -> tuple[SourceAssertion, ...]:
     assertions = (
-        SourceAssertion(sku, AssertionPredicate.HAS_SKU, sku, evidence),
-        SourceAssertion(sku, AssertionPredicate.HAS_DESCRIPTION, description, evidence),
-        SourceAssertion(sku, AssertionPredicate.HAS_QUANTITY, quantity, evidence),
+        SourceAssertion(
+            sku,
+            AssertionPredicate.HAS_SKU,
+            sku,
+            evidence,
+            transformation_event_id=transformation_event_id,
+        ),
+        SourceAssertion(
+            sku,
+            AssertionPredicate.HAS_DESCRIPTION,
+            description,
+            evidence,
+            transformation_event_id=transformation_event_id,
+        ),
+        SourceAssertion(
+            sku,
+            AssertionPredicate.HAS_QUANTITY,
+            quantity,
+            evidence,
+            transformation_event_id=transformation_event_id,
+        ),
     )
     if unit_price is None:
         return assertions
     return assertions + (
-        SourceAssertion(sku, AssertionPredicate.HAS_UNIT_PRICE, unit_price, evidence),
+        SourceAssertion(
+            sku,
+            AssertionPredicate.HAS_UNIT_PRICE,
+            unit_price,
+            evidence,
+            transformation_event_id=transformation_event_id,
+        ),
     )
 
 
-def assertions_for_bom(bom: Bom) -> tuple[SourceAssertion, ...]:
+def assertions_for_bom(
+    bom: Bom,
+    transformation_event_id: str | None = None,
+) -> tuple[SourceAssertion, ...]:
     assertions: list[SourceAssertion] = []
     for line in bom.lines:
         assertions.extend(
@@ -64,6 +94,7 @@ def assertions_for_bom(bom: Bom) -> tuple[SourceAssertion, ...]:
                 line.quantity,
                 line.unit_price,
                 line.evidence,
+                transformation_event_id,
             )
         )
     return tuple(assertions)
