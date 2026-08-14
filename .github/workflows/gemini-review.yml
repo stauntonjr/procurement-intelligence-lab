@@ -45,7 +45,6 @@ jobs:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           use_vertex_ai: 'false'
           use_gemini_code_assist: 'false'
-          upload_artifacts: 'false'
           settings: |-
             {
               "maxSessionTurns": 20,
@@ -77,11 +76,11 @@ jobs:
             review format specified by GEMINI.md.
 
       - name: Post Gemini review
-        if: steps.gemini.outputs.summary != ''
+        if: steps.gemini.outputs.gemini_response != ''
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GEMINI_REVIEW: ${{ steps.gemini.outputs.summary }}
+          GEMINI_REVIEW: ${{ steps.gemini.outputs.gemini_response }}
         run: |
           set -euo pipefail
           printf '%s\n' "$GEMINI_REVIEW" > /tmp/gemini-review.md
