@@ -7,6 +7,7 @@ from enum import StrEnum
 
 from procurement_intelligence_lab.domain.bom import EvidenceRef
 from procurement_intelligence_lab.domain.identity import stable_id
+from procurement_intelligence_lab.domain.provenance import DecisionProvenance
 
 
 class AnomalyKind(StrEnum):
@@ -53,7 +54,7 @@ class AnomalyPolicy:
 
 @dataclass(frozen=True)
 class Anomaly:
-    """A typed deviation retaining expected, observed, and source evidence."""
+    """A typed deviation retaining evidence and decision provenance."""
 
     subject_key: str
     kind: AnomalyKind
@@ -63,6 +64,7 @@ class Anomaly:
     status: AnomalyStatus
     evidence: tuple[EvidenceRef, ...]
     policy_id: str
+    provenance: DecisionProvenance
     detected_at: datetime
 
     def __post_init__(self) -> None:
@@ -79,6 +81,7 @@ class Anomaly:
             str(self.observed),
             tuple(ref.evidence_id for ref in self.evidence),
             self.policy_id,
+            self.provenance.provenance_id,
         )
 
 
@@ -89,6 +92,7 @@ def detect_quantity_mismatch(
     evidence: tuple[EvidenceRef, ...],
     *,
     policy: AnomalyPolicy,
+    provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
     if abs(observed - expected) <= policy.quantity_tolerance:
@@ -102,6 +106,7 @@ def detect_quantity_mismatch(
         AnomalyStatus.OPEN,
         evidence,
         policy.policy_id,
+        provenance,
         detected_at,
     )
 
@@ -113,6 +118,7 @@ def detect_price_deviation(
     evidence: tuple[EvidenceRef, ...],
     *,
     policy: AnomalyPolicy,
+    provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
     if abs(observed - expected) <= policy.price_tolerance:
@@ -126,6 +132,7 @@ def detect_price_deviation(
         AnomalyStatus.OPEN,
         evidence,
         policy.policy_id,
+        provenance,
         detected_at,
     )
 
@@ -137,6 +144,7 @@ def detect_late_commitment(
     evidence: tuple[EvidenceRef, ...],
     *,
     policy: AnomalyPolicy,
+    provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
     if observed <= expected + timedelta(days=policy.late_days_tolerance):
@@ -150,5 +158,6 @@ def detect_late_commitment(
         AnomalyStatus.OPEN,
         evidence,
         policy.policy_id,
+        provenance,
         detected_at,
     )
