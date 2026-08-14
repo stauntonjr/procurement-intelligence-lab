@@ -30,7 +30,7 @@ items that are unresolved or inconsistently named across documents.
 
 ### Query
 
-> What different SKU do we need for the next DC?
+> What different SKUs do we need for the next DC?
 
 ### Expected result
 
