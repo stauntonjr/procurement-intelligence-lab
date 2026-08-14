@@ -8,26 +8,24 @@ The showcase is a chat interface paired with an evidence inspector and source vi
 
 ## Architecture
 
-Artifacts flow through `StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence`. Postgres is the intended canonical store; search, vector, and graph systems are replaceable projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
+Artifacts flow through StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence. Postgres is the intended canonical store; search, vector, and graph systems are replaceable projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
 
 ## Status
 
-The initial vertical slice is complete: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, and a framework-independent evidence chain.
+The initial evidence-first vertical slice is complete: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, a claims/evidence service, constrained chat routing, and a local HTTP inspector with source lookup and reproducible review context.
 
-The current implementation also includes the claims/evidence service and a constrained chat adapter. A dependency-free local HTTP chat/evidence inspector is in progress in [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82). Durable identifiers, persistence, review workflows, retrieval projections, and product-feedback capture remain planned.
+M7 is now establishing the append-only assertion-ledger port and reference in-memory adapter. Durable database storage, temporal correction events, retrieval projections, and product-feedback persistence remain later slices.
 
-The canonical delivery map is [docs/development/milestone-map.md](docs/development/milestone-map.md). Changes to architecture or delivery status must follow the synchronization policy in [ADR-012](docs/adr/012-plan-and-milestone-synchronization.md).
+The canonical delivery map is docs/development/milestone-map.md. Changes to architecture or delivery status must follow the synchronization policy in ADR-012.
 
 ## Local entry points
 
-```bash
-uv sync --all-groups
-make check
-make eval
-make demo
-```
+    uv sync --all-groups
+    make check
+    make eval
+    make demo
 
-`make demo` is equivalent to `uv run python -m procurement_intelligence_lab`. Pass `--help` to inspect its synthetic-BOM and canonical-candidate inputs.
+make demo is equivalent to uv run python -m procurement_intelligence_lab. Pass --help to inspect its synthetic-BOM and canonical-candidate inputs.
 
 ## Public-data disclaimer
 
