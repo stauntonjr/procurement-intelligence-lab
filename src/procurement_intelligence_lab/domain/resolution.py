@@ -33,19 +33,21 @@ def resolve_identifier(
     matches = tuple(
         candidate for candidate in candidates if normalize_identifier(candidate) == normalized
     )
+    relevant_assertions = tuple(
+        assertion
+        for assertion in assertions
+        if normalize_identifier(assertion.subject_key) == normalized
+        and assertion.predicate is AssertionPredicate.HAS_SKU
+    )
     if len(matches) == 1:
         return ResolutionDecision(
             mention,
             matches[0],
             ResolutionStatus.RESOLVED,
-            tuple(
-                assertion
-                for assertion in assertions
-                if assertion.predicate is AssertionPredicate.HAS_SKU
-            ),
+            relevant_assertions,
             "normalized exact identifier match",
         )
     rationale = (
         "no normalized candidate match" if not matches else "ambiguous normalized candidate match"
     )
-    return ResolutionDecision(mention, None, ResolutionStatus.UNRESOLVED, assertions, rationale)
+    return ResolutionDecision(mention, None, ResolutionStatus.UNRESOLVED, relevant_assertions, rationale)

@@ -21,7 +21,8 @@ def reconcile_lines(lines: tuple[OperationalBomLine, ...]) -> tuple[ReconciledLi
         grouped.setdefault(line.canonical_key, []).append(line)
 
     reconciled: list[ReconciledLine] = []
-    for key, observations in grouped.items():
+    for key in sorted(grouped):
+        observations = grouped[key]
         prices = {line.unit_price for line in observations}
         unit_price = next(iter(prices)) if len(prices) == 1 else None
         reconciled.append(

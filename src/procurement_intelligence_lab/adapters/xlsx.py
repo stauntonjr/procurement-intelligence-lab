@@ -35,13 +35,15 @@ def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
         workbook = ET.fromstring(archive.read("xl/workbook.xml"))
         rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
         relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
-        target = next(
-            item.attrib.get(f"{{{_NS['r']}}}id", item.attrib.get("r:id", ""))
-            for item in workbook.findall(".//x:sheet", _NS)
-            if item.attrib["name"] == sheet
+        sheet_node = next(
+            (item for item in workbook.findall(".//x:sheet", _NS) if item.attrib["name"] == sheet),
+            None,
         )
-        if not target:
-            raise ValueError(f"sheet {sheet!r} has no relationship id")
+        if sheet_node is None:
+            raise ValueError(f"sheet {sheet!r} not found in workbook")
+        target = sheet_node.attrib.get(f"{{{_NS['r']}}}id", sheet_node.attrib.get("r:id", ""))
+        if not target or target not in relmap:
+            raise ValueError(f"sheet {sheet!r} has no valid relationship")
         worksheet = "xl/" + relmap[target].lstrip("/")
         root = ET.fromstring(archive.read(worksheet))
         rows: list[list[str]] = []
