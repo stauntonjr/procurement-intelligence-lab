@@ -1,6 +1,12 @@
 from typing import cast
 
-from procurement_intelligence_lab.interfaces.web import claim_payload
+import pytest
+
+from procurement_intelligence_lab.interfaces.web import (
+    EvidenceNotFoundError,
+    claim_payload,
+    source_payload,
+)
 
 
 def test_claim_payload_exposes_trace_and_source_evidence() -> None:
@@ -23,3 +29,22 @@ def test_claim_payload_exposes_trace_and_source_evidence() -> None:
         "operational state",
         "reconciliation",
     ]
+
+
+def test_source_payload_resolves_a_stable_evidence_id() -> None:
+    claim = claim_payload("How many GPUs are in the BOM?")
+    evidence = cast(list[dict[str, object]], claim["evidence"])
+    evidence_id = cast(str, evidence[0]["evidence_id"])
+
+    payload = source_payload(evidence_id)
+    source_evidence = cast(dict[str, object], payload["evidence"])
+    source_line = cast(dict[str, object], payload["line"])
+
+    assert source_evidence["evidence_id"] == evidence_id
+    assert source_evidence["sheet"] == "BOM"
+    assert source_line["sku"] == "GPU-A"
+
+
+def test_source_payload_rejects_unknown_evidence_id() -> None:
+    with pytest.raises(EvidenceNotFoundError):
+        source_payload("evidence:missing")
