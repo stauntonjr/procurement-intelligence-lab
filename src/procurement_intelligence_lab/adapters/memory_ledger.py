@@ -10,9 +10,7 @@ class InMemoryAssertionLedger:
     def __init__(self) -> None:
         self._entries: list[AssertionLedgerEntry] = []
 
-    def append(
-        self, assertion: SourceAssertion, *, observed_at: datetime
-    ) -> AssertionLedgerEntry:
+    def append(self, assertion: SourceAssertion, *, observed_at: datetime) -> AssertionLedgerEntry:
         if observed_at.tzinfo is None:
             raise ValueError("observed_at must be timezone-aware")
         entry = AssertionLedgerEntry(len(self._entries) + 1, assertion, observed_at)
