@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
 from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domain.evidence import EvidenceNodeKind
 from procurement_intelligence_lab.domain.resolution import ResolutionStatus
 
 
@@ -24,3 +25,9 @@ def test_bom_pipeline_preserves_layers_and_excludes_unresolved_state() -> None:
     ]
     assert result.reconciled_lines[0].canonical_key == "GPU-A"
     assert result.reconciled_lines[0].quantity == Decimal(4)
+    assert [node.kind for node in result.evidence.nodes] == [
+        EvidenceNodeKind.SOURCE_ASSERTION,
+        EvidenceNodeKind.RESOLUTION,
+        EvidenceNodeKind.OPERATIONAL_STATE,
+        EvidenceNodeKind.RECONCILIATION,
+    ]
