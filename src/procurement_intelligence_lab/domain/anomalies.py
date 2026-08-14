@@ -81,7 +81,7 @@ class Anomaly:
             self.kind.value,
             str(self.expected),
             str(self.observed),
-            tuple(ref.evidence_id for ref in self.evidence),
+            tuple(sorted(ref.evidence_id for ref in self.evidence)),
             self.policy_id,
             self.provenance.provenance_id,
         )
