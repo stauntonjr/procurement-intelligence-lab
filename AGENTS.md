@@ -23,7 +23,7 @@ Issues are executable specifications. Every change must preserve provenance, typ
 
 ## Primary delivery loop
 
-For every non-trivial repository slice, use the `.agents/skills/architecture-plan-sync/SKILL.md` procedure as part of the normal agent loop:
+For every non-trivial repository slice, use the `skills/architecture-plan-sync/SKILL.md` procedure as part of the normal agent loop:
 
 1. **Orient:** read the handoff, milestone map, relevant Issue, ADRs, and architecture documents. Before a major new slice or after a merge wave, run the read-only [roadmap stewardship audit](docs/development/roadmap-stewardship.md) and review the current GitHub Project deliberately.
 2. **Implement:** keep the smallest vertical slice, its acceptance evidence, and durable decision record aligned. Record material Chat/Work conclusions in an Issue, ADR, or project document.
