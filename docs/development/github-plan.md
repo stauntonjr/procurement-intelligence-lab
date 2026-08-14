@@ -31,7 +31,7 @@ Historical implementation order is recorded with `S` labels in `milestone-map.md
 
 ## Project fields and views
 
-Use a GitHub Project with fields: Status, Area, Type, Priority, Risk, Agentability, Evidence Required, Milestone, Decision Needed, Challenge ID, Semantic Surface, Test Layers, and Iteration. Views: milestone roadmap, harness hardening, semantic challenges, review readiness, evidence-gated queue, architecture decisions, evaluation results, and drift. Keep labels focused on durable facets and use fields for workflow state to avoid duplication.
+Use a GitHub Project with fields: Status, Area, Work Type, Priority, Risk, Agentability, Evidence Required, Milestone, Decision Needed, Challenge ID, Semantic Surface, Test Layers, and Iteration. GitHub reserves the literal custom-field name `Type`, so `Work Type` is the portable project field name. Views: milestone roadmap, harness hardening, semantic challenges, review readiness, evidence-gated queue, architecture decisions, evaluation results, and drift. Keep labels focused on durable facets and use fields for workflow state to avoid duplication.
 
 ## Labels
 
