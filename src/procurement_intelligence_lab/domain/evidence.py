@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from procurement_intelligence_lab.domain.bom import EvidenceRef
+from procurement_intelligence_lab.domain.identity import stable_id
 from procurement_intelligence_lab.domain.resolution import ResolutionDecision
 from procurement_intelligence_lab.domain.state import OperationalBomLine
 
@@ -22,11 +23,29 @@ class EvidenceNode:
     evidence: tuple[EvidenceRef, ...]
     status: str
 
+    @property
+    def node_id(self) -> str:
+        return stable_id(
+            "evidence-node",
+            self.kind.value,
+            self.label,
+            self.status,
+            tuple(ref.evidence_id for ref in self.evidence),
+        )
+
 
 @dataclass(frozen=True)
 class EvidenceChain:
     claim: str
     nodes: tuple[EvidenceNode, ...]
+
+    @property
+    def chain_id(self) -> str:
+        return stable_id("evidence-chain", self.claim, tuple(node.node_id for node in self.nodes))
+
+    @property
+    def claim_id(self) -> str:
+        return stable_id("claim", self.claim, self.chain_id)
 
 
 def source_chain(claim: str, evidence: tuple[EvidenceRef, ...]) -> EvidenceChain:
