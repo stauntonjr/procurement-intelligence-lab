@@ -9,3 +9,6 @@ build/
 *.egg-info/
 .DS_Store
 
+# Gemini CLI local state / credentials
+.gemini/
+gha-creds-*.json
