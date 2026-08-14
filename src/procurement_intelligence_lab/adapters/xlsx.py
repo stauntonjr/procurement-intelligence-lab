@@ -36,7 +36,7 @@ def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
         rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
         relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
         target = next(
-            item.attrib.get("{%s}id" % _NS["r"], item.attrib.get("r:id", ""))
+            item.attrib.get(f"{{{_NS['r']}}}id", item.attrib.get("r:id", ""))
             for item in workbook.findall(".//x:sheet", _NS)
             if item.attrib["name"] == sheet
         )
