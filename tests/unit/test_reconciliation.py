@@ -14,9 +14,9 @@ def test_reconciliation_aggregates_and_exposes_price_conflicts() -> None:
 
     result = reconcile_lines(lines)
 
-    assert result[0].canonical_key == "gpu"
-    assert result[0].quantity == Decimal(6)
-    assert result[0].status == "reconciled"
-    assert result[1].canonical_key == "cpu"
-    assert result[1].unit_price is None
-    assert result[1].status == "conflict"
+    assert result[0].canonical_key == "cpu"
+    assert result[0].unit_price is None
+    assert result[0].status == "conflict"
+    assert result[1].canonical_key == "gpu"
+    assert result[1].quantity == Decimal(6)
+    assert result[1].status == "reconciled"
