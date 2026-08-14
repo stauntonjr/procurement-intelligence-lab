@@ -1,5 +1,7 @@
 # Evaluation plan
 
+Technology evaluations are tracked in the [technology evaluation register](evaluation/technology-register.md). Current entries are bounded experiments, not runtime adoption decisions.
+
 ## Offline quality
 
 - Entity resolution: precision/recall by entity type, with a “review” class for ambiguous pairs.
