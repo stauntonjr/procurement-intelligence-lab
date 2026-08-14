@@ -8,7 +8,6 @@ from enum import StrEnum
 from procurement_intelligence_lab.domain.bom import EvidenceRef
 from procurement_intelligence_lab.domain.identity import stable_id
 from procurement_intelligence_lab.domain.provenance import DecisionProvenance
-from procurement_intelligence_lab.domain.state import ExpectedObservedState, StateFreshness
 
 
 class AnomalyKind(StrEnum):
@@ -86,108 +85,6 @@ class Anomaly:
             self.policy_id,
             self.provenance.provenance_id,
         )
-
-
-def detect_expected_observed_anomalies(
-    state: ExpectedObservedState,
-    *,
-    policy: AnomalyPolicy,
-    provenance: DecisionProvenance,
-    detected_at: datetime,
-) -> tuple[Anomaly, ...]:
-    """Detect deterministic state deviations without predicting or acting."""
-    expected = state.expected
-    observed = state.observed
-    evidence = _state_evidence(state)
-    subject_key = _state_subject_key(state)
-    anomalies: list[Anomaly] = []
-
-    if observed is None or observed.ordered_quantity <= Decimal(0):
-        if expected.required_quantity > policy.quantity_tolerance:
-            anomalies.append(
-                Anomaly(
-                    subject_key,
-                    AnomalyKind.MISSING_PO,
-                    expected.required_quantity,
-                    None if observed is None else observed.ordered_quantity,
-                    AnomalySeverity.WARNING,
-                    AnomalyStatus.OPEN,
-                    evidence,
-                    policy.policy_id,
-                    provenance,
-                    detected_at,
-                )
-            )
-    elif abs(observed.ordered_quantity - expected.required_quantity) > policy.quantity_tolerance:
-        anomalies.append(
-            Anomaly(
-                subject_key,
-                AnomalyKind.QUANTITY_MISMATCH,
-                expected.required_quantity,
-                observed.ordered_quantity,
-                AnomalySeverity.WARNING,
-                AnomalyStatus.OPEN,
-                evidence,
-                policy.policy_id,
-                provenance,
-                detected_at,
-            )
-        )
-
-    if observed is None:
-        return tuple(anomalies)
-
-    if observed.substituted_quantity > policy.quantity_tolerance:
-        anomalies.append(
-            Anomaly(
-                subject_key,
-                AnomalyKind.SUBSTITUTION,
-                Decimal(0),
-                observed.substituted_quantity,
-                AnomalySeverity.WARNING,
-                AnomalyStatus.OPEN,
-                evidence,
-                policy.policy_id,
-                provenance,
-                detected_at,
-            )
-        )
-
-    if (
-        observed.freshness is not StateFreshness.CURRENT
-        or observed.unknown_quantity > policy.quantity_tolerance
-    ):
-        anomalies.append(
-            Anomaly(
-                subject_key,
-                AnomalyKind.COVERAGE_GAP,
-                expected.required_quantity,
-                observed.unknown_quantity,
-                AnomalySeverity.INFO,
-                AnomalyStatus.OPEN,
-                evidence,
-                policy.policy_id,
-                provenance,
-                detected_at,
-            )
-        )
-
-    return tuple(anomalies)
-
-
-def _state_subject_key(state: ExpectedObservedState) -> str:
-    scope = state.expected.scope
-    return (
-        f"{scope.tenant_id}/{scope.project_id}/{scope.site_id}/"
-        f"{scope.bom_revision}:{state.expected.canonical_key}"
-    )
-
-
-def _state_evidence(state: ExpectedObservedState) -> tuple[EvidenceRef, ...]:
-    evidence = list(state.expected.evidence)
-    if state.observed is not None:
-        evidence.extend(state.observed.evidence)
-    return tuple({ref.evidence_id: ref for ref in evidence}.values())
 
 
 def detect_quantity_mismatch(

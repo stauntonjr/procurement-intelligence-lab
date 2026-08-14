@@ -16,7 +16,6 @@ Define a framework-independent anomaly contract:
 - Anomaly is immutable and carries the subject, expected and observed values, severity, lifecycle status, policy identifier, detection timestamp, and source evidence.
 - AnomalyPolicy holds explicit non-negative quantity, price, and schedule tolerances.
 - Deterministic helpers emit an open warning only when a comparison exceeds the configured tolerance. They return no anomaly within tolerance.
-- State orchestration consumes `ExpectedObservedState`: it emits missing-PO, quantity-mismatch, substitution, and coverage-gap anomalies where the state contract provides the required inputs. It does not infer revision, price, schedule, or identity anomalies from incomplete state.
 - Detection timestamps must be timezone-aware. Anomaly IDs are stable for the same semantic inputs and evidence references.
 
 This slice provides the core contract and representative deterministic comparisons. Broader detection orchestration and durable anomaly persistence remain later work.
