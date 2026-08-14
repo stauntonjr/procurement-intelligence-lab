@@ -20,6 +20,22 @@ body:
     attributes:
       label: Interface
       description: Inputs, outputs, and boundaries
+    validations:
+      required: true
+  - type: textarea
+    id: semantic_contract
+    attributes:
+      label: Semantic Contract
+      description: Authoritative inputs/output, scope and as-of rule, governing policy, evidence, and typed failures
+    validations:
+      required: true
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Scenario Matrix
+      description: Applicable empty, many, duplicate, conflict, missing, time, scope, value-boundary, malformed, and public-caller cases
+    validations:
+      required: true
   - type: textarea
     id: acceptance
     attributes:

@@ -1,0 +1,19 @@
+# ADR-021: Enforce semantic quality with layered tests and agent challenges
+
+Status: accepted
+
+## Context
+
+Several deterministic defects survived green unit tests because fixtures mirrored implementation assumptions, public callers and built artifacts were not exercised, domain policy was implicit, and advisory review sometimes arrived after merge. Local delivery-slice labels also reused GitHub milestone identifiers with different meanings.
+
+## Decision
+
+Use GitHub's M0-M9 milestones as the only milestone taxonomy. Historical implementation sequence labels use S0-S9.
+
+Enforce known contracts with required static, unit, contract, integration, regression, package-smoke, and challenge-manifest checks. Put shipped semantic defects into C001-C008 manifests with deterministic oracles. Keep AI review advisory, while requiring review arrival and explicit disposition before merge.
+
+Public regression tests measure recurrence prevention. Truly blind development-agent evaluation uses a protected evaluator because a public repository cannot hide its oracle.
+
+## Consequences
+
+Changes take longer to merge but provide executable evidence at the boundary where a defect can occur. Coverage is a ratchet, not a substitute for semantic scenarios. GitHub Issues, milestone state, Project fields, and repository status documents must be reconciled deliberately.

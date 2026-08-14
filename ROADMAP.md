@@ -5,6 +5,7 @@
 - Establish an evidence-first domain model.
 - Demonstrate deterministic normalization, resolution, retrieval, anomaly detection, and approval gating.
 - Make non-claims and evaluation boundaries explicit.
+- Enforce semantic contracts with layered CI, clean-artifact smoke tests, and C001-C008 development-agent challenges.
 
 ## 1. Discovery-ready prototype
 

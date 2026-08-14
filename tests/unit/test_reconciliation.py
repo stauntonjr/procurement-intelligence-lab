@@ -6,11 +6,14 @@ from procurement_intelligence_lab.domain.provenance import (
     DecisionProvenance,
     local_provenance_context,
 )
-from procurement_intelligence_lab.domain.reconciliation import reconcile_lines
+from procurement_intelligence_lab.domain.reconciliation import (
+    ReconciliationPolicy,
+    reconcile_lines,
+)
 from procurement_intelligence_lab.domain.state import OperationalBomLine
 
 
-def test_reconciliation_aggregates_and_exposes_price_conflicts() -> None:
+def test_reconciliation_selects_governing_claim_and_retains_conflicts() -> None:
     evidence = EvidenceRef("fixture.xlsx", "hash", "BOM", 2, ("A",))
     lines = (
         OperationalBomLine("gpu", Decimal(4), Decimal(100), "bom-a.xlsx", evidence),
@@ -25,12 +28,17 @@ def test_reconciliation_aggregates_and_exposes_price_conflicts() -> None:
         "1",
     )
 
-    result = reconcile_lines(lines, provenance=provenance)
+    result = reconcile_lines(
+        lines,
+        policy=ReconciliationPolicy(("bom-a.xlsx", "bom-b.xlsx")),
+        provenance=provenance,
+    )
 
     assert result[0].canonical_key == "cpu"
-    assert result[0].unit_price is None
+    assert result[0].unit_price == Decimal(20)
+    assert result[0].governing_source_artifact == "bom-a.xlsx"
     assert result[0].status == "conflict"
     assert result[0].provenance.provenance_id == provenance.provenance_id
     assert result[1].canonical_key == "gpu"
-    assert result[1].quantity == Decimal(6)
-    assert result[1].status == "reconciled"
+    assert result[1].quantity == Decimal(4)
+    assert result[1].status == "conflict"

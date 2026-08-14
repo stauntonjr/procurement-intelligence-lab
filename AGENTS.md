@@ -20,6 +20,20 @@ Chat/Work is for exploration and planning. Codex and other development agents im
 
 Issues are executable specifications. Every change must preserve provenance, typed failure boundaries, and the evidence contract. Read this file, relevant skills, and ADRs before changing architecture.
 
+## Semantic change contract
+
+Before changing a business calculation, adapter, public interface, or runtime package:
+
+1. Name the authoritative inputs and output; scope and as-of key; governing policy; evidence retained; and typed failure behavior.
+2. Read every Issue governing semantics touched by the change, including later-milestone work. Do not invent future policy inside an earlier delivery slice.
+3. Cover applicable empty, one, many, duplicate, conflict, missing, stale, future, cross-scope, zero, negative, fractional, and boundary cases.
+4. Test the real public caller. Manually constructed helper context is not acceptance evidence for a browser, HTTP, CLI, or installed-package path.
+5. Validate a clean built artifact whenever package metadata, entry points, examples, or runtime resources change.
+6. Treat unknown, absent, and unresolved as distinct from zero, complete, or reconciled. Success requires positive evidence.
+7. Add a regression oracle and development-agent challenge manifest for every shipped semantic defect.
+
+Use `skills/implement-domain-logic/SKILL.md`, `skills/add-adapter/SKILL.md`, `skills/test-public-interface/SKILL.md`, `skills/release-smoke/SKILL.md`, and `skills/run-agent-challenges/SKILL.md` as applicable.
+
 
 ## Primary delivery loop
 
@@ -31,3 +45,5 @@ For every non-trivial repository slice, use the `skills/architecture-plan-sync/S
 4. **Report:** distinguish `main` from planned work and report confirmed planning drift explicitly.
 
 The roadmap steward is advisory and read-only. It cannot access Chat/Work history or update repository/GitHub state; agents and maintainers deliberately materialize durable corrections through normal PRs and Issue/Project updates.
+
+Do not merge while required deterministic checks are pending or failing. Automated review remains advisory, but its review must arrive and every actionable thread must be resolved or explicitly rebutted before merge.

@@ -13,6 +13,7 @@ Use this skill whenever planning, implementing, reviewing, or reporting reposito
 2. Read `docs/development/github-plan.md` and the relevant architecture/ADR documents.
 3. Identify the smallest vertical delivery slice.
 4. Associate it with one primary milestone and GitHub issue.
+   GitHub M0-M9 identifiers are canonical; use S0-S9 only for historical implementation slices.
 5. Decide whether the change affects an invariant, boundary, or public contract.
 6. Before a major new slice or after a merge wave, run the read-only roadmap stewardship audit and review the current GitHub Project deliberately. Treat its report as evidence, not authority.
 

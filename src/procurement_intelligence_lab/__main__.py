@@ -5,23 +5,23 @@ from __future__ import annotations
 import argparse
 import json
 from decimal import Decimal
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
 from procurement_intelligence_lab.adapters.xlsx import read_bom
-from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
-from procurement_intelligence_lab.domain.bom import (
-    Bom,
-    EvidenceRef,
-    QueryResult,
-    bom_cost,
-    distinct_skus,
-    gpu_quantity,
+from procurement_intelligence_lab.application.evidence_service import (
+    ClaimKind,
+    EvidenceBackedClaim,
+    inspect_bom_claims,
 )
+from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
+from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef
+from procurement_intelligence_lab.domain.scope import Permission, RequestContext
 
 
 def _default_bom_path() -> Path:
-    return Path(__file__).resolve().parents[2] / "examples" / "synthetic_bom.xlsx"
+    return Path(str(files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")))
 
 
 def _evidence_payload(evidence: EvidenceRef) -> dict[str, object]:
@@ -34,7 +34,7 @@ def _evidence_payload(evidence: EvidenceRef) -> dict[str, object]:
     }
 
 
-def _query_payload(result: QueryResult) -> dict[str, object]:
+def _query_payload(result: EvidenceBackedClaim) -> dict[str, object]:
     value: object = str(result.value) if isinstance(result.value, Decimal) else result.value
     return {
         "value": value,
@@ -45,17 +45,34 @@ def _query_payload(result: QueryResult) -> dict[str, object]:
 
 def demo_payload(bom: Bom, canonical_candidates: tuple[str, ...]) -> dict[str, Any]:
     pipeline = run_bom_pipeline(bom, canonical_candidates)
+    context = RequestContext(
+        "cli-user",
+        "synthetic-tenant",
+        "synthetic-project",
+        "synthetic-site",
+        frozenset({Permission.READ_STATE}),
+        "cli-demo",
+    )
+    claims = {
+        claim.kind: claim
+        for claim in inspect_bom_claims(
+            bom,
+            canonical_candidates,
+            request_context=context,
+        )
+    }
     return {
         "claims": {
-            "distinct_skus": _query_payload(distinct_skus(bom)),
-            "gpu_quantity": _query_payload(gpu_quantity(bom)),
-            "bom_cost": _query_payload(bom_cost(bom)),
+            "distinct_skus": _query_payload(claims[ClaimKind.DISTINCT_SKUS]),
+            "gpu_quantity": _query_payload(claims[ClaimKind.GPU_QUANTITY]),
+            "bom_cost": _query_payload(claims[ClaimKind.BOM_COST]),
         },
         "operational_state": [
             {
                 "canonical_key": line.canonical_key,
                 "quantity": str(line.quantity),
                 "unit_price": str(line.unit_price) if line.unit_price is not None else None,
+                "governing_source_artifact": line.governing_source_artifact,
                 "source_artifacts": line.source_artifacts,
                 "status": line.status,
             }

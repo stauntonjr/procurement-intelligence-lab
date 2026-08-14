@@ -38,7 +38,7 @@ def test_question_routes_to_evidence_backed_deterministic_claim() -> None:
 
     assert result.kind is ClaimKind.GPU_QUANTITY
     assert result.value == Decimal(4)
-    assert result.execution_trace.claim == "BOM operational state"
+    assert result.execution_trace.claim == "gpu_quantity"
 
 
 def test_unapproved_question_abstains() -> None:

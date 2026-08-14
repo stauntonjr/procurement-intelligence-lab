@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Domain Logic"
+  short_description: "Specify and test domain semantics"
+  default_prompt: "Use -domain-logic to implement this domain change from its authoritative contract and scenario matrix."

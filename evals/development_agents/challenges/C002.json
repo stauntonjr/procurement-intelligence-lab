@@ -1,0 +1,9 @@
+{
+  "id": "C002",
+  "title": "Sparse XLSX coordinates preserve fields",
+  "finding_commit": "c05b0107a4d327154801138c6144612a2f971af7",
+  "oracle": "Missing XML cells do not shift values into adjacent business columns.",
+  "test_command": ["uv", "run", "pytest", "-q", "tests/contract/test_xlsx_coordinates.py"],
+  "surfaces": ["adapter", "xlsx", "provenance"],
+  "prevention": ["adapter contract matrix", "golden sparse fixture"]
+}

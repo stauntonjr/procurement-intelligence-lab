@@ -1,0 +1,9 @@
+{
+  "id": "C005",
+  "title": "Reconciliation selects a governing claim",
+  "finding_commit": "cf24590218ee7d410f407af22f48527aceb8810b",
+  "oracle": "Explicit source precedence selects the value while losing and conflicting evidence remains visible.",
+  "test_command": ["uv", "run", "pytest", "-q", "tests/unit/test_reconciliation.py"],
+  "surfaces": ["domain", "reconciliation", "policy"],
+  "prevention": ["business truth table", "conflicting-claim fixture"]
+}

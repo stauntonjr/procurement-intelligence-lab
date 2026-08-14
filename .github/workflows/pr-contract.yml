@@ -1,0 +1,18 @@
+name: PR Contract
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate executable specification
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python tools/check_pr_contract.py

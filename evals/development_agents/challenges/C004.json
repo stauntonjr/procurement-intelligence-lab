@@ -1,0 +1,9 @@
+{
+  "id": "C004",
+  "title": "Installed wheel runs the advertised demo",
+  "finding_commit": "b5f5d62003651c5eccadce5a3067b0df8f2891a5",
+  "oracle": "A clean wheel installation contains its runtime fixture and executes outside the checkout.",
+  "test_command": ["uv", "run", "python", "tools/package_smoke.py"],
+  "surfaces": ["packaging", "cli", "runtime-resource"],
+  "prevention": ["clean-install smoke", "wheel-content assertion"]
+}

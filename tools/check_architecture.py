@@ -9,6 +9,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOMAIN = ROOT / "src" / "procurement_intelligence_lab" / "domain"
 PROJECT_ROOT = "procurement_intelligence_lab"
+REQUIRED_HARNESS_PATHS = (
+    "tests/contract/test_claim_semantics.py",
+    "tests/integration/test_web_happy_path.py",
+    "tests/regression/test_state_invariants.py",
+    "src/procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+    "skills/implement-domain-logic/SKILL.md",
+    "skills/test-public-interface/SKILL.md",
+    "skills/release-smoke/SKILL.md",
+    "skills/run-agent-challenges/SKILL.md",
+)
 
 
 def imported_roots(path: Path) -> set[str]:
@@ -28,9 +38,16 @@ def main() -> int:
     violations: list[str] = []
     allowed = set(sys.stdlib_module_names) | {PROJECT_ROOT}
 
+    if not DOMAIN.is_dir():
+        violations.append(f"required domain directory is missing: {DOMAIN.relative_to(ROOT)}")
+
     for path in sorted(DOMAIN.rglob("*.py")):
         for module in sorted(imported_roots(path) - allowed):
             violations.append(f"{path.relative_to(ROOT)} imports third-party module {module!r}")
+
+    for required in REQUIRED_HARNESS_PATHS:
+        if not (ROOT / required).is_file():
+            violations.append(f"required harness artifact is missing: {required}")
 
     if violations:
         print("Architecture boundary violations:")

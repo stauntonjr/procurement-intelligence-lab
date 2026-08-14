@@ -1,0 +1,63 @@
+from decimal import Decimal
+
+import pytest
+
+from procurement_intelligence_lab.application.evidence_service import (
+    ClaimKind,
+    inspect_bom_claims,
+)
+from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domain.scope import Permission, RequestContext
+
+
+def _context() -> RequestContext:
+    return RequestContext(
+        "reviewer", "tenant", "project", "site", frozenset({Permission.READ_STATE}), "trace"
+    )
+
+
+def _line(sku: str, description: str, quantity: str, row: int) -> BomLine:
+    return BomLine(
+        sku,
+        description,
+        Decimal(quantity),
+        Decimal(100),
+        EvidenceRef("bom.xlsx", "hash", "BOM", row, ("A", "B", "C", "D")),
+    )
+
+
+@pytest.mark.contract
+def test_unresolved_identity_cannot_become_an_authoritative_gpu_claim() -> None:
+    bom = Bom("bom.xlsx", (_line("GPU-ALIAS", "GPU accelerator", "9", 2),))
+
+    claim = next(
+        item
+        for item in inspect_bom_claims(bom, ("GPU-A",), request_context=_context())
+        if item.kind is ClaimKind.GPU_QUANTITY
+    )
+
+    assert claim.value is None
+    assert claim.status == "unresolved"
+    assert claim.execution_trace.nodes[-1].status == "unresolved"
+
+
+@pytest.mark.contract
+def test_each_claim_trace_contains_only_material_source_evidence() -> None:
+    gpu = _line("GPU-A", "GPU accelerator", "4", 2)
+    cpu = _line("CPU-A", "CPU", "2", 3)
+
+    claims = {
+        claim.kind: claim
+        for claim in inspect_bom_claims(
+            Bom("bom.xlsx", (gpu, cpu)),
+            ("GPU-A", "CPU-A"),
+            request_context=_context(),
+        )
+    }
+
+    gpu_claim = claims[ClaimKind.GPU_QUANTITY]
+    cost_claim = claims[ClaimKind.BOM_COST]
+    assert gpu_claim.evidence == (gpu.evidence,)
+    assert all(node.evidence == (gpu.evidence,) for node in gpu_claim.execution_trace.nodes)
+    assert cost_claim.evidence == (gpu.evidence, cpu.evidence)
+    assert gpu_claim.execution_trace.chain_id != cost_claim.execution_trace.chain_id

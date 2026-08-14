@@ -5,6 +5,7 @@ from datetime import datetime
 from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
 from procurement_intelligence_lab.domain.retrieval import (
     ProjectionBuildRequest,
+    ProjectionKind,
     ProjectionManifest,
     ProjectionStatus,
     RetrievalHit,
@@ -30,6 +31,10 @@ class InMemoryLexicalProjection:
         *,
         request: ProjectionBuildRequest,
     ) -> ProjectionManifest:
+        if request.kind is not ProjectionKind.LEXICAL:
+            raise ValueError(
+                f"lexical projection adapter does not support {request.kind.value!r} builds"
+            )
         source_as_of = max(
             (entry.observed_at for entry in entries),
             default=request.requested_at,

@@ -1,5 +1,6 @@
 """Minimal dependency-free XLSX BOM adapter for synthetic fixtures."""
 
+import re
 from dataclasses import dataclass, replace
 from decimal import Decimal
 from hashlib import sha256
@@ -30,6 +31,7 @@ _NS = {
 _STRUCTURER_NAME = "xlsx-bom-structurer"
 _STRUCTURER_VERSION = "1"
 _BOM_SCHEMA_VERSION = "bom-xlsx-v1"
+_CELL_REFERENCE = re.compile(r"^([A-Z]+)([1-9][0-9]*)$")
 
 
 @dataclass(frozen=True)
@@ -54,6 +56,41 @@ def _cell_value(cell: ET.Element, shared_strings: list[str]) -> str:
         return _text(cell.find("x:is", _NS))
     value = _text(cell.find("x:v", _NS))
     return shared_strings[int(value)] if cell.attrib.get("t") == "s" else value
+
+
+def _column_index(reference: str) -> int:
+    match = _CELL_REFERENCE.fullmatch(reference.upper())
+    if match is None:
+        raise ValueError(f"invalid XLSX cell reference: {reference!r}")
+    index = 0
+    for character in match.group(1):
+        index = index * 26 + ord(character) - ord("A") + 1
+    return index - 1
+
+
+def _column_name(index: int) -> str:
+    name = ""
+    value = index + 1
+    while value:
+        value, remainder = divmod(value - 1, 26)
+        name = chr(ord("A") + remainder) + name
+    return name
+
+
+def _row_values(row: ET.Element, shared_strings: list[str]) -> tuple[list[str], tuple[str, ...]]:
+    """Return coordinate-aligned values and the populated source columns."""
+
+    indexed: dict[int, str] = {}
+    populated: list[str] = []
+    next_index = 0
+    for cell in row.findall("x:c", _NS):
+        reference = cell.attrib.get("r")
+        index = _column_index(reference) if reference else next_index
+        indexed[index] = _cell_value(cell, shared_strings)
+        populated.append(_column_name(index))
+        next_index = index + 1
+    width = max(indexed, default=-1) + 1
+    return [indexed.get(index, "") for index in range(width)], tuple(populated)
 
 
 def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
@@ -97,17 +134,20 @@ def read_bom_with_provenance(
             raise ValueError(f"sheet {sheet!r} has no valid relationship")
         worksheet = "xl/" + relmap[target].lstrip("/")
         root = ET.fromstring(archive.read(worksheet))
-        rows: list[list[str]] = []
-        for row in root.findall(".//x:sheetData/x:row", _NS):
-            rows.append([_cell_value(cell, shared) for cell in row.findall("x:c", _NS)])
+        rows: list[tuple[int, list[str], tuple[str, ...]]] = []
+        for fallback_row_number, row in enumerate(
+            root.findall(".//x:sheetData/x:row", _NS), start=1
+        ):
+            values, populated_columns = _row_values(row, shared)
+            rows.append((int(row.attrib.get("r", fallback_row_number)), values, populated_columns))
 
-    if not rows or rows[0][:4] != ["SKU", "Description", "Quantity", "Unit Price"]:
+    if not rows or rows[0][1][:4] != ["SKU", "Description", "Quantity", "Unit Price"]:
         raise ValueError("expected BOM headers: SKU, Description, Quantity, Unit Price")
 
     artifact_id = str(path)
     digest = sha256(raw).hexdigest()
     lines: list[BomLine] = []
-    for row_number, row in enumerate(rows[1:], start=2):
+    for row_number, row, populated_columns in rows[1:]:
         if not row or not row[0]:
             continue
         padded = row + [""] * (4 - len(row))
@@ -118,7 +158,7 @@ def read_bom_with_provenance(
                 padded[1],
                 Decimal(padded[2]),
                 price,
-                EvidenceRef(artifact_id, digest, sheet, row_number, ("A", "B", "C", "D")),
+                EvidenceRef(artifact_id, digest, sheet, row_number, populated_columns),
             )
         )
 

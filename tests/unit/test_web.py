@@ -34,7 +34,7 @@ def test_claim_payload_exposes_trace_and_source_evidence() -> None:
     assert payload["claim"] == "gpu_quantity"
     assert isinstance(payload["claim_id"], str)
     assert payload["value"] == "4"
-    assert payload["status"] == "observed"
+    assert payload["status"] == "reconciled"
     evidence = cast(list[dict[str, object]], payload["evidence"])
     assert isinstance(evidence[0]["evidence_id"], str)
     assert evidence[0]["sheet"] == "BOM"

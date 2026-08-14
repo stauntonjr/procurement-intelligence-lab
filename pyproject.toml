@@ -8,7 +8,13 @@ license = {text = "MIT"}
 dependencies = []
 
 [dependency-groups]
-dev = ["pytest>=8.3", "ruff>=0.8", "pyright>=1.1"]
+dev = [
+  "hypothesis>=6.138",
+  "pytest>=8.3",
+  "pytest-cov>=6.2",
+  "ruff>=0.8",
+  "pyright>=1.1",
+]
 release = ["python-semantic-release>=10.0"]
 
 [build-system]
@@ -28,9 +34,27 @@ target-version = "py312"
 [tool.pyright]
 include = ["src", "tests"]
 typeCheckingMode = "strict"
+pythonVersion = "3.12"
+venvPath = "."
+venv = ".venv"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+  "contract: port and adapter conformance tests",
+  "integration: cross-layer public-interface tests",
+  "regression: permanent oracles for previously shipped defects",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["procurement_intelligence_lab"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from importlib.resources import files
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -31,7 +32,7 @@ form{display:flex;gap:10px}input{flex:1;padding:13px;border:1px solid #ccd3df;bo
 @media(max-width:700px){.trace{grid-template-columns:1fr 1fr}h1{font-size:34px}}
 </style></head><body><main><p>PROCUREMENT INTELLIGENCE LAB · READ-ONLY INVESTIGATION</p>
 <h1>Every answer has a trail.</h1><p>Ask an approved BOM question. The answer is computed deterministically and remains linked to its source evidence.</p>
-<section class="chat"><form><input name="q" value="How many GPUs are in the BOM?" aria-label="Question"><button>Ask</button></form><div id="answer"></div></section>
+<section class="chat"><form><input type="hidden" name="tenant_id" value="synthetic-tenant"><input type="hidden" name="project_id" value="synthetic-project"><input type="hidden" name="site_id" value="synthetic-site"><input name="q" value="How many GPUs are in the BOM?" aria-label="Question"><button>Ask</button></form><div id="answer"></div></section>
 <section class="panel"><p>EXECUTION TRACE</p><div class="trace" id="trace"><div class="stage">Source assertions</div><div class="stage">Entity resolution</div><div class="stage">Operational state</div><div class="stage">Reconciliation</div></div></section>
 <script>
 const form=document.querySelector("form"),answer=document.querySelector("#answer"),trace=document.querySelector("#trace");
@@ -51,7 +52,7 @@ class ReviewContextNotFoundError(LookupError):
 
 
 def _fixture() -> Path:
-    return Path(__file__).resolve().parents[3] / "examples" / "synthetic_bom.xlsx"
+    return Path(str(files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")))
 
 
 def _request_context(
