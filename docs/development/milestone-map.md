@@ -11,7 +11,7 @@ This is the canonical map from the current implementation to the architecture. M
 | M4 | Constrained deterministic chat routing | Complete | `application/chat.py` |
 | M5 | Local HTTP chat/evidence inspector | Complete | [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82) |
 | M6 | Durable identifiers, source viewer, and review context | Complete | [PRs #86, #88, and #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90), ADRs 013–014 |
-| M7 | Append-only persistence, temporal state, anomaly taxonomy, and execution provenance | In progress | [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92), [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), ADRs 015–017 |
+| M7 | Append-only persistence, temporal state, anomaly taxonomy, and execution provenance | In progress | [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92), [Issues #47 and #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47), ADRs 015–017 and 020 |
 | M8 | Retrieval projections and review UI | In progress | Issue #54, ADR-018, retrieval lifecycle contract |
 | M9 | Guarded actions, product signals, and integrated evaluation | Planned | Approval gates, sanitized feedback loop, release evidence |
 
