@@ -22,6 +22,7 @@ from procurement_intelligence_lab.domain.resolution import (
     ResolutionDecision,
     resolve_identifier,
 )
+from procurement_intelligence_lab.domain.scope import Permission, RequestContext
 from procurement_intelligence_lab.domain.state import project_operational_lines
 
 
@@ -39,7 +40,10 @@ def run_bom_pipeline(
     canonical_candidates: tuple[str, ...],
     *,
     provenance: ProvenanceContext | None = None,
+    request_context: RequestContext | None = None,
 ) -> BomPipelineResult:
+    if request_context is not None:
+        request_context.require(Permission.READ_STATE)
     context = provenance or local_provenance_context()
     resolution_provenance = DecisionProvenance(
         context,
