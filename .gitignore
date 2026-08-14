@@ -11,3 +11,7 @@ build/
 vision_chat.txt
 Fluidstack Anthropic $50B Deal.md
 *.code-workspace
+
+# Gemini CLI local state / credentials
+.gemini/
+gha-creds-*.json

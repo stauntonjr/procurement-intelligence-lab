@@ -1,0 +1,79 @@
+"""Minimal dependency-free XLSX BOM adapter for synthetic fixtures."""
+
+from decimal import Decimal
+from hashlib import sha256
+from pathlib import Path
+from xml.etree import ElementTree as ET
+from zipfile import ZipFile
+
+from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
+
+
+_NS = {
+    "x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+    "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+}
+
+
+def _text(node: ET.Element | None) -> str:
+    return "".join(node.itertext()) if node is not None else ""
+
+
+def _cell_value(cell: ET.Element, shared_strings: list[str]) -> str:
+    if cell.attrib.get("t") == "inlineStr":
+        return _text(cell.find("x:is", _NS))
+    value = _text(cell.find("x:v", _NS))
+    return shared_strings[int(value)] if cell.attrib.get("t") == "s" else value
+
+
+def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
+    raw = Path(path).read_bytes()
+    with ZipFile(path) as archive:
+        shared = (
+            [
+                _text(node)
+                for node in ET.fromstring(archive.read("xl/sharedStrings.xml")).findall(
+                    ".//x:si", _NS
+                )
+            ]
+            if "xl/sharedStrings.xml" in archive.namelist()
+            else []
+        )
+        workbook = ET.fromstring(archive.read("xl/workbook.xml"))
+        rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+        relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
+        sheet_node = next(
+            (item for item in workbook.findall(".//x:sheet", _NS) if item.attrib["name"] == sheet),
+            None,
+        )
+        if sheet_node is None:
+            raise ValueError(f"sheet {sheet!r} not found in workbook")
+        target = sheet_node.attrib.get(f"{{{_NS['r']}}}id", sheet_node.attrib.get("r:id", ""))
+        if not target or target not in relmap:
+            raise ValueError(f"sheet {sheet!r} has no valid relationship")
+        worksheet = "xl/" + relmap[target].lstrip("/")
+        root = ET.fromstring(archive.read(worksheet))
+        rows: list[list[str]] = []
+        for row in root.findall(".//x:sheetData/x:row", _NS):
+            rows.append([_cell_value(cell, shared) for cell in row.findall("x:c", _NS)])
+
+    if not rows or rows[0][:4] != ["SKU", "Description", "Quantity", "Unit Price"]:
+        raise ValueError("expected BOM headers: SKU, Description, Quantity, Unit Price")
+
+    digest = sha256(raw).hexdigest()
+    lines: list[BomLine] = []
+    for row_number, row in enumerate(rows[1:], start=2):
+        if not row or not row[0]:
+            continue
+        padded = row + [""] * (4 - len(row))
+        price = Decimal(padded[3]) if padded[3] else None
+        lines.append(
+            BomLine(
+                padded[0],
+                padded[1],
+                Decimal(padded[2]),
+                price,
+                EvidenceRef(path.__str__(), digest, sheet, row_number, ("A", "B", "C", "D")),
+            )
+        )
+    return Bom(path.__str__(), tuple(lines))
