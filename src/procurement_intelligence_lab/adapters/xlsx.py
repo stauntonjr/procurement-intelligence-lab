@@ -1,6 +1,6 @@
 """Minimal dependency-free XLSX BOM adapter for synthetic fixtures."""
 
-from decimal import Decimal
+from decimal import Decimal  # noqa: I001
 from hashlib import sha256
 from pathlib import Path
 from xml.etree import ElementTree as ET
