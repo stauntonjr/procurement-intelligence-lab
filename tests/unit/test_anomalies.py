@@ -284,12 +284,11 @@ def test_state_orchestration_preserves_scope_and_incomplete_observation(
     assert anomalies[-1].severity is AnomalySeverity.INFO
 
 
-def test_state_orchestration_nonzero_tolerance_classifies_small_order_as_quantity_mismatch_not_missing_po(
+def test_state_orchestration_tolerance_does_not_hide_nonzero_order(
     evidence: tuple[EvidenceRef, ...],
     detected_at: datetime,
     provenance: DecisionProvenance,
 ) -> None:
-    """ordered=1, expected=4, tolerance=1: should be QUANTITY_MISMATCH, not MISSING_PO."""
     expected = ExpectedRequirement(
         "GPU-A",
         Decimal(4),
@@ -300,7 +299,7 @@ def test_state_orchestration_nonzero_tolerance_classifies_small_order_as_quantit
     observed = ObservedProcurement(
         "GPU-A",
         Decimal(1),
-        Decimal(1),
+        Decimal(0),
         Decimal(0),
         Decimal(0),
         Decimal(0),
@@ -317,6 +316,4 @@ def test_state_orchestration_nonzero_tolerance_classifies_small_order_as_quantit
         detected_at=detected_at,
     )
 
-    kinds = [anomaly.kind for anomaly in anomalies]
-    assert AnomalyKind.MISSING_PO not in kinds
-    assert AnomalyKind.QUANTITY_MISMATCH in kinds
+    assert [anomaly.kind for anomaly in anomalies] == [AnomalyKind.QUANTITY_MISMATCH]
