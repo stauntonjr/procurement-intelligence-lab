@@ -91,7 +91,7 @@ def test_failed_or_deleted_projection_cannot_silently_serve_stale_results() -> N
     assert rebuilt.status is ProjectionStatus.READY
     assert deleted.status is ProjectionStatus.DELETED
     with pytest.raises(LookupError, match="not ready"):
-        projection.search("lexical-bom", "GPU")
+        projection.search("lexical-bom", "GPU", context=_scope())
 
 
 def test_projection_requires_explicit_lifecycle_inputs() -> None:
