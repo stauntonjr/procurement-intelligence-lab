@@ -88,7 +88,6 @@ class Anomaly:
         )
 
 
-
 def detect_expected_observed_anomalies(
     state: ExpectedObservedState,
     *,
@@ -189,6 +188,7 @@ def _state_evidence(state: ExpectedObservedState) -> tuple[EvidenceRef, ...]:
     if state.observed is not None:
         evidence.extend(state.observed.evidence)
     return tuple({ref.evidence_id: ref for ref in evidence}.values())
+
 
 def detect_quantity_mismatch(
     subject_key: str,
