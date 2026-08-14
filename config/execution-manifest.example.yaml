@@ -1,0 +1,28 @@
+# Example effective execution manifest.
+# The launcher resolves these values before constructing ProvenanceContext.
+run:
+  workflow_name: bom-pipeline
+  workflow_version: "1"
+  run_id: "<generated-per-run>"
+  code_revision: "<immutable-git-sha>"
+  image_digest: "<immutable-container-digest>"
+  config_digest: "<hash-of-resolved-config>"
+  dependency_lock_digest: "<hash-of-lockfile>"
+  input_snapshot_ids:
+    - "<artifact-or-dataset-snapshot-id>"
+
+components:
+  entity_resolver:
+    kind: deterministic
+    implementation_version: "1"
+    policy_version: "normalized-exact-v1"
+  anomaly_detector:
+    kind: model
+    implementation_version: "<adapter-version>"
+    provider: "<provider>"
+    model_id: "<provider-model-id>"
+    model_revision: "<immutable-model-revision>"
+    prompt_version: "<prompt-version>"
+    schema_version: "<schema-version>"
+
+# Do not place API keys, raw environment values, or proprietary data here.

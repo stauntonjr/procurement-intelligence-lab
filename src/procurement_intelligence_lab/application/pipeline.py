@@ -8,6 +8,12 @@ from procurement_intelligence_lab.domain.assertions import (
 )
 from procurement_intelligence_lab.domain.bom import Bom
 from procurement_intelligence_lab.domain.evidence import EvidenceChain, pipeline_chain
+from procurement_intelligence_lab.domain.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+    ProvenanceContext,
+    local_provenance_context,
+)
 from procurement_intelligence_lab.domain.reconciliation import (
     ReconciledLine,
     reconcile_lines,
@@ -25,15 +31,43 @@ class BomPipelineResult:
     decisions: tuple[ResolutionDecision, ...]
     reconciled_lines: tuple[ReconciledLine, ...]
     evidence: EvidenceChain
+    provenance: ProvenanceContext
 
 
-def run_bom_pipeline(bom: Bom, canonical_candidates: tuple[str, ...]) -> BomPipelineResult:
+def run_bom_pipeline(
+    bom: Bom,
+    canonical_candidates: tuple[str, ...],
+    *,
+    provenance: ProvenanceContext | None = None,
+) -> BomPipelineResult:
+    context = provenance or local_provenance_context()
+    resolution_provenance = DecisionProvenance(
+        context,
+        "normalized-exact-resolver",
+        ComponentKind.DETERMINISTIC,
+        "1",
+    )
+    reconciliation_provenance = DecisionProvenance(
+        context,
+        "deterministic-reconciliation",
+        ComponentKind.DETERMINISTIC,
+        "1",
+    )
     assertions = assertions_for_bom(bom)
     decisions = tuple(
-        resolve_identifier(line.sku, canonical_candidates, assertions) for line in bom.lines
+        resolve_identifier(
+            line.sku,
+            canonical_candidates,
+            assertions,
+            provenance=resolution_provenance,
+        )
+        for line in bom.lines
     )
     operational_lines = project_operational_lines(bom, decisions)
-    reconciled_lines = reconcile_lines(operational_lines)
+    reconciled_lines = reconcile_lines(
+        operational_lines,
+        provenance=reconciliation_provenance,
+    )
     evidence_refs = tuple(line.evidence for line in bom.lines)
     reconciliation_status = (
         "conflict" if any(line.status == "conflict" for line in reconciled_lines) else "reconciled"
@@ -49,4 +83,5 @@ def run_bom_pipeline(bom: Bom, canonical_candidates: tuple[str, ...]) -> BomPipe
             operational_lines,
             reconciliation_status,
         ),
+        context,
     )

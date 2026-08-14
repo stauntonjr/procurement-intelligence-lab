@@ -1,11 +1,25 @@
 from decimal import Decimal
 
 from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domain.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+    local_provenance_context,
+)
 from procurement_intelligence_lab.domain.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
 from procurement_intelligence_lab.domain.state import OperationalBomLine, project_operational_lines
+
+
+def _provenance() -> DecisionProvenance:
+    return DecisionProvenance(
+        local_provenance_context(),
+        "test-resolver",
+        ComponentKind.DETERMINISTIC,
+        "1",
+    )
 
 
 def test_only_resolved_lines_enter_operational_state() -> None:
@@ -18,8 +32,22 @@ def test_only_resolved_lines_enter_operational_state() -> None:
         ),
     )
     decisions = (
-        ResolutionDecision("GPU-A", "gpu-canonical", ResolutionStatus.RESOLVED, (), "exact"),
-        ResolutionDecision("UNKNOWN", None, ResolutionStatus.UNRESOLVED, (), "missing"),
+        ResolutionDecision(
+            "GPU-A",
+            "gpu-canonical",
+            ResolutionStatus.RESOLVED,
+            (),
+            "exact",
+            _provenance(),
+        ),
+        ResolutionDecision(
+            "UNKNOWN",
+            None,
+            ResolutionStatus.UNRESOLVED,
+            (),
+            "missing",
+            _provenance(),
+        ),
     )
 
     lines = project_operational_lines(bom, decisions)
