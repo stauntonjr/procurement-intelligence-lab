@@ -9,7 +9,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 ## Current milestone and status
 
 - **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes temporal correction, durable storage, and complete transformation provenance. See the [canonical milestone map](../development/milestone-map.md), [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), and [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
-- **M8 — Retrieval projections and review UI:** planned. The foundation is [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
+- **M8 — Retrieval projections and review UI:** in progress. The rebuildable projection lifecycle foundation is [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
 - **M9 — Guarded actions, product signals, and integrated evaluation:** planned.
 - The initial M0–M6 evidence-first vertical slice is complete on `main`; the [root README](../../README.md) records the current product boundary and runnable entry points.
 
@@ -28,7 +28,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- No implementation pull requests are currently open.
+- The retrieval lifecycle slice for [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) is active; it adds a derived, rebuildable lexical reference projection without selecting a search, vector, or graph store.
 - [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) scopes end-to-end transformation provenance from artifacts through structuring, mapping, assertions, and decisions.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) scopes rebuildable retrieval projection ports and lifecycle.
 - M6 follow-on review work remains tracked by [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
@@ -54,7 +54,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 1. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
 2. Prioritize [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) before model-backed structuring or graph/hypergraph persistence decisions.
-3. Continue with [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) when its retrieval port can be built from canonical assertion history and the current provenance contract.
+3. Complete and review [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54); use its lifecycle contract as the boundary for later lexical, vector, and graph adapters.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.
 
 ## Refresh protocol
