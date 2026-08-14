@@ -74,8 +74,8 @@ def test_incomplete_price_and_unresolved_identity_abstain_from_canonical_state()
 def test_conflicting_prices_retain_both_artifacts() -> None:
     reconciled = reconcile_lines(
         (
-            OperationalBomLine("GPU-A", Decimal(1), Decimal(100), "bom-a.xlsx"),
-            OperationalBomLine("GPU-A", Decimal(1), Decimal(125), "bom-b.xlsx"),
+            OperationalBomLine("GPU-A", Decimal(1), Decimal(100), "bom-a.xlsx", line("GPU-A", "1", "100", 2).evidence),
+            OperationalBomLine("GPU-A", Decimal(1), Decimal(125), "bom-b.xlsx", line("GPU-A", "1", "125", 3).evidence),
         ),
         provenance=_provenance(),
     )
