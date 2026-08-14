@@ -8,7 +8,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes expected-versus-observed state, temporal correction, durable storage, and anomaly orchestration. See the [canonical milestone map](../development/milestone-map.md), [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47), and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60).
+- **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes temporal correction, durable storage, and anomaly orchestration. See the [canonical milestone map](../development/milestone-map.md) and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60).
 - **M8 — Retrieval projections and review UI:** in progress. The rebuildable projection lifecycle foundation is complete; later adapter work remains. See [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
 - **M9 — Guarded actions, product signals, and integrated evaluation:** planned.
 - The initial M0–M6 evidence-first vertical slice is complete on `main`; the [root README](../../README.md) records the current product boundary and runnable entry points.
@@ -32,7 +32,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- Expected-versus-observed state is complete; [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) can close after this acceptance-evidence PR merges. The next M7 slice is temporal correction and anomaly orchestration.
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) is active: begin deterministic orchestration only from explicit scoped expected and observed state.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) is complete. Follow-on M8 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - M6 identity, source-viewer, and review-context work is complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -55,7 +55,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Close [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) once its acceptance evidence is merged, then extend anomaly orchestration only from explicit scoped expected and observed state.
+1. Extend [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) from explicit scoped expected and observed state; keep anomaly detection distinct from prediction, decisions, and actions.
 2. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
 3. Sequence later retrieval adapters only after their prerequisites, scope filters, and evaluation evidence are ready.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.
