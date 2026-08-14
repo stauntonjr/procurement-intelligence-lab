@@ -2,6 +2,11 @@ from typing import cast
 
 import pytest
 
+from procurement_intelligence_lab.domain.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
+)
 from procurement_intelligence_lab.interfaces.web import (
     EvidenceNotFoundError,
     claim_payload,
@@ -9,8 +14,22 @@ from procurement_intelligence_lab.interfaces.web import (
 )
 
 
+def _context(permission: Permission) -> RequestContext:
+    return RequestContext(
+        "demo-user",
+        "synthetic-tenant",
+        "synthetic-project",
+        "synthetic-site",
+        frozenset({permission, Permission.READ_STATE}),
+        "trace",
+    )
+
+
 def test_claim_payload_exposes_trace_and_source_evidence() -> None:
-    payload = claim_payload("How many GPUs are in the BOM?")
+    payload = claim_payload(
+        "How many GPUs are in the BOM?",
+        request_context=_context(Permission.READ_STATE),
+    )
 
     assert payload["claim"] == "gpu_quantity"
     assert isinstance(payload["claim_id"], str)
@@ -32,11 +51,17 @@ def test_claim_payload_exposes_trace_and_source_evidence() -> None:
 
 
 def test_source_payload_resolves_a_stable_evidence_id() -> None:
-    claim = claim_payload("How many GPUs are in the BOM?")
+    claim = claim_payload(
+        "How many GPUs are in the BOM?",
+        request_context=_context(Permission.READ_STATE),
+    )
     evidence = cast(list[dict[str, object]], claim["evidence"])
     evidence_id = cast(str, evidence[0]["evidence_id"])
 
-    payload = source_payload(evidence_id)
+    payload = source_payload(
+        evidence_id,
+        request_context=_context(Permission.READ_EVIDENCE),
+    )
     source_evidence = cast(dict[str, object], payload["evidence"])
     source_line = cast(dict[str, object], payload["line"])
 
@@ -47,4 +72,15 @@ def test_source_payload_resolves_a_stable_evidence_id() -> None:
 
 def test_source_payload_rejects_unknown_evidence_id() -> None:
     with pytest.raises(EvidenceNotFoundError):
-        source_payload("evidence:missing")
+        source_payload(
+            "evidence:missing",
+            request_context=_context(Permission.READ_EVIDENCE),
+        )
+
+
+def test_source_payload_rejects_missing_evidence_permission() -> None:
+    with pytest.raises(ScopeAuthorizationError, match="lacks"):
+        source_payload(
+            "evidence:missing",
+            request_context=_context(Permission.READ_STATE),
+        )

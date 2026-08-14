@@ -10,6 +10,11 @@ from procurement_intelligence_lab.domain.retrieval import (
     RetrievalHit,
     source_entry_ids,
 )
+from procurement_intelligence_lab.domain.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
+)
 
 
 class InMemoryLexicalProjection:
@@ -38,6 +43,7 @@ class InMemoryLexicalProjection:
             source_as_of=source_as_of,
             status=ProjectionStatus.READY,
             recorded_at=request.requested_at,
+            scope=request.scope,
         )
         self._entries[request.projection_id] = entries
         self._manifests[request.projection_id] = manifest
@@ -47,13 +53,16 @@ class InMemoryLexicalProjection:
         return self._manifests.get(projection_id)
 
     def search(
-        self, projection_id: str, query: str, *, limit: int = 10
+        self, projection_id: str, query: str, *, context: RequestContext, limit: int = 10
     ) -> tuple[RetrievalHit, ...]:
         if limit <= 0:
             raise ValueError("limit must be positive")
         manifest = self._manifests.get(projection_id)
         if manifest is None or manifest.status is not ProjectionStatus.READY:
             raise LookupError("projection is not ready")
+        context.require(Permission.SEARCH)
+        if not context.matches(manifest.scope):
+            raise ScopeAuthorizationError("request scope does not match projection scope")
         terms = tuple(term for term in query.casefold().split() if term)
         if not terms:
             return ()
@@ -110,6 +119,7 @@ class InMemoryLexicalProjection:
             source_as_of=previous.source_as_of,
             status=status,
             recorded_at=recorded_at,
+            scope=previous.scope,
             failure_reason=failure_reason,
         )
         self._manifests[previous.projection_id] = manifest

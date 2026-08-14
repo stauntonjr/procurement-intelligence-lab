@@ -13,6 +13,11 @@ from procurement_intelligence_lab.domain.retrieval import (
     ProjectionKind,
     ProjectionStatus,
 )
+from procurement_intelligence_lab.domain.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
+)
 
 
 def _entries() -> tuple[AssertionLedgerEntry, ...]:
@@ -34,6 +39,17 @@ def _entries() -> tuple[AssertionLedgerEntry, ...]:
     return first, second
 
 
+def _scope() -> RequestContext:
+    return RequestContext(
+        "demo-user",
+        "demo-tenant",
+        "demo-project",
+        "demo-site",
+        frozenset({Permission.SEARCH}),
+        "trace-1",
+    )
+
+
 def _request() -> ProjectionBuildRequest:
     return ProjectionBuildRequest(
         "lexical-bom",
@@ -41,6 +57,7 @@ def _request() -> ProjectionBuildRequest:
         "1",
         "config-v1",
         datetime(2026, 1, 3, tzinfo=UTC),
+        _scope(),
     )
 
 
@@ -50,7 +67,7 @@ def test_projection_builds_from_ledger_entries_and_exposes_source_metadata() -> 
 
     assert manifest.status is ProjectionStatus.READY
     assert len(manifest.source_entry_ids) == 2
-    hit = projection.search("lexical-bom", "accelerator")[0]
+    hit = projection.search("lexical-bom", "accelerator", context=_scope())[0]
     assert hit.entry.assertion.evidence.artifact_id == "bom.xlsx"
     assert hit.epistemic_status == "source_assertion"
     assert hit.projection_manifest_id == manifest.manifest_id
@@ -67,14 +84,14 @@ def test_failed_or_deleted_projection_cannot_silently_serve_stale_results() -> N
     )
     assert failed.status is ProjectionStatus.FAILED
     with pytest.raises(LookupError, match="not ready"):
-        projection.search("lexical-bom", "GPU")
+        projection.search("lexical-bom", "GPU", context=_scope())
 
     rebuilt = projection.build(_entries(), request=_request())
     deleted = projection.delete("lexical-bom", recorded_at=datetime(2026, 1, 5, tzinfo=UTC))
     assert rebuilt.status is ProjectionStatus.READY
     assert deleted.status is ProjectionStatus.DELETED
     with pytest.raises(LookupError, match="not ready"):
-        projection.search("lexical-bom", "GPU")
+        projection.search("lexical-bom", "GPU", context=_scope())
 
 
 def test_projection_requires_explicit_lifecycle_inputs() -> None:
@@ -85,4 +102,26 @@ def test_projection_requires_explicit_lifecycle_inputs() -> None:
             "1",
             "config-v1",
             datetime(2026, 1, 3),  # noqa: DTZ001
+            _scope(),
         )
+
+
+def test_projection_rejects_missing_permission_or_conflicting_scope() -> None:
+    projection = InMemoryLexicalProjection()
+    projection.build(_entries(), request=_request())
+    missing_permission = RequestContext(
+        "demo-user", "demo-tenant", "demo-project", "demo-site", frozenset(), "trace-2"
+    )
+    conflicting_scope = RequestContext(
+        "demo-user",
+        "demo-tenant",
+        "other-project",
+        "demo-site",
+        frozenset({Permission.SEARCH}),
+        "trace-3",
+    )
+
+    with pytest.raises(ScopeAuthorizationError, match="lacks"):
+        projection.search("lexical-bom", "GPU", context=missing_permission)
+    with pytest.raises(ScopeAuthorizationError, match="does not match"):
+        projection.search("lexical-bom", "GPU", context=conflicting_scope)

@@ -9,6 +9,7 @@ from procurement_intelligence_lab.domain.retrieval import (
     ProjectionManifest,
     RetrievalHit,
 )
+from procurement_intelligence_lab.domain.scope import RequestContext
 
 
 class RetrievalProjection(Protocol):
@@ -24,7 +25,7 @@ class RetrievalProjection(Protocol):
     def status(self, projection_id: str) -> ProjectionManifest | None: ...
 
     def search(
-        self, projection_id: str, query: str, *, limit: int = 10
+        self, projection_id: str, query: str, *, context: RequestContext, limit: int = 10
     ) -> tuple[RetrievalHit, ...]: ...
 
     def fail(

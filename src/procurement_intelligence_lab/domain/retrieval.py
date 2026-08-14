@@ -6,6 +6,7 @@ from enum import StrEnum
 
 from procurement_intelligence_lab.domain.identity import stable_id
 from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.domain.scope import RequestContext
 
 
 class ProjectionKind(StrEnum):
@@ -27,6 +28,7 @@ class ProjectionBuildRequest:
     implementation_version: str
     config_digest: str
     requested_at: datetime
+    scope: RequestContext
 
     def __post_init__(self) -> None:
         if not self.projection_id:
@@ -49,6 +51,7 @@ class ProjectionManifest:
     source_as_of: datetime
     status: ProjectionStatus
     recorded_at: datetime
+    scope: RequestContext
     failure_reason: str | None = None
 
     def __post_init__(self) -> None:
@@ -71,6 +74,9 @@ class ProjectionManifest:
             self.source_as_of.isoformat(),
             self.status.value,
             self.recorded_at.isoformat(),
+            self.scope.tenant_id,
+            self.scope.project_id,
+            self.scope.site_id,
             self.failure_reason,
         )
 

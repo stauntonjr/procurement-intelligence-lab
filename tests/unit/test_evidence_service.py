@@ -5,6 +5,13 @@ from procurement_intelligence_lab.application.evidence_service import (
     inspect_bom_claims,
 )
 from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domain.scope import Permission, RequestContext
+
+
+def _context() -> RequestContext:
+    return RequestContext(
+        "user", "tenant", "project", "site", frozenset({Permission.READ_STATE}), "trace"
+    )
 
 
 def test_claim_service_exposes_deterministic_values_and_execution_trace() -> None:
@@ -17,7 +24,7 @@ def test_claim_service_exposes_deterministic_values_and_execution_trace() -> Non
         ),
     )
 
-    claims = inspect_bom_claims(bom, ("GPU-A", "CPU-A"))
+    claims = inspect_bom_claims(bom, ("GPU-A", "CPU-A"), request_context=_context())
 
     assert [claim.kind for claim in claims] == [
         ClaimKind.DISTINCT_SKUS,

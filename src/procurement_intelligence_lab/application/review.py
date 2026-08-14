@@ -8,6 +8,7 @@ from procurement_intelligence_lab.application.evidence_service import (
     inspect_bom_claims,
 )
 from procurement_intelligence_lab.domain.bom import Bom
+from procurement_intelligence_lab.domain.scope import Permission, RequestContext
 
 
 class ReviewReason(StrEnum):
@@ -31,9 +32,18 @@ class ReviewContext:
 
 
 def review_context_for_claim(
-    claim_id: str, bom: Bom, canonical_candidates: tuple[str, ...]
+    claim_id: str,
+    bom: Bom,
+    canonical_candidates: tuple[str, ...],
+    *,
+    request_context: RequestContext,
 ) -> ReviewContext:
-    claims = inspect_bom_claims(bom, canonical_candidates)
+    request_context.require(Permission.REVIEW)
+    claims = inspect_bom_claims(
+        bom,
+        canonical_candidates,
+        request_context=request_context,
+    )
     claim = next((claim for claim in claims if claim.claim_id == claim_id), None)
     if claim is None:
         raise LookupError(f"unknown claim ID: {claim_id}")

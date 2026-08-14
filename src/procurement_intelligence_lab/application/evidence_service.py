@@ -14,6 +14,7 @@ from procurement_intelligence_lab.domain.bom import (
 )
 from procurement_intelligence_lab.domain.evidence import EvidenceChain
 from procurement_intelligence_lab.domain.identity import stable_id
+from procurement_intelligence_lab.domain.scope import RequestContext
 
 
 class ClaimKind(StrEnum):
@@ -43,9 +44,16 @@ class EvidenceBackedClaim:
 
 
 def inspect_bom_claims(
-    bom: Bom, canonical_candidates: tuple[str, ...]
+    bom: Bom,
+    canonical_candidates: tuple[str, ...],
+    *,
+    request_context: RequestContext,
 ) -> tuple[EvidenceBackedClaim, ...]:
-    trace = run_bom_pipeline(bom, canonical_candidates).evidence
+    trace = run_bom_pipeline(
+        bom,
+        canonical_candidates,
+        request_context=request_context,
+    ).evidence
     queries: tuple[tuple[ClaimKind, QueryResult], ...] = (
         (ClaimKind.DISTINCT_SKUS, distinct_skus(bom)),
         (ClaimKind.GPU_QUANTITY, gpu_quantity(bom)),
