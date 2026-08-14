@@ -33,8 +33,8 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
     anomaly = Anomaly(
         "GPU-A",
         AnomalyKind.QUANTITY_MISMATCH,
-        Decimal("4"),
-        Decimal("8"),
+        Decimal(4),
+        Decimal(8),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         evidence,
@@ -45,8 +45,8 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
     equivalent = Anomaly(
         "GPU-A",
         AnomalyKind.QUANTITY_MISMATCH,
-        Decimal("4"),
-        Decimal("8"),
+        Decimal(4),
+        Decimal(8),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         evidence,
@@ -62,13 +62,13 @@ def test_quantity_tolerance_is_configurable(
     evidence: tuple[EvidenceRef, ...],
     detected_at: datetime,
 ) -> None:
-    policy = AnomalyPolicy("quantity-v1", quantity_tolerance=Decimal("1"))
+    policy = AnomalyPolicy("quantity-v1", quantity_tolerance=Decimal(1))
 
     assert (
         detect_quantity_mismatch(
             "GPU-A",
-            Decimal("4"),
-            Decimal("5"),
+            Decimal(4),
+            Decimal(5),
             evidence,
             policy=policy,
             detected_at=detected_at,
@@ -77,8 +77,8 @@ def test_quantity_tolerance_is_configurable(
     )
     anomaly = detect_quantity_mismatch(
         "GPU-A",
-        Decimal("4"),
-        Decimal("6"),
+        Decimal(4),
+        Decimal(6),
         evidence,
         policy=policy,
         detected_at=detected_at,
@@ -101,8 +101,8 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
 
     price = detect_price_deviation(
         "GPU-A",
-        Decimal("100"),
-        Decimal("101"),
+        Decimal(100),
+        Decimal(101),
         evidence,
         policy=policy,
         detected_at=detected_at,
@@ -117,8 +117,8 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
     )
 
     assert price is not None
-    assert price.expected == Decimal("100")
-    assert price.observed == Decimal("101")
+    assert price.expected == Decimal(100)
+    assert price.observed == Decimal(101)
     assert late is not None
     assert late.kind is AnomalyKind.LATE_COMMITMENT
 
@@ -136,5 +136,5 @@ def test_anomalies_require_timezone_aware_detection_time(
             AnomalyStatus.OPEN,
             evidence,
             "coverage-v1",
-            datetime(2026, 1, 10),
+            datetime(2026, 1, 10),  # noqa: DTZ001
         )
