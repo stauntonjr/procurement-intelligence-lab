@@ -37,10 +37,12 @@ def test_source_payload_resolves_a_stable_evidence_id() -> None:
     evidence_id = cast(str, evidence[0]["evidence_id"])
 
     payload = source_payload(evidence_id)
+    source_evidence = cast(dict[str, object], payload["evidence"])
+    source_line = cast(dict[str, object], payload["line"])
 
-    assert payload["evidence"]["evidence_id"] == evidence_id
-    assert payload["evidence"]["sheet"] == "BOM"
-    assert payload["line"]["sku"] == "GPU-001"
+    assert source_evidence["evidence_id"] == evidence_id
+    assert source_evidence["sheet"] == "BOM"
+    assert source_line["sku"] == "GPU-001"
 
 
 def test_source_payload_rejects_unknown_evidence_id() -> None:
