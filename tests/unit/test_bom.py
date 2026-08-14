@@ -11,7 +11,7 @@ from procurement_intelligence_lab.domain.bom import (
 )
 
 
-def line(sku, description, quantity, price):
+def line(sku: str, description: str, quantity: str, price: str | None) -> BomLine:
     return BomLine(
         sku,
         description,
@@ -21,7 +21,7 @@ def line(sku, description, quantity, price):
     )
 
 
-def test_deterministic_queries_preserve_evidence():
+def test_deterministic_queries_preserve_evidence() -> None:
     bom = Bom(
         "fixture.xlsx",
         (
@@ -37,7 +37,7 @@ def test_deterministic_queries_preserve_evidence():
     assert len(result.evidence) == 2
 
 
-def test_missing_price_abstains_from_cost():
+def test_missing_price_abstains_from_cost() -> None:
     result = bom_cost(Bom("fixture.xlsx", (line("GPU-A", "GPU", "1", None),)))
     assert result.value is None
     assert result.status is EpistemicStatus.UNRESOLVED
