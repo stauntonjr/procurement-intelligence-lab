@@ -13,6 +13,7 @@ from procurement_intelligence_lab.application.chat import (
     UnsupportedQuestionError,
     answer_question,
 )
+from procurement_intelligence_lab.application.review import review_context_for_claim
 
 _HTML = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
@@ -35,6 +36,10 @@ form.addEventListener("submit",async event=>{event.preventDefault();const q=new 
 
 class EvidenceNotFoundError(LookupError):
     """Raised when an evidence ID is not present in the committed fixture."""
+
+
+class ReviewContextNotFoundError(LookupError):
+    """Raised when a claim ID is not present in the committed fixture."""
 
 
 def _fixture() -> Path:
@@ -88,6 +93,31 @@ def source_payload(evidence_id: str) -> dict[str, object]:
     raise EvidenceNotFoundError(f"unknown evidence ID: {evidence_id}")
 
 
+def review_context_payload(claim_id: str) -> dict[str, object]:
+    bom = read_bom(_fixture())
+    try:
+        context = review_context_for_claim(
+            claim_id, bom, tuple(line.sku for line in bom.lines)
+        )
+    except LookupError as error:
+        raise ReviewContextNotFoundError(str(error)) from error
+    value = (
+        str(context.claim_value)
+        if isinstance(context.claim_value, Decimal)
+        else context.claim_value
+    )
+    return {
+        "claim_id": context.claim_id,
+        "claim_kind": context.claim_kind,
+        "claim_value": value,
+        "claim_status": context.claim_status,
+        "evidence_ids": context.evidence_ids,
+        "chain_id": context.chain_id,
+        "node_ids": context.node_ids,
+        "allowed_reasons": [reason.value for reason in context.allowed_reasons],
+    }
+
+
 class InspectorHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
@@ -110,6 +140,15 @@ class InspectorHandler(BaseHTTPRequestHandler):
                 body = json.dumps(source_payload(evidence_id)).encode()
                 self.send_response(200)
             except EvidenceNotFoundError as error:
+                body = json.dumps({"error": str(error)}).encode()
+                self.send_response(404)
+            self.send_header("Content-Type", "application/json")
+        elif parsed.path == "/api/review-context":
+            claim_id = parse_qs(parsed.query).get("claim_id", [""])[0]
+            try:
+                body = json.dumps(review_context_payload(claim_id)).encode()
+                self.send_response(200)
+            except ReviewContextNotFoundError as error:
                 body = json.dumps({"error": str(error)}).encode()
                 self.send_response(404)
             self.send_header("Content-Type", "application/json")
