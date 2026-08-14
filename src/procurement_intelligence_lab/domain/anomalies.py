@@ -89,7 +89,6 @@ class Anomaly:
 
 
 
-
 def detect_expected_observed_anomalies(
     state: ExpectedObservedState,
     *,
