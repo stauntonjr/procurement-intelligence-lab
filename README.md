@@ -10,7 +10,9 @@ The showcase is a chat interface paired with an evidence inspector and source vi
 
 Artifacts flow through StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence. Postgres is the intended canonical store; search, vector, and graph systems are replaceable projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
 
-## Status
+## Project memory and status
+
+The repository is the canonical interoperability layer across ChatGPT, Work, Codex, humans, and other development agents. Use [docs/project/handoff.md](docs/project/handoff.md) as the concise fresh-agent index, then follow its links to the authoritative milestone map, ADRs, architecture docs, Issues, and PRs. Chat/Work supports exploration and planning; development agents implement against the repo; GitHub artifacts carry durable shared state.
 
 The initial evidence-first vertical slice is complete: a dependency-free XLSX BOM adapter, typed line-level evidence, deterministic SKU/GPU/cost queries, explicit cost abstention, source assertions, conservative entity resolution, operational-state projection, reconciliation, a claims/evidence service, constrained chat routing, and a local HTTP inspector with source lookup and reproducible review context.
 
