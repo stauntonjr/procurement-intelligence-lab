@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
@@ -10,7 +11,14 @@ from procurement_intelligence_lab.domain.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-from procurement_intelligence_lab.domain.state import OperationalBomLine, project_operational_lines
+from procurement_intelligence_lab.domain.state import (
+    ObservedProcurement,
+    StateFreshness,
+    StateScope,
+    compare_expected_observed,
+    expected_requirements,
+    project_operational_lines,
+)
 
 
 def _provenance() -> DecisionProvenance:
@@ -22,7 +30,11 @@ def _provenance() -> DecisionProvenance:
     )
 
 
-def test_only_resolved_lines_enter_operational_state() -> None:
+def _scope() -> StateScope:
+    return StateScope("tenant", "project", "site", "bom-v1")
+
+
+def test_expected_state_preserves_resolved_evidence_and_scope() -> None:
     evidence = EvidenceRef("fixture.xlsx", "hash", "BOM", 2, ("A",))
     bom = Bom(
         "fixture.xlsx",
@@ -51,5 +63,59 @@ def test_only_resolved_lines_enter_operational_state() -> None:
     )
 
     lines = project_operational_lines(bom, decisions)
+    expected = expected_requirements(
+        lines,
+        scope=_scope(),
+        as_of=datetime(2026, 1, 1, tzinfo=UTC),
+    )
 
-    assert lines == (OperationalBomLine("gpu-canonical", Decimal(4), Decimal(100), "fixture.xlsx"),)
+    assert len(expected) == 1
+    assert expected[0].required_quantity == Decimal(4)
+    assert expected[0].scope == _scope()
+    assert expected[0].evidence == (evidence,)
+
+
+def test_expected_and_observed_state_exposes_outstanding_and_freshness() -> None:
+    evidence = EvidenceRef("fixture.xlsx", "hash", "BOM", 2, ("A",))
+    expected = expected_requirements(
+        (
+            project_operational_lines(
+                Bom(
+                    "fixture.xlsx",
+                    (BomLine("GPU-A", "GPU", Decimal(4), Decimal(100), evidence),),
+                ),
+                (
+                    ResolutionDecision(
+                        "GPU-A",
+                        "gpu-canonical",
+                        ResolutionStatus.RESOLVED,
+                        (),
+                        "exact",
+                        _provenance(),
+                    ),
+                ),
+            )[0],
+        ),
+        scope=_scope(),
+        as_of=datetime(2026, 1, 1, tzinfo=UTC),
+    )
+    observed = ObservedProcurement(
+        "gpu-canonical",
+        Decimal(4),
+        Decimal(3),
+        Decimal(0),
+        Decimal(0),
+        _scope(),
+        datetime(2026, 1, 2, tzinfo=UTC),
+        StateFreshness.PARTIAL,
+        (evidence,),
+    )
+
+    state = compare_expected_observed(
+        expected,
+        (observed,),
+        as_of=datetime(2026, 1, 2, tzinfo=UTC),
+    )[0]
+
+    assert state.outstanding_quantity == Decimal(1)
+    assert state.freshness is StateFreshness.PARTIAL
