@@ -69,8 +69,9 @@ def bom_cost(bom: Bom) -> QueryResult:
     lines = tuple(line for line in bom.lines if line.status is not EpistemicStatus.UNRESOLVED)
     if any(line.unit_price is None for line in lines):
         return QueryResult(None, tuple(line.evidence for line in lines), EpistemicStatus.UNRESOLVED)
+    priced_lines = tuple(line for line in lines if line.unit_price is not None)
     return QueryResult(
-        sum((line.quantity * line.unit_price for line in lines), Decimal(0)),
+        sum((line.quantity * line.unit_price for line in priced_lines), Decimal(0)),
         tuple(line.evidence for line in lines),
         EpistemicStatus.OBSERVED,
     )

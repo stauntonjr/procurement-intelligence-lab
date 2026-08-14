@@ -1,6 +1,6 @@
 """Minimal dependency-free XLSX BOM adapter for synthetic fixtures."""
 
-from decimal import Decimal  # noqa: I001
+from decimal import Decimal
 from hashlib import sha256
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -56,7 +56,7 @@ def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
         raise ValueError("expected BOM headers: SKU, Description, Quantity, Unit Price")
 
     digest = sha256(raw).hexdigest()
-    lines = []
+    lines: list[BomLine] = []
     for row_number, row in enumerate(rows[1:], start=2):
         if not row or not row[0]:
             continue
