@@ -2,12 +2,12 @@ from procurement_intelligence_lab.domain.assertions import (
     AssertionPredicate,
     SourceAssertion,
 )
+from procurement_intelligence_lab.domain.bom import EvidenceRef
 from procurement_intelligence_lab.domain.resolution import (
     ResolutionStatus,
     normalize_identifier,
     resolve_identifier,
 )
-from procurement_intelligence_lab.domain.bom import EvidenceRef
 
 
 def test_normalized_exact_match_is_resolved() -> None:
