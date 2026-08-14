@@ -106,7 +106,7 @@ def test_expected_and_observed_state_exposes_outstanding_and_freshness() -> None
         Decimal(0),
         Decimal(0),
         Decimal(0),
-        _scope()
+        _scope(),
         datetime(2026, 1, 2, tzinfo=UTC),
         StateFreshness.PARTIAL,
         (evidence,),
