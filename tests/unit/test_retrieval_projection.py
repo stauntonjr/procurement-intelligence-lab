@@ -51,7 +51,7 @@ def test_projection_builds_from_ledger_entries_and_exposes_source_metadata() -> 
     assert manifest.status is ProjectionStatus.READY
     assert len(manifest.source_entry_ids) == 2
     hit = projection.search("lexical-bom", "accelerator")[0]
-    assert hit.entry.assertion.evidence.source_uri == "bom.xlsx"
+    assert hit.entry.assertion.evidence.artifact_id == "bom.xlsx"
     assert hit.epistemic_status == "source_assertion"
     assert hit.projection_manifest_id == manifest.manifest_id
 
