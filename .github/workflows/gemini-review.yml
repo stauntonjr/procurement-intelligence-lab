@@ -58,7 +58,7 @@ jobs:
             }
           prompt: |-
             You are the independent advisory PR reviewer described in GEMINI.md.
-            Read GEMINI.md and AGENTS.md before reviewing.
+            Read GEMINI.md and AGENTS.md before reviewing. When the change touches domain calculations, reconciliation, state transitions, or policy logic, also read `.github/skills/domain-logic-review/SKILL.md` and exercise its scenario matrix.
 
             Review pull request #${{ github.event.pull_request.number }}:
             ${{ github.event.pull_request.title }}
