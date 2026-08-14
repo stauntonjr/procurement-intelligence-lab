@@ -9,6 +9,8 @@ import pytest
 
 from procurement_intelligence_lab.interfaces.web import InspectorHandler
 
+HTTP_TIMEOUT_SECONDS = 5
+
 
 class _FormParser(HTMLParser):
     def __init__(self) -> None:
@@ -31,10 +33,13 @@ def test_default_browser_form_completes_the_real_http_happy_path() -> None:
     address = server.server_address
     host, port = str(address[0]), int(address[1])
     try:
-        with urlopen(f"http://{host}:{port}/") as response:
+        with urlopen(f"http://{host}:{port}/", timeout=HTTP_TIMEOUT_SECONDS) as response:
             parser = _FormParser()
             parser.feed(response.read().decode())
-        with urlopen(f"http://{host}:{port}/api/ask?{urlencode(parser.fields)}") as response:
+        with urlopen(
+            f"http://{host}:{port}/api/ask?{urlencode(parser.fields)}",
+            timeout=HTTP_TIMEOUT_SECONDS,
+        ) as response:
             payload = json.load(response)
             assert response.status == 200
         assert payload["claim"] == "gpu_quantity"

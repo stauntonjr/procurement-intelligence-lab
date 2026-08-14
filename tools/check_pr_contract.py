@@ -35,7 +35,8 @@ def validate(body: str) -> tuple[str, ...]:
         match = re.search(rf"(?m)^- {re.escape(label)}:\s*(.*)$", body)
         if match is None or not match.group(1).strip():
             errors.append(f"missing value: {label}")
-    if not re.search(r"(?m)^\| .+ \| (?:yes|no|n/a) \| .+ \|\s*$", body, re.IGNORECASE):
+    scenario_row = r"(?m)^\s*\|\s*[^|\r\n]+\|\s*(?:yes|no|n/a)\s*\|\s*[^|\r\n]+\s*\|?\s*$"
+    if not re.search(scenario_row, body, re.IGNORECASE):
         errors.append("scenario table must contain at least one completed yes/no/n/a row")
     return tuple(errors)
 

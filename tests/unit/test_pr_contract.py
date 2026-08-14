@@ -30,3 +30,28 @@ make check
 pending
 """
     assert validate(body) == ()
+
+
+def test_pr_contract_accepts_compact_scenario_row_without_trailing_pipe() -> None:
+    body = """## Summary
+Harness
+## Why
+Prevent recurrence
+## Milestone and issue
+- Primary milestone: M0
+- Linked issue: #3
+## Semantic contract
+- Authoritative inputs: repository evidence
+- Authoritative output: required checks
+- Scope/as-of rule: repository and current revision
+- Governing policy: deterministic checks
+- Evidence retained: CI artifacts
+- Typed failure behavior: non-zero exit
+## Scenario coverage
+|Empty/missing/unknown|yes|unit test
+## Evidence / validation
+make check
+## Review disposition
+complete
+"""
+    assert validate(body) == ()
