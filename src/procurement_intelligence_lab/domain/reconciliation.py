@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
+from procurement_intelligence_lab.domain.provenance import DecisionProvenance
 from procurement_intelligence_lab.domain.state import OperationalBomLine
 
 
@@ -13,9 +14,14 @@ class ReconciledLine:
     unit_price: Decimal | None
     source_artifacts: tuple[str, ...]
     status: str
+    provenance: DecisionProvenance
 
 
-def reconcile_lines(lines: tuple[OperationalBomLine, ...]) -> tuple[ReconciledLine, ...]:
+def reconcile_lines(
+    lines: tuple[OperationalBomLine, ...],
+    *,
+    provenance: DecisionProvenance,
+) -> tuple[ReconciledLine, ...]:
     grouped: dict[str, list[OperationalBomLine]] = {}
     for line in lines:
         grouped.setdefault(line.canonical_key, []).append(line)
@@ -32,6 +38,7 @@ def reconcile_lines(lines: tuple[OperationalBomLine, ...]) -> tuple[ReconciledLi
                 unit_price,
                 tuple(sorted({line.source_artifact for line in observations})),
                 "reconciled" if len(prices) == 1 else "conflict",
+                provenance,
             )
         )
     return tuple(reconciled)
