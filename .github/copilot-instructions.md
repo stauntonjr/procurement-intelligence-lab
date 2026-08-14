@@ -7,6 +7,7 @@ When reviewing pull requests in this repository:
 - Enforce the principle: **core owns semantics; adapters own mechanics; models produce evidence; policies produce decisions**.
 - Flag external framework, persistence, model-provider, or transport types leaking into domain semantics.
 - Flag authoritative arithmetic, reconciliation, identity decisions, permissions, or side effects being delegated to unconstrained LLM output when deterministic code or policy should own them.
+- For domain calculations, reconciliation, state transitions, or policy logic, apply `.github/skills/domain-logic-review/SKILL.md`: test the scoped, temporal, duplicate, partial/unknown, and boundary cases rather than accepting a happy-path implementation.
 - Flag material user-facing claims that cannot be traced through typed evidence/provenance.
 - For entity resolution, treat false merges as more severe than unresolved identities; nearest-neighbor similarity alone is not identity.
 - For document intelligence, distinguish document structuring quality from semantic/schema mapping quality.
