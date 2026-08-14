@@ -2,6 +2,7 @@ from typing import cast
 
 import pytest
 
+from procurement_intelligence_lab.domain.scope import Permission, RequestContext
 from procurement_intelligence_lab.interfaces.web import (
     ReviewContextNotFoundError,
     claim_payload,
@@ -9,11 +10,22 @@ from procurement_intelligence_lab.interfaces.web import (
 )
 
 
+def _context() -> RequestContext:
+    return RequestContext(
+        "demo-user",
+        "synthetic-tenant",
+        "synthetic-project",
+        "synthetic-site",
+        frozenset({Permission.READ_STATE, Permission.REVIEW}),
+        "trace",
+    )
+
+
 def test_review_context_preserves_claim_and_trace_references() -> None:
-    claim = claim_payload("How many GPUs are in the BOM?")
+    claim = claim_payload("How many GPUs are in the BOM?", request_context=_context())
     claim_id = cast(str, claim["claim_id"])
 
-    context = review_context_payload(claim_id)
+    context = review_context_payload(claim_id, request_context=_context())
 
     assert context["claim_id"] == claim_id
     assert context["claim_kind"] == "gpu_quantity"
@@ -32,4 +44,4 @@ def test_review_context_preserves_claim_and_trace_references() -> None:
 
 def test_review_context_rejects_unknown_claim_id() -> None:
     with pytest.raises(ReviewContextNotFoundError):
-        review_context_payload("claim:missing")
+        review_context_payload("claim:missing", request_context=_context())
