@@ -13,7 +13,7 @@ Model expected requirements and observed procurement records as separate immutab
 - `StateScope` binds each record to tenant, project, site, and BOM revision.
 - `ExpectedRequirement` records required quantity, as-of timestamp, and source evidence.
 - `ObservedProcurement` records ordered, received, substituted, delayed, and unknown quantities, freshness, as-of timestamp, and evidence.
-- `ExpectedObservedState` pairs the two projections and deterministically exposes outstanding quantity and observation freshness.
+- `ExpectedObservedState` pairs the two projections and deterministically exposes outstanding quantity and observation freshness. For a scope and canonical key, comparison selects the latest observed record at or before the requested as-of time; records in another scope or after the cutoff do not pair.
 
 This is a governed projection, not canonical source truth. It does not perform anomaly detection, prediction, or external integration. Those concerns remain separate slices.
 

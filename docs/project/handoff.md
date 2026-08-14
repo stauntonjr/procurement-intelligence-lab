@@ -27,10 +27,12 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - Canonical shared project-memory convention; see [PR #96](https://github.com/stauntonjr/procurement-intelligence-lab/pull/96).
 - M8 rebuildable lexical retrieval-projection lifecycle foundation; see [PR #101](https://github.com/stauntonjr/procurement-intelligence-lab/pull/101) and [ADR-018](../adr/018-rebuildable-retrieval-projections.md).
 - M7.2 deterministic XLSX transformation provenance through source assertions; see [PR #102](https://github.com/stauntonjr/procurement-intelligence-lab/pull/102) and [ADR-017](../adr/017-execution-and-decision-provenance.md).
+- M7 expected-versus-observed state projection, including scoped latest-as-of comparison; see [PR #105](https://github.com/stauntonjr/procurement-intelligence-lab/pull/105) and [ADR-020](../adr/020-expected-observed-state.md).
+- Focused domain-logic review procedure for Copilot and Gemini; see [PR #106](https://github.com/stauntonjr/procurement-intelligence-lab/pull/106).
 
 ## Active work and PRs
 
-- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is the active state slice: it separates scoped expected requirements from observed procurement state before anomaly orchestration.
+- Expected-versus-observed state is complete; [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) can close after this acceptance-evidence PR merges. The next M7 slice is temporal correction and anomaly orchestration.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) is complete. Follow-on M8 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - M6 identity, source-viewer, and review-context work is complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -53,7 +55,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Complete and review [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) before extending anomaly orchestration; expected and observed state must remain explicit and scoped.
+1. Close [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) once its acceptance evidence is merged, then extend anomaly orchestration only from explicit scoped expected and observed state.
 2. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
 3. Sequence later retrieval adapters only after their prerequisites, scope filters, and evaluation evidence are ready.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.

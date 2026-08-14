@@ -33,6 +33,6 @@ The merged implementation sequence is:
 - M4: PR #81
 - M5: PR #82
 - M6: PRs #86, #88, and #90
-- M7: PR #92 established the ledger boundary; PR #94 carries M7.1 anomaly and execution-provenance contracts
+- M7: PR #92 established the ledger boundary; PR #94 carries M7.1 anomaly and execution-provenance contracts; PR #105 implements expected-versus-observed state
 
 This mapping is deliberately explicit so future agents do not infer milestone status from PR numbers or filenames.

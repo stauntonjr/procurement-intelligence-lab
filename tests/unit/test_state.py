@@ -12,6 +12,7 @@ from procurement_intelligence_lab.domain.resolution import (
     ResolutionStatus,
 )
 from procurement_intelligence_lab.domain.state import (
+    ExpectedRequirement,
     ObservedProcurement,
     StateFreshness,
     StateScope,
@@ -120,3 +121,73 @@ def test_expected_and_observed_state_exposes_outstanding_and_freshness() -> None
 
     assert state.outstanding_quantity == Decimal(1)
     assert state.freshness is StateFreshness.PARTIAL
+
+
+def test_compare_expected_observed_selects_latest_in_scope_as_of() -> None:
+    evidence = EvidenceRef("fixture.xlsx", "hash", "BOM", 2, ("A",))
+    expected = (
+        ExpectedRequirement(
+            "gpu-canonical",
+            Decimal(4),
+            _scope(),
+            datetime(2026, 1, 1, tzinfo=UTC),
+            (evidence,),
+        ),
+    )
+    older = ObservedProcurement(
+        "gpu-canonical",
+        Decimal(1),
+        Decimal(1),
+        Decimal(0),
+        Decimal(0),
+        Decimal(0),
+        _scope(),
+        datetime(2026, 1, 1, tzinfo=UTC),
+        StateFreshness.CURRENT,
+        (evidence,),
+    )
+    latest = ObservedProcurement(
+        "gpu-canonical",
+        Decimal(4),
+        Decimal(3),
+        Decimal(0),
+        Decimal(0),
+        Decimal(0),
+        _scope(),
+        datetime(2026, 1, 2, tzinfo=UTC),
+        StateFreshness.PARTIAL,
+        (evidence,),
+    )
+    other_scope = ObservedProcurement(
+        "gpu-canonical",
+        Decimal(4),
+        Decimal(4),
+        Decimal(0),
+        Decimal(0),
+        Decimal(0),
+        StateScope("tenant", "other-project", "site", "bom-v1"),
+        datetime(2026, 1, 2, tzinfo=UTC),
+        StateFreshness.CURRENT,
+        (evidence,),
+    )
+    future = ObservedProcurement(
+        "gpu-canonical",
+        Decimal(4),
+        Decimal(4),
+        Decimal(0),
+        Decimal(0),
+        Decimal(0),
+        _scope(),
+        datetime(2026, 1, 3, tzinfo=UTC),
+        StateFreshness.CURRENT,
+        (evidence,),
+    )
+
+    state = compare_expected_observed(
+        expected,
+        (future, other_scope, older, latest),
+        as_of=datetime(2026, 1, 2, tzinfo=UTC),
+    )[0]
+
+    assert state.observed == latest
+    assert state.outstanding_quantity == Decimal(1)
