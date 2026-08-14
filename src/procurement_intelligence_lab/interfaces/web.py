@@ -14,6 +14,11 @@ from procurement_intelligence_lab.application.chat import (
     answer_question,
 )
 from procurement_intelligence_lab.application.review import review_context_for_claim
+from procurement_intelligence_lab.domain.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
+)
 
 _HTML = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
@@ -34,6 +39,9 @@ form.addEventListener("submit",async event=>{event.preventDefault();const q=new 
 </script></main></body></html>"""
 
 
+_DEMO_SCOPE = ("synthetic-tenant", "synthetic-project", "synthetic-site")
+
+
 class EvidenceNotFoundError(LookupError):
     """Raised when an evidence ID is not present in the committed fixture."""
 
@@ -46,9 +54,31 @@ def _fixture() -> Path:
     return Path(__file__).resolve().parents[3] / "examples" / "synthetic_bom.xlsx"
 
 
-def claim_payload(question: str) -> dict[str, object]:
+def _request_context(
+    query: dict[str, list[str]],
+    permission: Permission,
+) -> RequestContext:
+    scope = tuple(query.get(name, [""])[0] for name in ("tenant_id", "project_id", "site_id"))
+    if scope != _DEMO_SCOPE:
+        raise ScopeAuthorizationError("missing or conflicting synthetic demo scope")
+    return RequestContext(
+        "demo-user",
+        scope[0],
+        scope[1],
+        scope[2],
+        frozenset({permission}),
+        "http-demo",
+    )
+
+
+def claim_payload(question: str, *, request_context: RequestContext) -> dict[str, object]:
     bom = read_bom(_fixture())
-    claim = answer_question(question, bom, tuple(line.sku for line in bom.lines))
+    claim = answer_question(
+        question,
+        bom,
+        tuple(line.sku for line in bom.lines),
+        request_context=request_context,
+    )
     value = str(claim.value) if isinstance(claim.value, Decimal) else claim.value
     return {
         "question": question,
@@ -75,7 +105,12 @@ def claim_payload(question: str) -> dict[str, object]:
     }
 
 
-def source_payload(evidence_id: str) -> dict[str, object]:
+def source_payload(
+    evidence_id: str,
+    *,
+    request_context: RequestContext,
+) -> dict[str, object]:
+    request_context.require(Permission.READ_EVIDENCE)
     bom = read_bom(_fixture())
     for line in bom.lines:
         evidence = line.evidence
@@ -93,7 +128,12 @@ def source_payload(evidence_id: str) -> dict[str, object]:
     raise EvidenceNotFoundError(f"unknown evidence ID: {evidence_id}")
 
 
-def review_context_payload(claim_id: str) -> dict[str, object]:
+def review_context_payload(
+    claim_id: str,
+    *,
+    request_context: RequestContext,
+) -> dict[str, object]:
+    request_context.require(Permission.REVIEW)
     bom = read_bom(_fixture())
     try:
         context = review_context_for_claim(claim_id, bom, tuple(line.sku for line in bom.lines))
@@ -119,36 +159,52 @@ def review_context_payload(claim_id: str) -> dict[str, object]:
 class InspectorHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
+        query = parse_qs(parsed.query)
         if parsed.path == "/":
             body = _HTML.encode()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
         elif parsed.path == "/api/ask":
-            question = parse_qs(parsed.query).get("q", [""])[0]
+            question = query.get("q", [""])[0]
             try:
-                body = json.dumps(claim_payload(question)).encode()
+                body = json.dumps(
+                    claim_payload(
+                        question,
+                        request_context=_request_context(query, Permission.READ_STATE),
+                    )
+                ).encode()
                 self.send_response(200)
-            except UnsupportedQuestionError as error:
+            except (UnsupportedQuestionError, ScopeAuthorizationError) as error:
                 body = json.dumps({"error": str(error)}).encode()
-                self.send_response(422)
+                self.send_response(422 if isinstance(error, UnsupportedQuestionError) else 403)
             self.send_header("Content-Type", "application/json")
         elif parsed.path == "/api/source":
-            evidence_id = parse_qs(parsed.query).get("evidence_id", [""])[0]
+            evidence_id = query.get("evidence_id", [""])[0]
             try:
-                body = json.dumps(source_payload(evidence_id)).encode()
+                body = json.dumps(
+                    source_payload(
+                        evidence_id,
+                        request_context=_request_context(query, Permission.READ_EVIDENCE),
+                    )
+                ).encode()
                 self.send_response(200)
-            except EvidenceNotFoundError as error:
+            except (EvidenceNotFoundError, ScopeAuthorizationError) as error:
                 body = json.dumps({"error": str(error)}).encode()
-                self.send_response(404)
+                self.send_response(404 if isinstance(error, EvidenceNotFoundError) else 403)
             self.send_header("Content-Type", "application/json")
         elif parsed.path == "/api/review-context":
-            claim_id = parse_qs(parsed.query).get("claim_id", [""])[0]
+            claim_id = query.get("claim_id", [""])[0]
             try:
-                body = json.dumps(review_context_payload(claim_id)).encode()
+                body = json.dumps(
+                    review_context_payload(
+                        claim_id,
+                        request_context=_request_context(query, Permission.REVIEW),
+                    )
+                ).encode()
                 self.send_response(200)
-            except ReviewContextNotFoundError as error:
+            except (ReviewContextNotFoundError, ScopeAuthorizationError) as error:
                 body = json.dumps({"error": str(error)}).encode()
-                self.send_response(404)
+                self.send_response(404 if isinstance(error, ReviewContextNotFoundError) else 403)
             self.send_header("Content-Type", "application/json")
         else:
             body = b"not found"
