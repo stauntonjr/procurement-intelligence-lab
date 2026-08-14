@@ -126,7 +126,9 @@ def read_bom_with_provenance(
     context = provenance_context or local_provenance_context()
     context = replace(
         context,
-        input_snapshot_ids=tuple(\n            dict.fromkeys((*context.input_snapshot_ids, artifact_snapshot_id))\n        ),
+        input_snapshot_ids=tuple(
+            dict.fromkeys((*context.input_snapshot_ids, artifact_snapshot_id))
+        ),
     )
     provenance = DecisionProvenance(
         context,
