@@ -9,6 +9,11 @@ from procurement_intelligence_lab.domain.bom import (
     bom_cost,
 )
 from procurement_intelligence_lab.domain.evidence import EvidenceNodeKind
+from procurement_intelligence_lab.domain.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+    local_provenance_context,
+)
 from procurement_intelligence_lab.domain.reconciliation import reconcile_lines
 from procurement_intelligence_lab.domain.state import OperationalBomLine
 
@@ -20,6 +25,15 @@ def line(sku: str, quantity: str, price: str | None, row: int) -> BomLine:
         Decimal(quantity),
         Decimal(price) if price is not None else None,
         EvidenceRef("synthetic_bom.xlsx", "fixture-hash", "BOM", row, ("A", "B", "C", "D")),
+    )
+
+
+def _provenance() -> DecisionProvenance:
+    return DecisionProvenance(
+        local_provenance_context(),
+        "test-reconciliation",
+        ComponentKind.DETERMINISTIC,
+        "1",
     )
 
 
@@ -62,7 +76,8 @@ def test_conflicting_prices_retain_both_artifacts() -> None:
         (
             OperationalBomLine("GPU-A", Decimal(1), Decimal(100), "bom-a.xlsx"),
             OperationalBomLine("GPU-A", Decimal(1), Decimal(125), "bom-b.xlsx"),
-        )
+        ),
+        provenance=_provenance(),
     )
 
     assert reconciled[0].status == "conflict"
