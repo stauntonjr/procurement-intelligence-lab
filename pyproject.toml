@@ -22,6 +22,9 @@ packages = ["src/procurement_intelligence_lab"]
 line-length = 100
 target-version = "py312"
 
+[tool.ruff.lint.per-file-ignores]
+"src/procurement_intelligence_lab/adapters/xlsx.py" = ["I001"]
+
 [tool.pyright]
 include = ["src", "tests"]
 typeCheckingMode = "strict"
