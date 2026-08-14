@@ -102,7 +102,7 @@ def detect_expected_observed_anomalies(
     subject_key = _state_subject_key(state)
     anomalies: list[Anomaly] = []
 
-    if observed is None or observed.ordered_quantity <= policy.quantity_tolerance:
+if observed is None or observed.ordered_quantity <= Decimal(0):
         if expected.required_quantity > policy.quantity_tolerance:
             anomalies.append(
                 Anomaly(
