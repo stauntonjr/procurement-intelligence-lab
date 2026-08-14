@@ -14,6 +14,10 @@ from procurement_intelligence_lab.domain.anomalies import (
     detect_quantity_mismatch,
 )
 from procurement_intelligence_lab.domain.bom import EvidenceRef
+from procurement_intelligence_lab.domain.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
 
 
 @pytest.fixture
@@ -26,9 +30,23 @@ def detected_at() -> datetime:
     return datetime(2026, 1, 10, tzinfo=UTC)
 
 
+@pytest.fixture
+def provenance() -> DecisionProvenance:
+    from procurement_intelligence_lab.domain.provenance import local_provenance_context
+
+    return DecisionProvenance(
+        local_provenance_context(),
+        "test-anomaly-detector",
+        ComponentKind.DETERMINISTIC,
+        "1",
+        policy_version="test-v1",
+    )
+
+
 def test_anomaly_ids_are_stable_and_evidence_backed(
     evidence: tuple[EvidenceRef, ...],
     detected_at: datetime,
+    provenance: DecisionProvenance,
 ) -> None:
     anomaly = Anomaly(
         "GPU-A",
@@ -39,6 +57,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         AnomalyStatus.OPEN,
         evidence,
         "default-v1",
+        provenance,
         detected_at,
     )
 
@@ -51,6 +70,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         AnomalyStatus.OPEN,
         evidence,
         "default-v1",
+        provenance,
         detected_at,
     )
     different_evidence = Anomaly(
@@ -62,16 +82,19 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         AnomalyStatus.OPEN,
         (EvidenceRef("other.xlsx", "hash", "BOM", 2, ("A", "B")),),
         "default-v1",
+        provenance,
         detected_at,
     )
 
     assert anomaly.anomaly_id == equivalent.anomaly_id
     assert anomaly.anomaly_id != different_evidence.anomaly_id
+    assert anomaly.provenance.provenance_id == provenance.provenance_id
 
 
 def test_quantity_tolerance_is_configurable(
     evidence: tuple[EvidenceRef, ...],
     detected_at: datetime,
+    provenance: DecisionProvenance,
 ) -> None:
     policy = AnomalyPolicy("quantity-v1", quantity_tolerance=Decimal(1))
 
@@ -82,6 +105,7 @@ def test_quantity_tolerance_is_configurable(
             Decimal(5),
             evidence,
             policy=policy,
+            provenance=provenance,
             detected_at=detected_at,
         )
         is None
@@ -92,6 +116,7 @@ def test_quantity_tolerance_is_configurable(
         Decimal(6),
         evidence,
         policy=policy,
+        provenance=provenance,
         detected_at=detected_at,
     )
 
@@ -103,6 +128,7 @@ def test_quantity_tolerance_is_configurable(
 def test_price_and_schedule_comparisons_preserve_expected_observed_values(
     evidence: tuple[EvidenceRef, ...],
     detected_at: datetime,
+    provenance: DecisionProvenance,
 ) -> None:
     policy = AnomalyPolicy(
         "commercial-v1",
@@ -116,6 +142,7 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
         Decimal(101),
         evidence,
         policy=policy,
+        provenance=provenance,
         detected_at=detected_at,
     )
     late = detect_late_commitment(
@@ -124,6 +151,7 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
         date(2026, 1, 13),
         evidence,
         policy=policy,
+        provenance=provenance,
         detected_at=detected_at,
     )
 
@@ -136,6 +164,7 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
 
 def test_anomalies_require_timezone_aware_detection_time(
     evidence: tuple[EvidenceRef, ...],
+    provenance: DecisionProvenance,
 ) -> None:
     with pytest.raises(ValueError, match="timezone-aware"):
         Anomaly(
@@ -147,5 +176,6 @@ def test_anomalies_require_timezone_aware_detection_time(
             AnomalyStatus.OPEN,
             evidence,
             "coverage-v1",
+            provenance,
             datetime(2026, 1, 10),  # noqa: DTZ001
         )
