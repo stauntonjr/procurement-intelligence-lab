@@ -11,7 +11,7 @@ This is the canonical map from the current implementation to the architecture. M
 | M4 | Constrained deterministic chat routing | Complete | `application/chat.py` |
 | M5 | Local HTTP chat/evidence inspector | Complete | [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82) |
 | M6 | Durable identifiers, source viewer, and review context | Complete | [PRs #86, #88, and #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90), ADRs 013–014 |
-| M7 | Append-only persistence and temporal/as-of state | In progress | [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91), ADR-015 |
+| M7 | Append-only persistence, temporal state, and anomaly taxonomy | In progress | [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92), [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), ADRs 015–016 |
 | M8 | Retrieval projections and review UI | Planned | Labeled retrieval evaluation and review workflows |
 | M9 | Guarded actions, product signals, and integrated evaluation | Planned | Approval gates, sanitized feedback loop, release evidence |
 
@@ -33,6 +33,6 @@ The merged implementation sequence is:
 - M4: PR #81
 - M5: PR #82
 - M6: PRs #86, #88, and #90
-- M7: Issue #91, implementation in progress
+- M7: PR #92 established the ledger boundary; Issue #60 / M7.1 anomaly taxonomy is in progress
 
 This mapping is deliberately explicit so future agents do not infer milestone status from PR numbers or filenames.
