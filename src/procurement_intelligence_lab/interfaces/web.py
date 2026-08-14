@@ -44,13 +44,22 @@ def claim_payload(question: str) -> dict[str, object]:
     return {
         "question": question,
         "claim": claim.kind,
+        "claim_id": claim.claim_id,
         "value": value,
         "status": claim.status,
-        "evidence": [ref.__dict__ for ref in claim.evidence],
+        "evidence": [{**ref.__dict__, "evidence_id": ref.evidence_id} for ref in claim.evidence],
         "execution_trace": {
             "claim": claim.execution_trace.claim,
+            "claim_id": claim.execution_trace.claim_id,
+            "chain_id": claim.execution_trace.chain_id,
             "nodes": [
-                {"kind": node.kind, "label": node.label, "status": node.status}
+                {
+                    "node_id": node.node_id,
+                    "kind": node.kind,
+                    "label": node.label,
+                    "status": node.status,
+                    "evidence_ids": [ref.evidence_id for ref in node.evidence],
+                }
                 for node in claim.execution_trace.nodes
             ],
         },

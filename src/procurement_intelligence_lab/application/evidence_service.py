@@ -13,6 +13,7 @@ from procurement_intelligence_lab.domain.bom import (
     gpu_quantity,
 )
 from procurement_intelligence_lab.domain.evidence import EvidenceChain
+from procurement_intelligence_lab.domain.identity import stable_id
 
 
 class ClaimKind(StrEnum):
@@ -28,6 +29,17 @@ class EvidenceBackedClaim:
     status: str
     evidence: tuple[EvidenceRef, ...]
     execution_trace: EvidenceChain
+
+    @property
+    def claim_id(self) -> str:
+        return stable_id(
+            "claim",
+            self.kind.value,
+            str(self.value),
+            self.status,
+            self.execution_trace.chain_id,
+            tuple(ref.evidence_id for ref in self.evidence),
+        )
 
 
 def inspect_bom_claims(
