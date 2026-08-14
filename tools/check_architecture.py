@@ -30,9 +30,7 @@ def main() -> int:
 
     for path in sorted(DOMAIN.rglob("*.py")):
         for module in sorted(imported_roots(path) - allowed):
-            violations.append(
-                f"{path.relative_to(ROOT)} imports third-party module {module!r}"
-            )
+            violations.append(f"{path.relative_to(ROOT)} imports third-party module {module!r}")
 
     if violations:
         print("Architecture boundary violations:")
