@@ -10,7 +10,7 @@ This is the canonical map from the current implementation to the architecture. M
 | M3 | Claims/evidence application service | Complete | `application/evidence_service.py` |
 | M4 | Constrained deterministic chat routing | Complete | `application/chat.py` |
 | M5 | Local HTTP chat/evidence inspector | Complete | [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82) |
-| M6 | Durable identifiers, source viewer, and review context | In progress | [Issues #85 and #87](https://github.com/stauntonjr/procurement-intelligence-lab/issues/87), ADR-013 |
+| M6 | Durable identifiers, source viewer, and review context | In progress | [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89), ADRs 013–014 |
 | M7 | Append-only persistence and temporal/as-of state | Planned | Ledger schema, migrations, rebuildable projections |
 | M8 | Retrieval projections and review UI | Planned | Labeled retrieval evaluation and review workflows |
 | M9 | Guarded actions, product signals, and integrated evaluation | Planned | Approval gates, sanitized feedback loop, release evidence |
@@ -32,6 +32,6 @@ The merged implementation sequence is:
 - M3: PR #80
 - M4: PR #81
 - M5: PR #82
-- M6: PR #86 for stable identifiers; source viewer in progress under Issue #87
+- M6: PR #86 for stable identifiers and PR #88 for source viewing; review context in progress under Issue #89
 
 This mapping is deliberately explicit so future agents do not infer milestone status from PR numbers or filenames.
