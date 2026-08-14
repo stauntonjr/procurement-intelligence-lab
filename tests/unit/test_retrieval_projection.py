@@ -8,15 +8,15 @@ from procurement_intelligence_lab.adapters.memory_retrieval import InMemoryLexic
 from procurement_intelligence_lab.domain.assertions import AssertionPredicate, SourceAssertion
 from procurement_intelligence_lab.domain.bom import EvidenceRef
 from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.domain.retrieval (
+    ProjectionBuildRequest,
+    ProjectionKind,
+    ProjectionStatus,
+)
 from procurement_intelligence_lab.domain.scope import (
     Permission,
     RequestContext,
     ScopeAuthorizationError,
-)
-from procurement_intelligence_lab.domain.retrieval import (
-    ProjectionBuildRequest,
-    ProjectionKind,
-    ProjectionStatus,
 )
 
 
