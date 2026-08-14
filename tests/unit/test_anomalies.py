@@ -53,9 +53,20 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         "default-v1",
         detected_at,
     )
+    different_evidence = Anomaly(
+        "GPU-A",
+        AnomalyKind.QUANTITY_MISMATCH,
+        Decimal(4),
+        Decimal(8),
+        AnomalySeverity.WARNING,
+        AnomalyStatus.OPEN,
+        (EvidenceRef("other.xlsx", "hash", "BOM", 2, ("A", "B")),),
+        "default-v1",
+        detected_at,
+    )
 
     assert anomaly.anomaly_id == equivalent.anomaly_id
-    assert anomaly.evidence[0].evidence_id in anomaly.anomaly_id
+    assert anomaly.anomaly_id != different_evidence.anomaly_id
 
 
 def test_quantity_tolerance_is_configurable(
