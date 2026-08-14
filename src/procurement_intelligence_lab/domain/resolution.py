@@ -50,4 +50,6 @@ def resolve_identifier(
     rationale = (
         "no normalized candidate match" if not matches else "ambiguous normalized candidate match"
     )
-    return ResolutionDecision(mention, None, ResolutionStatus.UNRESOLVED, relevant_assertions, rationale)
+    return ResolutionDecision(
+        mention, None, ResolutionStatus.UNRESOLVED, relevant_assertions, rationale
+    )
