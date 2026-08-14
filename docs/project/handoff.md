@@ -21,7 +21,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 - M0–M4 repository, evidence, claims, and constrained chat foundations.
 - M5 local HTTP chat/evidence inspector; see [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82).
-- M6 durable identifiers, source viewer, and review context; see [PRs #86, #88, and #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90).
+- M6 durable identifiers, source viewer, and review context; see [PR #86](https://github.com/stauntonjr/procurement-intelligence-lab/pull/86), [PR #88](https://github.com/stauntonjr/procurement-intelligence-lab/pull/88), and [PR #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90).
 - Initial procurement query contracts and public-dataset planning; see [draft PR #76](https://github.com/stauntonjr/procurement-intelligence-lab/pull/76).
 
 ## Active work and PRs
