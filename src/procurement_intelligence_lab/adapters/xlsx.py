@@ -6,7 +6,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile
 
-from ..domain.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
 
 
 _NS = {
