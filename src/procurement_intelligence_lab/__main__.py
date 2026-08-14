@@ -11,6 +11,7 @@ from typing import Any
 from procurement_intelligence_lab.adapters.xlsx import read_bom
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
 from procurement_intelligence_lab.domain.bom import (
+    Bom,
     EvidenceRef,
     QueryResult,
     bom_cost,
@@ -42,8 +43,7 @@ def _query_payload(result: QueryResult) -> dict[str, object]:
     }
 
 
-def demo_payload(path: Path, canonical_candidates: tuple[str, ...]) -> dict[str, Any]:
-    bom = read_bom(path)
+def demo_payload(bom: Bom, canonical_candidates: tuple[str, ...]) -> dict[str, Any]:
     pipeline = run_bom_pipeline(bom, canonical_candidates)
     return {
         "claims": {
@@ -95,7 +95,7 @@ def main() -> None:
 
     bom = read_bom(args.bom)
     candidates = tuple(args.candidate) if args.candidate else tuple(line.sku for line in bom.lines)
-    print(json.dumps(demo_payload(args.bom, candidates), indent=2))
+    print(json.dumps(demo_payload(bom, candidates), indent=2))
 
 
 if __name__ == "__main__":
