@@ -19,9 +19,7 @@ def _entries() -> tuple[AssertionLedgerEntry, ...]:
     ledger = InMemoryAssertionLedger()
     evidence = EvidenceRef("bom.xlsx", "hash", "BOM", 2, ("A", "B"))
     first = ledger.append(
-        SourceAssertion(
-            "GPU-A", AssertionPredicate.HAS_QUANTITY, Decimal("4"), evidence
-        ),
+        SourceAssertion("GPU-A", AssertionPredicate.HAS_QUANTITY, Decimal("4"), evidence),
         observed_at=datetime(2026, 1, 1, tzinfo=UTC),
     )
     second = ledger.append(
@@ -72,9 +70,7 @@ def test_failed_or_deleted_projection_cannot_silently_serve_stale_results() -> N
         projection.search("lexical-bom", "GPU")
 
     rebuilt = projection.build(_entries(), request=_request())
-    deleted = projection.delete(
-        "lexical-bom", recorded_at=datetime(2026, 1, 5, tzinfo=UTC)
-    )
+    deleted = projection.delete("lexical-bom", recorded_at=datetime(2026, 1, 5, tzinfo=UTC))
     assert rebuilt.status is ProjectionStatus.READY
     assert deleted.status is ProjectionStatus.DELETED
     with pytest.raises(LookupError, match="not ready"):
