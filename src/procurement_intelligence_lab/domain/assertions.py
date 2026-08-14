@@ -5,6 +5,7 @@ from decimal import Decimal
 from enum import StrEnum
 
 from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef
+from procurement_intelligence_lab.domain.identity import stable_id
 
 
 class AssertionPredicate(StrEnum):
@@ -21,6 +22,17 @@ class SourceAssertion:
     value: str | Decimal
     evidence: EvidenceRef
     source_system: str = "document"
+
+    @property
+    def assertion_id(self) -> str:
+        return stable_id(
+            "assertion",
+            self.subject_key,
+            self.predicate.value,
+            str(self.value),
+            self.evidence.evidence_id,
+            self.source_system,
+        )
 
 
 def assertions_for_bom_line(

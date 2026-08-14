@@ -21,9 +21,9 @@ The delivery sequence is intentionally vertical and may cross architectural laye
 - M2 Evidence Contract & Golden Tests — complete
 - M3 Claims / Evidence Application Service — complete
 - M4 Constrained Chat Routing — complete
-- M5 Local HTTP Chat Inspector — in progress
-- M6 Durable Identity, Source Viewer & Review Context — planned
-- M7 Append-Only Persistence & Temporal State — planned
+- M5 Local HTTP Chat Inspector — complete
+- M6 Durable Identity, Source Viewer & Review Context — complete
+- M7 Append-Only Persistence & Temporal State — in progress
 - M8 Retrieval Projections & Review UI — planned
 - M9 Guarded Actions, Product Signals & Evaluation — planned
 
@@ -41,10 +41,10 @@ Suggested labels are `area:architecture`, `area:domain`, `area:ingestion`, `area
 
 - Keep the semantic model and architecture invariants current.
 - Maintain the evidence inspector contract and UX drill-down chain.
-- Add stable identifiers before persistence or multi-document review.
+- Preserve stable identifiers across persistence adapters.
 - Define the synthetic data specification and evaluation manifests.
 - Prefer small vertical issues with explicit acceptance evidence over speculative issue floods.
 
 ## Runner security
 
-CI starts on GitHub-hosted runners. A future secure self-hosted DGX runner must be isolated, ephemeral or resettable, least-privilege, secret-free by default, and limited to trusted post-merge workflows. Untrusted public pull-request code is explicitly blocked from trusted self-hosted runners; public PRs use GitHub-hosted runners only.
+CI starts on GitHub-hosted runners. A future secure self-hosted DGX runner must be isolated, ephemeral or resettable, least-privilege, secret-free by default, and limited to trusted post-merge workflows. Untrusted public-pull-request code is explicitly blocked from trusted self-hosted runners; public PRs use GitHub-hosted runners only.
