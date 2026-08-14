@@ -45,5 +45,7 @@ def resolve_identifier(
             ),
             "normalized exact identifier match",
         )
-    rationale = "no normalized candidate match" if not matches else "ambiguous normalized candidate match"
+    rationale = (
+        "no normalized candidate match" if not matches else "ambiguous normalized candidate match"
+    )
     return ResolutionDecision(mention, None, ResolutionStatus.UNRESOLVED, assertions, rationale)
