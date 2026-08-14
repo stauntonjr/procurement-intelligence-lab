@@ -56,8 +56,7 @@ def gpu_quantity(bom: Bom) -> QueryResult:
     lines = tuple(
         line
         for line in bom.lines
-        if "gpu" in line.description.lower()
-        and line.status is not EpistemicStatus.UNRESOLVED
+        if "gpu" in line.description.lower() and line.status is not EpistemicStatus.UNRESOLVED
     )
     return QueryResult(
         sum((line.quantity for line in lines), Decimal(0)),
@@ -69,9 +68,7 @@ def gpu_quantity(bom: Bom) -> QueryResult:
 def bom_cost(bom: Bom) -> QueryResult:
     lines = tuple(line for line in bom.lines if line.status is not EpistemicStatus.UNRESOLVED)
     if any(line.unit_price is None for line in lines):
-        return QueryResult(
-            None, tuple(line.evidence for line in lines), EpistemicStatus.UNRESOLVED
-        )
+        return QueryResult(None, tuple(line.evidence for line in lines), EpistemicStatus.UNRESOLVED)
     return QueryResult(
         sum((line.quantity * line.unit_price for line in lines), Decimal(0)),
         tuple(line.evidence for line in lines),
