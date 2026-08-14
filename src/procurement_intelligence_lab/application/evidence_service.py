@@ -4,7 +4,14 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
-from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef, QueryResult, bom_cost, distinct_skus, gpu_quantity
+from procurement_intelligence_lab.domain.bom import (
+    Bom,
+    EvidenceRef,
+    QueryResult,
+    bom_cost,
+    distinct_skus,
+    gpu_quantity,
+)
 from procurement_intelligence_lab.domain.evidence import EvidenceChain
 
 
