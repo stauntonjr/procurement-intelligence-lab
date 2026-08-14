@@ -6,11 +6,25 @@ from procurement_intelligence_lab.domain.evidence import (
     pipeline_chain,
     source_chain,
 )
+from procurement_intelligence_lab.domain.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+    local_provenance_context,
+)
 from procurement_intelligence_lab.domain.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
 from procurement_intelligence_lab.domain.state import OperationalBomLine
+
+
+def _provenance() -> DecisionProvenance:
+    return DecisionProvenance(
+        local_provenance_context(),
+        "test-resolver",
+        ComponentKind.DETERMINISTIC,
+        "1",
+    )
 
 
 def test_evidence_chain_is_ui_framework_independent() -> None:
@@ -24,7 +38,14 @@ def test_evidence_chain_is_ui_framework_independent() -> None:
 
 def test_pipeline_chain_exposes_all_drilldown_stages() -> None:
     evidence = EvidenceRef("bom.xlsx", "hash", "BOM", 2, ("A", "B"))
-    decision = ResolutionDecision("GPU-A", "gpu", ResolutionStatus.RESOLVED, (), "exact")
+    decision = ResolutionDecision(
+        "GPU-A",
+        "gpu",
+        ResolutionStatus.RESOLVED,
+        (),
+        "exact",
+        _provenance(),
+    )
     line = OperationalBomLine("gpu", Decimal(4), Decimal(100), "bom.xlsx")
 
     chain = pipeline_chain("GPU quantity", (evidence,), (decision,), (line,), "reconciled")
