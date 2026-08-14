@@ -9,11 +9,19 @@ from procurement_intelligence_lab.domain.anomalies import (
     AnomalyPolicy,
     AnomalySeverity,
     AnomalyStatus,
+    detect_expected_observed_anomalies,
     detect_late_commitment,
     detect_price_deviation,
     detect_quantity_mismatch,
 )
 from procurement_intelligence_lab.domain.bom import EvidenceRef
+from procurement_intelligence_lab.domain.state import (
+    ExpectedObservedState,
+    ExpectedRequirement,
+    ObservedProcurement,
+    StateFreshness,
+    StateScope,
+)
 from procurement_intelligence_lab.domain.provenance import (
     ComponentKind,
     DecisionProvenance,
@@ -205,3 +213,72 @@ def test_anomalies_require_timezone_aware_detection_time(
             provenance,
             datetime(2026, 1, 10),  # noqa: DTZ001
         )
+
+
+def _state_scope() -> StateScope:
+    return StateScope("tenant", "project", "site", "bom-v1")
+
+
+def test_state_orchestration_distinguishes_missing_po_from_quantity_mismatch(
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    expected = ExpectedRequirement(
+        "GPU-A",
+        Decimal(4),
+        _state_scope(),
+        datetime(2026, 1, 1, tzinfo=UTC),
+        evidence,
+    )
+
+    anomalies = detect_expected_observed_anomalies(
+        ExpectedObservedState(expected, None),
+        policy=AnomalyPolicy("state-v1"),
+        provenance=provenance,
+        detected_at=detected_at,
+    )
+
+    assert [anomaly.kind for anomaly in anomalies] == [AnomalyKind.MISSING_PO]
+    assert anomalies[0].subject_key == "tenant/project/site/bom-v1:GPU-A"
+    assert anomalies[0].evidence == evidence
+
+
+def test_state_orchestration_preserves_scope_and_incomplete_observation(
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    expected = ExpectedRequirement(
+        "GPU-A",
+        Decimal(4),
+        _state_scope(),
+        datetime(2026, 1, 1, tzinfo=UTC),
+        evidence,
+    )
+    observed = ObservedProcurement(
+        "GPU-A",
+        Decimal(2),
+        Decimal(1),
+        Decimal(1),
+        Decimal(0),
+        Decimal(1),
+        _state_scope(),
+        datetime(2026, 1, 2, tzinfo=UTC),
+        StateFreshness.PARTIAL,
+        evidence,
+    )
+
+    anomalies = detect_expected_observed_anomalies(
+        ExpectedObservedState(expected, observed),
+        policy=AnomalyPolicy("state-v1"),
+        provenance=provenance,
+        detected_at=detected_at,
+    )
+
+    assert [anomaly.kind for anomaly in anomalies] == [
+        AnomalyKind.QUANTITY_MISMATCH,
+        AnomalyKind.SUBSTITUTION,
+        AnomalyKind.COVERAGE_GAP,
+    ]
+    assert anomalies[-1].severity is AnomalySeverity.INFO
