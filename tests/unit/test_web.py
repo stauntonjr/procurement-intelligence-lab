@@ -42,7 +42,7 @@ def test_source_payload_resolves_a_stable_evidence_id() -> None:
 
     assert source_evidence["evidence_id"] == evidence_id
     assert source_evidence["sheet"] == "BOM"
-    assert source_line["sku"] == "GPU-001"
+    assert source_line["sku"] == "GPU-A"
 
 
 def test_source_payload_rejects_unknown_evidence_id() -> None:
