@@ -8,8 +8,8 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M7 — Append-only persistence and temporal/as-of state:** in progress. See the [canonical milestone map](../development/milestone-map.md) and [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91).
-- **M8 — Retrieval projections and review UI:** planned.
+- **M7 — Append-only persistence, temporal/as-of state, anomaly taxonomy, and execution provenance:** in progress. The ledger boundary and the first anomaly/provenance contract are on `main`; remaining work includes temporal correction, durable storage, and complete transformation provenance. See the [canonical milestone map](../development/milestone-map.md), [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), and [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
+- **M8 — Retrieval projections and review UI:** planned. The foundation is [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54).
 - **M9 — Guarded actions, product signals, and integrated evaluation:** planned.
 - The initial M0–M6 evidence-first vertical slice is complete on `main`; the [root README](../../README.md) records the current product boundary and runnable entry points.
 
@@ -22,15 +22,16 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M0–M4 repository, evidence, claims, and constrained chat foundations.
 - M5 local HTTP chat/evidence inspector; see [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82).
 - M6 durable identifiers, source viewer, and review context; see [PR #86](https://github.com/stauntonjr/procurement-intelligence-lab/pull/86), [PR #88](https://github.com/stauntonjr/procurement-intelligence-lab/pull/88), and [PR #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90).
-- Initial procurement query contracts and public-dataset planning; see [draft PR #76](https://github.com/stauntonjr/procurement-intelligence-lab/pull/76).
+- M7 ledger boundary and initial anomaly/execution-provenance contract; see [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92) and [PR #94](https://github.com/stauntonjr/procurement-intelligence-lab/pull/94).
+- Layered deterministic and advisory PR review governance; see [PR #93](https://github.com/stauntonjr/procurement-intelligence-lab/pull/93).
+- Canonical shared project-memory convention; see [PR #96](https://github.com/stauntonjr/procurement-intelligence-lab/pull/96).
 
 ## Active work and PRs
 
-- [PR #94](https://github.com/stauntonjr/procurement-intelligence-lab/pull/94) implements the M7.1 anomaly taxonomy and provenance boundary.
-- [PR #95](https://github.com/stauntonjr/procurement-intelligence-lab/pull/95) fixes the related anomaly-test constructor failure.
-- [PR #93](https://github.com/stauntonjr/procurement-intelligence-lab/pull/93) adds layered PR review governance.
-- [PR #84](https://github.com/stauntonjr/procurement-intelligence-lab/pull/84) documents agent-framework evaluation strategy.
-- M6 follow-on work is tracked by [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
+- No implementation pull requests are currently open.
+- [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) scopes end-to-end transformation provenance from artifacts through structuring, mapping, assertions, and decisions.
+- [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) scopes rebuildable retrieval projection ports and lifecycle.
+- M6 follow-on review work remains tracked by [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
 ## Settled decisions
 
@@ -40,18 +41,20 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - Keep development agents and operational agents distinct; external actions require authorization, approval, idempotency, and audit.
 - Use synthetic or demonstrably public data only. This is an architectural lab, not a production procurement authority.
 - Follow the repository constitution and ADRs for architecture changes; use benchmark evidence for model or algorithm swaps.
+- Execution/decision provenance is an immutable event graph concept; relational foreign keys are a persistence mechanism, not the conceptual model. See [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
 
 ## Open decisions and questions
 
 - Which append-only persistence/database adapter should follow the M7 port, and what temporal correction evidence is required? Start with [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91) and the ADRs linked from that issue.
+- How should transformation provenance be represented from artifacts through structure, mapping, assertions, and decisions? Start with [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98).
 - Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #54, #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
 
 ## Recommended next work
 
-1. Review and merge the active M7/related governance PRs only after their checks and acceptance evidence are current.
-2. Continue M7 from Issue #91; preserve append-only and temporal semantics.
-3. Record any changed milestone/status mapping in the milestone map and update this index when the change materially affects onboarding.
+1. Run the [roadmap stewardship protocol](../development/roadmap-stewardship.md) and resolve confirmed durable-record drift through normal Issues and PRs.
+2. Prioritize [Issue #98](https://github.com/stauntonjr/procurement-intelligence-lab/issues/98) before model-backed structuring or graph/hypergraph persistence decisions.
+3. Continue with [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) when its retrieval port can be built from canonical assertion history and the current provenance contract.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.
 
 ## Refresh protocol
@@ -62,4 +65,5 @@ Treat this page as a concise index, not a second source of truth. On each meanin
 2. Update this page only when the milestone, active work, settled decisions, or recommended next work changes materially.
 3. Link to authoritative artifacts instead of copying their full content.
 4. Do not persist hidden chain-of-thought or entire chat transcripts. Chat/Work is for exploration and planning; Codex and other development agents implement against the repository; GitHub docs, issues, ADRs, and PRs are the durable shared state.
-5. Recheck links and run the lightweight documentation check before opening or updating a PR.
+5. Use the roadmap stewardship audit to flag drift, but record material chat decisions deliberately in durable artifacts.
+6. Recheck links and run the lightweight documentation check before opening or updating a PR.
