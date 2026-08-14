@@ -142,9 +142,18 @@ def compare_expected_observed(
 ) -> tuple[ExpectedObservedState, ...]:
     if as_of.tzinfo is None:
         raise ValueError("as_of must be timezone-aware")
-    observed_by_key = {item.canonical_key: item for item in observed if item.as_of <= as_of}
+
+    observed_by_key: dict[tuple[StateScope, str], ObservedProcurement] = {}
+    for item in observed:
+        if item.as_of > as_of:
+            continue
+        key = (item.scope, item.canonical_key)
+        current = observed_by_key.get(key)
+        if current is None or item.as_of > current.as_of:
+            observed_by_key[key] = item
+
     return tuple(
-        ExpectedObservedState(item, observed_by_key.get(item.canonical_key))
+        ExpectedObservedState(item, observed_by_key.get((item.scope, item.canonical_key)))
         for item in expected
         if item.as_of <= as_of
     )
