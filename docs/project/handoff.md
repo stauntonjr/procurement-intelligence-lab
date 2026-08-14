@@ -8,7 +8,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M7 — Append-only persistence and temporal/as-of state:** in progress. See the [canonical milestone map](../development/milestone-map.md), [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91), and [ADR-015](../adr/ADR-015.md).
+- **M7 — Append-only persistence and temporal/as-of state:** in progress. See the [canonical milestone map](../development/milestone-map.md) and [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91).
 - **M8 — Retrieval projections and review UI:** planned.
 - **M9 — Guarded actions, product signals, and integrated evaluation:** planned.
 - The initial M0–M6 evidence-first vertical slice is complete on `main`; the [root README](../../README.md) records the current product boundary and runnable entry points.
@@ -43,14 +43,14 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Open decisions and questions
 
-- Which append-only persistence/database adapter should follow the M7 port, and what temporal correction evidence is required? Start with [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91) and ADR-015.
+- Which append-only persistence/database adapter should follow the M7 port, and what temporal correction evidence is required? Start with [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91) and the ADRs linked from that issue.
 - Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #54, #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
 
 ## Recommended next work
 
 1. Review and merge the active M7/related governance PRs only after their checks and acceptance evidence are current.
-2. Continue M7 from Issue #91 and ADR-015; preserve append-only and temporal semantics.
+2. Continue M7 from Issue #91; preserve append-only and temporal semantics.
 3. Record any changed milestone/status mapping in the milestone map and update this index when the change materially affects onboarding.
 4. Before selecting retrieval or agent frameworks, run the repository's stated evaluation and benchmark work.
 
