@@ -62,6 +62,7 @@ class ObservedProcurement:
     received_quantity: Decimal
     substituted_quantity: Decimal
     delayed_quantity: Decimal
+    unknown_quantity: Decimal
     scope: StateScope
     as_of: datetime
     freshness: StateFreshness
