@@ -33,6 +33,10 @@ form.addEventListener("submit",async event=>{event.preventDefault();const q=new 
 </script></main></body></html>"""
 
 
+class EvidenceNotFoundError(LookupError):
+    """Raised when an evidence ID is not present in the committed fixture."""
+
+
 def _fixture() -> Path:
     return Path(__file__).resolve().parents[3] / "examples" / "synthetic_bom.xlsx"
 
@@ -66,6 +70,24 @@ def claim_payload(question: str) -> dict[str, object]:
     }
 
 
+def source_payload(evidence_id: str) -> dict[str, object]:
+    bom = read_bom(_fixture())
+    for line in bom.lines:
+        evidence = line.evidence
+        if evidence.evidence_id == evidence_id:
+            return {
+                "evidence": {**evidence.__dict__, "evidence_id": evidence.evidence_id},
+                "line": {
+                    "sku": line.sku,
+                    "description": line.description,
+                    "quantity": str(line.quantity),
+                    "unit_price": str(line.unit_price) if line.unit_price is not None else None,
+                    "status": line.status,
+                },
+            }
+    raise EvidenceNotFoundError(f"unknown evidence ID: {evidence_id}")
+
+
 class InspectorHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
@@ -81,6 +103,15 @@ class InspectorHandler(BaseHTTPRequestHandler):
             except UnsupportedQuestionError as error:
                 body = json.dumps({"error": str(error)}).encode()
                 self.send_response(422)
+            self.send_header("Content-Type", "application/json")
+        elif parsed.path == "/api/source":
+            evidence_id = parse_qs(parsed.query).get("evidence_id", [""])[0]
+            try:
+                body = json.dumps(source_payload(evidence_id)).encode()
+                self.send_response(200)
+            except EvidenceNotFoundError as error:
+                body = json.dumps({"error": str(error)}).encode()
+                self.send_response(404)
             self.send_header("Content-Type", "application/json")
         else:
             body = b"not found"
