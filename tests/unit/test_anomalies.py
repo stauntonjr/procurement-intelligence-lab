@@ -15,16 +15,16 @@ from procurement_intelligence_lab.domain.anomalies import (
     detect_quantity_mismatch,
 )
 from procurement_intelligence_lab.domain.bom import EvidenceRef
+from procurement_intelligence_lab.domain.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
 from procurement_intelligence_lab.domain.state import (
     ExpectedObservedState,
     ExpectedRequirement,
     ObservedProcurement,
     StateFreshness,
     StateScope,
-)
-from procurement_intelligence_lab.domain.provenance import (
-    ComponentKind,
-    DecisionProvenance,
 )
 
 
