@@ -31,6 +31,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M7 expected-versus-observed state projection, including scoped latest-as-of comparison; see [PR #105](https://github.com/stauntonjr/procurement-intelligence-lab/pull/105) and [ADR-020](../adr/020-expected-observed-state.md).
 - Focused domain-logic review procedure for Copilot and Gemini; see [PR #106](https://github.com/stauntonjr/procurement-intelligence-lab/pull/106).
 - Semantic-quality hardening: layered test taxonomy, clean-wheel and real HTTP smoke tests, explicit reconciliation policy, state invariants, and C001-C008 development-agent challenges; see [ADR-021](../adr/021-semantic-quality-and-agent-challenge-harness.md).
+- Credentialed GitHub planning administration is now reproducible through `.github/planning.json`, `tools/github_planning.py`, and `skills/manage-github-planning/SKILL.md`; Project #6 has the eight named operating views.
 
 ## Active work and PRs
 
@@ -57,7 +58,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Complete and enforce the M0 harness-hardening issues, required checks, review-arrival policy, and Project views.
+1. Merge the M0 harness-hardening work, then close only the issues whose acceptance evidence is complete on `main`.
 2. Baseline the C001-C008 prevention/detection/repair challenge scores in a protected evaluator.
 3. Complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) with temporal and reviewed governing-claim inputs beyond the current source-precedence slice.
 4. Continue [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) without collapsing anomaly detection into prediction, decisions, or actions.

@@ -1,0 +1,99 @@
+{
+  "repository": "stauntonjr/procurement-intelligence-lab",
+  "project": {
+    "owner": "stauntonjr",
+    "number": 6,
+    "id": "PVT_kwHOAiy8Ic4BgORL",
+    "allow_unmanaged_views": true,
+    "views": [
+      {
+        "name": "Milestone roadmap",
+        "layout": "ROADMAP_LAYOUT",
+        "filter": "is:issue"
+      },
+      {
+        "name": "Harness hardening",
+        "layout": "TABLE_LAYOUT",
+        "filter": "milestone:\"M0 Engineering & Architecture Harness\""
+      },
+      {
+        "name": "Semantic challenges",
+        "layout": "TABLE_LAYOUT",
+        "filter": "has:\"Challenge ID\""
+      },
+      {
+        "name": "Review readiness",
+        "layout": "TABLE_LAYOUT",
+        "filter": "is:pr status:\"In Progress\""
+      },
+      {
+        "name": "Evidence-gated queue",
+        "layout": "TABLE_LAYOUT",
+        "filter": "is:issue \"Evidence Required\":Yes"
+      },
+      {
+        "name": "Architecture decisions",
+        "layout": "TABLE_LAYOUT",
+        "filter": "is:issue Area:Architecture \"Work Type\":Decision"
+      },
+      {
+        "name": "Evaluation results",
+        "layout": "TABLE_LAYOUT",
+        "filter": "Area:Evaluation"
+      },
+      {
+        "name": "Planning drift",
+        "layout": "TABLE_LAYOUT",
+        "filter": "is:issue no:milestone"
+      }
+    ]
+  },
+  "required_fields": [
+    "Status",
+    "Area",
+    "Work Type",
+    "Priority",
+    "Risk",
+    "Agentability",
+    "Evidence Required",
+    "Milestone",
+    "Decision Needed",
+    "Challenge ID",
+    "Semantic Surface",
+    "Test Layers",
+    "Iteration"
+  ],
+  "required_milestones": [
+    "M0 Engineering & Architecture Harness",
+    "M1 Synthetic Document Vertical Slice",
+    "M2 Assertion Ledger & Provenance",
+    "M3 Deterministic Entity Resolution",
+    "M4 Reconciliation & Operational State",
+    "M5 Evidence-First Chat UX",
+    "M6 Retrieval Projections",
+    "M7 Intelligence & Forecasting",
+    "M8 Guarded Agent Tools",
+    "M9 Integrated Demo"
+  ],
+  "required_labels": [
+    "area:architecture",
+    "area:agents",
+    "area:domain",
+    "area:entity-resolution",
+    "area:evaluation",
+    "area:ingestion",
+    "area:provenance",
+    "area:retrieval",
+    "area:ux",
+    "evidence:required",
+    "good-first-slice",
+    "risk:high",
+    "risk:low",
+    "risk:medium",
+    "type:adr",
+    "type:benchmark",
+    "type:chore",
+    "type:docs",
+    "type:feature"
+  ]
+}

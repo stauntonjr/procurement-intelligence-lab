@@ -34,6 +34,18 @@ Before changing a business calculation, adapter, public interface, or runtime pa
 
 Use `skills/implement-domain-logic/SKILL.md`, `skills/add-adapter/SKILL.md`, `skills/test-public-interface/SKILL.md`, `skills/release-smoke/SKILL.md`, and `skills/run-agent-challenges/SKILL.md` as applicable.
 
+## GitHub planning administration
+
+Use `skills/manage-github-planning/SKILL.md` as the authoritative procedure for creating, updating,
+and verifying Issues, native parent-child relationships, labels, milestones, Project fields and item
+values, and saved Project views. `.github/planning.json` is the repository-owned expected-state
+contract; live GitHub remains the operational tracker.
+
+Authenticate through the keyring-backed `gh` session, inspect before every write, and audit after
+every batch. Retry a network-blocked `gh` operation through the environment's approved network
+mechanism rather than misreporting a sandbox failure as a GitHub capability limitation. Never expose
+the token or delete planning objects without explicit authorization.
+
 
 ## Primary delivery loop
 

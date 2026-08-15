@@ -1,4 +1,4 @@
-.PHONY: check check-fast unit contract integration regression package-smoke challenge-validate challenges eval demo
+.PHONY: check check-fast unit contract integration regression package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
 
 check-fast:
 	uv run ruff format --check .
@@ -38,3 +38,12 @@ eval:
 
 demo:
 	uv run python -m procurement_intelligence_lab
+
+github-plan-preflight:
+	uv run python tools/github_planning.py preflight
+
+github-plan-audit:
+	uv run python tools/github_planning.py audit
+
+github-plan-sync-views:
+	uv run python tools/github_planning.py sync-views --apply

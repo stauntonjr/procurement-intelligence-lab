@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage GitHub Planning"
+  short_description: "Administer Issues, milestones, labels, and Projects"
+  default_prompt: "Use $manage-github-planning to audit or update this repository’s GitHub planning state and verify every change."

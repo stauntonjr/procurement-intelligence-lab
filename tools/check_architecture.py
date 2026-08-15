@@ -18,6 +18,8 @@ REQUIRED_HARNESS_PATHS = (
     "skills/test-public-interface/SKILL.md",
     "skills/release-smoke/SKILL.md",
     "skills/run-agent-challenges/SKILL.md",
+    "skills/manage-github-planning/SKILL.md",
+    ".github/planning.json",
 )
 
 
