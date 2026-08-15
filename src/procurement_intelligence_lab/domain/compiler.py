@@ -332,7 +332,6 @@ def _validate_binding(
         _validate_reference(reference, f"{path}.policy_refs[{index}]", issues)
     if binding.eval_suite_ref is not None:
         _validate_reference(binding.eval_suite_ref, f"{path}.eval_suite_ref", issues)
-    _validate_provider_neutrality(binding, path, issues)
 
     stage = stage_value
     mode = mode_value
