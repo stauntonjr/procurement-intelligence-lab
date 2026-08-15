@@ -54,7 +54,6 @@ _FORBIDDEN_TOKENS = (
     "textract",
     "vertex",
 )
-_INVALID_EMPTY_SEMANTICS = frozenset({"failed", "none", "skipped", "unknown", "unresolved"})
 
 
 @dataclass(frozen=True)
