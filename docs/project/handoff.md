@@ -31,7 +31,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M7 expected-versus-observed state projection, including scoped latest-as-of comparison; see [PR #105](https://github.com/stauntonjr/procurement-intelligence-lab/pull/105) and [ADR-020](../adr/020-expected-observed-state.md).
 - Focused domain-logic review procedure for Copilot and Gemini; see [PR #106](https://github.com/stauntonjr/procurement-intelligence-lab/pull/106).
 - Semantic-quality hardening: layered test taxonomy, clean-wheel and real HTTP smoke tests, explicit reconciliation policy, state invariants, and C001-C008 deterministic challenge oracles; see [PR #119](https://github.com/stauntonjr/procurement-intelligence-lab/pull/119) and [ADR-021](../adr/021-semantic-quality-and-agent-challenge-harness.md).
-- Credentialed GitHub planning administration is reproducible through `.github/planning.json`, `tools/github_planning.py`, and `skills/manage-github-planning/SKILL.md`; Project #6 has the eight named operating views. The post-merge audit found 10 milestones, 28 labels, 25 fields, 98 items, and no missing configured planning objects.
+- Credentialed GitHub planning administration is reproducible through `.github/planning.json`, `tools/github_planning.py`, and `skills/manage-github-planning/SKILL.md`; Project #6 has the eight named operating views. The post-merge audit found 10 milestones, 28 labels, 25 Project fields, 98 Project items, and no missing configured planning objects.
 
 ## Active work and PRs
 
