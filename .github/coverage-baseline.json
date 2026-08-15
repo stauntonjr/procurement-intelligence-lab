@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "source_commit": "dc55cacc2b4aea7099ca40601dfd7a6215a8470a",
+  "command": "uv run pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=xml",
+  "line_rate": 0.9088,
+  "branch_rate": 0.7219
+}

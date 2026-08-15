@@ -16,4 +16,4 @@ Public regression tests measure recurrence prevention. Truly blind development-a
 
 ## Consequences
 
-Changes take longer to merge but provide executable evidence at the boundary where a defect can occur. Coverage is a ratchet, not a substitute for semantic scenarios. GitHub Issues, milestone state, Project fields, and repository status documents must be reconciled deliberately.
+Changes take longer to merge but provide executable evidence at the boundary where a defect can occur. Coverage is a ratchet, not a substitute for semantic scenarios. The checked-in [coverage baseline](../../.github/coverage-baseline.json) records the evidence-backed line and branch rates; CI rejects either rate falling below that baseline. GitHub Issues, milestone state, Project fields, and repository status documents must be reconciled deliberately.
