@@ -62,6 +62,12 @@ Repository administrators should enable automatic GitHub Copilot code review for
 
 The review-arrival job runs when a same-repository PR becomes reviewable and after each new head commit. It polls for a bounded window because a review submitted by a GitHub App cannot itself start another Actions workflow. Draft PRs skip the gate until `ready_for_review`; a missing current-commit review fails closed after the wait window.
 
+Fork pull requests continue through the safe deterministic workflows, but intentionally skip
+`Review Arrival` and the secret-bearing Gemini review workflow. Both jobs are restricted to
+same-repository heads: a fork must never receive the Gemini credential, and the repository does not
+claim that an advisory Copilot review will arrive for an untrusted fork. The workflow-policy test
+locks this distinction so a future condition change requires an explicit review of the trust boundary.
+
 ## Runner security
 
 All PR review workflows run on GitHub-hosted runners. Future trusted self-hosted/GPU runners must not execute arbitrary code from untrusted public pull requests. Expensive or trusted-machine evaluations should be triggered only through reviewed/authorized paths.
