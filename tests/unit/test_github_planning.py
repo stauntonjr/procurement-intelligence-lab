@@ -11,6 +11,7 @@ from tools.github_planning import (
     load_config,
     missing_names,
     plan_view_operations,
+    require_expected_identity,
 )
 
 
@@ -72,6 +73,25 @@ def test_load_config_rejects_missing_required_section(tmp_path: Path) -> None:
         load_config(path)
 
 
+def test_load_config_rejects_missing_nested_project_key(tmp_path: Path) -> None:
+    path = tmp_path / "planning.json"
+    path.write_text(
+        json.dumps(
+            {
+                "repository": "owner/repo",
+                "project": {"owner": "owner", "number": 6, "id": "PVT_1"},
+                "required_fields": [],
+                "required_milestones": [],
+                "required_labels": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="missing 'views'"):
+        load_config(path)
+
+
 def test_delete_view_refuses_a_configured_view_before_network_access() -> None:
     config = {
         "project": {
@@ -83,3 +103,23 @@ def test_delete_view_refuses_a_configured_view_before_network_access() -> None:
 
     with pytest.raises(ValueError, match="remove configured view"):
         delete_view(config, name="Managed", apply=True)
+
+
+def test_identity_guard_rejects_wrong_authenticated_login() -> None:
+    with pytest.raises(RuntimeError, match="does not match owner"):
+        require_expected_identity(
+            owner="expected",
+            expected_project_id="PVT_1",
+            viewer="other",
+            live_project_id="PVT_1",
+        )
+
+
+def test_identity_guard_rejects_wrong_project_node() -> None:
+    with pytest.raises(RuntimeError, match="does not match configured"):
+        require_expected_identity(
+            owner="expected",
+            expected_project_id="PVT_1",
+            viewer="expected",
+            live_project_id="PVT_2",
+        )

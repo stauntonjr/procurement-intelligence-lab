@@ -43,8 +43,6 @@ def main() -> int:
             [str(python), "-m", "pip", "install", "--no-deps", str(wheel)],
             cwd=temporary,
             check=True,
-            capture_output=True,
-            text=True,
         )
         completed = subprocess.run(
             [str(python), "-m", "procurement_intelligence_lab"],

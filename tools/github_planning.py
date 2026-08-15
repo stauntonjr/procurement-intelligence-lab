@@ -91,7 +91,7 @@ def run_gh_json(*args: str) -> Any:
 
 
 def load_config(path: Path) -> dict[str, Any]:
-    """Load and minimally validate planning configuration."""
+    """Load and validate planning configuration before any network call."""
     value: Any = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise TypeError("planning configuration must be a JSON object")
@@ -104,7 +104,47 @@ def load_config(path: Path) -> dict[str, Any]:
     ):
         if key not in value:
             raise ValueError(f"planning configuration is missing {key!r}")
-    return cast(dict[str, Any], value)
+    config = cast(dict[str, Any], value)
+    repository = config["repository"]
+    if not isinstance(repository, str) or repository.count("/") != 1:
+        raise ValueError("planning repository must be an OWNER/REPO string")
+
+    project = config["project"]
+    if not isinstance(project, dict):
+        raise TypeError("planning project must be a JSON object")
+    for key in ("owner", "number", "id", "views"):
+        if key not in project:
+            raise ValueError(f"planning project is missing {key!r}")
+    if not isinstance(project["owner"], str) or not project["owner"]:
+        raise ValueError("planning project owner must be a non-empty string")
+    if (
+        not isinstance(project["number"], int)
+        or isinstance(project["number"], bool)
+        or project["number"] <= 0
+    ):
+        raise ValueError("planning project number must be a positive integer")
+    if not isinstance(project["id"], str) or not project["id"]:
+        raise ValueError("planning project id must be a non-empty node ID")
+    if not isinstance(project["views"], list):
+        raise TypeError("planning project views must be a JSON array")
+    for index, item in enumerate(project["views"]):
+        if not isinstance(item, dict):
+            raise TypeError(f"planning project view {index} must be a JSON object")
+        if not isinstance(item.get("name"), str) or not item["name"]:
+            raise ValueError(f"planning project view {index} needs a non-empty name")
+        if item.get("layout") not in {"TABLE_LAYOUT", "BOARD_LAYOUT", "ROADMAP_LAYOUT"}:
+            raise ValueError(f"planning project view {index} has an invalid layout")
+        if "filter" in item and not isinstance(item["filter"], str):
+            raise TypeError(f"planning project view {index} filter must be a string")
+
+    for key in ("required_fields", "required_milestones", "required_labels"):
+        names = config[key]
+        if not isinstance(names, list) or not all(
+            isinstance(name, str) and bool(name) for name in names
+        ):
+            raise TypeError(f"planning {key} must be an array of non-empty strings")
+    desired_views(config)
+    return config
 
 
 def desired_views(config: dict[str, Any]) -> list[DesiredView]:
@@ -218,6 +258,18 @@ def missing_names(required: list[str], actual: list[str]) -> list[str]:
     return sorted(name for name in required if name not in present)
 
 
+def require_expected_identity(
+    *, owner: str, expected_project_id: str, viewer: str, live_project_id: str
+) -> None:
+    """Stop writes and audits when identity or Project resolution drifts."""
+    if viewer != owner:
+        raise RuntimeError(f"authenticated GitHub login {viewer!r} does not match owner {owner!r}")
+    if live_project_id != expected_project_id:
+        raise RuntimeError(
+            f"live Project ID {live_project_id!r} does not match configured {expected_project_id!r}"
+        )
+
+
 def audit(config: dict[str, Any]) -> int:
     """Audit planning objects and emit a bounded JSON report."""
     repository = str(config["repository"])
@@ -276,7 +328,13 @@ def audit(config: dict[str, Any]) -> int:
             "number",
         ),
     )
-    _, views = project_views(owner, number)
+    live_project_id, views = project_views(owner, number)
+    require_expected_identity(
+        owner=owner,
+        expected_project_id=str(project_config["id"]),
+        viewer=str(viewer.get("login") or ""),
+        live_project_id=live_project_id,
+    )
 
     field_names = [
         str(item["name"]) for item in cast(list[dict[str, Any]], fields_payload["fields"])
@@ -389,11 +447,19 @@ def preflight(config: dict[str, Any]) -> int:
     auth = run_gh("auth", "status")
     viewer = cast(dict[str, Any], run_gh_json("api", "user"))
     run_gh_json("repo", "view", repository, "--json", "nameWithOwner")
-    project_views(str(project_config["owner"]), int(project_config["number"]))
+    owner = str(project_config["owner"])
+    live_project_id, _ = project_views(owner, int(project_config["number"]))
+    viewer_login = str(viewer.get("login") or "")
+    require_expected_identity(
+        owner=owner,
+        expected_project_id=str(project_config["id"]),
+        viewer=viewer_login,
+        live_project_id=live_project_id,
+    )
     print(
         json.dumps(
             {
-                "authenticated_as": viewer.get("login"),
+                "authenticated_as": viewer_login,
                 "repository": repository,
                 "project_number": project_config["number"],
                 "auth_status_verified": "Logged in" in auth,
