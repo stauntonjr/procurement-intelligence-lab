@@ -404,26 +404,6 @@ def _validate_reference(
         )
 
 
-def _validate_provider_neutrality(
-    binding: StageBinding,
-    path: str,
-    issues: list[ValidationIssue],
-) -> None:
-    values = (
-        binding.domain_config_ref,
-        *binding.policy_refs,
-        binding.eval_suite_ref,
-    )
-    for value in values:
-        if isinstance(value, str) and any(token in value.casefold() for token in _FORBIDDEN_TOKENS):
-            issues.append(
-                ValidationIssue(
-                    "provider_leakage",
-                    path,
-                    "portable bindings must not select providers, models, services, regions, or deployment",
-                )
-            )
-
 
 def _compile_binding(binding: StageBinding) -> dict[str, object]:
     return {
