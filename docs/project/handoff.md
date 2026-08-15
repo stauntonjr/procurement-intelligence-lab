@@ -8,7 +8,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M0 — Engineering and architecture harness:** active hardening. ADR-021, layered tests, package/UI smoke checks, and C001-C008 address eight defects that escaped the previous unit-only harness. See [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) and its #110-#117 work breakdown under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
+- **M0 — Engineering and architecture harness:** active hardening. PR #119 delivered ADR-021, layered tests, package/UI smoke checks, C001-C008 deterministic oracles, and credentialed GitHub planning administration. Issues #110, #113, and #114 are complete; #111, #112, and #115 retain explicit residual gaps, while #116-#117 and #120-#130 govern the remaining harness and GitHub-platform work. See [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
 - **M4 — Reconciliation and governed state:** in progress. Explicit source precedence and state invariants are implemented, while the broader governing-claim contract in [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) remains open.
 - **M5 — Evidence-first UX:** in progress. The local inspector is runnable and now has a real HTTP happy-path check; [Issue #8](https://github.com/stauntonjr/procurement-intelligence-lab/issues/8) still governs the full drill-down showcase.
 - **M6 — Retrieval:** in progress. The lexical lifecycle foundation exists and now rejects unsupported projection kinds; later adapters and evaluation remain.
@@ -30,8 +30,8 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M7.2 deterministic XLSX transformation provenance through source assertions; see [PR #102](https://github.com/stauntonjr/procurement-intelligence-lab/pull/102) and [ADR-017](../adr/017-execution-and-decision-provenance.md).
 - M7 expected-versus-observed state projection, including scoped latest-as-of comparison; see [PR #105](https://github.com/stauntonjr/procurement-intelligence-lab/pull/105) and [ADR-020](../adr/020-expected-observed-state.md).
 - Focused domain-logic review procedure for Copilot and Gemini; see [PR #106](https://github.com/stauntonjr/procurement-intelligence-lab/pull/106).
-- Semantic-quality hardening: layered test taxonomy, clean-wheel and real HTTP smoke tests, explicit reconciliation policy, state invariants, and C001-C008 development-agent challenges; see [ADR-021](../adr/021-semantic-quality-and-agent-challenge-harness.md).
-- Credentialed GitHub planning administration is now reproducible through `.github/planning.json`, `tools/github_planning.py`, and `skills/manage-github-planning/SKILL.md`; Project #6 has the eight named operating views.
+- Semantic-quality hardening: layered test taxonomy, clean-wheel and real HTTP smoke tests, explicit reconciliation policy, state invariants, and C001-C008 deterministic challenge oracles; see [PR #119](https://github.com/stauntonjr/procurement-intelligence-lab/pull/119) and [ADR-021](../adr/021-semantic-quality-and-agent-challenge-harness.md).
+- Credentialed GitHub planning administration is reproducible through `.github/planning.json`, `tools/github_planning.py`, and `skills/manage-github-planning/SKILL.md`; Project #6 has the eight named operating views. The post-merge audit found 10 milestones, 28 labels, 25 fields, 98 items, and no missing configured planning objects.
 
 ## Active work and PRs
 
@@ -58,10 +58,11 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Merge the M0 harness-hardening work, then close only the issues whose acceptance evidence is complete on `main`.
-2. Baseline the C001-C008 prevention/detection/repair challenge scores in a protected evaluator.
-3. Complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) with temporal and reviewed governing-claim inputs beyond the current source-precedence slice.
-4. Continue [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) without collapsing anomaly detection into prediction, decisions, or actions.
+1. Complete the remaining M0 closeout gaps: an executable fork-path review test in [Issue #111](https://github.com/stauntonjr/procurement-intelligence-lab/issues/111), an actual coverage ratchet in [Issue #112](https://github.com/stauntonjr/procurement-intelligence-lab/issues/112), and complete C001-C008 challenge provenance plus known-bad or mutation evidence in [Issue #115](https://github.com/stauntonjr/procurement-intelligence-lab/issues/115).
+2. Start [Issue #120](https://github.com/stauntonjr/procurement-intelligence-lab/issues/120) to establish bot-compatible dependency and GitHub Actions updates, then pin and restrict the Actions supply chain in [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121).
+3. Baseline the C001-C008 prevention/detection/repair challenge scores in a protected evaluator through [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116).
+4. Complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) with temporal and reviewed governing-claim inputs beyond the current source-precedence slice.
+5. Continue [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) without collapsing anomaly detection into prediction, decisions, or actions.
 
 ## Refresh protocol
 
