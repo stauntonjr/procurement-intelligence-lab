@@ -24,7 +24,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M5 local HTTP chat/evidence inspector; see [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82).
 - M6 durable identifiers, source viewer, and review context; see [PR #86](https://github.com/stauntonjr/procurement-intelligence-lab/pull/86), [PR #88](https://github.com/stauntonjr/procurement-intelligence-lab/pull/88), and [PR #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90).
 - M7 ledger boundary and initial anomaly/execution-provenance contract; see [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92) and [PR #94](https://github.com/stauntonjr/procurement-intelligence-lab/pull/94).
-- Layered deterministic and advisory PR review governance; see [PR #93](https://github.com/stauntonjr/procurement-intelligence-lab/pull/93).
+- Deterministic PR checks with optional advisory AI review; see [PR #93](https://github.com/stauntonjr/procurement-intelligence-lab/pull/93). PR-triggered Gemini review and current-commit review-arrival polling were retired because quota exhaustion and bot self-updates made them nondeterministic merge blockers.
 - Canonical shared project-memory convention; see [PR #96](https://github.com/stauntonjr/procurement-intelligence-lab/pull/96).
 - M8 rebuildable lexical retrieval-projection lifecycle foundation; see [PR #101](https://github.com/stauntonjr/procurement-intelligence-lab/pull/101) and [ADR-018](../adr/018-rebuildable-retrieval-projections.md).
 - M7.2 deterministic XLSX transformation provenance through source assertions; see [PR #102](https://github.com/stauntonjr/procurement-intelligence-lab/pull/102) and [ADR-017](../adr/017-execution-and-decision-provenance.md).
@@ -59,7 +59,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Complete the remaining M0 closeout gaps: an executable fork-path review test in [Issue #111](https://github.com/stauntonjr/procurement-intelligence-lab/issues/111), an actual coverage ratchet in [Issue #112](https://github.com/stauntonjr/procurement-intelligence-lab/issues/112), and complete C001-C008 challenge provenance plus known-bad or mutation evidence in [Issue #115](https://github.com/stauntonjr/procurement-intelligence-lab/issues/115).
+1. Complete the remaining M0 closeout gaps: verify the deterministic-only PR/ruleset policy in [Issue #111](https://github.com/stauntonjr/procurement-intelligence-lab/issues/111), add an actual coverage ratchet in [Issue #112](https://github.com/stauntonjr/procurement-intelligence-lab/issues/112), and complete C001-C008 challenge provenance plus known-bad or mutation evidence in [Issue #115](https://github.com/stauntonjr/procurement-intelligence-lab/issues/115).
 2. Start [Issue #120](https://github.com/stauntonjr/procurement-intelligence-lab/issues/120) to establish bot-compatible dependency and GitHub Actions updates, then pin and restrict the Actions supply chain in [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121).
 3. Baseline the C001-C008 prevention/detection/repair challenge scores in a protected evaluator through [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116).
 4. Complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) with temporal and reviewed governing-claim inputs beyond the current source-precedence slice.
