@@ -1,4 +1,6 @@
 # Example effective execution manifest.
+# This is a resolved execution-provenance input, not the compiled DomainPackage JSON manifest.
+# Provider/model identities belong here at runtime, not in portable domain stage bindings.
 # The launcher resolves these values before constructing ProvenanceContext.
 run:
   workflow_name: bom-pipeline

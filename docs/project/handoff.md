@@ -16,7 +16,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current architecture
 
-The system preserves evidence from synthetic/semi-structured procurement documents through structured mapping, source assertions, entity mentions, resolution decisions, canonicalized assertions, reconciliation, operational state, and derived intelligence. Core semantics remain framework-independent; adapters own external mechanics. Postgres is the intended canonical store, while lexical, vector, and graph systems are replaceable projections. Deterministic services compute and enforce policy; AI-assisted interfaces explain and route work. See [architecture overview](../architecture/overview.md), [semantic model](../domain/semantic-model.md), and [architecture tradeoffs](../architecture.md).
+The system preserves evidence from synthetic/semi-structured procurement documents through structured mapping, source assertions, entity mentions, resolution decisions, canonicalized assertions, reconciliation, operational state, and derived intelligence. Core semantics remain framework-independent; adapters own external mechanics. Postgres is the intended canonical store, while lexical, vector, and graph systems are replaceable projections. Deterministic services compute and enforce policy; AI-assisted interfaces explain and route work. The proposed horizontal platform boundary separates stage definitions, domain bindings/policy, and runtime implementation selection; it is documented in [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and is not implemented capability on `main`. See [architecture overview](../architecture/overview.md), [semantic model](../domain/semantic-model.md), and [architecture tradeoffs](../architecture.md).
 
 ## Recently completed
 
@@ -55,6 +55,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - How should the request-scope contract evolve from the synthetic fixture boundary to authenticated multi-project adapters? See [ADR-019](../adr/019-explicit-request-scope.md).
 - Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
+- Which exact stage contracts, capability vocabulary, manifest compatibility rules, and second vertical should ratify the proposed `DomainPackage` platform boundary? See [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [open questions](../architecture/open-questions.md).
 
 ## Recommended next work
 
