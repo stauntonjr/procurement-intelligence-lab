@@ -403,7 +403,6 @@ def _validate_reference(
         )
 
 
-
 def _compile_binding(binding: StageBinding) -> dict[str, object]:
     return {
         "stage": binding.stage.value,
