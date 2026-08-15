@@ -15,6 +15,20 @@ Current open questions include:
 - Pydantic AI or another typed agent/tool boundary
 - FastMCP as an external interoperability adapter
 
+## Domain-package and stage-planning questions
+
+The four-layer boundary, fixed stage bindings, and logical-versus-physical planning model are proposed in [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md). Remaining design questions are:
+
+- the exact platform input/output contract versions and guarantees for each standardized stage;
+- how source-profile selection is represented and validated without becoming a domain-defined conditional DAG;
+- the capability vocabulary, compatibility rules, and diagnostics used by implementation descriptors;
+- canonical-JSON rules, extension points, and backward/forward compatibility for compiled manifests;
+- how declarative domain config and policy references are packaged, signed, resolved, and migrated;
+- which optimizations are allowed while preserving explicit logical-stage traces and execution provenance; and
+- which second vertical provides the strongest proof that the meta-schema is genuinely horizontal.
+
+Docling versus Textract, Splink versus Semantica or a custom resolver, model IDs, service versions, cloud regions, and orchestration products remain runtime hypotheses or benchmarks. They are not `DomainPackage` semantics.
+
 ## LM and agent framework hypotheses
 
 ### DSPy

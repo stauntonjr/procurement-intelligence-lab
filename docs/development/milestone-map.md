@@ -38,3 +38,18 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 - `Complete` requires implementation, layered tests, documentation, and issue acceptance evidence on `main`.
 - Update GitHub Issue, milestone, Project, and this map together when state changes.
 - Do not infer milestone status from branch names, PR numbers, or historical slice labels.
+
+## Proposed horizontal domain-platform workstream
+
+This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the proposal.
+
+| Step | Primary milestone alignment | Deliverable | Acceptance boundary |
+|---|---|---|---|
+| Platform contracts | M0 Engineering and architecture harness | Stage definitions, fixed meta-schema, neutral modes, strategy/policy contracts, canonical JSON schema | Proposed until reviewed and covered by conformance/versioning tests |
+| Procurement extraction | M1-M4 semantic pipeline | Procurement package, source profiles, policy/config refs, and evaluation refs | No observable semantic or provenance regression |
+| Compiler and manifest | M0 Engineering and architecture harness | Deterministic compiler, validator, manifest hash, compatibility tests | Equivalent authoring data yields byte-equivalent canonical JSON |
+| Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | No domain-name branching; incompatible implementations fail closed |
+| SME/MCP authoring | M8 Guarded agent tools | Schema-aware declarative authoring and validation interfaces | Import remains side-effect-free; writes are reviewable and policy constrained |
+| Second-vertical proof | M9 Integrated demo | Another domain package plus shared conformance and swap benchmarks | Demonstrates reuse without changing platform topology for domain convenience |
+
+Implementation issues and Project items must be created and reviewed before these steps are treated as scheduled work. This documentation change is part of the M0 domain semantic-model decision record and does not mark any step complete.

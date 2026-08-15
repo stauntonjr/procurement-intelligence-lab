@@ -49,6 +49,8 @@ Semantica’s generic extraction, conflict-resolution, or deduplication pipeline
 
 Entity resolution is a benchmark, not a trust decision. Compare a deterministic-ID baseline, Splink, Semantica, and later contextual/custom ER using precision, recall, false-merge rate, candidate recall, review rate, calibration, and runtime. Weight false merges as costlier than unresolved identities; abstention and human review are valid outcomes.
 
+Under the proposed [domain-package architecture](../architecture/domain-package-and-stage-planning.md), Semantica, Splink, and project-owned resolvers are runtime implementation candidates. The procurement `RESOLVE` binding states provider-neutral requirements and policy/evaluation references; the runtime registry advertises and validates which candidate satisfies them.
+
 ## Adoption criteria
 
 Adoption of any adapter or bounded use would require reproducible benchmark evidence showing:

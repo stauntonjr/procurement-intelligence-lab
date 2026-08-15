@@ -60,3 +60,7 @@ The prototype keeps the model deliberately small. A production implementation wo
 - Batch vs streaming: batch is simpler for initial reconciliation; streaming is valuable for time-sensitive exceptions. Preserve replayability in either case.
 - LLM extraction vs deterministic parsing: use deterministic parsing where structure exists, LLM extraction only with schemas, confidence, provenance, and review thresholds.
 - Early agent autonomy vs approval gates: automate recommendations first; require explicit approval for external side effects.
+
+## Horizontal platform boundary
+
+The proposed cross-domain architecture separates platform stage semantics, domain bindings and policy parameters, and deployment/runtime provider selection. The logical stage topology stays stable while a compiler and runtime capability registry support source-specific physical plans and benchmarkable provider swaps. See [Domain packages and stage planning](architecture/domain-package-and-stage-planning.md) and [ADR-022](adr/022-domain-semantics-and-physical-stage-planning.md).
