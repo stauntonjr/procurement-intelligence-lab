@@ -4,6 +4,10 @@ Status: accepted architecture contract. This is the acceptance record for M0.33.
 what M0.34 must validate; it does not introduce a compiler, registry, planner, or new runtime
 behavior on main.
 
+Named verticals and their expansion status are tracked in the [domain vertical registry](domain-verticals.md).
+The procurement mapping below is the current vertical's semantic baseline; the compiler contract
+is intentionally reusable for a future package and does not imply that a second vertical exists.
+
 ## Scope and ownership
 
 The four layers are normative:

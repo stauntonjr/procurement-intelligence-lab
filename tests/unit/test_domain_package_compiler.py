@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import replace
+from typing import cast
 
 import pytest
 
@@ -23,6 +24,7 @@ def package(
     bindings: tuple[StageBinding, ...] | None = None,
     profiles: tuple[SourceProfile, ...] | None = None,
     schema_version: str = "1.0",
+    domain_id: str = "procurement",
 ) -> DomainPackage:
     selected = bindings or tuple(
         StageBinding(
@@ -34,7 +36,7 @@ def package(
     )
     return DomainPackage(
         schema_version,
-        "procurement",
+        domain_id,
         "0.3.0",
         profiles or (SourceProfile("default", "1.0.0", selected),),
     )
@@ -85,6 +87,15 @@ def test_compile_is_deterministic_and_provider_neutral() -> None:
     assert first.manifest_hash
     assert b"procurement" in first.canonical_json
     assert b"provider" not in first.canonical_json.lower()
+
+
+def test_compile_is_vertical_neutral() -> None:
+    result = compile_domain_package(package(domain_id="inventory"))
+
+    assert result.manifest["domain"] == {"id": "inventory", "version": "0.3.0"}
+    stages = cast(list[dict[str, object]], result.manifest["stages"])
+    assert [cast(str, stage["stage"]) for stage in stages] == [stage.value for stage in STAGE_ORDER]
+    assert b"procurement" not in result.canonical_json
 
 
 def test_compile_accepts_execute_and_verified_passthrough() -> None:
