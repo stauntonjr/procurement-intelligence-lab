@@ -83,3 +83,9 @@ jobs:
         with: { enable-cache: true }
       - run: uv sync --all-groups
       - run: make challenge-validate
+      - run: make challenges
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-agent-challenge-results
+          path: artifacts/challenges/latest.json

@@ -3,6 +3,7 @@
   "title": "Claim traces are specific and truthful",
   "finding_commit": "ea6e1d1bdd1ffb08a5783566aaba7da92a0b20ad",
   "oracle": "Each claim carries only material evidence and empty reconciliation is unresolved.",
+  "known_bad": "Attach all available evidence to each claim and treat empty reconciliation as success.",
   "test_command": ["uv", "run", "pytest", "-q", "tests/contract/test_claim_semantics.py::test_each_claim_trace_contains_only_material_source_evidence", "tests/unit/test_evidence_contract.py::test_incomplete_price_and_unresolved_identity_abstain_from_canonical_state"],
   "surfaces": ["provenance", "claims", "status"],
   "prevention": ["claim-level evidence contract", "status truth table"]

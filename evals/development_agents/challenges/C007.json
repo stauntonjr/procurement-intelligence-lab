@@ -3,6 +3,7 @@
   "title": "Adapters reject unsupported capabilities",
   "finding_commit": "bd4ab97c8a959eb54c8c4ac63cedc13dfebab733",
   "oracle": "The lexical adapter rejects vector and graph build requests.",
+  "known_bad": "Silently accept an unsupported vector or graph projection request in the lexical adapter.",
   "test_command": ["uv", "run", "pytest", "-q", "tests/contract/test_retrieval_adapter.py"],
   "surfaces": ["adapter", "retrieval", "capability"],
   "prevention": ["port conformance suite", "enum rejection matrix"]

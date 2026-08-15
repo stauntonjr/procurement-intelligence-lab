@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import shlex
 import subprocess
+import time
 from pathlib import Path
 from typing import TypedDict, cast
 
@@ -18,6 +20,7 @@ class Challenge(TypedDict):
     title: str
     finding_commit: str
     oracle: str
+    known_bad: str
     test_command: list[str]
     surfaces: list[str]
     prevention: list[str]
@@ -36,6 +39,7 @@ def load_challenges() -> tuple[Challenge, ...]:
             "title",
             "finding_commit",
             "oracle",
+            "known_bad",
             "test_command",
             "surfaces",
             "prevention",
@@ -43,7 +47,7 @@ def load_challenges() -> tuple[Challenge, ...]:
         missing = required - value.keys()
         if missing:
             raise ValueError(f"{path.relative_to(ROOT)} missing {sorted(missing)!r}")
-        for field in ("id", "title", "finding_commit", "oracle"):
+        for field in ("id", "title", "finding_commit", "oracle", "known_bad"):
             if not isinstance(value[field], str) or not value[field]:
                 raise ValueError(f"{path.name} requires a non-empty string {field}")
         for field in ("test_command", "surfaces", "prevention"):
@@ -69,10 +73,20 @@ def load_challenges() -> tuple[Challenge, ...]:
     return tuple(challenges)
 
 
+def _revision() -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, check=True, capture_output=True, text=True
+    )
+    return result.stdout.strip()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--validate-only", action="store_true")
     parser.add_argument("--challenge", action="append", default=[])
+    parser.add_argument("--results", type=Path)
+    parser.add_argument("--model", default="not-specified")
+    parser.add_argument("--configuration", default="not-specified")
     args = parser.parse_args()
     challenges = load_challenges()
     selected = set(args.challenge)
@@ -82,13 +96,46 @@ def main() -> int:
         print(f"validated {len(challenges)} challenge manifests")
         return 0
 
+    started_at = dt.datetime.now(dt.UTC)
+    results: list[dict[str, object]] = []
+    exit_code = 0
     for challenge in challenges:
         if selected and challenge["id"] not in selected:
             continue
         print(f"{challenge['id']}: {challenge['title']}")
         print(f"  $ {shlex.join(challenge['test_command'])}")
-        subprocess.run(challenge["test_command"], cwd=ROOT, check=True)
-    return 0
+        started = time.monotonic()
+        completed = subprocess.run(challenge["test_command"], cwd=ROOT, check=False)
+        outcome = "passed" if completed.returncode == 0 else "failed"
+        results.append(
+            {
+                "id": challenge["id"],
+                "outcome": outcome,
+                "return_code": completed.returncode,
+                "duration_seconds": round(time.monotonic() - started, 3),
+                "prevention": "not_evaluated_public_oracle_passed",
+                "detection": "public_oracle_passed"
+                if completed.returncode == 0
+                else "public_oracle_failed",
+                "repair": "not_evaluated",
+            }
+        )
+        if completed.returncode != 0:
+            exit_code = 1
+    if args.results is not None:
+        payload = {
+            "schema_version": 1,
+            "kind": "development-agent-public-challenge-run",
+            "revision": _revision(),
+            "model": args.model,
+            "configuration": args.configuration,
+            "started_at": started_at.isoformat(),
+            "completed_at": dt.datetime.now(dt.UTC).isoformat(),
+            "results": results,
+        }
+        args.results.parent.mkdir(parents=True, exist_ok=True)
+        args.results.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return exit_code
 
 
 if __name__ == "__main__":
