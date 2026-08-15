@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   validate:
@@ -14,5 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate executable specification
         env:
-          PR_BODY: ${{ github.event.pull_request.body }}
-        run: python tools/check_pr_contract.py
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json body --jq .body +            > "$RUNNER_TEMP/pr-body.md"
+          PR_BODY="$(<"$RUNNER_TEMP/pr-body.md")" python tools/check_pr_contract.py
