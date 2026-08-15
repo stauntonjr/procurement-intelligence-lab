@@ -41,7 +41,7 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 
 ## Ratified horizontal domain-platform workstream
 
-This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the proposal.
+This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the contract.
 
 | Step | Primary milestone alignment | Deliverable | Acceptance boundary |
 |---|---|---|---|
