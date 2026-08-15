@@ -27,25 +27,34 @@ def read_rates(path: Path) -> CoverageRates:
 
     if not (line_rate.is_finite() and branch_rate.is_finite()):
         raise ValueError(f"coverage XML has non-finite line-rate/branch-rate: {path}")
-    if not (Decimal("0") <= line_rate <= Decimal("1") and Decimal("0") <= branch_rate <= Decimal("1")):
+    if not (Decimal(0) <= line_rate <= Decimal(1) and Decimal(0) <= branch_rate <= Decimal(1)):
         raise ValueError(f"coverage XML has out-of-range line-rate/branch-rate: {path}")
 
     return CoverageRates(line_rate, branch_rate)
+
 
 def read_baseline(path: Path) -> CoverageRates:
     try:
         data = json.loads(path.read_text())
         line_rate = Decimal(str(data["line_rate"]))
         branch_rate = Decimal(str(data["branch_rate"]))
-    except (OSError, KeyError, TypeError, InvalidOperation, ValueError, json.JSONDecodeError) as error:
+    except (
+        OSError,
+        KeyError,
+        TypeError,
+        InvalidOperation,
+        ValueError,
+        json.JSONDecodeError,
+    ) as error:
         raise ValueError(f"coverage baseline is invalid: {path}") from error
 
     if not (line_rate.is_finite() and branch_rate.is_finite()):
         raise ValueError(f"coverage baseline has non-finite line_rate/branch_rate: {path}")
-    if not (Decimal("0") <= line_rate <= Decimal("1") and Decimal("0") <= branch_rate <= Decimal("1")):
+    if not (Decimal(0) <= line_rate <= Decimal(1) and Decimal(0) <= branch_rate <= Decimal(1)):
         raise ValueError(f"coverage baseline has out-of-range line_rate/branch_rate: {path}")
 
     return CoverageRates(line_rate, branch_rate)
+
 
 def validate(current: CoverageRates, baseline: CoverageRates) -> tuple[str, ...]:
     errors: list[str] = []
