@@ -14,7 +14,10 @@ from procurement_intelligence_lab.domain.provenance import (
     DecisionProvenance,
     local_provenance_context,
 )
-from procurement_intelligence_lab.domain.reconciliation import reconcile_lines
+from procurement_intelligence_lab.domain.reconciliation import (
+    ReconciliationPolicy,
+    reconcile_lines,
+)
 from procurement_intelligence_lab.domain.state import OperationalBomLine
 
 
@@ -89,9 +92,11 @@ def test_conflicting_prices_retain_both_artifacts() -> None:
                 line("GPU-A", "1", "125", 3).evidence,
             ),
         ),
+        policy=ReconciliationPolicy(("bom-a.xlsx", "bom-b.xlsx")),
         provenance=_provenance(),
     )
 
     assert reconciled[0].status == "conflict"
-    assert reconciled[0].unit_price is None
+    assert reconciled[0].unit_price == Decimal(100)
+    assert reconciled[0].governing_source_artifact == "bom-a.xlsx"
     assert reconciled[0].source_artifacts == ("bom-a.xlsx", "bom-b.xlsx")

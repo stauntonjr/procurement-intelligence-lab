@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Smoke Test"
+  short_description: "Verify built artifacts in clean installs"
+  default_prompt: "Use -smoke to build and run the distributable artifact in a clean environment."

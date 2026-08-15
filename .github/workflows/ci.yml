@@ -4,12 +4,81 @@ on:
   push:
     branches: [main]
 jobs:
-  checks:
+  static-and-architecture:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
         with: { enable-cache: true }
       - run: uv sync --all-groups
-      - run: make check
+      - run: make check-fast
 
+  unit:
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true, python-version: "${{ matrix.python-version }}" }
+      - run: uv sync --all-groups
+      - run: make unit
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true }
+      - run: uv sync --all-groups
+      - run: uv run pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=85
+      - uses: actions/upload-artifact@v4
+        with:
+          name: branch-coverage
+          path: coverage.xml
+
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true }
+      - run: uv sync --all-groups
+      - run: make contract
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true }
+      - run: uv sync --all-groups
+      - run: make integration
+
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true }
+      - run: uv sync --all-groups
+      - run: make regression
+
+  package-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true }
+      - run: uv sync --all-groups
+      - run: make package-smoke
+
+  eval-manifest-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { enable-cache: true }
+      - run: uv sync --all-groups
+      - run: make challenge-validate

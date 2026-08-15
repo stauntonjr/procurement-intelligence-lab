@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
+from importlib.resources import as_file, files
 from urllib.parse import parse_qs, urlparse
 
 from procurement_intelligence_lab.adapters.xlsx import read_bom
@@ -14,6 +14,7 @@ from procurement_intelligence_lab.application.chat import (
     answer_question,
 )
 from procurement_intelligence_lab.application.review import review_context_for_claim
+from procurement_intelligence_lab.domain.bom import Bom
 from procurement_intelligence_lab.domain.scope import (
     Permission,
     RequestContext,
@@ -31,7 +32,7 @@ form{display:flex;gap:10px}input{flex:1;padding:13px;border:1px solid #ccd3df;bo
 @media(max-width:700px){.trace{grid-template-columns:1fr 1fr}h1{font-size:34px}}
 </style></head><body><main><p>PROCUREMENT INTELLIGENCE LAB · READ-ONLY INVESTIGATION</p>
 <h1>Every answer has a trail.</h1><p>Ask an approved BOM question. The answer is computed deterministically and remains linked to its source evidence.</p>
-<section class="chat"><form><input name="q" value="How many GPUs are in the BOM?" aria-label="Question"><button>Ask</button></form><div id="answer"></div></section>
+<section class="chat"><form><input type="hidden" name="tenant_id" value="synthetic-tenant"><input type="hidden" name="project_id" value="synthetic-project"><input type="hidden" name="site_id" value="synthetic-site"><input name="q" value="How many GPUs are in the BOM?" aria-label="Question"><button>Ask</button></form><div id="answer"></div></section>
 <section class="panel"><p>EXECUTION TRACE</p><div class="trace" id="trace"><div class="stage">Source assertions</div><div class="stage">Entity resolution</div><div class="stage">Operational state</div><div class="stage">Reconciliation</div></div></section>
 <script>
 const form=document.querySelector("form"),answer=document.querySelector("#answer"),trace=document.querySelector("#trace");
@@ -50,8 +51,10 @@ class ReviewContextNotFoundError(LookupError):
     """Raised when a claim ID is not present in the committed fixture."""
 
 
-def _fixture() -> Path:
-    return Path(__file__).resolve().parents[3] / "examples" / "synthetic_bom.xlsx"
+def _read_fixture_bom() -> Bom:
+    resource = files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")
+    with as_file(resource) as path:
+        return read_bom(path)
 
 
 def _request_context(
@@ -72,7 +75,7 @@ def _request_context(
 
 
 def claim_payload(question: str, *, request_context: RequestContext) -> dict[str, object]:
-    bom = read_bom(_fixture())
+    bom = _read_fixture_bom()
     claim = answer_question(
         question,
         bom,
@@ -111,7 +114,7 @@ def source_payload(
     request_context: RequestContext,
 ) -> dict[str, object]:
     request_context.require(Permission.READ_EVIDENCE)
-    bom = read_bom(_fixture())
+    bom = _read_fixture_bom()
     for line in bom.lines:
         evidence = line.evidence
         if evidence.evidence_id == evidence_id:
@@ -134,7 +137,7 @@ def review_context_payload(
     request_context: RequestContext,
 ) -> dict[str, object]:
     request_context.require(Permission.REVIEW)
-    bom = read_bom(_fixture())
+    bom = _read_fixture_bom()
     try:
         context = review_context_for_claim(
             claim_id,

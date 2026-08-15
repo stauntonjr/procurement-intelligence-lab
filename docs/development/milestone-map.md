@@ -1,38 +1,40 @@
 # Delivery milestone map
 
-This is the canonical map from the current implementation to the architecture. Milestones are delivery slices, not isolated layers; one slice may cross domain, application, adapter, test, and documentation boundaries.
+GitHub milestones are the canonical delivery taxonomy. Historical vertical implementation sequence labels use `S` so they cannot be confused with milestone identifiers.
 
-| Milestone | Delivered capability | Status | Primary evidence |
+## Canonical GitHub milestones
+
+| Milestone | Capability | Repository evidence | Status boundary |
 |---|---|---|---|
-| M0 | Repository harness, conventions, CI, invariants | Complete | `docs/architecture/invariants.md`, CI |
-| M1 | Synthetic XLSX BOM vertical slice | Complete | `src/procurement_intelligence_lab/adapters/xlsx.py`, demo |
-| M2 | Evidence contract and golden tests | Complete | `tests/unit/test_evidence_contract.py` |
-| M3 | Claims/evidence application service | Complete | `application/evidence_service.py` |
-| M4 | Constrained deterministic chat routing | Complete | `application/chat.py` |
-| M5 | Local HTTP chat/evidence inspector | Complete | [PR #82](https://github.com/stauntonjr/procurement-intelligence-lab/pull/82) |
-| M6 | Durable identifiers, source viewer, and review context | Complete | [PRs #86, #88, and #90](https://github.com/stauntonjr/procurement-intelligence-lab/pull/90), ADRs 013–014 |
-| M7 | Append-only persistence, temporal state, anomaly taxonomy, and execution provenance | In progress | [PR #92](https://github.com/stauntonjr/procurement-intelligence-lab/pull/92), [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47), [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), ADRs 015–017 and 020 |
-| M8 | Retrieval projections and review UI | In progress | Issue #54, ADR-018, retrieval lifecycle contract |
-| M9 | Guarded actions, product signals, and integrated evaluation | Planned | Approval gates, sanitized feedback loop, release evidence |
+| M0 | Engineering and architecture harness | CI, `AGENTS.md`, ADR-021, C001-C008 | In progress until Issue #3 and harness-hardening sub-issues satisfy acceptance |
+| M1 | Synthetic documents and structure/mapping | XLSX adapter, fixtures, contract tests | In progress; Issue #7 remains authoritative |
+| M2 | Assertion ledger and provenance | assertion ledger and execution provenance | In progress; milestone state lives in GitHub |
+| M3 | Entity resolution | conservative resolver and retained decisions | In progress; broader acceptance remains issue-driven |
+| M4 | Reconciliation and governed state | explicit precedence policy, expected/observed state | In progress; Issue #15 remains open |
+| M5 | Evidence-first UX | chat, inspector, source/review context | In progress; Issue #8 remains open |
+| M6 | Retrieval | rebuildable lexical projection lifecycle | In progress; follow-on adapters/evaluation remain open |
+| M7 | Intelligence | evidence-backed anomaly taxonomy/orchestration | In progress |
+| M8 | Agent tools and guarded workflows | planned issue slices | Planned |
+| M9 | Integrated public demo | package smoke and future full walkthrough | Planned |
+
+## Historical implementation slices
+
+| Slice | Delivered capability | Primary evidence |
+|---|---|---|
+| S0 | Initial repository scaffold | PR #1 |
+| S1 | Synthetic XLSX BOM vertical slice | PR #77 |
+| S2 | Evidence contract | PR #79 |
+| S3 | Claims/evidence application service | PR #80 |
+| S4 | Constrained chat routing | PR #81 |
+| S5 | Local HTTP inspector | PR #82 |
+| S6 | Durable identifiers, source viewer, review context | PRs #86, #88, #90 |
+| S7 | Ledger, state, anomalies, and execution provenance | PRs #92, #94, #105, #108 |
+| S8 | Retrieval projection foundation | PR #101 |
+| S9 | Guarded actions and integrated evaluation | Not delivered |
 
 ## Status rules
 
-- **Planned** means the capability is not yet implemented on `main`.
-- **In progress** means an open PR or active implementation exists.
-- **Complete** means implementation, tests, documentation, and acceptance evidence are present on `main`.
-- A merged PR may complete only part of a milestone; update this table when that happens.
-- If the implementation sequence changes, update the milestone map and GitHub operating plan in the same PR.
-
-## PR mapping
-
-The merged implementation sequence is:
-
-- M1: PR #77
-- M2: PR #79
-- M3: PR #80
-- M4: PR #81
-- M5: PR #82
-- M6: PRs #86, #88, and #90
-- M7: PR #92 established the ledger boundary; PR #94 carries M7.1 anomaly and execution-provenance contracts; PR #105 implements expected-versus-observed state
-
-This mapping is deliberately explicit so future agents do not infer milestone status from PR numbers or filenames.
+- A merged slice does not complete a GitHub milestone by itself.
+- `Complete` requires implementation, layered tests, documentation, and issue acceptance evidence on `main`.
+- Update GitHub Issue, milestone, Project, and this map together when state changes.
+- Do not infer milestone status from branch names, PR numbers, or historical slice labels.

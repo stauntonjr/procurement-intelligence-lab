@@ -51,8 +51,13 @@ class ExpectedRequirement:
     evidence: tuple[EvidenceRef, ...]
 
     def __post_init__(self) -> None:
+        if not self.canonical_key:
+            raise ValueError("canonical_key is required")
+        _require_nonnegative("required_quantity", self.required_quantity)
         if self.as_of.tzinfo is None:
             raise ValueError("as_of must be timezone-aware")
+        if not self.evidence:
+            raise ValueError("expected state requires evidence")
 
 
 @dataclass(frozen=True)
@@ -69,14 +74,35 @@ class ObservedProcurement:
     evidence: tuple[EvidenceRef, ...]
 
     def __post_init__(self) -> None:
+        if not self.canonical_key:
+            raise ValueError("canonical_key is required")
+        quantities = {
+            "ordered_quantity": self.ordered_quantity,
+            "received_quantity": self.received_quantity,
+            "substituted_quantity": self.substituted_quantity,
+            "delayed_quantity": self.delayed_quantity,
+            "unknown_quantity": self.unknown_quantity,
+        }
+        for name, value in quantities.items():
+            _require_nonnegative(name, value)
         if self.as_of.tzinfo is None:
             raise ValueError("as_of must be timezone-aware")
+        if not self.evidence:
+            raise ValueError("observed state requires evidence")
 
 
 @dataclass(frozen=True)
 class ExpectedObservedState:
     expected: ExpectedRequirement
     observed: ObservedProcurement | None
+
+    def __post_init__(self) -> None:
+        if self.observed is None:
+            return
+        if self.expected.canonical_key != self.observed.canonical_key:
+            raise ValueError("expected and observed canonical keys must match")
+        if self.expected.scope != self.observed.scope:
+            raise ValueError("expected and observed scopes must match")
 
     @property
     def outstanding_quantity(self) -> Decimal:
@@ -86,6 +112,11 @@ class ExpectedObservedState:
     @property
     def freshness(self) -> StateFreshness:
         return self.observed.freshness if self.observed is not None else StateFreshness.UNKNOWN
+
+
+def _require_nonnegative(name: str, value: Decimal) -> None:
+    if not value.is_finite() or value < Decimal(0):
+        raise ValueError(f"{name} must be a finite non-negative quantity")
 
 
 def project_operational_lines(

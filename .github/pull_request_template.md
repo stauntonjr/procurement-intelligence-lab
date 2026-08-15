@@ -8,6 +8,26 @@
 - Linked issue:
 - Acceptance evidence:
 
+## Semantic contract
+
+- Authoritative inputs:
+- Authoritative output:
+- Scope/as-of rule:
+- Governing policy:
+- Evidence retained:
+- Typed failure behavior:
+
+## Scenario coverage
+
+| Scenario | Applicable? | Test/evidence |
+|---|---:|---|
+| Empty/missing/unknown | | |
+| Duplicate/many/conflict | | |
+| Scope/time/as-of | | |
+| Zero/negative/fractional/boundary | | |
+| Unsupported capability/malformed input | | |
+| Public caller and clean package | | |
+
 ## Evidence / validation
 
 ## Architectural impact
@@ -28,4 +48,11 @@
 ## Checks
 
 - [ ] `make check`
+- [ ] `make package-smoke` when packaging/resources changed
+- [ ] `make challenges` for affected challenge IDs
 - [ ] Relevant tests/evaluation run
+
+## Review disposition
+
+- Automated review arrived for the latest commit:
+- Actionable findings resolved or rebutted:

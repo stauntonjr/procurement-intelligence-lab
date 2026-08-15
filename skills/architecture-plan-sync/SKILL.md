@@ -13,6 +13,7 @@ Use this skill whenever planning, implementing, reviewing, or reporting reposito
 2. Read `docs/development/github-plan.md` and the relevant architecture/ADR documents.
 3. Identify the smallest vertical delivery slice.
 4. Associate it with one primary milestone and GitHub issue.
+   GitHub M0-M9 identifiers are canonical; use S0-S9 only for historical implementation slices.
 5. Decide whether the change affects an invariant, boundary, or public contract.
 6. Before a major new slice or after a merge wave, run the read-only roadmap stewardship audit and review the current GitHub Project deliberately. Treat its report as evidence, not authority.
 
@@ -32,7 +33,7 @@ Confirm that the PR states:
 - tests/evaluation performed;
 - documentation and ADR impact.
 
-Update the README, roadmap, milestone map, handoff, GitHub Issue status, or Project fields when the change makes them stale. Use an ADR for durable architecture decisions, not for routine status bookkeeping.
+Update the README, roadmap, milestone map, handoff, GitHub Issue status, or Project fields when the change makes them stale. Use `skills/manage-github-planning/SKILL.md` for live planning writes and verification. Use an ADR for durable architecture decisions, not for routine status bookkeeping.
 
 Use `Closes #<issue>` only when the Issue is fully complete. Otherwise use `Part of #<issue>` and leave the Issue open.
 

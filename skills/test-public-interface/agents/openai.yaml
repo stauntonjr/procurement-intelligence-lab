@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Public Interface"
+  short_description: "Exercise real CLI HTTP and UI paths"
+  default_prompt: "Use -public-interface to validate this change through the actual public entry point."

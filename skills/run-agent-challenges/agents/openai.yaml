@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run Agent Challenges"
+  short_description: "Create and replay semantic bug challenges"
+  default_prompt: "Use -agent-challenges to add or execute a development-agent challenge with a deterministic oracle."

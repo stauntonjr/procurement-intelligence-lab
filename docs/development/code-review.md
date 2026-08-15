@@ -24,7 +24,7 @@ GitHub Copilot code review is the default general AI reviewer. It is guided by:
 - `.github/skills/code-review/` for architecture/provenance review procedure;
 - `.github/skills/evaluation-review/` for ML/LLM/intelligence quality claims.
 
-AI review is advisory. High-confidence findings should be resolved or explicitly rebutted, but Copilot approval is not a merge invariant.
+AI review is advisory. High-confidence findings should be resolved or explicitly rebutted, but Copilot approval is not a merge invariant. Review arrival for the latest commit and explicit disposition are merge-readiness requirements so findings cannot routinely arrive after merge.
 
 ## Review responsibilities
 
@@ -58,7 +58,9 @@ As the evidence architecture matures, material user-facing claims must remain tr
 
 ## Automatic Copilot review setting
 
-Repository administrators should enable automatic GitHub Copilot code review for pull requests and, if useful, re-review on new pushes. This is a repository/ruleset setting rather than a workflow file. Keep Copilot advisory; required merge gates should remain deterministic.
+Repository administrators should enable automatic GitHub Copilot code review for pull requests and re-review on new pushes. This is a repository/ruleset setting rather than a workflow file. Keep Copilot's judgment advisory; use deterministic PR-contract and review-arrival checks plus conversation resolution to prevent premature merge.
+
+The review-arrival job runs when a same-repository PR becomes reviewable and after each new head commit. It polls for a bounded window because a review submitted by a GitHub App cannot itself start another Actions workflow. Draft PRs skip the gate until `ready_for_review`; a missing current-commit review fails closed after the wait window.
 
 ## Runner security
 

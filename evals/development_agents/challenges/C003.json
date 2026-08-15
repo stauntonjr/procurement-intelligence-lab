@@ -1,0 +1,9 @@
+{
+  "id": "C003",
+  "title": "Default browser flow carries required scope",
+  "finding_commit": "a86e1fd13966f39ceb51a89010944dc7cde7c005",
+  "oracle": "Submitting the shipped default form reaches the real API with HTTP 200.",
+  "test_command": ["uv", "run", "pytest", "-q", "tests/integration/test_web_happy_path.py"],
+  "surfaces": ["http", "browser", "authorization"],
+  "prevention": ["public-interface smoke test", "caller-contract review"]
+}
