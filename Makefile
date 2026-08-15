@@ -1,4 +1,4 @@
-.PHONY: check check-fast unit contract integration regression package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
+.PHONY: check check-fast unit contract integration regression coverage-ratchet package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
 
 check-fast:
 	uv run ruff format --check .
@@ -20,7 +20,8 @@ regression:
 	uv run pytest -q -m regression
 
 check: check-fast
-	uv run pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-fail-under=85
+	uv run pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=85
+	uv run python tools/check_coverage_ratchet.py
 	@uv run python -c "from pathlib import Path; required=['AGENTS.md','README.md','docs/project/handoff.md','docs/architecture/overview.md','docs/domains/procurement/semantic-model.md','docs/architecture/evidence-and-ux.md']; missing=[p for p in required if not Path(p).exists()]; print(f'missing: {missing}' if missing else 'architecture checks passed'); raise SystemExit(1 if missing else 0)"
 
 package-smoke:
