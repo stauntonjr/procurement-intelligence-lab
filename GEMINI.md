@@ -6,7 +6,7 @@ Read `AGENTS.md` first, then relevant architecture, ADR, evaluation, and path-sp
 
 ## Independent-review remit
 
-Gemini is intentionally a second opinion alongside Copilot. Prioritize findings that are easy for a general reviewer to miss:
+Gemini is an optional, manually initiated second opinion alongside Copilot. It is not part of pull-request automation or merge eligibility. Prioritize findings that are easy for a general reviewer to miss:
 
 - correctness defects and edge cases
 - unsafe assumptions, missing error handling, and concurrency/resource-lifecycle issues
