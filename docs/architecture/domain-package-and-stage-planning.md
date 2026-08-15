@@ -11,7 +11,7 @@ The goal is to make procurement one vertical on a reusable evidence-first platfo
 | `StageDefinition` | platform | Universal stage meaning, input/output contracts, semantic guarantees, and allowed logical topology | Procurement rules or provider selection |
 | `StageBinding` | domain | A vertical's mode, semantic requirements, policy/config references, and evaluation-suite reference for one standard stage | `run()`/`execute()` behavior or ordinary provider/model/service names |
 | strategy/policy | platform contract plus domain selection and parameters | Platform-defined strategy semantics with domain-selected policy and domain parameters | Hidden provider mechanics or unversioned executable callbacks |
-| `ImplementationConfig` and runtime registry | deployment/runtime | Provider/adaptor selection, service/model versions, regions, credentials references, and capability advertisement | Domain-specific branching or redefinition of stage semantics |
+| `ImplementationConfig` and runtime registry | deployment/runtime | Provider/adapter selection, service/model versions, regions, credentials references, and capability advertisement | Domain-specific branching or redefinition of stage semantics |
 
 This means `docling-v1`, `textract-v2`, Splink, Semantica, a model ID, or a cloud region normally does **not** belong in a `StageBinding`. Those are runtime choices. A binding may instead require capabilities such as table recovery, page coordinates, conservative resolution, or human-review routing.
 
@@ -63,9 +63,9 @@ class StageDefinition:
 
 ```python
 class StageMode(Enum):
-    EXECUTE = "execute"
-    PASSTHROUGH = "passthrough"
-    EMPTY = "empty"
+    EXECUTE = "EXECUTE"
+    PASSTHROUGH = "PASSTHROUGH"
+    EMPTY = "EMPTY"
 
 
 @dataclass(frozen=True)

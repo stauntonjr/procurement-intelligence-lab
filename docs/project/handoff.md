@@ -53,7 +53,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 - How should scoped expected and observed procurement records be populated from append-only inputs, and what temporal correction evidence is required? Start with [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) and [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91).
 - How should the request-scope contract evolve from the synthetic fixture boundary to authenticated multi-project adapters? See [ADR-019](../adr/019-explicit-request-scope.md).
-- Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issues #55, #57, and #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
+- Which retrieval projections and fusion strategy earn adoption under the M8 evaluation plan? Start with [Issue #55](https://github.com/stauntonjr/procurement-intelligence-lab/issues/55), [Issue #57](https://github.com/stauntonjr/procurement-intelligence-lab/issues/57), and [Issue #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
 - Which exact stage contracts, capability vocabulary, manifest compatibility rules, and second vertical should ratify the proposed `DomainPackage` platform boundary? See [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [open questions](../architecture/open-questions.md).
 
