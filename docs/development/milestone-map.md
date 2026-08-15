@@ -39,13 +39,13 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 - Update GitHub Issue, milestone, Project, and this map together when state changes.
 - Do not infer milestone status from branch names, PR numbers, or historical slice labels.
 
-## Proposed horizontal domain-platform workstream
+## Ratified horizontal domain-platform workstream
 
 This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the proposal.
 
 | Step | Primary milestone alignment | Deliverable | Acceptance boundary |
 |---|---|---|---|
-| Platform contracts | M0 Engineering and architecture harness | Stage definitions, fixed meta-schema, neutral modes, strategy/policy contracts, canonical JSON schema | Proposed until reviewed and covered by conformance/versioning tests |
+| Platform contracts | M0 Engineering and architecture harness | Ratified stage definitions, fixed meta-schema, neutral modes, strategy/policy contracts, and conformance/versioning rules | Contract ratified by M0.33; compiler and canonical JSON remain M0.34 work |
 | Procurement extraction | M1-M4 semantic pipeline | Procurement package, source profiles, policy/config refs, and evaluation refs | No observable semantic or provenance regression |
 | Compiler and manifest | M0 Engineering and architecture harness | Deterministic compiler, validator, manifest hash, compatibility tests | Equivalent authoring data yields byte-equivalent canonical JSON |
 | Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | No domain-name branching; incompatible implementations fail closed |

@@ -1,6 +1,6 @@
 # Domain packages and stage planning
 
-Status: proposed target architecture. This document defines a direction and vocabulary; it does not claim that the compiler, capability registry, physical planner, or multi-domain runtime is implemented on `main`.
+Status: accepted architecture contract. This document defines the ratified semantic boundary and vocabulary; it does not claim that the compiler, capability registry, physical planner, or multi-domain runtime is implemented on main.
 
 The goal is to make procurement one vertical on a reusable evidence-first platform without moving procurement meaning into provider adapters or making a future control plane aware of domain names. Four layers keep those responsibilities separate.
 
@@ -318,4 +318,4 @@ This proposal becomes an implemented platform boundary only after the roadmap wo
 5. add SME/MCP authoring and validation tools that edit declarative packages rather than runtime code; and
 6. prove portability with a second vertical and shared conformance/evaluation suites.
 
-Until those slices are implemented and accepted, current repository types and application services remain authoritative for behavior on `main`.
+The [conformance contract](domain-package-conformance.md) is authoritative for the ratified catalog, fixed meta-schema, versioning, procurement mapping, and compiler cases. Until the implementation slices land, current repository types and application services remain authoritative for behavior on main.
