@@ -8,14 +8,14 @@ Artifact → [Structuring transformation event] → StructuredDocument
 → Derived Facts → Anomalies → Predictions → Decisions → Actions
 ```
 
-The proposed platform stage catalog names the schedulable semantics as:
+The ratified platform stage catalog names the schedulable semantics as:
 
 ```text
 INGEST → STRUCTURE → MAP → NORMALIZE → ASSERT → RESOLVE
 → RECONCILE → DERIVE → DETECT → PREDICT → DECIDE → ACT
 ```
 
-This naming does not remove intermediate contracts from the semantic model. Entity mentions, resolution decisions, canonicalized assertions, reconciliation decisions, and operational state remain explicit inputs/outputs within the corresponding stage boundaries. The platform owns this logical order; domains bind requirements to it rather than defining arbitrary stage edges. See [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md).
+This naming does not remove intermediate contracts from the semantic model. Entity mentions, resolution decisions, canonicalized assertions, reconciliation decisions, and operational state remain explicit inputs/outputs within the corresponding stage boundaries. The platform owns this logical order; domains bind requirements to it rather than defining arbitrary stage edges. See [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md) and the [conformance contract](../architecture/domain-package-conformance.md).
 
 An Artifact is the immutable source boundary. Structure describes what was found; mapping assigns fields to a schema. Normalized observations make values comparable. Source assertions record claims plus source location, extraction method, confidence, timestamps, and epistemic status. They are not truth.
 

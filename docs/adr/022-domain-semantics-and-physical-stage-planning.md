@@ -1,6 +1,6 @@
 # ADR-022: Separate domain semantics from runtime implementation and physical planning
 
-Status: proposed
+Status: accepted
 
 ## Context
 
@@ -12,7 +12,7 @@ The repository already separates structure from mapping, assertions from truth, 
 
 ## Decision
 
-Adopt the proposed four-layer model described in [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md):
+Adopt the four-layer model described in [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md) as the platform contract. This decision ratifies the semantic boundary and schema rules; it does not claim that the compiler, registry, planner, or a migrated procurement package exists on main.
 
 1. platform-owned `StageDefinition` records define universal stage semantics, input/output contracts, guarantees, and allowed logical topology;
 2. domain-owned declarative `StageBinding` records define mode, semantic requirements, domain config/policy references, and evaluation references, but do not normally select providers, models, services, or regions;
@@ -58,4 +58,6 @@ Rejected for ordinary configuration because semantic order is a platform invaria
 
 ## Adoption and validation
 
-This ADR remains proposed until the stage catalog and manifest schema are reviewed through the M0 semantic-model work. Implementation proceeds in roadmap slices and must preserve current behavior, provenance, typed failure boundaries, and benchmark obligations. Provider choices remain evaluation hypotheses until supported by reproducible evidence.
+The stage catalog, fixed meta-schema, neutral modes, versioning rules, current-semantics mapping, and compiler conformance matrix are ratified in [the conformance contract](../architecture/domain-package-conformance.md). Implementation proceeds in separately gated roadmap slices: M0.34 compiles and validates manifests; M1-M4 extract the procurement package; M8 adds guarded authoring; and M9 adds runtime planning and a second-vertical proof.
+
+Current repository types and application services remain authoritative for behavior on main until those slices are implemented and accepted. Provider choices remain evaluation hypotheses until supported by reproducible evidence.
