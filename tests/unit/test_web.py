@@ -2,7 +2,7 @@ from typing import cast
 
 import pytest
 
-from procurement_intelligence_lab.domain.scope import (
+from procurement_intelligence_lab.domains.procurement.scope import (
     Permission,
     RequestContext,
     ScopeAuthorizationError,

@@ -3,7 +3,7 @@ from decimal import Decimal
 
 import pytest
 
-from procurement_intelligence_lab.domain.anomalies import (
+from procurement_intelligence_lab.domains.procurement.anomalies import (
     Anomaly,
     AnomalyKind,
     AnomalyPolicy,
@@ -14,12 +14,12 @@ from procurement_intelligence_lab.domain.anomalies import (
     detect_price_deviation,
     detect_quantity_mismatch,
 )
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.provenance import (
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.provenance import (
     ComponentKind,
     DecisionProvenance,
 )
-from procurement_intelligence_lab.domain.state import (
+from procurement_intelligence_lab.domains.procurement.state import (
     ExpectedObservedState,
     ExpectedRequirement,
     ObservedProcurement,
@@ -40,7 +40,7 @@ def detected_at() -> datetime:
 
 @pytest.fixture
 def provenance() -> DecisionProvenance:
-    from procurement_intelligence_lab.domain.provenance import local_provenance_context
+    from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 
     return DecisionProvenance(
         local_provenance_context(),

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 
-from procurement_intelligence_lab.domain.identity import stable_id
+from procurement_intelligence_lab.domains.procurement.identity import stable_id
 
 
 class ComponentKind(StrEnum):

@@ -1,14 +1,14 @@
-from procurement_intelligence_lab.domain.assertions import (
+from procurement_intelligence_lab.domains.procurement.assertions import (
     AssertionPredicate,
     SourceAssertion,
 )
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.provenance import (
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.provenance import (
     ComponentKind,
     DecisionProvenance,
     local_provenance_context,
 )
-from procurement_intelligence_lab.domain.resolution import (
+from procurement_intelligence_lab.domains.procurement.resolution import (
     ResolutionStatus,
     normalize_identifier,
     resolve_identifier,

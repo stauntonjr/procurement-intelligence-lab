@@ -2,8 +2,8 @@
 
 from datetime import datetime
 
-from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
-from procurement_intelligence_lab.domain.retrieval import (
+from procurement_intelligence_lab.domains.procurement.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.domains.procurement.retrieval import (
     ProjectionBuildRequest,
     ProjectionKind,
     ProjectionManifest,
@@ -11,7 +11,7 @@ from procurement_intelligence_lab.domain.retrieval import (
     RetrievalHit,
     source_entry_ids,
 )
-from procurement_intelligence_lab.domain.scope import (
+from procurement_intelligence_lab.domains.procurement.scope import (
     Permission,
     RequestContext,
     ScopeAuthorizationError,

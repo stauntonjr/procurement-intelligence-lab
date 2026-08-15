@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from procurement_intelligence_lab.domain.bom import (
+from procurement_intelligence_lab.domains.procurement.bom import (
     Bom,
     BomLine,
     EpistemicStatus,

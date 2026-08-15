@@ -5,8 +5,8 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.state import (
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.state import (
     ExpectedObservedState,
     ExpectedRequirement,
     ObservedProcurement,

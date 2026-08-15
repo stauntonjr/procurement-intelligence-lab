@@ -9,7 +9,7 @@ status.
 
 | Domain ID | Name | Status | Evidence and delivery boundary |
 |---|---|---|---|
-| `procurement` | Procurement Intelligence | Active, first vertical | [semantic model](../domain/semantic-model.md), existing BOM/assertion/resolution/reconciliation/state code, and the procurement mapping in the [conformance contract](domain-package-conformance.md). M0.34 compiler/manifest work is [Issue #135](https://github.com/stauntonjr/procurement-intelligence-lab/issues/135); extracting the existing behavior into a complete package remains an M1–M4 delivery slice. |
+| `procurement` | Procurement Intelligence | Active, first vertical | [`src/procurement_intelligence_lab/domains/procurement/`](../../src/procurement_intelligence_lab/domains/procurement/), [semantic model](../domains/procurement/semantic-model.md), and the procurement mapping in the [conformance contract](domain-package-conformance.md). M0.34 compiler/manifest work is [Issue #135](https://github.com/stauntonjr/procurement-intelligence-lab/issues/135); extracting the existing behavior into a complete package remains an M1–M4 delivery slice. |
 
 There is currently one implemented vertical. The compiler accepts a stable domain ID rather than
 branching on `procurement`; acceptance of another ID is an extensibility property, not evidence
@@ -52,4 +52,3 @@ The executable extensibility guard is
 `tests/unit/test_domain_package_compiler.py::test_compile_is_vertical_neutral`: it compiles an
 `inventory` package-shaped fixture through the same catalog without adding an inventory-specific
 branch. The fixture is a harness challenge, not a second production vertical.
-

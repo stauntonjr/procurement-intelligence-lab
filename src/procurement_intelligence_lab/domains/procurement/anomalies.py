@@ -5,10 +5,13 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from enum import StrEnum
 
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.identity import stable_id
-from procurement_intelligence_lab.domain.provenance import DecisionProvenance
-from procurement_intelligence_lab.domain.state import ExpectedObservedState, StateFreshness
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.identity import stable_id
+from procurement_intelligence_lab.domains.procurement.provenance import DecisionProvenance
+from procurement_intelligence_lab.domains.procurement.state import (
+    ExpectedObservedState,
+    StateFreshness,
+)
 
 
 class AnomalyKind(StrEnum):

@@ -8,12 +8,12 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile
 
-from procurement_intelligence_lab.domain.assertions import (
+from procurement_intelligence_lab.domains.procurement.assertions import (
     SourceAssertion,
     assertions_for_bom,
 )
-from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
-from procurement_intelligence_lab.domain.provenance import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domains.procurement.provenance import (
     ComponentKind,
     DecisionProvenance,
     ProvenanceContext,

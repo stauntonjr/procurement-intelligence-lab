@@ -14,8 +14,8 @@ from procurement_intelligence_lab.application.chat import (
     answer_question,
 )
 from procurement_intelligence_lab.application.review import review_context_for_claim
-from procurement_intelligence_lab.domain.bom import Bom
-from procurement_intelligence_lab.domain.scope import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom
+from procurement_intelligence_lab.domains.procurement.scope import (
     Permission,
     RequestContext,
     ScopeAuthorizationError,

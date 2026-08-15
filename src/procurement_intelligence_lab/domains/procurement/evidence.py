@@ -3,10 +3,10 @@
 from dataclasses import dataclass
 from enum import StrEnum
 
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.identity import stable_id
-from procurement_intelligence_lab.domain.resolution import ResolutionDecision
-from procurement_intelligence_lab.domain.state import OperationalBomLine
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.identity import stable_id
+from procurement_intelligence_lab.domains.procurement.resolution import ResolutionDecision
+from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
 
 
 class EvidenceNodeKind(StrEnum):

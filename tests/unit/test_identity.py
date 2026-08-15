@@ -1,5 +1,5 @@
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.evidence import source_chain
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.evidence import source_chain
 
 
 def test_evidence_ids_are_deterministic_and_location_sensitive() -> None:

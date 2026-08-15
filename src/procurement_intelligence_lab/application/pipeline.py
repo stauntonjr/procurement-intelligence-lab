@@ -2,30 +2,33 @@
 
 from dataclasses import dataclass
 
-from procurement_intelligence_lab.domain.assertions import (
+from procurement_intelligence_lab.domains.procurement.assertions import (
     SourceAssertion,
     assertions_for_bom,
 )
-from procurement_intelligence_lab.domain.bom import Bom
-from procurement_intelligence_lab.domain.evidence import EvidenceChain, pipeline_chain
-from procurement_intelligence_lab.domain.provenance import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom
+from procurement_intelligence_lab.domains.procurement.evidence import EvidenceChain, pipeline_chain
+from procurement_intelligence_lab.domains.procurement.provenance import (
     ComponentKind,
     DecisionProvenance,
     ProvenanceContext,
     local_provenance_context,
 )
-from procurement_intelligence_lab.domain.reconciliation import (
+from procurement_intelligence_lab.domains.procurement.reconciliation import (
     ReconciledLine,
     ReconciliationPolicy,
     ReconciliationPolicyError,
     reconcile_lines,
 )
-from procurement_intelligence_lab.domain.resolution import (
+from procurement_intelligence_lab.domains.procurement.resolution import (
     ResolutionDecision,
     resolve_identifier,
 )
-from procurement_intelligence_lab.domain.scope import Permission, RequestContext
-from procurement_intelligence_lab.domain.state import OperationalBomLine, project_operational_lines
+from procurement_intelligence_lab.domains.procurement.scope import Permission, RequestContext
+from procurement_intelligence_lab.domains.procurement.state import (
+    OperationalBomLine,
+    project_operational_lines,
+)
 
 
 @dataclass(frozen=True)

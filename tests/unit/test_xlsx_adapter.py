@@ -6,8 +6,8 @@ from procurement_intelligence_lab.adapters.xlsx import (
     read_bom,
     read_bom_with_provenance,
 )
-from procurement_intelligence_lab.domain.bom import bom_cost, gpu_quantity
-from procurement_intelligence_lab.domain.provenance import ProvenanceRelation
+from procurement_intelligence_lab.domains.procurement.bom import bom_cost, gpu_quantity
+from procurement_intelligence_lab.domains.procurement.provenance import ProvenanceRelation
 
 
 def _write_bom(path: Path) -> None:

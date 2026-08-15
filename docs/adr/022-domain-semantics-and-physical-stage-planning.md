@@ -25,6 +25,12 @@ Keep a fixed `DomainPackage` meta-schema: every domain supplies every standardiz
 
 Author domain packages as side-effect-free typed Python data. A `DomainCompiler` validates them and emits deterministic, language-neutral JSON containing stages, capabilities, requirements, and domain-owned references—not provider package names. Runtime/application configuration uses TOML plus environment/secret references; deployment mechanics use ecosystem-native YAML.
 
+The repository layout mirrors this boundary: horizontal package contracts remain under
+`src/procurement_intelligence_lab/domain/`, while vertical-owned semantics live under
+`src/procurement_intelligence_lab/domains/<domain_id>/`. The first vertical is therefore
+`domains/procurement/`; a future vertical gets a sibling package rather than a branch inside
+procurement code. Its authoritative semantic documentation lives under `docs/domains/<domain_id>/`.
+
 The control plane combines a compiled manifest, source profile, and runtime implementation registry/config to produce a physical plan. It may optimize neutral stages away physically, but semantic traces and provenance retain their explicit logical presence. A future Go control plane consumes compiled manifests and registry data; it does not import Python authoring objects or branch on domain identity.
 
 Record the platform schema version, domain version, compiled-manifest hash, runtime implementation/provider/model versions, and application/code version separately in execution provenance.

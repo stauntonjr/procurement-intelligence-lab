@@ -3,8 +3,11 @@
 from dataclasses import dataclass
 from enum import StrEnum
 
-from procurement_intelligence_lab.domain.assertions import AssertionPredicate, SourceAssertion
-from procurement_intelligence_lab.domain.provenance import DecisionProvenance
+from procurement_intelligence_lab.domains.procurement.assertions import (
+    AssertionPredicate,
+    SourceAssertion,
+)
+from procurement_intelligence_lab.domains.procurement.provenance import DecisionProvenance
 
 
 class ResolutionStatus(StrEnum):

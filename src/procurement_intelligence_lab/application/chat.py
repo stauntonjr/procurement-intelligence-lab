@@ -5,8 +5,8 @@ from procurement_intelligence_lab.application.evidence_service import (
     EvidenceBackedClaim,
     inspect_bom_claims,
 )
-from procurement_intelligence_lab.domain.bom import Bom
-from procurement_intelligence_lab.domain.scope import RequestContext
+from procurement_intelligence_lab.domains.procurement.bom import Bom
+from procurement_intelligence_lab.domains.procurement.scope import RequestContext
 
 
 class UnsupportedQuestionError(ValueError):

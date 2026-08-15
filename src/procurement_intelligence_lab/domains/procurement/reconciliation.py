@@ -3,9 +3,9 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.provenance import DecisionProvenance
-from procurement_intelligence_lab.domain.state import OperationalBomLine
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.provenance import DecisionProvenance
+from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
 
 
 @dataclass(frozen=True)
