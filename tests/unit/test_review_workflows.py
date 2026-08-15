@@ -33,5 +33,5 @@ def test_pr_contract_reads_the_current_pull_request_body() -> None:
     content = workflow("pr-contract.yml")
 
     assert "pull-requests: read" in content
-    assert 'gh pr view "$PR_NUMBER"' in content
+    assert 'gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER"' in content
     assert "github.event.pull_request.body" not in content
