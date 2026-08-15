@@ -1,24 +1,24 @@
 from decimal import Decimal
 
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
-from procurement_intelligence_lab.domain.bom import (
+from procurement_intelligence_lab.domains.procurement.bom import (
     Bom,
     BomLine,
     EpistemicStatus,
     EvidenceRef,
     bom_cost,
 )
-from procurement_intelligence_lab.domain.evidence import EvidenceNodeKind
-from procurement_intelligence_lab.domain.provenance import (
+from procurement_intelligence_lab.domains.procurement.evidence import EvidenceNodeKind
+from procurement_intelligence_lab.domains.procurement.provenance import (
     ComponentKind,
     DecisionProvenance,
     local_provenance_context,
 )
-from procurement_intelligence_lab.domain.reconciliation import (
+from procurement_intelligence_lab.domains.procurement.reconciliation import (
     ReconciliationPolicy,
     reconcile_lines,
 )
-from procurement_intelligence_lab.domain.state import OperationalBomLine
+from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
 
 
 def line(sku: str, quantity: str, price: str | None, row: int) -> BomLine:

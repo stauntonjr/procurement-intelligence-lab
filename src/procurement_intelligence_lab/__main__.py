@@ -17,8 +17,8 @@ from procurement_intelligence_lab.application.evidence_service import (
     inspect_bom_claims,
 )
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
-from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef
-from procurement_intelligence_lab.domain.scope import Permission, RequestContext
+from procurement_intelligence_lab.domains.procurement.bom import Bom, EvidenceRef
+from procurement_intelligence_lab.domains.procurement.scope import Permission, RequestContext
 
 
 def _default_bom_resource() -> Traversable:

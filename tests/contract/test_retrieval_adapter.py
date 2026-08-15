@@ -5,11 +5,17 @@ from decimal import Decimal
 import pytest
 
 from procurement_intelligence_lab.adapters.memory_retrieval import InMemoryLexicalProjection
-from procurement_intelligence_lab.domain.assertions import AssertionPredicate, SourceAssertion
-from procurement_intelligence_lab.domain.bom import EvidenceRef
-from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
-from procurement_intelligence_lab.domain.retrieval import ProjectionBuildRequest, ProjectionKind
-from procurement_intelligence_lab.domain.scope import Permission, RequestContext
+from procurement_intelligence_lab.domains.procurement.assertions import (
+    AssertionPredicate,
+    SourceAssertion,
+)
+from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
+from procurement_intelligence_lab.domains.procurement.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.domains.procurement.retrieval import (
+    ProjectionBuildRequest,
+    ProjectionKind,
+)
+from procurement_intelligence_lab.domains.procurement.scope import Permission, RequestContext
 
 
 def _entries() -> tuple[AssertionLedgerEntry, ...]:

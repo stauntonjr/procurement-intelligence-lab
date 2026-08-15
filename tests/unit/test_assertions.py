@@ -1,11 +1,11 @@
 from decimal import Decimal
 
-from procurement_intelligence_lab.domain.assertions import (
+from procurement_intelligence_lab.domains.procurement.assertions import (
     AssertionPredicate,
     assertions_for_bom,
     assertions_for_bom_line,
 )
-from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
 
 
 def test_assertions_preserve_source_evidence_and_omit_missing_values() -> None:

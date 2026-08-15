@@ -1,17 +1,17 @@
 from datetime import UTC, datetime
 from decimal import Decimal
 
-from procurement_intelligence_lab.domain.bom import Bom, BomLine, EvidenceRef
-from procurement_intelligence_lab.domain.provenance import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domains.procurement.provenance import (
     ComponentKind,
     DecisionProvenance,
     local_provenance_context,
 )
-from procurement_intelligence_lab.domain.resolution import (
+from procurement_intelligence_lab.domains.procurement.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-from procurement_intelligence_lab.domain.state import (
+from procurement_intelligence_lab.domains.procurement.state import (
     ExpectedRequirement,
     ObservedProcurement,
     StateFreshness,

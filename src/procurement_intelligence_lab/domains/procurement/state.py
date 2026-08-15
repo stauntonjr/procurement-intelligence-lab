@@ -5,8 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 from enum import StrEnum
 
-from procurement_intelligence_lab.domain.bom import Bom, EvidenceRef
-from procurement_intelligence_lab.domain.resolution import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom, EvidenceRef
+from procurement_intelligence_lab.domains.procurement.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )

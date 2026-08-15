@@ -3,13 +3,13 @@
 from datetime import datetime
 from typing import Protocol
 
-from procurement_intelligence_lab.domain.ledger import AssertionLedgerEntry
-from procurement_intelligence_lab.domain.retrieval import (
+from procurement_intelligence_lab.domains.procurement.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.domains.procurement.retrieval import (
     ProjectionBuildRequest,
     ProjectionManifest,
     RetrievalHit,
 )
-from procurement_intelligence_lab.domain.scope import RequestContext
+from procurement_intelligence_lab.domains.procurement.scope import RequestContext
 
 
 class RetrievalProjection(Protocol):
