@@ -17,6 +17,13 @@ def workflow(name: str) -> str:
     return (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
 
 
+def test_repository_instructions_do_not_require_advisory_review_arrival() -> None:
+    instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+
+    assert "its arrival is not a merge invariant" in instructions
+    assert "review must arrive" not in instructions
+
+
 def test_pull_request_workflows_are_deterministic_and_secret_free() -> None:
     """AI review is advisory and must never block or consume PR-triggered quota."""
     contents = [path.read_text(encoding="utf-8") for path in pull_request_workflows()]
