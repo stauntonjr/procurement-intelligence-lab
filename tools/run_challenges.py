@@ -107,16 +107,15 @@ def main() -> int:
         started = time.monotonic()
         completed = subprocess.run(challenge["test_command"], cwd=ROOT, check=False)
         outcome = "passed" if completed.returncode == 0 else "failed"
+        public_status = "passed" if completed.returncode == 0 else "failed"
         results.append(
             {
                 "id": challenge["id"],
                 "outcome": outcome,
                 "return_code": completed.returncode,
                 "duration_seconds": round(time.monotonic() - started, 3),
-                "prevention": "not_evaluated_public_oracle_passed",
-                "detection": "public_oracle_passed"
-                if completed.returncode == 0
-                else "public_oracle_failed",
+                "prevention": f"not_evaluated_public_oracle_{public_status}",
+                "detection": f"public_oracle_{public_status}",
                 "repair": "not_evaluated",
             }
         )
