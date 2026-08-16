@@ -1,17 +1,20 @@
-"""Evidence-backed anomaly types and deterministic comparison helpers."""
+"""Typed procurement anomalies and deterministic per-kind policies."""
 
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from enum import StrEnum
 
-from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
-from procurement_intelligence_lab.domains.procurement.identity import stable_id
-from procurement_intelligence_lab.domains.procurement.provenance import DecisionProvenance
-from procurement_intelligence_lab.domains.procurement.state import (
-    ExpectedObservedState,
-    StateFreshness,
+from procurement_intelligence_lab.domains.procurement.state import ExpectedObservedState
+from procurement_intelligence_lab.platform.semantics.anomalies import (
+    Anomaly,
+    AnomalyDetails,
+    AnomalySeverity,
+    AnomalyStatus,
 )
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
+from procurement_intelligence_lab.platform.semantics.state import StateFreshness
 
 
 class AnomalyKind(StrEnum):
@@ -25,76 +28,213 @@ class AnomalyKind(StrEnum):
     COVERAGE_GAP = "coverage_gap"
 
 
-class AnomalySeverity(StrEnum):
-    INFO = "info"
-    WARNING = "warning"
-    CRITICAL = "critical"
+def _validate_policy_id(policy_id: str) -> None:
+    if not policy_id.strip():
+        raise ValueError("policy_id must not be empty")
 
 
-class AnomalyStatus(StrEnum):
-    OPEN = "open"
-    SUPPRESSED = "suppressed"
-    IN_REVIEW = "in_review"
-    RESOLVED = "resolved"
+def _validate_tolerance(name: str, tolerance: Decimal) -> None:
+    if not tolerance.is_finite() or tolerance < Decimal(0):
+        raise ValueError(f"{name} must be finite and non-negative")
 
 
-@dataclass(frozen=True)
-class AnomalyPolicy:
-    """Auditable tolerances for deterministic anomaly comparisons."""
-
-    policy_id: str
-    quantity_tolerance: Decimal = Decimal(0)
-    price_tolerance: Decimal = Decimal(0)
-    late_days_tolerance: int = 0
-
-    def __post_init__(self) -> None:
-        if not self.policy_id:
-            raise ValueError("policy_id must not be empty")
-        if self.quantity_tolerance < 0 or self.price_tolerance < 0:
-            raise ValueError("numeric tolerances must be non-negative")
-        if self.late_days_tolerance < 0:
-            raise ValueError("late_days_tolerance must be non-negative")
+def _validate_comparison(name: str, value: Decimal) -> None:
+    if not value.is_finite() or value < Decimal(0):
+        raise ValueError(f"{name} must be finite and non-negative")
 
 
 @dataclass(frozen=True)
-class Anomaly:
-    """A typed deviation retaining evidence and decision provenance."""
-
-    subject_key: str
-    kind: AnomalyKind
-    expected: object | None
-    observed: object | None
-    severity: AnomalySeverity
-    status: AnomalyStatus
-    evidence: tuple[EvidenceRef, ...]
+class MissingPurchaseOrderPolicy:
     policy_id: str
-    provenance: DecisionProvenance
-    detected_at: datetime
+    minimum_required_quantity: Decimal = Decimal(0)
 
     def __post_init__(self) -> None:
-        if not self.policy_id:
-            raise ValueError("policy_id must not be empty")
-        if self.detected_at.tzinfo is None:
-            raise ValueError("detected_at must be timezone-aware")
+        _validate_policy_id(self.policy_id)
+        _validate_tolerance("minimum_required_quantity", self.minimum_required_quantity)
+
+
+@dataclass(frozen=True)
+class QuantityMismatchPolicy:
+    policy_id: str
+    tolerance: Decimal = Decimal(0)
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+        _validate_tolerance("quantity tolerance", self.tolerance)
+
+
+@dataclass(frozen=True)
+class SubstitutionPolicy:
+    policy_id: str
+    tolerance: Decimal = Decimal(0)
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+        _validate_tolerance("substitution tolerance", self.tolerance)
+
+
+@dataclass(frozen=True)
+class CoverageGapPolicy:
+    policy_id: str
+    unknown_quantity_tolerance: Decimal = Decimal(0)
+    flag_non_current: bool = True
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+        _validate_tolerance("unknown quantity tolerance", self.unknown_quantity_tolerance)
+
+
+@dataclass(frozen=True)
+class PriceDeviationPolicy:
+    policy_id: str
+    tolerance: Decimal = Decimal(0)
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+        _validate_tolerance("price tolerance", self.tolerance)
+
+
+@dataclass(frozen=True)
+class LateCommitmentPolicy:
+    policy_id: str
+    tolerance: timedelta = timedelta(0)
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+        if self.tolerance < timedelta(0):
+            raise ValueError("late commitment tolerance must be non-negative")
+
+
+@dataclass(frozen=True)
+class StaleRevisionPolicy:
+    policy_id: str
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+
+
+@dataclass(frozen=True)
+class UnresolvedIdentityPolicy:
+    policy_id: str
+
+    def __post_init__(self) -> None:
+        _validate_policy_id(self.policy_id)
+
+
+@dataclass(frozen=True)
+class ExpectedObservedAnomalyPolicies:
+    missing_purchase_order: MissingPurchaseOrderPolicy
+    quantity_mismatch: QuantityMismatchPolicy
+    substitution: SubstitutionPolicy
+    coverage_gap: CoverageGapPolicy
+
+
+@dataclass(frozen=True)
+class MissingPurchaseOrderDetails:
+    expected: Decimal
+    observed: Decimal | None
 
     @property
-    def anomaly_id(self) -> str:
-        return stable_id(
-            "anomaly",
-            self.subject_key,
-            self.kind.value,
-            str(self.expected),
-            str(self.observed),
-            tuple(sorted(ref.evidence_id for ref in self.evidence)),
-            self.policy_id,
-            self.provenance.provenance_id,
-        )
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.MISSING_PO
+
+
+@dataclass(frozen=True)
+class QuantityMismatchDetails:
+    expected: Decimal
+    observed: Decimal
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.QUANTITY_MISMATCH
+
+
+@dataclass(frozen=True)
+class SubstitutionDetails:
+    expected: Decimal
+    observed: Decimal
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.SUBSTITUTION
+
+
+@dataclass(frozen=True)
+class CoverageGapDetails:
+    expected: Decimal
+    observed: Decimal
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.COVERAGE_GAP
+
+
+@dataclass(frozen=True)
+class PriceDeviationDetails:
+    expected: Decimal
+    observed: Decimal
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.PRICE_DEVIATION
+
+
+@dataclass(frozen=True)
+class LateCommitmentDetails:
+    expected: date
+    observed: date
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.LATE_COMMITMENT
+
+
+@dataclass(frozen=True)
+class StaleRevisionDetails:
+    expected: str
+    observed: str
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.STALE_REVISION
+
+
+@dataclass(frozen=True)
+class UnresolvedIdentityDetails:
+    expected: str | None
+    observed: str
+
+    @property
+    def kind(self) -> AnomalyKind:
+        return AnomalyKind.UNRESOLVED_IDENTITY
+
+
+def _anomaly(
+    subject_key: str,
+    details: AnomalyDetails,
+    severity: AnomalySeverity,
+    evidence: tuple[EvidenceRef, ...],
+    policy_id: str,
+    provenance: DecisionProvenance,
+    detected_at: datetime,
+) -> Anomaly:
+    # The public Anomaly constructor accepts the structural AnomalyDetails protocol.
+    return Anomaly(
+        subject_key,
+        details,
+        severity,
+        AnomalyStatus.OPEN,
+        evidence,
+        policy_id,
+        provenance,
+        detected_at,
+    )
 
 
 def detect_expected_observed_anomalies(
     state: ExpectedObservedState,
     *,
-    policy: AnomalyPolicy,
+    policy: ExpectedObservedAnomalyPolicies,
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> tuple[Anomaly, ...]:
@@ -105,33 +245,34 @@ def detect_expected_observed_anomalies(
     subject_key = _state_subject_key(state)
     anomalies: list[Anomaly] = []
 
+    missing_policy = policy.missing_purchase_order
     if observed is None or observed.ordered_quantity <= Decimal(0):
-        if expected.required_quantity > policy.quantity_tolerance:
+        if expected.required_quantity > missing_policy.minimum_required_quantity:
             anomalies.append(
-                Anomaly(
+                _anomaly(
                     subject_key,
-                    AnomalyKind.MISSING_PO,
-                    expected.required_quantity,
-                    None if observed is None else observed.ordered_quantity,
+                    MissingPurchaseOrderDetails(
+                        expected.required_quantity,
+                        None if observed is None else observed.ordered_quantity,
+                    ),
                     AnomalySeverity.WARNING,
-                    AnomalyStatus.OPEN,
                     evidence,
-                    policy.policy_id,
+                    missing_policy.policy_id,
                     provenance,
                     detected_at,
                 )
             )
-    elif abs(observed.ordered_quantity - expected.required_quantity) > policy.quantity_tolerance:
+    elif (
+        abs(observed.ordered_quantity - expected.required_quantity)
+        > policy.quantity_mismatch.tolerance
+    ):
         anomalies.append(
-            Anomaly(
+            _anomaly(
                 subject_key,
-                AnomalyKind.QUANTITY_MISMATCH,
-                expected.required_quantity,
-                observed.ordered_quantity,
+                QuantityMismatchDetails(expected.required_quantity, observed.ordered_quantity),
                 AnomalySeverity.WARNING,
-                AnomalyStatus.OPEN,
                 evidence,
-                policy.policy_id,
+                policy.quantity_mismatch.policy_id,
                 provenance,
                 detected_at,
             )
@@ -140,36 +281,30 @@ def detect_expected_observed_anomalies(
     if observed is None:
         return tuple(anomalies)
 
-    if observed.substituted_quantity > policy.quantity_tolerance:
+    if observed.substituted_quantity > policy.substitution.tolerance:
         anomalies.append(
-            Anomaly(
+            _anomaly(
                 subject_key,
-                AnomalyKind.SUBSTITUTION,
-                Decimal(0),
-                observed.substituted_quantity,
+                SubstitutionDetails(Decimal(0), observed.substituted_quantity),
                 AnomalySeverity.WARNING,
-                AnomalyStatus.OPEN,
                 evidence,
-                policy.policy_id,
+                policy.substitution.policy_id,
                 provenance,
                 detected_at,
             )
         )
 
+    coverage_policy = policy.coverage_gap
     if (
-        observed.freshness is not StateFreshness.CURRENT
-        or observed.unknown_quantity > policy.quantity_tolerance
-    ):
+        coverage_policy.flag_non_current and observed.freshness is not StateFreshness.CURRENT
+    ) or observed.unknown_quantity > coverage_policy.unknown_quantity_tolerance:
         anomalies.append(
-            Anomaly(
+            _anomaly(
                 subject_key,
-                AnomalyKind.COVERAGE_GAP,
-                expected.required_quantity,
-                observed.unknown_quantity,
+                CoverageGapDetails(expected.required_quantity, observed.unknown_quantity),
                 AnomalySeverity.INFO,
-                AnomalyStatus.OPEN,
                 evidence,
-                policy.policy_id,
+                coverage_policy.policy_id,
                 provenance,
                 detected_at,
             )
@@ -182,7 +317,7 @@ def _state_subject_key(state: ExpectedObservedState) -> str:
     scope = state.expected.scope
     return (
         f"{scope.tenant_id}/{scope.project_id}/{scope.site_id}/"
-        f"{scope.bom_revision}:{state.expected.canonical_key}"
+        f"{scope.version}:{state.expected.canonical_key}"
     )
 
 
@@ -199,19 +334,18 @@ def detect_quantity_mismatch(
     observed: Decimal,
     evidence: tuple[EvidenceRef, ...],
     *,
-    policy: AnomalyPolicy,
+    policy: QuantityMismatchPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
-    if abs(observed - expected) <= policy.quantity_tolerance:
+    _validate_comparison("expected quantity", expected)
+    _validate_comparison("observed quantity", observed)
+    if abs(observed - expected) <= policy.tolerance:
         return None
-    return Anomaly(
+    return _anomaly(
         subject_key,
-        AnomalyKind.QUANTITY_MISMATCH,
-        expected,
-        observed,
+        QuantityMismatchDetails(expected, observed),
         AnomalySeverity.WARNING,
-        AnomalyStatus.OPEN,
         evidence,
         policy.policy_id,
         provenance,
@@ -225,19 +359,18 @@ def detect_price_deviation(
     observed: Decimal,
     evidence: tuple[EvidenceRef, ...],
     *,
-    policy: AnomalyPolicy,
+    policy: PriceDeviationPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
-    if abs(observed - expected) <= policy.price_tolerance:
+    _validate_comparison("expected price", expected)
+    _validate_comparison("observed price", observed)
+    if abs(observed - expected) <= policy.tolerance:
         return None
-    return Anomaly(
+    return _anomaly(
         subject_key,
-        AnomalyKind.PRICE_DEVIATION,
-        expected,
-        observed,
+        PriceDeviationDetails(expected, observed),
         AnomalySeverity.WARNING,
-        AnomalyStatus.OPEN,
         evidence,
         policy.policy_id,
         provenance,
@@ -251,19 +384,64 @@ def detect_late_commitment(
     observed: date,
     evidence: tuple[EvidenceRef, ...],
     *,
-    policy: AnomalyPolicy,
+    policy: LateCommitmentPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
-    if observed <= expected + timedelta(days=policy.late_days_tolerance):
+    if observed <= expected + policy.tolerance:
         return None
-    return Anomaly(
+    return _anomaly(
         subject_key,
-        AnomalyKind.LATE_COMMITMENT,
-        expected,
-        observed,
+        LateCommitmentDetails(expected, observed),
         AnomalySeverity.WARNING,
-        AnomalyStatus.OPEN,
+        evidence,
+        policy.policy_id,
+        provenance,
+        detected_at,
+    )
+
+
+def detect_stale_revision(
+    subject_key: str,
+    expected: str,
+    observed: str,
+    evidence: tuple[EvidenceRef, ...],
+    *,
+    policy: StaleRevisionPolicy,
+    provenance: DecisionProvenance,
+    detected_at: datetime,
+) -> Anomaly | None:
+    if not expected.strip() or not observed.strip():
+        raise ValueError("expected and observed revisions are required")
+    if observed == expected:
+        return None
+    return _anomaly(
+        subject_key,
+        StaleRevisionDetails(expected, observed),
+        AnomalySeverity.WARNING,
+        evidence,
+        policy.policy_id,
+        provenance,
+        detected_at,
+    )
+
+
+def detect_unresolved_identity(
+    subject_key: str,
+    observed: str,
+    evidence: tuple[EvidenceRef, ...],
+    *,
+    expected: str | None,
+    policy: UnresolvedIdentityPolicy,
+    provenance: DecisionProvenance,
+    detected_at: datetime,
+) -> Anomaly:
+    if not observed.strip():
+        raise ValueError("observed identity mention is required")
+    return _anomaly(
+        subject_key,
+        UnresolvedIdentityDetails(expected, observed),
+        AnomalySeverity.WARNING,
         evidence,
         policy.policy_id,
         provenance,

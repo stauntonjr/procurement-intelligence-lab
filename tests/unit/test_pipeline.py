@@ -2,8 +2,8 @@ from decimal import Decimal
 
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
 from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
-from procurement_intelligence_lab.domains.procurement.evidence import EvidenceNodeKind
-from procurement_intelligence_lab.domains.procurement.resolution import ResolutionStatus
+from procurement_intelligence_lab.platform.semantics.evidence_graph import EvidenceNodeKind
+from procurement_intelligence_lab.platform.semantics.resolution import ResolutionStatus
 
 
 def test_bom_pipeline_preserves_layers_and_excludes_unresolved_state() -> None:

@@ -2,20 +2,22 @@ from decimal import Decimal
 
 from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
 from procurement_intelligence_lab.domains.procurement.evidence import (
-    EvidenceNodeKind,
     pipeline_chain,
+)
+from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
+from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
+from procurement_intelligence_lab.platform.semantics.evidence_graph import (
+    EvidenceNodeKind,
     source_chain,
 )
-from procurement_intelligence_lab.domains.procurement.provenance import (
+from procurement_intelligence_lab.platform.semantics.provenance import (
     ComponentKind,
     DecisionProvenance,
-    local_provenance_context,
 )
-from procurement_intelligence_lab.domains.procurement.resolution import (
+from procurement_intelligence_lab.platform.semantics.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
 
 
 def _provenance() -> DecisionProvenance:

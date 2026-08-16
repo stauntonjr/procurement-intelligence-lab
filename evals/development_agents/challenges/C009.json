@@ -1,0 +1,28 @@
+{
+  "id": "C009",
+  "title": "Platform semantics do not depend on a concrete vertical",
+  "introducing_commit": "1d1472bf2762cfdf856a3e45cf188f1310d75be2",
+  "oracle": "Shared platform and port modules remain independent of every concrete vertical while vertical packages may depend on platform contracts.",
+  "known_bad": "Place a concrete procurement import in a shared platform semantic module.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/platform/semantics/state.py",
+      "find": "from enum import StrEnum\n",
+      "replace": "from enum import StrEnum\n\nfrom procurement_intelligence_lab.domains.procurement.bom import Bom\n"
+    }
+  ],
+  "known_bad_failure_pattern": "platform/semantics/state.py",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_architecture_boundaries.py::test_platform_never_imports_a_vertical"
+  ],
+  "surfaces": ["architecture", "platform", "verticals", "ports"],
+  "prevention": [
+    "one-way import architecture check",
+    "platform ownership matrix",
+    "non-procurement portability fixture"
+  ]
+}

@@ -10,12 +10,12 @@ from procurement_intelligence_lab.domains.procurement.assertions import (
     SourceAssertion,
 )
 from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
-from procurement_intelligence_lab.domains.procurement.ledger import AssertionLedgerEntry
-from procurement_intelligence_lab.domains.procurement.retrieval import (
+from procurement_intelligence_lab.platform.semantics.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.platform.semantics.retrieval import (
     ProjectionBuildRequest,
     ProjectionKind,
 )
-from procurement_intelligence_lab.domains.procurement.scope import Permission, RequestContext
+from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 
 
 def _entries() -> tuple[AssertionLedgerEntry, ...]:

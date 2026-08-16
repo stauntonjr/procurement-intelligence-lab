@@ -40,7 +40,10 @@ For changes to domain calculations, reconciliation, state transitions, or policy
 
 Architecture is partly deterministic and partly judgment-based.
 
-Deterministic checks currently enforce that the framework-independent `domain/` package imports only standard-library or project-owned modules. Additional rules should migrate into deterministic checks only when they can be expressed with low ambiguity.
+Deterministic checks enforce that framework-independent `platform/` and `domains/` packages import
+only standard-library or project-owned modules. They also reject platform-to-vertical,
+port-to-concrete-vertical, and cross-vertical imports. Additional rules should migrate into
+deterministic checks only when they can be expressed with low ambiguity.
 
 AI review additionally checks semantic leakage such as infrastructure objects defining domain concepts, models directly deciding canonical state, or an adapter-specific representation escaping its boundary.
 

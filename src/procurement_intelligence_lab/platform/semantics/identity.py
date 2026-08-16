@@ -1,4 +1,4 @@
-"""Deterministic identifiers for evidence-backed domain objects."""
+"""Deterministic identifiers for evidence-backed semantic objects."""
 
 from __future__ import annotations
 
@@ -8,6 +8,8 @@ from hashlib import sha256
 
 def stable_id(namespace: str, *parts: object) -> str:
     """Return a stable, opaque identifier for a semantic object."""
+    if not namespace:
+        raise ValueError("identity namespace must not be empty")
     payload = json.dumps(
         [namespace, *parts],
         ensure_ascii=True,

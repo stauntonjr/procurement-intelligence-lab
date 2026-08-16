@@ -1,11 +1,11 @@
 """Source assertions retain what a document said before reconciliation."""
 
-from dataclasses import dataclass
 from decimal import Decimal
 from enum import StrEnum
 
-from procurement_intelligence_lab.domains.procurement.bom import Bom, EvidenceRef
-from procurement_intelligence_lab.domains.procurement.identity import stable_id
+from procurement_intelligence_lab.domains.procurement.bom import Bom
+from procurement_intelligence_lab.platform.semantics.assertions import SourceAssertion
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 
 
 class AssertionPredicate(StrEnum):
@@ -13,28 +13,6 @@ class AssertionPredicate(StrEnum):
     HAS_DESCRIPTION = "has_description"
     HAS_QUANTITY = "has_quantity"
     HAS_UNIT_PRICE = "has_unit_price"
-
-
-@dataclass(frozen=True)
-class SourceAssertion:
-    subject_key: str
-    predicate: AssertionPredicate
-    value: str | Decimal
-    evidence: EvidenceRef
-    source_system: str = "document"
-    transformation_event_id: str | None = None
-
-    @property
-    def assertion_id(self) -> str:
-        return stable_id(
-            "assertion",
-            self.subject_key,
-            self.predicate.value,
-            str(self.value),
-            self.evidence.evidence_id,
-            self.source_system,
-            self.transformation_event_id,
-        )
 
 
 def assertions_for_bom_line(

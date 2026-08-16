@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import cast
 
-from procurement_intelligence_lab.domain.package import (
+from procurement_intelligence_lab.platform.domain_packages.package import (
     STAGE_DEFINITIONS,
     STAGE_ORDER,
     DomainPackage,

@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
 
-from procurement_intelligence_lab.domains.procurement.identity import stable_id
-from procurement_intelligence_lab.domains.procurement.ledger import AssertionLedgerEntry
-from procurement_intelligence_lab.domains.procurement.scope import RequestContext
+from procurement_intelligence_lab.platform.semantics.identity import stable_id
+from procurement_intelligence_lab.platform.semantics.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.platform.semantics.scope import RequestContext
 
 
 class ProjectionKind(StrEnum):

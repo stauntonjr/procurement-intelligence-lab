@@ -2,35 +2,12 @@
 
 from dataclasses import dataclass
 from decimal import Decimal
-from enum import StrEnum
 
-from procurement_intelligence_lab.domains.procurement.identity import stable_id
-
-
-class EpistemicStatus(StrEnum):
-    OBSERVED = "observed"
-    INFERRED = "inferred"
-    UNRESOLVED = "unresolved"
-
-
-@dataclass(frozen=True)
-class EvidenceRef:
-    artifact_id: str
-    content_hash: str
-    sheet: str
-    row: int
-    cells: tuple[str, ...]
-
-    @property
-    def evidence_id(self) -> str:
-        return stable_id(
-            "evidence",
-            self.artifact_id,
-            self.content_hash,
-            self.sheet,
-            self.row,
-            self.cells,
-        )
+from procurement_intelligence_lab.platform.semantics.epistemics import EpistemicStatus
+from procurement_intelligence_lab.platform.semantics.evidence import (
+    EvidenceBackedResult,
+    EvidenceRef,
+)
 
 
 @dataclass(frozen=True)
@@ -49,14 +26,10 @@ class Bom:
     lines: tuple[BomLine, ...]
 
 
-@dataclass(frozen=True)
-class QueryResult:
-    value: object
-    evidence: tuple[EvidenceRef, ...]
-    status: EpistemicStatus
+QueryResult = EvidenceBackedResult
 
 
-def distinct_skus(bom: Bom) -> QueryResult:
+def distinct_skus(bom: Bom) -> EvidenceBackedResult[tuple[str, ...]]:
     lines = tuple(line for line in bom.lines if line.status is not EpistemicStatus.UNRESOLVED)
     return QueryResult(
         tuple(sorted({line.sku for line in lines})),
@@ -65,7 +38,7 @@ def distinct_skus(bom: Bom) -> QueryResult:
     )
 
 
-def gpu_quantity(bom: Bom) -> QueryResult:
+def gpu_quantity(bom: Bom) -> EvidenceBackedResult[Decimal]:
     lines = tuple(
         line
         for line in bom.lines
@@ -78,7 +51,7 @@ def gpu_quantity(bom: Bom) -> QueryResult:
     )
 
 
-def bom_cost(bom: Bom) -> QueryResult:
+def bom_cost(bom: Bom) -> EvidenceBackedResult[Decimal]:
     lines = tuple(line for line in bom.lines if line.status is not EpistemicStatus.UNRESOLVED)
     evidence = tuple(line.evidence for line in lines)
     if any(line.unit_price is None for line in lines):
