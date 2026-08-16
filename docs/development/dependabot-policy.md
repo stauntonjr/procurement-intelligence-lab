@@ -6,9 +6,24 @@ Actions, and the lockfile-pinned roadmap-review CLI. The authoritative configura
 
 ## Review and merge contract
 
-- Dependabot pull requests run the same deterministic PR checks as every other
-  pull request: PR-contract validation, static/architecture checks, tests,
-  dependency review, and any applicable package or challenge checks.
+- Dependabot pull requests run the same deterministic static/architecture,
+  test, dependency-review, package, and challenge checks as every other pull
+  request. PR-contract validation is author-aware because Dependabot generates
+  its own body and does not populate the repository's human-authored semantic
+  template.
+- Only a pull request whose GitHub event author is exactly `dependabot[bot]`
+  may use the machine contract. It must target `main`, expose a valid head SHA,
+  use a recognized Dependabot ecosystem branch, retain Dependabot's
+  machine-readable dependency trace, contain only commits authored by
+  `dependabot[bot]`, and change a nonempty unique set of files wholly inside
+  that ecosystem's managed surface. A fully valid repository PR body permits
+  maintainer-authored commits and may replace the generated dependency trace,
+  but it never relaxes the branch, revision, ecosystem, or file-surface
+  constraints.
+- Human-authored and other bot-authored pull requests must satisfy the full
+  executable semantic PR template. The workflow uses read-only pull-request
+  access and the event's immutable author/head/base context; it does not rewrite
+  bodies, use `pull_request_target`, or grant a blanket automation bypass.
 - AI review is advisory. No workflow polls for an AI review or makes review
   arrival a merge invariant. This keeps a bot-authored update from waiting on a
   quota-limited or unavailable reviewer.

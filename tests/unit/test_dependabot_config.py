@@ -47,3 +47,6 @@ def test_dependabot_policy_does_not_enable_auto_merge_or_ai_review_gate() -> Non
     assert "No auto-merge" in policy
     assert "AI review is advisory" in policy
     assert "A human maintainer must" in policy
+    assert "author is exactly `dependabot[bot]`" in policy
+    assert "does not rewrite" in policy
+    assert "blanket automation bypass" in policy

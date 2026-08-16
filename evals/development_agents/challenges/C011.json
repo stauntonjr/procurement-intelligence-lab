@@ -1,0 +1,33 @@
+{
+  "id": "C011",
+  "title": "Generated Dependabot pull requests use a bounded machine contract",
+  "introducing_commit": "a5d8dd8f1e28e36954ac8f5fe82dd7534472eded",
+  "oracle": "An authentic Dependabot pull request may omit the human semantic template only when its target, revision, ecosystem branch, generated dependency trace, commit authors, and changed files satisfy the ecosystem-specific machine contract.",
+  "known_bad": "Route authentic Dependabot pull requests back through the human-only semantic body contract, causing every untouched generated update body to fail before its dependency checks can run.",
+  "known_bad_mutation": [
+    {
+      "path": "tools/check_pr_contract.py",
+      "find": "    if author_login == DEPENDABOT_LOGIN:\n",
+      "replace": "    if False and author_login == DEPENDABOT_LOGIN:\n"
+    }
+  ],
+  "known_bad_failure_pattern": "missing heading: Summary",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_pr_contract.py::test_pr_contract_main_accepts_bounded_dependabot_generated_body"
+  ],
+  "surfaces": [
+    "pull request contract",
+    "Dependabot update workflow",
+    "GitHub Actions merge gates"
+  ],
+  "prevention": [
+    "trusted event-author routing",
+    "ecosystem-specific changed-file allowlists",
+    "generated metadata, commit provenance, and current-head validation",
+    "executable known-bad challenge replay"
+  ]
+}

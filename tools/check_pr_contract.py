@@ -82,6 +82,22 @@ SEMANTIC_PATHS = {
     "pyproject.toml",
     "uv.lock",
 }
+DEPENDABOT_LOGIN = "dependabot[bot]"
+DEPENDABOT_TRACE_FIELDS = (
+    "updated-dependencies:",
+    "dependency-name:",
+    "dependency-version:",
+    "update-type:",
+)
+DEPENDABOT_ALLOWED_FILES = {
+    "uv": frozenset({"pyproject.toml", "uv.lock"}),
+    "npm_and_yarn": frozenset(
+        {
+            ".github/roadmap-steward/package.json",
+            ".github/roadmap-steward/package-lock.json",
+        }
+    ),
+}
 
 
 def _value(body: str, label: str) -> str | None:
@@ -154,7 +170,7 @@ def _cross_validate_evidence(body: str, evidence: object) -> list[str]:
     return errors
 
 
-def validate(
+def _validate_standard(
     body: str,
     *,
     expected_revision: str | None = None,
@@ -212,6 +228,106 @@ def validate(
     return tuple(errors)
 
 
+def _dependabot_ecosystem(head_ref: str | None) -> str | None:
+    if head_ref is None or not head_ref.startswith("dependabot/"):
+        return None
+    ecosystem, separator, update_name = head_ref.removeprefix("dependabot/").partition("/")
+    if not separator or not update_name:
+        return None
+    if ecosystem == "github_actions" or ecosystem in DEPENDABOT_ALLOWED_FILES:
+        return ecosystem
+    return None
+
+
+def _dependabot_file_allowed(ecosystem: str, path: str) -> bool:
+    if ecosystem == "github_actions":
+        candidate = Path(path)
+        return candidate.parent == Path(".github/workflows") and candidate.suffix in {
+            ".yml",
+            ".yaml",
+        }
+    return path in DEPENDABOT_ALLOWED_FILES[ecosystem]
+
+
+def validate_dependabot(
+    body: str,
+    *,
+    expected_revision: str | None,
+    changed_files: tuple[str, ...],
+    commit_author_logins: tuple[str, ...],
+    head_ref: str | None,
+    base_ref: str | None,
+) -> tuple[str, ...]:
+    """Validate bounded machine provenance for an authentic Dependabot PR."""
+
+    errors: list[str] = []
+    if base_ref != "main":
+        errors.append("Dependabot pull requests must target main")
+    if expected_revision is None or re.fullmatch(r"[0-9a-f]{40}", expected_revision) is None:
+        errors.append("Dependabot pull requests require a 40-character lowercase head SHA")
+    ecosystem = _dependabot_ecosystem(head_ref)
+    if ecosystem is None:
+        errors.append("Dependabot head ref must name a supported managed ecosystem")
+    has_generated_trace = bool(body.strip()) and all(
+        field in body for field in DEPENDABOT_TRACE_FIELDS
+    )
+    has_standard_contract = not _validate_standard(
+        body,
+        expected_revision=expected_revision,
+        changed_files=changed_files,
+    )
+    if not has_standard_contract:
+        if not has_generated_trace:
+            errors.append("Dependabot body must retain machine-readable dependency metadata")
+        if not commit_author_logins or any(
+            author != DEPENDABOT_LOGIN for author in commit_author_logins
+        ):
+            errors.append(
+                "Dependabot machine contract requires every PR commit to be authored by "
+                f"{DEPENDABOT_LOGIN}"
+            )
+    if not changed_files:
+        errors.append("Dependabot update must change at least one managed dependency file")
+    elif len(set(changed_files)) != len(changed_files):
+        errors.append("Dependabot changed-file evidence must not contain duplicates")
+    if ecosystem is not None:
+        forbidden = tuple(
+            path for path in changed_files if not _dependabot_file_allowed(ecosystem, path)
+        )
+        if forbidden:
+            errors.append(
+                f"Dependabot {ecosystem} update may not change files outside its managed surface: "
+                + ", ".join(forbidden)
+            )
+    return tuple(errors)
+
+
+def validate(
+    body: str,
+    *,
+    expected_revision: str | None = None,
+    changed_files: tuple[str, ...] = (),
+    commit_author_logins: tuple[str, ...] = (),
+    author_login: str | None = None,
+    head_ref: str | None = None,
+    base_ref: str | None = None,
+) -> tuple[str, ...]:
+    if author_login == DEPENDABOT_LOGIN:
+        return validate_dependabot(
+            body,
+            expected_revision=expected_revision,
+            changed_files=changed_files,
+            commit_author_logins=commit_author_logins,
+            head_ref=head_ref,
+            base_ref=base_ref,
+        )
+    return _validate_standard(
+        body,
+        expected_revision=expected_revision,
+        changed_files=changed_files,
+    )
+
+
 def main() -> int:
     body = os.environ.get("PR_BODY", "")
     changed_files_path = os.environ.get("PR_CHANGED_FILES_PATH")
@@ -226,10 +342,25 @@ def main() -> int:
         except OSError as error:
             print(f"pull request contract input error: {error}")
             return 1
+    commit_authors_path = os.environ.get("PR_COMMIT_AUTHORS_PATH")
+    commit_author_logins: tuple[str, ...] = ()
+    if commit_authors_path:
+        try:
+            commit_author_logins = tuple(
+                line.strip()
+                for line in Path(commit_authors_path).read_text(encoding="utf-8").splitlines()
+            )
+        except OSError as error:
+            print(f"pull request contract input error: {error}")
+            return 1
     errors = validate(
         body,
         expected_revision=os.environ.get("PR_HEAD_SHA"),
         changed_files=changed_files,
+        commit_author_logins=commit_author_logins,
+        author_login=os.environ.get("PR_AUTHOR_LOGIN"),
+        head_ref=os.environ.get("PR_HEAD_REF"),
+        base_ref=os.environ.get("PR_BASE_REF"),
     )
     if errors:
         print("Pull request contract is incomplete:")

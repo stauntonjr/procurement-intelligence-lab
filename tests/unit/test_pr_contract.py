@@ -83,6 +83,19 @@ complete
 """
 
 
+def dependabot_body(*, include_trace: bool = True) -> str:
+    trace = """<!--
+updated-dependencies:
+- dependency-name: actions/setup-uv
+  dependency-version: 10.0.0
+  update-type: version-update:semver-major
+-->
+"""
+    return f"""Bumps [actions/setup-uv](https://github.com/astral-sh/setup-uv) from 7 to 10.
+
+{trace if include_trace else ""}"""
+
+
 def test_pr_contract_rejects_empty_template() -> None:
     assert "missing value: Primary milestone" in validate("## Summary\n")
 
@@ -90,6 +103,205 @@ def test_pr_contract_rejects_empty_template() -> None:
 def test_pr_contract_accepts_complete_semantic_contract_bound_to_head() -> None:
     revision = "a" * 40
     assert validate(semantic_body(revision), expected_revision=revision) == ()
+
+
+def test_pr_contract_accepts_bounded_dependabot_generated_body() -> None:
+    assert (
+        validate(
+            dependabot_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]",),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/github-actions-a1b2c3d4e5",
+            base_ref="main",
+        )
+        == ()
+    )
+
+
+def test_pr_contract_accepts_each_configured_dependabot_ecosystem() -> None:
+    cases = (
+        ("uv", ("pyproject.toml", "uv.lock")),
+        (
+            "npm_and_yarn",
+            (
+                ".github/roadmap-steward/package.json",
+                ".github/roadmap-steward/package-lock.json",
+            ),
+        ),
+    )
+
+    for ecosystem, changed_files in cases:
+        assert (
+            validate(
+                dependabot_body(),
+                expected_revision="a" * 40,
+                changed_files=changed_files,
+                commit_author_logins=("dependabot[bot]",),
+                author_login="dependabot[bot]",
+                head_ref=f"dependabot/{ecosystem}/example-update",
+                base_ref="main",
+            )
+            == ()
+        )
+
+
+def test_pr_contract_does_not_trust_generated_body_from_other_authors() -> None:
+    errors = validate(
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=(".github/workflows/ci.yml",),
+        author_login="octocat",
+        head_ref="dependabot/github_actions/example-update",
+        base_ref="main",
+    )
+
+    assert "missing heading: Summary" in errors
+
+
+def test_pr_contract_rejects_dependabot_outside_managed_surface() -> None:
+    errors = validate(
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=(".github/workflows/ci.yml", "src/example.py"),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/github_actions/example-update",
+        base_ref="main",
+    )
+
+    assert any("outside its managed surface: src/example.py" in error for error in errors)
+
+
+def test_pr_contract_rejects_dependabot_ecosystem_mismatch() -> None:
+    errors = validate(
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=("uv.lock",),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/github_actions/example-update",
+        base_ref="main",
+    )
+
+    assert any("outside its managed surface: uv.lock" in error for error in errors)
+
+
+def test_pr_contract_rejects_unbounded_dependabot_context() -> None:
+    cases = (
+        {
+            "expected_revision": "not-a-sha",
+            "head_ref": "dependabot/github_actions/example-update",
+            "base_ref": "main",
+        },
+        {
+            "expected_revision": "a" * 40,
+            "head_ref": "dependabot/pip/example-update",
+            "base_ref": "main",
+        },
+        {
+            "expected_revision": "a" * 40,
+            "head_ref": "dependabot/github_actions/example-update",
+            "base_ref": "release",
+        },
+    )
+
+    for context in cases:
+        assert validate(
+            dependabot_body(),
+            changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]",),
+            author_login="dependabot[bot]",
+            **context,
+        )
+
+
+def test_pr_contract_rejects_missing_or_duplicate_dependabot_file_evidence() -> None:
+    assert "Dependabot update must change at least one managed dependency file" in validate(
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=(),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/uv/example-update",
+        base_ref="main",
+    )
+    assert "Dependabot changed-file evidence must not contain duplicates" in validate(
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=("uv.lock", "uv.lock"),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/uv/example-update",
+        base_ref="main",
+    )
+
+
+def test_pr_contract_rejects_dependabot_without_trace_or_full_contract() -> None:
+    errors = validate(
+        dependabot_body(include_trace=False),
+        expected_revision="a" * 40,
+        changed_files=(".github/workflows/ci.yml",),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/github_actions/example-update",
+        base_ref="main",
+    )
+
+    assert "Dependabot body must retain machine-readable dependency metadata" in errors
+
+
+def test_pr_contract_accepts_full_contract_but_still_bounds_dependabot_files() -> None:
+    assert (
+        validate(
+            semantic_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
+        == ()
+    )
+    assert any(
+        "outside its managed surface: src/example.py" in error
+        for error in validate(
+            semantic_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml", "src/example.py"),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
+    )
+
+
+def test_pr_contract_requires_full_contract_after_human_modifies_dependabot_branch() -> None:
+    assert (
+        "Dependabot machine contract requires every PR commit to be authored by dependabot[bot]"
+        in validate(
+            dependabot_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]", "octocat"),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
+    )
+    assert (
+        validate(
+            semantic_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]", "octocat"),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
+        == ()
+    )
 
 
 def test_pr_contract_requires_every_semantic_scenario_family() -> None:
@@ -225,3 +437,21 @@ def test_pr_contract_fails_closed_when_changed_files_input_is_unreadable(
 
     assert main() == 1
     assert "pull request contract input error" in capsys.readouterr().out
+
+
+def test_pr_contract_main_accepts_bounded_dependabot_generated_body(
+    monkeypatch: Any, tmp_path: Path
+) -> None:
+    changed_files = tmp_path / "changed-files.txt"
+    changed_files.write_text(".github/workflows/ci.yml\n", encoding="utf-8")
+    commit_authors = tmp_path / "commit-authors.txt"
+    commit_authors.write_text("dependabot[bot]\n", encoding="utf-8")
+    monkeypatch.setenv("PR_BODY", dependabot_body())
+    monkeypatch.setenv("PR_CHANGED_FILES_PATH", str(changed_files))
+    monkeypatch.setenv("PR_COMMIT_AUTHORS_PATH", str(commit_authors))
+    monkeypatch.setenv("PR_HEAD_SHA", "a" * 40)
+    monkeypatch.setenv("PR_AUTHOR_LOGIN", "dependabot[bot]")
+    monkeypatch.setenv("PR_HEAD_REF", "dependabot/github_actions/example-update")
+    monkeypatch.setenv("PR_BASE_REF", "main")
+
+    assert main() == 0
