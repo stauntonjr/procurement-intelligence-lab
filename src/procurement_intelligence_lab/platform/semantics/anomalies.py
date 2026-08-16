@@ -5,7 +5,11 @@ from datetime import datetime
 from enum import StrEnum
 from typing import Protocol, cast
 
-from procurement_intelligence_lab.platform.semantics.errors import ScopeMismatchError
+from procurement_intelligence_lab.platform.semantics.errors import (
+    ScopeContractError,
+    SemanticContractError,
+    TemporalContractError,
+)
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
@@ -52,16 +56,16 @@ class Anomaly:
 
     def __post_init__(self) -> None:
         if not self.subject_key.strip() or not self.policy_id.strip():
-            raise ValueError("anomaly subject and policy ID are required")
+            raise SemanticContractError("anomaly subject and policy ID are required")
         if not self.evidence:
-            raise ValueError("anomalies require evidence")
+            raise SemanticContractError("anomalies require evidence")
         if len({item.evidence_id for item in self.evidence}) != len(self.evidence):
-            raise ValueError("anomaly evidence must be unique")
+            raise SemanticContractError("anomaly evidence must be unique")
         if self.detected_at.tzinfo is None:
-            raise ValueError("detected_at must be timezone-aware")
+            raise TemporalContractError("detected_at must be timezone-aware")
         scope_value = cast(object, self.scope)
         if not isinstance(scope_value, StateScope):
-            raise ScopeMismatchError("anomalies require an explicit state scope")
+            raise ScopeContractError("anomalies require an explicit state scope")
 
     @property
     def kind(self) -> StrEnum:

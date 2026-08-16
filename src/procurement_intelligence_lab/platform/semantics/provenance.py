@@ -4,6 +4,10 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
 
+from procurement_intelligence_lab.platform.semantics.errors import (
+    SemanticContractError,
+    TemporalContractError,
+)
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 
 
@@ -41,9 +45,9 @@ class ProvenanceContext:
 
     def __post_init__(self) -> None:
         if not self.run_id:
-            raise ValueError("run_id must not be empty")
+            raise SemanticContractError("run_id must not be empty")
         if self.started_at.tzinfo is None:
-            raise ValueError("started_at must be timezone-aware")
+            raise TemporalContractError("started_at must be timezone-aware")
 
     @property
     def context_id(self) -> str:
@@ -77,11 +81,13 @@ class DecisionProvenance:
 
     def __post_init__(self) -> None:
         if not self.component_name or not self.implementation_version:
-            raise ValueError("component name and implementation version are required")
+            raise SemanticContractError("component name and implementation version are required")
         if self.component_kind is ComponentKind.MODEL and not (
             self.model_provider and self.model_id and self.model_revision
         ):
-            raise ValueError("model decisions require provider, model ID, and model revision")
+            raise SemanticContractError(
+                "model decisions require provider, model ID, and model revision"
+            )
 
     @property
     def provenance_id(self) -> str:
@@ -120,11 +126,11 @@ class TransformationEvent:
 
     def __post_init__(self) -> None:
         if not self.event_type:
-            raise ValueError("event_type must not be empty")
+            raise SemanticContractError("event_type must not be empty")
         if not self.output_ids:
-            raise ValueError("transformation events require at least one output")
+            raise SemanticContractError("transformation events require at least one output")
         if any(not edge.target_id for edge in self.input_edges):
-            raise ValueError("provenance edge targets must not be empty")
+            raise SemanticContractError("provenance edge targets must not be empty")
 
     @property
     def event_id(self) -> str:

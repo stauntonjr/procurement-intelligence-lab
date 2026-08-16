@@ -5,7 +5,11 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Protocol
 
-from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
+from procurement_intelligence_lab.platform.semantics.errors import (
+    ErrorCode,
+    PolicyContractError,
+    SemanticContractError,
+)
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
 from procurement_intelligence_lab.platform.semantics.resolution import CanonicalizedAssertion
@@ -16,8 +20,10 @@ class SourceObservation(Protocol):
     def source_artifact(self) -> str: ...
 
 
-class ReconciliationPolicyError(ValueError):
+class ReconciliationPolicyError(PolicyContractError):
     """Raised when no explicit policy can select a governing observation."""
+
+    code = ErrorCode.RECONCILIATION_POLICY_NO_MATCH
 
 
 @dataclass(frozen=True)
@@ -28,9 +34,9 @@ class SourcePrecedencePolicy:
 
     def __post_init__(self) -> None:
         if not self.source_precedence:
-            raise ValueError("source_precedence must not be empty")
+            raise SemanticContractError("source_precedence must not be empty")
         if len(set(self.source_precedence)) != len(self.source_precedence):
-            raise ValueError("source_precedence must not contain duplicates")
+            raise SemanticContractError("source_precedence must not contain duplicates")
 
     def governing_source(self, observations: Sequence[SourceObservation]) -> str:
         available = {line.source_artifact for line in observations}

@@ -8,6 +8,7 @@ from procurement_intelligence_lab.platform.semantics.anomalies import Anomaly
 from procurement_intelligence_lab.platform.semantics.derivation import DerivedFact
 from procurement_intelligence_lab.platform.semantics.errors import (
     AuthorityContractError,
+    AuthorityScopeMismatchError,
     ScopeMismatchError,
     SemanticContractError,
     TemporalContractError,
@@ -99,7 +100,7 @@ class Decision:
         if not all((self.subject_key.strip(), self.rationale.strip(), self.policy_id.strip())):
             raise SemanticContractError("decision subject, rationale, and policy ID are required")
         if self.authority.scope != self.inputs.scope:
-            raise ScopeMismatchError("decision authority and inputs must share one scope")
+            raise AuthorityScopeMismatchError("decision authority and inputs must share one scope")
         if self.decided_at.tzinfo is None:
             raise TemporalContractError("decision decided_at must be timezone-aware")
         if self.decided_at < self.inputs.as_of:

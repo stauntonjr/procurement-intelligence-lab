@@ -34,7 +34,7 @@ must not become the domain model.
 
 ## Failures and stable error codes
 
-Every caller-visible failure belongs to exactly one category:
+Every failure emitted by a platform semantic record or policy belongs to exactly one category:
 
 | Category | Meaning | Retry expectation |
 |---|---|---|
@@ -51,9 +51,12 @@ the form `pil.<category>.<condition>`. Codes are append-only public identifiers:
 reuse, or change the meaning of a released value. Add a new code when callers must distinguish a
 new condition. Human-readable messages may add specific evidence and are not stable identifiers.
 
-Platform semantic exceptions expose `category`, `code`, and `as_dict()` while remaining
-`ValueError` subclasses for compatibility. Adapters translate platform failures at system
-boundaries; they must preserve the stable code and must not infer success from an unknown code.
+Platform semantic exceptions expose `category`, `code`, and `as_dict()` while retaining their
+established `ValueError`, `TypeError`, or `PermissionError` family for compatibility. Invalid or
+missing scope values are `input`; conflicts between otherwise valid governed records are `policy`;
+and scope conflicts involving a principal, approval, or authority are `authorization`. Adapters
+translate platform failures at system boundaries; they must preserve the stable code and must not
+infer success from an unknown code.
 
 ## Values, configuration, and observability
 

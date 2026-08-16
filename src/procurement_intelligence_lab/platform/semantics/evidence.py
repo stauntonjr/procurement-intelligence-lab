@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from typing import Protocol, runtime_checkable
 
 from procurement_intelligence_lab.platform.semantics.epistemics import EpistemicStatus
+from procurement_intelligence_lab.platform.semantics.errors import (
+    SemanticContractError,
+    SemanticTypeContractError,
+)
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 
 
@@ -31,13 +35,13 @@ class TabularLocation:
 
     def __post_init__(self) -> None:
         if not self.sheet:
-            raise ValueError("tabular evidence sheet must not be empty")
+            raise SemanticContractError("tabular evidence sheet must not be empty")
         if self.row < 1:
-            raise ValueError("tabular evidence row must be one-based")
+            raise SemanticContractError("tabular evidence row must be one-based")
         if not self.cells or any(not cell for cell in self.cells):
-            raise ValueError("tabular evidence cells must not be empty")
+            raise SemanticContractError("tabular evidence cells must not be empty")
         if len(set(self.cells)) != len(self.cells):
-            raise ValueError("tabular evidence cells must not contain duplicates")
+            raise SemanticContractError("tabular evidence cells must not contain duplicates")
 
     @property
     def location_kind(self) -> str:
@@ -60,7 +64,7 @@ class RecordLocation:
 
     def __post_init__(self) -> None:
         if not self.collection or not self.record_key:
-            raise ValueError("record evidence collection and key are required")
+            raise SemanticContractError("record evidence collection and key are required")
 
     @property
     def location_kind(self) -> str:
@@ -97,17 +101,19 @@ class EvidenceRef:
         artifact_id = artifact_id.strip()
         content_hash = content_hash.strip()
         if not artifact_id or not content_hash:
-            raise ValueError("evidence artifact ID and content hash are required")
+            raise SemanticContractError("evidence artifact ID and content hash are required")
         resolved_location: EvidenceLocation
         if isinstance(location, str):
             if row is None or cells is None:
-                raise ValueError("legacy tabular evidence requires row and cells")
+                raise SemanticContractError("legacy tabular evidence requires row and cells")
             resolved_location = TabularLocation(location, row, cells)
         else:
             if row is not None or cells is not None:
-                raise ValueError("typed evidence location cannot be combined with row or cells")
+                raise SemanticContractError(
+                    "typed evidence location cannot be combined with row or cells"
+                )
             if not isinstance(location, EvidenceLocation):
-                raise TypeError("location must implement EvidenceLocation")
+                raise SemanticTypeContractError("location must implement EvidenceLocation")
             resolved_location = location
         object.__setattr__(self, "artifact_id", artifact_id)
         object.__setattr__(self, "content_hash", content_hash)
@@ -125,19 +131,19 @@ class EvidenceRef:
     @property
     def sheet(self) -> str:
         if not isinstance(self.location, TabularLocation):
-            raise TypeError("evidence does not have a tabular sheet")
+            raise SemanticTypeContractError("evidence does not have a tabular sheet")
         return self.location.sheet
 
     @property
     def row(self) -> int:
         if not isinstance(self.location, TabularLocation):
-            raise TypeError("evidence does not have a tabular row")
+            raise SemanticTypeContractError("evidence does not have a tabular row")
         return self.location.row
 
     @property
     def cells(self) -> tuple[str, ...]:
         if not isinstance(self.location, TabularLocation):
-            raise TypeError("evidence does not have tabular cells")
+            raise SemanticTypeContractError("evidence does not have tabular cells")
         return self.location.cells
 
     def as_dict(self) -> dict[str, object]:
@@ -151,7 +157,7 @@ class EvidenceRef:
         location_fields = self.location.payload_fields()
         reserved = location_fields.keys() & payload.keys()
         if reserved:
-            raise ValueError(
+            raise SemanticContractError(
                 f"evidence location payload uses reserved fields: {sorted(reserved)!r}"
             )
         payload.update(location_fields)
@@ -166,4 +172,4 @@ class EvidenceBackedResult[ValueT]:
 
     def __post_init__(self) -> None:
         if self.status is EpistemicStatus.UNRESOLVED and self.value is not None:
-            raise ValueError("unresolved results must not carry a resolved value")
+            raise SemanticContractError("unresolved results must not carry a resolved value")

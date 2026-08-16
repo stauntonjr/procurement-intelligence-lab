@@ -4,6 +4,10 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from procurement_intelligence_lab.platform.semantics.assertions import SourceAssertion
+from procurement_intelligence_lab.platform.semantics.errors import (
+    SemanticContractError,
+    TemporalContractError,
+)
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 
 
@@ -15,9 +19,9 @@ class AssertionLedgerEntry:
 
     def __post_init__(self) -> None:
         if self.sequence < 1:
-            raise ValueError("ledger sequence must be positive")
+            raise SemanticContractError("ledger sequence must be positive")
         if self.observed_at.tzinfo is None:
-            raise ValueError("ledger observation time must be timezone-aware")
+            raise TemporalContractError("ledger observation time must be timezone-aware")
 
     @property
     def entry_id(self) -> str:

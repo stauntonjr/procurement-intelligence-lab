@@ -5,6 +5,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from enum import StrEnum
 
+from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 
@@ -22,7 +23,7 @@ class SourceAssertion:
 
     def __post_init__(self) -> None:
         if not self.subject_key or not self.source_system:
-            raise ValueError("assertion subject and source system are required")
+            raise SemanticContractError("assertion subject and source system are required")
 
     @property
     def assertion_id(self) -> str:
