@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v5
 
       - name: Capture durable planning snapshot
         env:
@@ -35,7 +35,7 @@ jobs:
       - name: Run advisory roadmap review
         id: gemini
         continue-on-error: true
-        uses: google-github-actions/run-gemini-cli@a3bf79042542528e91937b3a3a6fbc4967ee3c31 # patched v0 line
+        uses: google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489 # patched v0 line
         env:
           GITHUB_TOKEN: ""
           GEMINI_CLI_TRUST_WORKSPACE: "true"
