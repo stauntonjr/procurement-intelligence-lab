@@ -7,7 +7,8 @@ CONFIG = Path(".github/dependabot.yml")
 
 def _section(text: str, ecosystem: str) -> str:
     marker = f'package-ecosystem: "{ecosystem}"'
-    start = text.index(marker)
+    start = text.find(marker)
+    assert start != -1, f"Missing Dependabot update section for {ecosystem!r}"
     next_start = text.find("\n  - package-ecosystem:", start + len(marker))
     return text[start : next_start if next_start != -1 else len(text)]
 
