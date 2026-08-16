@@ -1,4 +1,4 @@
-"""Explicit, fail-closed request scope and authorization contracts."""
+"""Explicit request authorization and state-projection scopes."""
 
 from dataclasses import dataclass
 from enum import StrEnum
@@ -29,13 +29,7 @@ class RequestContext:
 
     def __post_init__(self) -> None:
         if not all(
-            (
-                self.principal_id,
-                self.tenant_id,
-                self.project_id,
-                self.site_id,
-                self.trace_id,
-            )
+            (self.principal_id, self.tenant_id, self.project_id, self.site_id, self.trace_id)
         ):
             raise ValueError("principal, tenant, project, site, and trace IDs are required")
 
@@ -46,12 +40,22 @@ class RequestContext:
             )
 
     def matches(self, other: "RequestContext") -> bool:
-        return (
-            self.tenant_id,
-            self.project_id,
-            self.site_id,
-        ) == (
+        return (self.tenant_id, self.project_id, self.site_id) == (
             other.tenant_id,
             other.project_id,
             other.site_id,
         )
+
+
+@dataclass(frozen=True)
+class StateScope:
+    """Tenant/project/site plus a domain-owned state version."""
+
+    tenant_id: str
+    project_id: str
+    site_id: str
+    version: str
+
+    def __post_init__(self) -> None:
+        if not all((self.tenant_id, self.project_id, self.site_id, self.version)):
+            raise ValueError("state scope identifiers and version are required")

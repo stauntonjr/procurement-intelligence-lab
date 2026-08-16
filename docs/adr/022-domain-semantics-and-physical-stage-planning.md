@@ -12,7 +12,7 @@ The repository already separates structure from mapping, assertions from truth, 
 
 ## Decision
 
-Adopt the four-layer model described in [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md) as the platform contract. This decision ratifies the semantic boundary and schema rules; it does not claim that the compiler, registry, planner, or a migrated procurement package exists on main.
+Adopt the four-layer model described in [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md) as the platform contract. This decision ratifies the semantic boundary and schema rules. The deterministic compiler is implemented; the runtime registry/planner and a complete declarative procurement package are not.
 
 1. platform-owned `StageDefinition` records define universal stage semantics, input/output contracts, guarantees, and allowed logical topology;
 2. domain-owned declarative `StageBinding` records define mode, semantic requirements, domain config/policy references, and evaluation references, but do not normally select providers, models, services, or regions;
@@ -25,11 +25,21 @@ Keep a fixed `DomainPackage` meta-schema: every domain supplies every standardiz
 
 Author domain packages as side-effect-free typed Python data. A `DomainCompiler` validates them and emits deterministic, language-neutral JSON containing stages, capabilities, requirements, and domain-owned references—not provider package names. Runtime/application configuration uses TOML plus environment/secret references; deployment mechanics use ecosystem-native YAML.
 
-The repository layout mirrors this boundary: horizontal package contracts remain under
-`src/procurement_intelligence_lab/domain/`, while vertical-owned semantics live under
-`src/procurement_intelligence_lab/domains/<domain_id>/`. The first vertical is therefore
-`domains/procurement/`; a future vertical gets a sibling package rather than a branch inside
-procurement code. Its authoritative semantic documentation lives under `docs/domains/<domain_id>/`.
+The repository layout mirrors this boundary. Shared contracts live under
+`src/procurement_intelligence_lab/platform/`: `platform/domain_packages/` owns the stage catalog and
+compiler, while `platform/semantics/` owns reusable evidence, identity, provenance, scope, ledger,
+resolution, retrieval, reconciliation, state, and anomaly contracts. Vertical-owned records,
+policy parameters, and algorithms live under `src/procurement_intelligence_lab/domains/<domain_id>/`.
+The first vertical is `domains/procurement/`; a future vertical gets a sibling package rather than a
+branch inside procurement code. Its authoritative semantic documentation lives under
+`docs/domains/<domain_id>/`. The detailed ownership and dependency rules are in
+[Platform semantics and vertical ownership](../architecture/platform-semantics.md).
+
+Dependency direction is one-way: verticals may import the platform, but the platform does not
+import a vertical; ports do not bind to a concrete vertical; and one vertical does not import a
+sibling. Application composition is the boundary that may select and register vertical-specific
+implementations. This corrects the whole-file classification introduced by PR #137 while preserving
+the DomainPackage compiler and its manifest contract.
 
 The control plane combines a compiled manifest, source profile, and runtime implementation registry/config to produce a physical plan. It may optimize neutral stages away physically, but semantic traces and provenance retain their explicit logical presence. A future Go control plane consumes compiled manifests and registry data; it does not import Python authoring objects or branch on domain identity.
 
@@ -42,6 +52,8 @@ Record the platform schema version, domain version, compiled-manifest hash, runt
 - Source profiles can choose execute or passthrough variants without changing the common downstream semantic contracts.
 - Compiler determinism and manifest compatibility become platform contracts requiring conformance tests and migration rules.
 - Stage-catalog evolution is an architecture change, not an ordinary domain edit.
+- Adding a vertical-specific record does not make shared evidence, provenance, scope, or strategy
+  contracts vertical-owned.
 - The design introduces work for a meta-schema, procurement-package extraction, compiler/manifest, runtime registry and planner, SME/MCP authoring tools, and a second-vertical proof.
 
 ## Alternatives considered

@@ -1,28 +1,14 @@
 """Conservative entity-resolution decisions over source assertions."""
 
-from dataclasses import dataclass
-from enum import StrEnum
-
 from procurement_intelligence_lab.domains.procurement.assertions import (
     AssertionPredicate,
     SourceAssertion,
 )
-from procurement_intelligence_lab.domains.procurement.provenance import DecisionProvenance
-
-
-class ResolutionStatus(StrEnum):
-    RESOLVED = "resolved"
-    UNRESOLVED = "unresolved"
-
-
-@dataclass(frozen=True)
-class ResolutionDecision:
-    mention: str
-    canonical_key: str | None
-    status: ResolutionStatus
-    evidence: tuple[SourceAssertion, ...]
-    rationale: str
-    provenance: DecisionProvenance
+from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
+from procurement_intelligence_lab.platform.semantics.resolution import (
+    ResolutionDecision,
+    ResolutionStatus,
+)
 
 
 def normalize_identifier(value: str) -> str:
@@ -44,7 +30,7 @@ def resolve_identifier(
         assertion
         for assertion in assertions
         if normalize_identifier(assertion.subject_key) == normalized
-        and assertion.predicate is AssertionPredicate.HAS_SKU
+        and assertion.predicate.value == AssertionPredicate.HAS_SKU.value
     )
     if len(matches) == 1:
         return ResolutionDecision(

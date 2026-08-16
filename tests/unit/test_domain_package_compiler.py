@@ -6,11 +6,11 @@ from typing import cast
 
 import pytest
 
-from procurement_intelligence_lab.domain.compiler import (
+from procurement_intelligence_lab.platform.domain_packages.compiler import (
     DomainPackageValidationError,
     compile_domain_package,
 )
-from procurement_intelligence_lab.domain.package import (
+from procurement_intelligence_lab.platform.domain_packages.package import (
     STAGE_ORDER,
     DomainPackage,
     SourceProfile,

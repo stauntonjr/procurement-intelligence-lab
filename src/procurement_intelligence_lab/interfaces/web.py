@@ -15,7 +15,7 @@ from procurement_intelligence_lab.application.chat import (
 )
 from procurement_intelligence_lab.application.review import review_context_for_claim
 from procurement_intelligence_lab.domains.procurement.bom import Bom
-from procurement_intelligence_lab.domains.procurement.scope import (
+from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
     RequestContext,
     ScopeAuthorizationError,
@@ -89,7 +89,7 @@ def claim_payload(question: str, *, request_context: RequestContext) -> dict[str
         "claim_id": claim.claim_id,
         "value": value,
         "status": claim.status,
-        "evidence": [{**ref.__dict__, "evidence_id": ref.evidence_id} for ref in claim.evidence],
+        "evidence": [ref.as_dict() for ref in claim.evidence],
         "execution_trace": {
             "claim": claim.execution_trace.claim,
             "claim_id": claim.execution_trace.claim_id,
@@ -119,7 +119,7 @@ def source_payload(
         evidence = line.evidence
         if evidence.evidence_id == evidence_id:
             return {
-                "evidence": {**evidence.__dict__, "evidence_id": evidence.evidence_id},
+                "evidence": evidence.as_dict(),
                 "line": {
                     "sku": line.sku,
                     "description": line.description,

@@ -63,4 +63,7 @@ The prototype keeps the model deliberately small. A production implementation wo
 
 ## Horizontal platform boundary
 
-The proposed cross-domain architecture separates platform stage semantics, domain bindings and policy parameters, and deployment/runtime provider selection. The logical stage topology stays stable while a compiler and runtime capability registry support source-specific physical plans and benchmarkable provider swaps. See [Domain packages and stage planning](architecture/domain-package-and-stage-planning.md) and [ADR-022](adr/022-domain-semantics-and-physical-stage-planning.md).
+The cross-domain architecture separates platform stage/semantic contracts, domain bindings and
+policy parameters, and deployment/runtime provider selection. The logical stage topology stays
+stable while a compiler and future runtime capability registry support source-specific physical
+plans and benchmarkable provider swaps. See [Platform semantics and vertical ownership](architecture/platform-semantics.md), [Domain packages and stage planning](architecture/domain-package-and-stage-planning.md), and [ADR-022](adr/022-domain-semantics-and-physical-stage-planning.md).

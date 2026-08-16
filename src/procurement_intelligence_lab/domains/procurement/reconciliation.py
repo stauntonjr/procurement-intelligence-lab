@@ -3,9 +3,13 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
-from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
-from procurement_intelligence_lab.domains.procurement.provenance import DecisionProvenance
 from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
+from procurement_intelligence_lab.platform.semantics.reconciliation import (
+    ReconciliationPolicyError,
+    SourcePrecedencePolicy,
+)
 
 
 @dataclass(frozen=True)
@@ -21,30 +25,14 @@ class ReconciledLine:
     provenance: DecisionProvenance
 
 
-class ReconciliationPolicyError(ValueError):
-    """Raised when no explicit policy can select a governing observation."""
+ReconciliationPolicy = SourcePrecedencePolicy
 
-
-@dataclass(frozen=True)
-class ReconciliationPolicy:
-    """Select the first available source in explicit precedence order."""
-
-    source_precedence: tuple[str, ...]
-
-    def __post_init__(self) -> None:
-        if not self.source_precedence:
-            raise ValueError("source_precedence must not be empty")
-        if len(set(self.source_precedence)) != len(self.source_precedence):
-            raise ValueError("source_precedence must not contain duplicates")
-
-    def governing_source(self, observations: list[OperationalBomLine]) -> str:
-        available = {line.source_artifact for line in observations}
-        for source in self.source_precedence:
-            if source in available:
-                return source
-        raise ReconciliationPolicyError(
-            f"no source-precedence rule covers observations from {sorted(available)!r}"
-        )
+__all__ = (
+    "ReconciledLine",
+    "ReconciliationPolicy",
+    "ReconciliationPolicyError",
+    "reconcile_lines",
+)
 
 
 def reconcile_lines(

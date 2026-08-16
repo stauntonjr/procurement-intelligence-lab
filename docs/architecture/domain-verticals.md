@@ -9,7 +9,7 @@ status.
 
 | Domain ID | Name | Status | Evidence and delivery boundary |
 |---|---|---|---|
-| `procurement` | Procurement Intelligence | Active, first vertical | [`src/procurement_intelligence_lab/domains/procurement/`](../../src/procurement_intelligence_lab/domains/procurement/), [semantic model](../domains/procurement/semantic-model.md), and the procurement mapping in the [conformance contract](domain-package-conformance.md). M0.34 compiler/manifest work is [Issue #135](https://github.com/stauntonjr/procurement-intelligence-lab/issues/135); extracting the existing behavior into a complete package remains an M1–M4 delivery slice. |
+| `procurement` | Procurement Intelligence | Active, first vertical | [`src/procurement_intelligence_lab/domains/procurement/`](../../src/procurement_intelligence_lab/domains/procurement/), including BOM, initial BoQ and PO records, procurement state/reconciliation/anomaly behavior, the [semantic model](../domains/procurement/semantic-model.md), and the procurement mapping in the [conformance contract](domain-package-conformance.md). M0.34 compiler/manifest work is [Issue #135](https://github.com/stauntonjr/procurement-intelligence-lab/issues/135); platform ownership correction and BoQ/PO pressure tests are [Issue #149](https://github.com/stauntonjr/procurement-intelligence-lab/issues/149). |
 
 There is currently one implemented vertical. The compiler accepts a stable domain ID rather than
 branching on `procurement`; acceptance of another ID is an extensibility property, not evidence
@@ -42,6 +42,7 @@ A new vertical is a new declarative package, not a new platform fork. Its contri
   credential, region, deployment, or executable callback names;
 - pass the shared compiler, conformance, determinism, provider-neutrality, and provenance
   regression suites; and
+- reuse `platform/semantics` without requiring platform or ports to import the new vertical; and
 - add its own registry row and GitHub issue before it is called active.
 
 If the candidate needs a different stage order, output contract, or neutral mode, that is a

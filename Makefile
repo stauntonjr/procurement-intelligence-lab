@@ -35,7 +35,7 @@ regression:
 check: check-fast
 	uv run pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=85
 	uv run python tools/check_coverage_ratchet.py
-	@uv run python -c "from pathlib import Path; required=['AGENTS.md','README.md','docs/project/handoff.md','docs/architecture/overview.md','docs/domains/procurement/semantic-model.md','docs/architecture/evidence-and-ux.md']; missing=[p for p in required if not Path(p).exists()]; print(f'missing: {missing}' if missing else 'architecture checks passed'); raise SystemExit(1 if missing else 0)"
+	@uv run python -c "from pathlib import Path; required=['AGENTS.md','README.md','docs/project/handoff.md','docs/architecture/overview.md','docs/architecture/platform-semantics.md','docs/domains/procurement/semantic-model.md','docs/architecture/evidence-and-ux.md']; missing=[p for p in required if not Path(p).exists()]; print(f'missing: {missing}' if missing else 'architecture checks passed'); raise SystemExit(1 if missing else 0)"
 
 package-smoke:
 	uv run python tools/package_smoke.py

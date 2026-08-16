@@ -186,7 +186,10 @@ unit tests
 not requested
 """
 
-    errors = validate(body, changed_files=("src/procurement_intelligence_lab/domain/compiler.py",))
+    errors = validate(
+        body,
+        changed_files=("src/procurement_intelligence_lab/platform/domain_packages/compiler.py",),
+    )
 
     assert any("Semantic change cannot be no" in error for error in errors)
 

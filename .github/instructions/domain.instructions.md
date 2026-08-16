@@ -1,5 +1,5 @@
 ---
-applyTo: "src/procurement_intelligence_lab/domain/**/*.py"
+applyTo: "src/procurement_intelligence_lab/{platform,domains}/**/*.py"
 ---
 
 # Domain review rules
@@ -11,3 +11,5 @@ applyTo: "src/procurement_intelligence_lab/domain/**/*.py"
 - Preserve semantic distinctions among source assertions, entity-resolution decisions, reconciled state, derived facts, predictions, decisions, and actions.
 - Do not collapse unresolved source mentions into canonical identity without an auditable resolution decision.
 - Money/quantities must not use binary floating point for authoritative values.
+- Platform modules must not import a concrete vertical. Ports depend on platform contracts, and
+  vertical-specific registration occurs only at the application composition boundary.
