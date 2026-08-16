@@ -46,7 +46,7 @@ def validate() -> list[str]:
             errors.append(f"{location}: Action {repository_root!r} is not allowlisted")
         if not SHA_RE.fullmatch(revision):
             errors.append(f"{location}: Action {repository} is not pinned to a full SHA")
-        if not comment or "v" not in comment:
+        if not comment or not re.search(r"\bv?\d+(?:\.\d+){0,2}\b", comment):
             errors.append(f"{location}: pinned Action needs a readable version comment")
     return errors
 
