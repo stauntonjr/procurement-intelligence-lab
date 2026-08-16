@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Semantic Change"
+  short_description: "Review semantic changes against executable contracts"
+  default_prompt: "Use $review-semantic-change to review this change from a fresh context."

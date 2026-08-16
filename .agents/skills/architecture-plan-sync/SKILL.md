@@ -33,7 +33,7 @@ Confirm that the PR states:
 - tests/evaluation performed;
 - documentation and ADR impact.
 
-Update the README, roadmap, milestone map, handoff, GitHub Issue status, or Project fields when the change makes them stale. Use `skills/manage-github-planning/SKILL.md` for live planning writes and verification. Use an ADR for durable architecture decisions, not for routine status bookkeeping.
+Update the README, roadmap, milestone map, handoff, GitHub Issue status, or Project fields when the change makes them stale. Use `.agents/skills/manage-github-planning/SKILL.md` for live planning writes and verification. Use an ADR for durable architecture decisions, not for routine status bookkeeping.
 
 Use `Closes #<issue>` only when the Issue is fully complete. Otherwise use `Part of #<issue>` and leave the Issue open.
 

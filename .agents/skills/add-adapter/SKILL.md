@@ -1,3 +1,8 @@
+---
+name: add-adapter
+description: Add or change an external-system, storage, document, retrieval, or transport adapter behind a project-owned port. Use when capabilities, unsupported variants, mapping mechanics, lifecycle behavior, or failure translation can affect callers while core semantics must remain independent.
+---
+
 # Add adapter
 
 Read `AGENTS.md`, the primary Issue, and relevant ADRs. Define the port and supported capability set before implementing mechanics. Reject unsupported enum variants, formats, scopes, and lifecycle states explicitly.

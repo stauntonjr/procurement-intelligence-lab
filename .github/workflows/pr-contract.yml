@@ -17,7 +17,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_CHANGED_FILES_PATH: ${{ runner.temp }}/pr-changed-files.txt
         run: |
           set -euo pipefail
           gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq .body > "$RUNNER_TEMP/pr-body.md"
-          PR_BODY="$(<"$RUNNER_TEMP/pr-body.md")" python tools/check_pr_contract.py
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files?per_page=100" --jq '.[].filename' > "$PR_CHANGED_FILES_PATH"
+          PR_BODY="$(<"$RUNNER_TEMP/pr-body.md")" python -m tools.check_pr_contract

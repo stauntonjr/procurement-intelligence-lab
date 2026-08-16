@@ -1,0 +1,4 @@
+interface:
+  display_name: "Semantic Change Loop"
+  short_description: "Specify, implement, verify, and evidence semantics"
+  default_prompt: "Use $semantic-change-loop to implement this semantic change with executable evidence."

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "issue": "#145",
+  "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "surfaces": ["development-agent semantic workflow"],
+  "instructions": [
+    "AGENTS.md",
+    "docs/development/agent-loop.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "Issue, repository guidance, changed files, tests, and public callers",
+    "authoritative_output": "Validated semantic-change evidence for one revision",
+    "scope_as_of": "Only the declared surfaces at the recorded revision",
+    "governing_policy": "Applicable scenarios require executable evidence; omissions fail closed",
+    "evidence_retained": "Paths, commands, results, revision, and review disposition",
+    "typed_failures": "The validator returns non-zero with field-specific errors"
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": ["tests/unit/test_pr_contract.py"],
+      "rationale": ""
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": ["tests/unit/test_semantic_change_harness.py"],
+      "rationale": ""
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": ["tests/unit/test_semantic_change_harness.py"],
+      "rationale": ""
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "not_applicable",
+      "evidence": [],
+      "rationale": "This validator does not calculate domain quantities"
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": ["tests/unit/test_semantic_change_harness.py"],
+      "rationale": ""
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "not_applicable",
+      "evidence": [],
+      "rationale": "The change has no product CLI, HTTP, or package interface"
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": ["evals/development_agents/skill-routing.json"],
+      "rationale": ""
+    }
+  ],
+  "commands": [
+    {
+      "argv": ["make", "semantic-preflight"],
+      "outcome": "passed",
+      "evidence": "local command output"
+    }
+  ],
+  "review": {
+    "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "mode": "self_fresh_pass",
+    "findings": [],
+    "unresolved_findings": []
+  },
+  "completion": "ready"
+}

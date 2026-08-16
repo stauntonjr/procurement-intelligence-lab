@@ -7,6 +7,8 @@
 - Primary milestone:
 - Linked issue:
 - Acceptance evidence:
+- Semantic change: yes/no
+- Non-semantic rationale: n/a for semantic changes
 
 ## Semantic contract
 
@@ -16,6 +18,7 @@
 - Governing policy:
 - Evidence retained:
 - Typed failure behavior:
+- Behavior evidence:
 
 ## Scenario coverage
 
@@ -27,8 +30,18 @@
 | Zero/negative/fractional/boundary | | |
 | Unsupported capability/malformed input | | |
 | Public caller and clean package | | |
+| Safe counterexample/unrelated change | | |
 
 ## Evidence / validation
+
+## Semantic evidence JSON
+
+Semantic changes: replace the object below with evidence matching
+`docs/development/semantic-change-evidence.schema.json`. Non-semantic changes may leave it unchanged.
+
+```json
+{}
+```
 
 ## Architectural impact
 
@@ -54,5 +67,6 @@
 
 ## Review disposition
 
+- Reviewed revision:
 - Automated review (if requested) was considered for the latest commit; arrival is advisory, not a merge gate:
 - Actionable findings resolved or rebutted:

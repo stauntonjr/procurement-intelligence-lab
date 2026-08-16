@@ -24,19 +24,20 @@ Issues are executable specifications. Every change must preserve provenance, typ
 
 Before changing a business calculation, adapter, public interface, or runtime package:
 
-1. Name the authoritative inputs and output; scope and as-of key; governing policy; evidence retained; and typed failure behavior.
+1. Use `.agents/skills/semantic-change-loop/SKILL.md`. Name the authoritative inputs and output; scope and as-of key; governing policy; evidence retained; and typed failure behavior.
 2. Read every Issue governing semantics touched by the change, including later-milestone work. Do not invent future policy inside an earlier delivery slice.
 3. Cover applicable empty, one, many, duplicate, conflict, missing, stale, future, cross-scope, zero, negative, fractional, and boundary cases.
 4. Test the real public caller. Manually constructed helper context is not acceptance evidence for a browser, HTTP, CLI, or installed-package path.
 5. Validate a clean built artifact whenever package metadata, entry points, examples, or runtime resources change.
 6. Treat unknown, absent, and unresolved as distinct from zero, complete, or reconciled. Success requires positive evidence.
 7. Add a regression oracle and development-agent challenge manifest for every shipped semantic defect.
+8. Record the latest-revision contract, scenario dispositions, commands, and review result using `docs/development/semantic-change-evidence.schema.json`. Do not claim completion with stale or unresolved evidence.
 
-Use `skills/implement-domain-logic/SKILL.md`, `skills/add-adapter/SKILL.md`, `skills/test-public-interface/SKILL.md`, `skills/release-smoke/SKILL.md`, and `skills/run-agent-challenges/SKILL.md` as applicable.
+Use `.agents/skills/implement-domain-logic/SKILL.md`, `.agents/skills/add-adapter/SKILL.md`, `.agents/skills/test-public-interface/SKILL.md`, `.agents/skills/release-smoke/SKILL.md`, `.agents/skills/review-semantic-change/SKILL.md`, and `.agents/skills/run-agent-challenges/SKILL.md` as applicable.
 
 ## GitHub planning administration
 
-Use `skills/manage-github-planning/SKILL.md` as the authoritative procedure for creating, updating,
+Use `.agents/skills/manage-github-planning/SKILL.md` as the authoritative procedure for creating, updating,
 and verifying Issues, native parent-child relationships, labels, milestones, Project fields and item
 values, and saved Project views. `.github/planning.json` is the repository-owned expected-state
 contract; live GitHub remains the operational tracker.
@@ -49,7 +50,7 @@ the token or delete planning objects without explicit authorization.
 
 ## Primary delivery loop
 
-For every non-trivial repository slice, use the `skills/architecture-plan-sync/SKILL.md` procedure as part of the normal agent loop:
+For every non-trivial repository slice, use the `.agents/skills/architecture-plan-sync/SKILL.md` procedure as part of the normal agent loop:
 
 1. **Orient:** read the handoff, milestone map, relevant Issue, ADRs, and architecture documents. Before a major new slice or after a merge wave, run the read-only [roadmap stewardship audit](docs/development/roadmap-stewardship.md) and review the current GitHub Project deliberately.
 2. **Implement:** keep the smallest vertical slice, its acceptance evidence, and durable decision record aligned. Record material Chat/Work conclusions in an Issue, ADR, or project document.
