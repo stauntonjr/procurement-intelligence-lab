@@ -15,7 +15,7 @@ SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
 def workflow_references() -> list[tuple[Path, int, str, str | None]]:
     references: list[tuple[Path, int, str, str | None]] = []
-    for path in sorted(WORKFLOW_DIR.glob("*.yml")):
+    for path in sorted([*WORKFLOW_DIR.glob("*.yml"), *WORKFLOW_DIR.glob("*.yaml")]):
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             match = USES_RE.match(line)
             if match:
