@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/stauntonjr/procurement-intelligence-lab/blob/main/evals/development_agents/baseline.schema.json",
+  "$id": "https://raw.githubusercontent.com/stauntonjr/procurement-intelligence-lab/main/evals/development_agents/baseline.schema.json",
   "title": "Protected development-agent baseline report",
   "type": "object",
   "required": ["schema_version", "public_revision", "evaluator_revision", "instruction_variant", "model", "configuration", "challenge_set", "started_at", "completed_at", "results"],
