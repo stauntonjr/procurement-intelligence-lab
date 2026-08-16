@@ -127,7 +127,7 @@ def load_challenges() -> tuple[Challenge, ...]:
             raise ValueError(f"{path.name} does not match challenge ID {challenge['id']!r}")
         seen.add(challenge["id"])
         challenges.append(challenge)
-    expected = {f"C{number:03d}" for number in range(1, 11)}
+    expected = {f"C{number:03d}" for number in range(1, 12)}
     if seen != expected:
         raise ValueError(
             f"challenge set mismatch: expected {sorted(expected)}, found {sorted(seen)}"

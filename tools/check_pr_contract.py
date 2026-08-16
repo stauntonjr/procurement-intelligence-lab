@@ -242,10 +242,10 @@ def _dependabot_ecosystem(head_ref: str | None) -> str | None:
 def _dependabot_file_allowed(ecosystem: str, path: str) -> bool:
     if ecosystem == "github_actions":
         candidate = Path(path)
-        return (
-            candidate.parent == Path(".github/workflows")
-            and candidate.suffix in {".yml", ".yaml"}
-        )
+        return candidate.parent == Path(".github/workflows") and candidate.suffix in {
+            ".yml",
+            ".yaml",
+        }
     return path in DEPENDABOT_ALLOWED_FILES[ecosystem]
 
 
@@ -267,7 +267,7 @@ def validate_dependabot(
     ecosystem = _dependabot_ecosystem(head_ref)
     if ecosystem is None:
         errors.append("Dependabot head ref must name a supported managed ecosystem")
-    has_generated_trace = body.strip() and all(
+    has_generated_trace = bool(body.strip()) and all(
         field in body for field in DEPENDABOT_TRACE_FIELDS
     )
     has_standard_contract = not _validate_standard(

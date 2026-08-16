@@ -249,9 +249,7 @@ def test_pr_contract_accepts_full_contract_but_still_bounds_dependabot_files() -
         "base_ref": "main",
     }
 
-    assert validate(
-        semantic_body(), changed_files=(".github/workflows/ci.yml",), **context
-    ) == ()
+    assert validate(semantic_body(), changed_files=(".github/workflows/ci.yml",), **context) == ()
     assert any(
         "outside its managed surface: src/example.py" in error
         for error in validate(
