@@ -87,7 +87,32 @@ docs check
 not requested
 """
 
-    assert validate(body) == ()
+    assert validate(body, changed_files=("docs/development/conventions.md",)) == ()
+
+
+def test_pr_contract_rejects_non_semantic_opt_out_for_executable_paths() -> None:
+    body = """## Summary
+Refactor
+## Why
+Simplify code
+## Milestone and issue
+- Primary milestone: M0
+- Linked issue: #145
+- Semantic change: no
+- Non-semantic rationale: Intended to preserve behavior
+## Semantic contract
+Not applicable
+## Scenario coverage
+Not applicable
+## Evidence / validation
+unit tests
+## Review disposition
+not requested
+"""
+
+    errors = validate(body, changed_files=("src/procurement_intelligence_lab/domain/compiler.py",))
+
+    assert any("Semantic change cannot be no" in error for error in errors)
 
 
 def test_pr_contract_rejects_unexplained_non_semantic_claim() -> None:

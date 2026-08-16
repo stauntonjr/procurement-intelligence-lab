@@ -92,8 +92,15 @@ def _validate_scenarios(value: object, root: Path) -> list[str]:
             for reference in evidence:
                 reference_path = reference.split("::", 1)[0]
                 if reference.startswith("command:"):
+                    if not reference.removeprefix("command:").strip():
+                        errors.append(f"{prefix}.evidence command reference is empty")
                     continue
-                if Path(reference_path).is_absolute() or not (root / reference_path).is_file():
+                path = Path(reference_path)
+                if (
+                    path.is_absolute()
+                    or ".." in path.parts
+                    or not (root / reference_path).is_file()
+                ):
                     errors.append(f"{prefix}.evidence does not resolve: {reference}")
         if disposition == "not_applicable" and not _nonempty_string(rationale):
             errors.append(f"{prefix}.rationale is required when not applicable")

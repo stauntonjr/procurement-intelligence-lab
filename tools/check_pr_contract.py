@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+from pathlib import Path
 
 REQUIRED_HEADINGS = (
     "Summary",
@@ -37,6 +38,24 @@ SCENARIO_ROWS = (
     "Public caller and clean package",
     "Safe counterexample/unrelated change",
 )
+SEMANTIC_PATH_PREFIXES = (
+    ".agents/",
+    ".github/instructions/",
+    ".github/workflows/",
+    "evals/",
+    "examples/",
+    "src/",
+    "tests/",
+    "tools/",
+)
+SEMANTIC_PATHS = {
+    ".github/ISSUE_TEMPLATE/feature.yml",
+    ".github/pull_request_template.md",
+    "AGENTS.md",
+    "Makefile",
+    "pyproject.toml",
+    "uv.lock",
+}
 
 
 def _value(body: str, label: str) -> str | None:
@@ -61,7 +80,18 @@ def _scenario_rows(body: str) -> dict[str, tuple[str, str]]:
     }
 
 
-def validate(body: str, *, expected_revision: str | None = None) -> tuple[str, ...]:
+def requires_semantic_contract(paths: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(
+        path for path in paths if path in SEMANTIC_PATHS or path.startswith(SEMANTIC_PATH_PREFIXES)
+    )
+
+
+def validate(
+    body: str,
+    *,
+    expected_revision: str | None = None,
+    changed_files: tuple[str, ...] = (),
+) -> tuple[str, ...]:
     errors: list[str] = []
     for heading in REQUIRED_HEADINGS:
         if not re.search(rf"(?m)^## {re.escape(heading)}\s*$", body):
@@ -74,6 +104,12 @@ def validate(body: str, *, expected_revision: str | None = None) -> tuple[str, .
         errors.append("Semantic change must be yes or no")
         return tuple(errors)
     if semantic_change.casefold() == "no":
+        semantic_paths = requires_semantic_contract(changed_files)
+        if semantic_paths:
+            errors.append(
+                "Semantic change cannot be no for executable or harness paths: "
+                + ", ".join(semantic_paths)
+            )
         rationale = _value(body, "Non-semantic rationale")
         if rationale is None or rationale.casefold().startswith(("n/a", "none", "no ")):
             errors.append("non-semantic changes require a concrete Non-semantic rationale")
@@ -101,7 +137,19 @@ def validate(body: str, *, expected_revision: str | None = None) -> tuple[str, .
 
 def main() -> int:
     body = os.environ.get("PR_BODY", "")
-    errors = validate(body, expected_revision=os.environ.get("PR_HEAD_SHA"))
+    changed_files_path = os.environ.get("PR_CHANGED_FILES_PATH")
+    changed_files: tuple[str, ...] = ()
+    if changed_files_path:
+        changed_files = tuple(
+            line.strip()
+            for line in Path(changed_files_path).read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        )
+    errors = validate(
+        body,
+        expected_revision=os.environ.get("PR_HEAD_SHA"),
+        changed_files=changed_files,
+    )
     if errors:
         print("Pull request contract is incomplete:")
         for error in errors:
