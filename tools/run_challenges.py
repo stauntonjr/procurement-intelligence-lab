@@ -72,6 +72,10 @@ def load_challenges() -> tuple[Challenge, ...]:
         ):
             if not isinstance(value[field], str) or not value[field]:
                 raise ValueError(f"{path.name} requires a non-empty string {field}")
+        try:
+            re.compile(cast(str, value["known_bad_failure_pattern"]))
+        except re.error as exc:
+            raise ValueError(f"{path.name} has invalid known_bad_failure_pattern") from exc
         if re.fullmatch(r"[0-9a-f]{40}", cast(str, value["introducing_commit"])) is None:
             raise ValueError(f"{path.name} requires a full introducing_commit SHA")
         for field in ("test_command", "surfaces", "prevention"):
