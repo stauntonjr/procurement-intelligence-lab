@@ -217,11 +217,15 @@ def main() -> int:
     changed_files_path = os.environ.get("PR_CHANGED_FILES_PATH")
     changed_files: tuple[str, ...] = ()
     if changed_files_path:
-        changed_files = tuple(
-            line.strip()
-            for line in Path(changed_files_path).read_text(encoding="utf-8").splitlines()
-            if line.strip()
-        )
+        try:
+            changed_files = tuple(
+                line.strip()
+                for line in Path(changed_files_path).read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            )
+        except OSError as error:
+            print(f"pull request contract input error: {error}")
+            return 1
     errors = validate(
         body,
         expected_revision=os.environ.get("PR_HEAD_SHA"),
