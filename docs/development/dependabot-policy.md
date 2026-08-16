@@ -17,6 +17,8 @@ Actions version drift. The authoritative configuration is
 - Action version pinning and immutable-reference enforcement are a separate
   hardening slice tracked by Issue #121; this file does not silently expand
   that scope.
+- Action updates are constrained by the immutable-reference and allowlist
+  policy in [the Actions supply-chain policy](github-actions-supply-chain.md).
 
 ## Triage and rollback
 

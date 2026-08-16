@@ -8,7 +8,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M0 — Engineering and architecture harness:** active hardening. PR #119 delivered ADR-021, layered tests, package/UI smoke checks, C001-C008 deterministic oracles, and credentialed GitHub planning administration. Issues #110-#115 are complete; #145 is the bounded active semantic-loop slice and ends after one PR without expanding into prompt optimization. Issue #116 remains open until both protected baseline variants run, #120 remains open pending representative `uv` and bot-review evidence, and #121 is the current Actions supply-chain slice. Domain-package contracts #134-#135 are complete. See [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
+- **M0 — Engineering and architecture harness:** active hardening. PR #119 delivered ADR-021, layered tests, package/UI smoke checks, C001-C008 deterministic oracles, and credentialed GitHub planning administration. Issues #110-#115 and #145 are complete; #116 remains open until both protected baseline variants run, #120 remains open pending representative update evidence, and #121 is the current Actions supply-chain slice. Domain-package contracts #134-#135 are complete. See [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
 - **M4 — Reconciliation and governed state:** in progress. Explicit source precedence and state invariants are implemented, while the broader governing-claim contract in [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) remains open.
 - **M5 — Evidence-first UX:** in progress. The local inspector is runnable and now has a real HTTP happy-path check; [Issue #8](https://github.com/stauntonjr/procurement-intelligence-lab/issues/8) still governs the full drill-down showcase.
 - **M6 — Retrieval:** in progress. The lexical lifecycle foundation exists and now rejects unsupported projection kinds; later adapters and evaluation remain.
@@ -62,11 +62,10 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Complete [Issue #145](https://github.com/stauntonjr/procurement-intelligence-lab/issues/145)'s bounded semantic specification, implementation, verification, and review loop, then stop harness expansion and reassess priority.
+1. Complete and merge [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121)'s immutable Actions policy, then stop harness expansion.
 2. Return to product work: complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15)'s governing-claim policy before continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
-3. Complete and merge [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121)'s immutable Actions policy independently; do not make it a prerequisite for resumed product work.
-4. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
-5. Keep DSPy or other prompt/program optimization deferred until the baseline exists and a separate benchmark issue defines train/development/held-out separation and an exit criterion.
+3. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
+4. Keep DSPy or other prompt/program optimization deferred until the baseline exists and a separate benchmark issue defines train/development/held-out separation and an exit criterion.
 
 ## Refresh protocol
 

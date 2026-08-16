@@ -1,0 +1,35 @@
+{
+  "policy_version": 1,
+  "allowed_actions": [
+    {
+      "repository": "actions/checkout",
+      "trust": "github",
+      "reason": "Repository checkout"
+    },
+    {
+      "repository": "actions/upload-artifact",
+      "trust": "github",
+      "reason": "CI evidence artifact publication"
+    },
+    {
+      "repository": "actions/dependency-review-action",
+      "trust": "github",
+      "reason": "Dependency change policy check"
+    },
+    {
+      "repository": "astral-sh/setup-uv",
+      "trust": "explicitly-approved",
+      "reason": "Reproducible uv and Python setup"
+    },
+    {
+      "repository": "github/codeql-action",
+      "trust": "github",
+      "reason": "CodeQL security analysis"
+    },
+    {
+      "repository": "google-github-actions/run-gemini-cli",
+      "trust": "explicitly-approved",
+      "reason": "Advisory roadmap stewardship only"
+    }
+  ]
+}
