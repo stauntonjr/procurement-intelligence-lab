@@ -43,6 +43,13 @@ the DomainPackage compiler and its manifest contract.
 
 The control plane combines a compiled manifest, source profile, and runtime implementation registry/config to produce a physical plan. It may optimize neutral stages away physically, but semantic traces and provenance retain their explicit logical presence. A future Go control plane consumes compiled manifests and registry data; it does not import Python authoring objects or branch on domain identity.
 
+Every language-neutral input/output name in the stage catalog resolves through a platform-owned,
+immutable Python contract registry. The registry validates same-named concrete types, duplicate
+registrations, and missing stage contracts before package compilation. Runtime strategy behavior is
+defined separately with `Protocol` contracts for all twelve stages. Neither registry contains a
+vertical implementation or an executable callback. See
+[Universal logical-stage semantics](../architecture/universal-stage-semantics.md).
+
 Record the platform schema version, domain version, compiled-manifest hash, runtime implementation/provider/model versions, and application/code version separately in execution provenance.
 
 ## Consequences
@@ -54,7 +61,9 @@ Record the platform schema version, domain version, compiled-manifest hash, runt
 - Stage-catalog evolution is an architecture change, not an ordinary domain edit.
 - Adding a vertical-specific record does not make shared evidence, provenance, scope, or strategy
   contracts vertical-owned.
-- The design introduces work for a meta-schema, procurement-package extraction, compiler/manifest, runtime registry and planner, SME/MCP authoring tools, and a second-vertical proof.
+- The semantic contract layer is complete across the fixed topology, while procurement-package
+  extraction, the runtime registry/planner, SME/MCP authoring tools, operational late-stage
+  implementations, and a second production vertical remain separate work.
 
 ## Alternatives considered
 
@@ -76,6 +85,6 @@ Rejected for ordinary configuration because semantic order is a platform invaria
 
 ## Adoption and validation
 
-The stage catalog, fixed meta-schema, neutral modes, versioning rules, current-semantics mapping, and compiler conformance matrix are ratified in [the conformance contract](../architecture/domain-package-conformance.md). Implementation proceeds in separately gated roadmap slices: M0.34 compiles and validates manifests; M1-M4 extract the procurement package; M8 adds guarded authoring; and M9 adds runtime planning and a second-vertical proof.
+The stage catalog, fixed meta-schema, neutral modes, versioning rules, current-semantics mapping, and compiler conformance matrix are ratified in [the conformance contract](../architecture/domain-package-conformance.md). M0.34 compiles and validates manifests; M0.36 supplies and validates concrete semantic types and strategy Protocols for the complete logical topology; M1-M4 extract the procurement package; M8 adds guarded authoring; and M9 adds runtime planning and a second-vertical proof.
 
 Current repository types and application services remain authoritative for behavior on main until those slices are implemented and accepted. Provider choices remain evaluation hypotheses until supported by reproducible evidence.

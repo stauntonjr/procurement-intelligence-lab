@@ -1,6 +1,6 @@
 # Platform semantics and vertical ownership
 
-Status: accepted implementation contract for Issue #149.
+Status: accepted implementation contract for Issues #149 and #151.
 
 ## Dependency direction
 
@@ -26,8 +26,8 @@ that obscure ownership.
 ```text
 src/procurement_intelligence_lab/
   platform/
-    domain_packages/   # stage catalog, authoring schema, deterministic compiler
-    semantics/         # evidence, identity, provenance, scope and shared contracts
+    domain_packages/   # stage catalog, concrete contract registry, schema, compiler
+    semantics/         # universal stage records, evidence foundations, strategy Protocols
   domains/
     procurement/       # BOM, BoQ, PO and procurement policy/algorithms
 ```
@@ -52,7 +52,8 @@ absent.
 | Source-precedence strategy and typed failure | Procurement evidence-chain assembly |
 | Retrieval projection lifecycle contracts | Procurement DomainPackage bindings and policy references |
 | Anomaly severity/lifecycle and evidence envelope | |
-| DomainPackage catalog and compiler | |
+| Concrete contracts and strategy Protocols for all twelve logical stages | |
+| DomainPackage catalog, semantic contract registry, and compiler | |
 
 Mixed modules are split at the record or behavior boundary. A generic filename is not sufficient
 evidence that every implementation inside it belongs to the platform.
@@ -63,6 +64,9 @@ Platform protocols describe executable strategy behavior. DomainPackage authorin
 only versioned references and parameters, never callbacks. The application composition root may
 import both the platform registry and a selected vertical implementation and register them there.
 The generic anomaly/reconciliation modules therefore never import procurement detectors.
+
+The full contract map and the distinction between semantic and operational completeness are
+authoritative in [Universal logical-stage semantics](universal-stage-semantics.md).
 
 ## Procurement pressure tests
 

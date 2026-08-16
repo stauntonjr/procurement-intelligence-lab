@@ -84,15 +84,19 @@ the present BOM pipeline is already a DomainPackage.
 
 | Stage | Current authoritative behavior | Ratified package implication |
 |---|---|---|
-| INGEST | read_bom_with_provenance captures XLSX bytes and appends an artifact hash to ProvenanceContext. | A future binding requires immutable capture identity. |
-| STRUCTURE / MAP | XlsxStructuredBom and the XLSX adapter recover rows/cells and map fixed BOM headers in one adapter boundary. | Future extraction may separate contracts physically, but must retain coordinates, schema identity, and transformation provenance. |
-| NORMALIZE | BomLine, BoqLine, and PurchaseOrderLine use Decimal quantities/prices plus the platform-owned typed EvidenceRef; no standalone normalized-observation type exists. | M1-M4 extraction must preserve units, diagnostics, typed source location, and evidence. |
+| INGEST | read_bom_with_provenance captures XLSX bytes and appends an artifact hash to ProvenanceContext; the platform now defines `SourceReference` and immutable `Artifact`. | A future binding must populate the shared capture contract without changing public BOM behavior. |
+| STRUCTURE / MAP | `StructuredDocument` and `MappedDocument` contracts are distinct, while XlsxStructuredBom still performs both stages in one adapter boundary. | Physical fusion remains valid only when both semantic records and their evidence can be traced. |
+| NORMALIZE | `NormalizedObservation` now defines value/unit/diagnostic/epistemic semantics; current BomLine, BoqLine, and PurchaseOrderLine remain direct vertical records. | M1-M4 extraction must populate the shared observation contract without treating missing as zero. |
 | ASSERT | SourceAssertion and assertions_for_bom retain source claim, evidence, and transformation event. | Binding must preserve claims before truth/canonical state. |
 | RESOLVE | ResolutionDecision and resolve_identifier preserve resolved and unresolved outcomes with decision provenance. | Unresolved identity remains a valid output, not an empty result. |
 | RECONCILE | project_operational_lines, the platform SourcePrecedencePolicy contract, and procurement reconcile_lines retain governing and losing evidence. | Binding selects declarative policy references; it does not select a reconciler provider. |
-| DERIVE | Platform EvidenceBackedResult and evidence-chain records expose deterministic derived values; no generic DerivedFact record exists. | A later implementation may introduce an explicit record without changing the evidence contract. |
+| DERIVE | `DerivedFact` plus existing EvidenceBackedResult/evidence chains define deterministic evidence-linked output. | Procurement application services have not yet adopted the explicit record everywhere. |
 | DETECT | The platform Anomaly envelope and procurement typed details/detectors consume scoped expected/observed state and per-kind policies. | Binding carries requirements/policy references; detection does not decide or act. |
-| PREDICT / DECIDE / ACT | No operational implementation is present on main. | Initial procurement bindings are typed EMPTY; no absent section or generic null executor is allowed. |
+| PREDICT / DECIDE / ACT | Shared `Prediction`, `Decision`, `ApprovedDecision`, and `ActionResult` contracts enforce uncertainty, scope, authority, approval, idempotency, and audit invariants. No procurement executor is present. | Initial procurement bindings remain typed EMPTY; concrete policy/model/action work requires separate issues and evaluation. |
+
+The semantic contract registry validates every catalog input/output name before compilation without
+adding Python type names to the language-neutral manifest. C010 rejects a known-bad missing
+registration.
 
 ## M0.34 conformance matrix
 

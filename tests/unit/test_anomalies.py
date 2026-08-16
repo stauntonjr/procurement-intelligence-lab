@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 
@@ -80,6 +81,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
 
     equivalent = Anomaly(
@@ -91,6 +93,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
     different_evidence = Anomaly(
         "GPU-A",
@@ -101,6 +104,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
     multi_evidence = evidence + (EvidenceRef("bom.xlsx", "hash", "BOM", 3, ("C", "D")),)
     multi = Anomaly(
@@ -112,6 +116,7 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
     reordered = Anomaly(
         "GPU-A",
@@ -122,12 +127,35 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
 
     assert anomaly.anomaly_id == equivalent.anomaly_id
     assert multi.anomaly_id == reordered.anomaly_id
     assert anomaly.anomaly_id != different_evidence.anomaly_id
+    assert (
+        anomaly.anomaly_id != replace(anomaly, scope=StateScope("other", "p", "s", "v")).anomaly_id
+    )
     assert anomaly.provenance.provenance_id == provenance.provenance_id
+
+
+def test_anomaly_rejects_duplicate_evidence(
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    with pytest.raises(ValueError, match="evidence must be unique"):
+        Anomaly(
+            "GPU-A",
+            QuantityMismatchDetails(Decimal(4), Decimal(8)),
+            AnomalySeverity.WARNING,
+            AnomalyStatus.OPEN,
+            evidence + evidence,
+            "default-v1",
+            provenance,
+            detected_at,
+            _state_scope(),
+        )
 
 
 def test_quantity_tolerance_is_configurable(
@@ -146,6 +174,7 @@ def test_quantity_tolerance_is_configurable(
             policy=policy,
             provenance=provenance,
             detected_at=detected_at,
+            scope=_state_scope(),
         )
         is None
     )
@@ -157,6 +186,7 @@ def test_quantity_tolerance_is_configurable(
         policy=policy,
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
 
     assert anomaly is not None
@@ -177,6 +207,7 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
         policy=PriceDeviationPolicy("price-v1", tolerance=Decimal("0.05")),
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
     late = detect_late_commitment(
         "PO-1",
@@ -186,6 +217,7 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
         policy=LateCommitmentPolicy("schedule-v1", tolerance=timedelta(days=2)),
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
 
     assert price is not None
@@ -208,6 +240,7 @@ def test_revision_and_identity_anomalies_have_dedicated_policies_and_details(
         policy=StaleRevisionPolicy("revision-v1"),
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
     unresolved = detect_unresolved_identity(
         "supplier-mention",
@@ -217,6 +250,7 @@ def test_revision_and_identity_anomalies_have_dedicated_policies_and_details(
         policy=UnresolvedIdentityPolicy("identity-v1"),
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
 
     assert stale is not None
@@ -233,6 +267,7 @@ def test_revision_and_identity_anomalies_have_dedicated_policies_and_details(
             policy=StaleRevisionPolicy("revision-v1"),
             provenance=provenance,
             detected_at=detected_at,
+            scope=_state_scope(),
         )
         is None
     )
@@ -271,6 +306,7 @@ def test_standalone_numeric_detectors_reject_invalid_comparisons(
             policy=QuantityMismatchPolicy("quantity-v1"),
             provenance=provenance,
             detected_at=detected_at,
+            scope=_state_scope(),
         )
 
 
@@ -288,6 +324,7 @@ def test_anomalies_require_timezone_aware_detection_time(
             "coverage-v1",
             provenance,
             datetime(2026, 1, 10),  # noqa: DTZ001
+            _state_scope(),
         )
 
 
@@ -366,6 +403,7 @@ def test_state_orchestration_preserves_scope_and_incomplete_observation(
         AnomalyKind.SUBSTITUTION,
         AnomalyKind.COVERAGE_GAP,
     ]
+    assert all(anomaly.scope == _state_scope() for anomaly in anomalies)
     assert anomalies[-1].severity is AnomalySeverity.INFO
 
 

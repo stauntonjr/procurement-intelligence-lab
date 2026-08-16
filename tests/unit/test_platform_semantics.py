@@ -26,6 +26,7 @@ from procurement_intelligence_lab.platform.semantics.provenance import (
     ProvenanceContext,
 )
 from procurement_intelligence_lab.platform.semantics.reconciliation import SourcePrecedencePolicy
+from procurement_intelligence_lab.platform.semantics.scope import StateScope
 
 
 class InventoryPredicate(StrEnum):
@@ -111,6 +112,7 @@ def test_non_procurement_vertical_uses_shared_evidence_ledger_and_anomaly_contra
         "inventory-count-v1",
         _provenance(),
         datetime(2026, 1, 2, tzinfo=UTC),
+        StateScope("tenant", "inventory", "warehouse", "snapshot-v1"),
     )
 
     assert entry.assertion.assertion_id
