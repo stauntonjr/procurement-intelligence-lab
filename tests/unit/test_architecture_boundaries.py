@@ -60,3 +60,7 @@ def test_verticals_do_not_import_sibling_verticals() -> None:
                 violations.append((path.relative_to(ROOT), imported))
 
     assert violations == []
+
+
+def test_superseded_root_prototype_is_absent() -> None:
+    assert not (ROOT / "procurement_lab").exists()

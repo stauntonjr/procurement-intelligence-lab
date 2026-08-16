@@ -100,6 +100,10 @@ def main() -> int:
             "ambiguous legacy package src/procurement_intelligence_lab/domain must remain absent"
         )
 
+    legacy_root_package = ROOT / "procurement_lab"
+    if legacy_root_package.exists():
+        violations.append("superseded root package procurement_lab must remain absent")
+
     for required in REQUIRED_HARNESS_PATHS:
         if not (ROOT / required).is_file():
             violations.append(f"required harness artifact is missing: {required}")

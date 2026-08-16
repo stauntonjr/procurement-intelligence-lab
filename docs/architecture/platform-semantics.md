@@ -34,7 +34,9 @@ src/procurement_intelligence_lab/
 
 `platform` replaces the ambiguous singular `domain` package. `domain` beside `domains` encouraged
 whole-file classification and made it unclear whether a type described the package compiler, a
-shared semantic contract, or one vertical.
+shared semantic contract, or one vertical. The earlier root-level `procurement_lab/` prototype is
+also superseded by the installable `src/procurement_intelligence_lab/` package and must remain
+absent.
 
 ## Ownership matrix
 
