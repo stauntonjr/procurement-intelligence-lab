@@ -24,9 +24,16 @@ def workflow_references() -> list[tuple[Path, int, str, str | None]]:
 
 
 def validate() -> list[str]:
-    policy = json.loads(ALLOWLIST.read_text(encoding="utf-8"))
-    allowed = {item["repository"] for item in policy["allowed_actions"]}
     errors: list[str] = []
+    try:
+        policy = json.loads(ALLOWLIST.read_text(encoding="utf-8"))
+        allowed = {item["repository"] for item in policy["allowed_actions"]}
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
+        return [
+            f"{ALLOWLIST.relative_to(ROOT)}: invalid actions allowlist "
+            f"({exc.__class__.__name__}: {exc})"
+        ]
+
     for path, line_number, reference, comment in workflow_references():
         match = ACTION_RE.match(reference)
         location = f"{path.relative_to(ROOT)}:{line_number}"
