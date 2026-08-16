@@ -34,6 +34,15 @@
 
 ## Evidence / validation
 
+## Semantic evidence JSON
+
+Semantic changes: replace the object below with evidence matching
+`docs/development/semantic-change-evidence.schema.json`. Non-semantic changes may leave it unchanged.
+
+```json
+{}
+```
+
 ## Architectural impact
 
 - [ ] No architecture boundary, invariant, or public contract changed

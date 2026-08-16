@@ -28,6 +28,24 @@ CONTRACT_FIELDS = (
     "typed_failures",
 )
 ROUTING_KINDS = {"positive", "negative", "safe_counterexample"}
+EVIDENCE_FIELDS = {
+    "schema_version",
+    "issue",
+    "revision",
+    "surfaces",
+    "instructions",
+    "skills",
+    "contract",
+    "scenarios",
+    "commands",
+    "review",
+    "completion",
+}
+SCENARIO_FIELDS = {"id", "disposition", "evidence", "rationale"}
+COMMAND_FIELDS = {"argv", "outcome", "evidence"}
+REVIEW_FIELDS = {"revision", "mode", "findings", "unresolved_findings"}
+ROUTING_FIELDS = {"schema_version", "cases"}
+ROUTING_CASE_FIELDS = {"id", "kind", "prompt", "expected_skills", "forbidden_skills"}
 
 
 def _nonempty_string(value: object) -> bool:
@@ -38,6 +56,11 @@ def _string_list(value: object) -> list[str] | None:
     if not isinstance(value, list) or not all(_nonempty_string(item) for item in value):
         return None
     return [str(item) for item in value]
+
+
+def _unexpected_fields(value: dict[object, object], allowed: set[str], field: str) -> list[str]:
+    unexpected = {str(key) for key in value if key not in allowed}
+    return [f"{field} contains unexpected fields: {sorted(unexpected)!r}"] if unexpected else []
 
 
 def _validate_repo_paths(paths: object, field: str, root: Path) -> list[str]:
@@ -57,11 +80,13 @@ def _validate_repo_paths(paths: object, field: str, root: Path) -> list[str]:
 def _validate_contract(value: object) -> list[str]:
     if not isinstance(value, dict):
         return ["contract must be an object"]
-    return [
+    errors = _unexpected_fields(value, set(CONTRACT_FIELDS), "contract")
+    errors.extend(
         f"contract.{field} must be a non-empty string"
         for field in CONTRACT_FIELDS
         if not _nonempty_string(value.get(field))
-    ]
+    )
+    return errors
 
 
 def _validate_scenarios(value: object, root: Path) -> list[str]:
@@ -74,6 +99,7 @@ def _validate_scenarios(value: object, root: Path) -> list[str]:
         if not isinstance(scenario, dict):
             errors.append(f"{prefix} must be an object")
             continue
+        errors.extend(_unexpected_fields(scenario, SCENARIO_FIELDS, prefix))
         scenario_id = scenario.get("id")
         if not isinstance(scenario_id, str):
             errors.append(f"{prefix}.id must be a string")
@@ -86,6 +112,8 @@ def _validate_scenarios(value: object, root: Path) -> list[str]:
             errors.append(f"{prefix}.disposition must be applicable or not_applicable")
         evidence = _string_list(scenario.get("evidence"))
         rationale = scenario.get("rationale")
+        if not isinstance(rationale, str):
+            errors.append(f"{prefix}.rationale must be a string")
         if disposition == "applicable" and (evidence is None or not evidence):
             errors.append(f"{prefix}.evidence is required when applicable")
         elif disposition == "applicable" and evidence is not None:
@@ -123,6 +151,7 @@ def _validate_commands(value: object, *, completion: object) -> list[str]:
         if not isinstance(command, dict):
             errors.append(f"{prefix} must be an object")
             continue
+        errors.extend(_unexpected_fields(command, COMMAND_FIELDS, prefix))
         argv = _string_list(command.get("argv"))
         if argv is None or not argv:
             errors.append(f"{prefix}.argv must be a non-empty string list")
@@ -138,7 +167,7 @@ def _validate_commands(value: object, *, completion: object) -> list[str]:
 def _validate_review(value: object, revision: object, completion: object) -> list[str]:
     if not isinstance(value, dict):
         return ["review must be an object"]
-    errors: list[str] = []
+    errors = _unexpected_fields(value, REVIEW_FIELDS, "review")
     if value.get("revision") != revision:
         errors.append("review.revision must match revision")
     if value.get("mode") not in {"self_fresh_pass", "independent_fresh_context"}:
@@ -156,7 +185,7 @@ def validate_evidence(
 ) -> tuple[str, ...]:
     if not isinstance(value, dict):
         return ("evidence must be a JSON object",)
-    errors: list[str] = []
+    errors = _unexpected_fields(value, EVIDENCE_FIELDS, "evidence")
     if value.get("schema_version") != SCHEMA_VERSION:
         errors.append(f"schema_version must be {SCHEMA_VERSION}")
     if not isinstance(value.get("issue"), str) or re.fullmatch(r"#\d+", value["issue"]) is None:
@@ -183,7 +212,7 @@ def validate_evidence(
 def validate_routing(value: object, *, root: Path = ROOT) -> tuple[str, ...]:
     if not isinstance(value, dict):
         return ("routing fixture must be a JSON object",)
-    errors: list[str] = []
+    errors = _unexpected_fields(value, ROUTING_FIELDS, "routing fixture")
     if value.get("schema_version") != SCHEMA_VERSION:
         errors.append(f"routing schema_version must be {SCHEMA_VERSION}")
     cases = value.get("cases")
@@ -197,6 +226,7 @@ def validate_routing(value: object, *, root: Path = ROOT) -> tuple[str, ...]:
         if not isinstance(case, dict):
             errors.append(f"{prefix} must be an object")
             continue
+        errors.extend(_unexpected_fields(case, ROUTING_CASE_FIELDS, prefix))
         case_id = case.get("id")
         if not _nonempty_string(case_id):
             errors.append(f"{prefix}.id must be a non-empty string")

@@ -90,8 +90,11 @@
       "properties": {
         "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "mode": {"enum": ["self_fresh_pass", "independent_fresh_context"]},
-        "findings": {"type": "array", "items": {"type": "string"}},
-        "unresolved_findings": {"type": "array", "items": {"type": "string"}}
+        "findings": {"type": "array", "items": {"$ref": "#/$defs/nonemptyString"}},
+        "unresolved_findings": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/nonemptyString"}
+        }
       }
     },
     "completion": {"enum": ["ready", "not_ready"]}

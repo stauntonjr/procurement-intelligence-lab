@@ -67,6 +67,23 @@ def test_semantic_evidence_rejects_unresolvable_evidence_reference() -> None:
     )
 
 
+def test_semantic_evidence_rejects_fields_outside_the_canonical_schema() -> None:
+    evidence = deepcopy(load(EXAMPLE))
+    evidence["claim"] = "unvalidated"
+    evidence["contract"]["implicit_policy"] = "latest wins"
+    evidence["scenarios"][0]["hidden_case"] = True
+    evidence["commands"][0]["ignored_failure"] = True
+    evidence["review"]["approval"] = "assumed"
+
+    errors = validate_evidence(evidence)
+
+    assert any("evidence contains unexpected fields" in error for error in errors)
+    assert any("contract contains unexpected fields" in error for error in errors)
+    assert any("scenarios[0] contains unexpected fields" in error for error in errors)
+    assert any("commands[0] contains unexpected fields" in error for error in errors)
+    assert any("review contains unexpected fields" in error for error in errors)
+
+
 def test_semantic_evidence_is_bound_to_reviewed_revision() -> None:
     evidence = deepcopy(load(EXAMPLE))
     evidence["review"]["revision"] = "b" * 40

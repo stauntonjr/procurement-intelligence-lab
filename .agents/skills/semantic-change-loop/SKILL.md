@@ -32,8 +32,10 @@ Require a linked Issue, relevant ADRs/docs, changed semantic surfaces, and the c
 ## Required output
 
 Produce a JSON evidence artifact matching the canonical schema, plus a PR body that identifies the
-same contract, scenarios, commands, and reviewed revision. Record observable evidence only; never
-store hidden reasoning or private evaluator content.
+same contract, scenarios, commands, and reviewed revision. Embed the completed JSON artifact under
+`## Semantic evidence JSON` in the PR body so CI and reviewers can validate the durable evidence
+against the actual head SHA. Record observable evidence only; never store hidden reasoning or
+private evaluator content.
 
 ## Stop conditions
 

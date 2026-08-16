@@ -5,7 +5,9 @@
 For a semantic change, use [semantic-change-loop](../../.agents/skills/semantic-change-loop/SKILL.md) and
 record evidence using [the canonical schema](semantic-change-evidence.schema.json). Every scenario
 family must have executable evidence or a concrete not-applicable rationale. A test command, model
-review, or completion statement applies only to the revision it records.
+review, or completion statement applies only to the revision it records. Embed the completed JSON
+record under `## Semantic evidence JSON` in the pull-request body; the PR Contract check validates
+that durable record against the actual head revision and the human-readable contract fields.
 
 Use [review-semantic-change](../../.agents/skills/review-semantic-change/SKILL.md) for a fresh review pass.
 Review reconstructs the contract from the Issue and source, searches for counterexamples, checks a
