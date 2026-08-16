@@ -62,7 +62,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Recommended next work
 
-1. Complete the remaining M0 closeout gap: run the two-variant protected baseline in [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116) using the private evaluator and public baseline schema.
+1. Complete the remaining M0 closeout gap: validate the private evaluator boundary for [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116) (access policy, schema validation, and manual dispatch wiring) before running the two-variant protected baseline.
 2. Start [Issue #120](https://github.com/stauntonjr/procurement-intelligence-lab/issues/120) to establish bot-compatible dependency and GitHub Actions updates, then pin and restrict the Actions supply chain in [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121).
 3. Baseline the C001-C008 prevention/detection/repair challenge scores in a protected evaluator through [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116).
 4. Complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) with temporal and reviewed governing-claim inputs beyond the current source-precedence slice.
