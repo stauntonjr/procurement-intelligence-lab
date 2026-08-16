@@ -83,17 +83,19 @@ def main() -> int:
                     f"{path.relative_to(ROOT)} imports concrete vertical module {module!r}"
                 )
 
-    for vertical in sorted(path for path in DOMAINS.iterdir() if path.is_dir()):
-        own_prefix = f"{PROJECT_ROOT}.domains.{vertical.name}"
-        for path in sorted(vertical.rglob("*.py")):
-            for module in sorted(absolute_imports(path)):
-                if module.startswith(f"{PROJECT_ROOT}.domains.") and not module.startswith(
-                    own_prefix
-                ):
-                    violations.append(
-                        f"{path.relative_to(ROOT)} imports sibling vertical module {module!r}"
-                    )
-
+    if DOMAINS.is_dir():
+        for vertical in sorted(path for path in DOMAINS.iterdir() if path.is_dir()):
+            own_prefix = f"{PROJECT_ROOT}.domains.{vertical.name}"
+            for path in sorted(vertical.rglob("*.py")):
+                for module in sorted(absolute_imports(path)):
+                    if module.startswith(f"{PROJECT_ROOT}.domains.") and not module.startswith(
+                        own_prefix
+                    ):
+                        violations.append(
+                            f"{path.relative_to(ROOT)} imports sibling vertical module {module!r}"
+                        )
+    else:
+        violations.append(f"required domains directory is missing: {DOMAINS.relative_to(ROOT)}")
     legacy_domain = PACKAGE / "domain"
     if legacy_domain.exists() and any(legacy_domain.iterdir()):
         violations.append(
