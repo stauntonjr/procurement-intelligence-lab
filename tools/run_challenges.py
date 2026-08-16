@@ -108,7 +108,12 @@ def load_challenges() -> tuple[Challenge, ...]:
                 raise ValueError(f"{value['id']} mutation find must be a non-empty string")
             if not isinstance(replace_value, str):
                 raise TypeError(f"{value['id']} mutation replace must be a string")
-            source = (ROOT / mutation_path).read_text(encoding="utf-8")
+            try:
+                source = (ROOT / mutation_path).read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError) as exc:
+                raise ValueError(
+                    f"{value['id']} mutation path {path_value!r} could not be read"
+                ) from exc
             occurrences = source.count(find_value)
             if occurrences != 1:
                 raise ValueError(
