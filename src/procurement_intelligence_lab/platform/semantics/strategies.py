@@ -106,7 +106,9 @@ class DetectStrategy(Protocol):
         states: tuple[OperationalState, ...],
         facts: tuple[DerivedFact, ...],
         *,
+        scope: StateScope,
         detected_at: datetime,
+        provenance: DecisionProvenance,
     ) -> tuple[Anomaly, ...]: ...
 
 
