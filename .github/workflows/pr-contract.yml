@@ -22,8 +22,10 @@ jobs:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
           PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
           PR_CHANGED_FILES_PATH: ${{ runner.temp }}/pr-changed-files.txt
+          PR_COMMIT_AUTHORS_PATH: ${{ runner.temp }}/pr-commit-authors.txt
         run: |
           set -euo pipefail
           gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq .body > "$RUNNER_TEMP/pr-body.md"
           gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files?per_page=100" --jq '.[].filename' > "$PR_CHANGED_FILES_PATH"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits?per_page=100" --jq '.[].author.login // ""' > "$PR_COMMIT_AUTHORS_PATH"
           PR_BODY="$(<"$RUNNER_TEMP/pr-body.md")" python -m tools.check_pr_contract

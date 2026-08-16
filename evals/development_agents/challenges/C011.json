@@ -2,7 +2,7 @@
   "id": "C011",
   "title": "Generated Dependabot pull requests use a bounded machine contract",
   "introducing_commit": "a5d8dd8f1e28e36954ac8f5fe82dd7534472eded",
-  "oracle": "An authentic Dependabot pull request may omit the human semantic template only when its target, revision, ecosystem branch, generated dependency trace, and changed files satisfy the ecosystem-specific machine contract.",
+  "oracle": "An authentic Dependabot pull request may omit the human semantic template only when its target, revision, ecosystem branch, generated dependency trace, commit authors, and changed files satisfy the ecosystem-specific machine contract.",
   "known_bad": "Route authentic Dependabot pull requests back through the human-only semantic body contract, causing every untouched generated update body to fail before its dependency checks can run.",
   "known_bad_mutation": [
     {
@@ -27,7 +27,7 @@
   "prevention": [
     "trusted event-author routing",
     "ecosystem-specific changed-file allowlists",
-    "generated metadata and current-head validation",
+    "generated metadata, commit provenance, and current-head validation",
     "executable known-bad challenge replay"
   ]
 }

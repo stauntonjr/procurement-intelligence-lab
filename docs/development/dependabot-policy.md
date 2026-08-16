@@ -14,10 +14,12 @@ Actions, and the lockfile-pinned roadmap-review CLI. The authoritative configura
 - Only a pull request whose GitHub event author is exactly `dependabot[bot]`
   may use the machine contract. It must target `main`, expose a valid head SHA,
   use a recognized Dependabot ecosystem branch, retain Dependabot's
-  machine-readable dependency trace, and change a nonempty unique set of files
-  wholly inside that ecosystem's managed surface. A fully valid repository PR
-  body may replace the generated dependency trace, but it never relaxes the
-  branch, revision, ecosystem, or file-surface constraints.
+  machine-readable dependency trace, contain only commits authored by
+  `dependabot[bot]`, and change a nonempty unique set of files wholly inside
+  that ecosystem's managed surface. A fully valid repository PR body permits
+  maintainer-authored commits and may replace the generated dependency trace,
+  but it never relaxes the branch, revision, ecosystem, or file-surface
+  constraints.
 - Human-authored and other bot-authored pull requests must satisfy the full
   executable semantic PR template. The workflow uses read-only pull-request
   access and the event's immutable author/head/base context; it does not rewrite

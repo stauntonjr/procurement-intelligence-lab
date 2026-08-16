@@ -38,3 +38,6 @@ def test_pr_contract_reads_the_current_pull_request_body() -> None:
     assert "PR_AUTHOR_LOGIN: ${{ github.event.pull_request.user.login }}" in content
     assert "PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}" in content
     assert "PR_BASE_REF: ${{ github.event.pull_request.base.ref }}" in content
+    assert "PR_COMMIT_AUTHORS_PATH: ${{ runner.temp }}/pr-commit-authors.txt" in content
+    assert "pulls/$PR_NUMBER/commits?per_page=100" in content
+    assert '.[].author.login // ""' in content

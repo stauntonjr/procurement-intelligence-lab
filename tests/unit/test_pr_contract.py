@@ -111,6 +111,7 @@ def test_pr_contract_accepts_bounded_dependabot_generated_body() -> None:
             dependabot_body(),
             expected_revision="a" * 40,
             changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]",),
             author_login="dependabot[bot]",
             head_ref="dependabot/github_actions/github-actions-a1b2c3d4e5",
             base_ref="main",
@@ -137,6 +138,7 @@ def test_pr_contract_accepts_each_configured_dependabot_ecosystem() -> None:
                 dependabot_body(),
                 expected_revision="a" * 40,
                 changed_files=changed_files,
+                commit_author_logins=("dependabot[bot]",),
                 author_login="dependabot[bot]",
                 head_ref=f"dependabot/{ecosystem}/example-update",
                 base_ref="main",
@@ -163,6 +165,7 @@ def test_pr_contract_rejects_dependabot_outside_managed_surface() -> None:
         dependabot_body(),
         expected_revision="a" * 40,
         changed_files=(".github/workflows/ci.yml", "src/example.py"),
+        commit_author_logins=("dependabot[bot]",),
         author_login="dependabot[bot]",
         head_ref="dependabot/github_actions/example-update",
         base_ref="main",
@@ -176,6 +179,7 @@ def test_pr_contract_rejects_dependabot_ecosystem_mismatch() -> None:
         dependabot_body(),
         expected_revision="a" * 40,
         changed_files=("uv.lock",),
+        commit_author_logins=("dependabot[bot]",),
         author_login="dependabot[bot]",
         head_ref="dependabot/github_actions/example-update",
         base_ref="main",
@@ -207,6 +211,7 @@ def test_pr_contract_rejects_unbounded_dependabot_context() -> None:
         assert validate(
             dependabot_body(),
             changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]",),
             author_login="dependabot[bot]",
             **context,
         )
@@ -215,6 +220,7 @@ def test_pr_contract_rejects_unbounded_dependabot_context() -> None:
 def test_pr_contract_rejects_missing_or_duplicate_dependabot_file_evidence() -> None:
     context = {
         "expected_revision": "a" * 40,
+        "commit_author_logins": ("dependabot[bot]",),
         "author_login": "dependabot[bot]",
         "head_ref": "dependabot/uv/example-update",
         "base_ref": "main",
@@ -233,6 +239,7 @@ def test_pr_contract_rejects_dependabot_without_trace_or_full_contract() -> None
         dependabot_body(include_trace=False),
         expected_revision="a" * 40,
         changed_files=(".github/workflows/ci.yml",),
+        commit_author_logins=("dependabot[bot]",),
         author_login="dependabot[bot]",
         head_ref="dependabot/github_actions/example-update",
         base_ref="main",
@@ -258,6 +265,23 @@ def test_pr_contract_accepts_full_contract_but_still_bounds_dependabot_files() -
             **context,
         )
     )
+
+
+def test_pr_contract_requires_full_contract_after_human_modifies_dependabot_branch() -> None:
+    context = {
+        "expected_revision": "a" * 40,
+        "changed_files": (".github/workflows/ci.yml",),
+        "commit_author_logins": ("dependabot[bot]", "octocat"),
+        "author_login": "dependabot[bot]",
+        "head_ref": "dependabot/github_actions/example-update",
+        "base_ref": "main",
+    }
+
+    assert (
+        "Dependabot machine contract requires every PR commit to be authored by dependabot[bot]"
+        in validate(dependabot_body(), **context)
+    )
+    assert validate(semantic_body(), **context) == ()
 
 
 def test_pr_contract_requires_every_semantic_scenario_family() -> None:
@@ -400,8 +424,11 @@ def test_pr_contract_main_accepts_bounded_dependabot_generated_body(
 ) -> None:
     changed_files = tmp_path / "changed-files.txt"
     changed_files.write_text(".github/workflows/ci.yml\n", encoding="utf-8")
+    commit_authors = tmp_path / "commit-authors.txt"
+    commit_authors.write_text("dependabot[bot]\n", encoding="utf-8")
     monkeypatch.setenv("PR_BODY", dependabot_body())
     monkeypatch.setenv("PR_CHANGED_FILES_PATH", str(changed_files))
+    monkeypatch.setenv("PR_COMMIT_AUTHORS_PATH", str(commit_authors))
     monkeypatch.setenv("PR_HEAD_SHA", "a" * 40)
     monkeypatch.setenv("PR_AUTHOR_LOGIN", "dependabot[bot]")
     monkeypatch.setenv("PR_HEAD_REF", "dependabot/github_actions/example-update")

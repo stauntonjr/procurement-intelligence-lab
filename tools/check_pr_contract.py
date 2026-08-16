@@ -254,6 +254,7 @@ def validate_dependabot(
     *,
     expected_revision: str | None,
     changed_files: tuple[str, ...],
+    commit_author_logins: tuple[str, ...],
     head_ref: str | None,
     base_ref: str | None,
 ) -> tuple[str, ...]:
@@ -275,8 +276,16 @@ def validate_dependabot(
         expected_revision=expected_revision,
         changed_files=changed_files,
     )
-    if not has_generated_trace and not has_standard_contract:
-        errors.append("Dependabot body must retain machine-readable dependency metadata")
+    if not has_standard_contract:
+        if not has_generated_trace:
+            errors.append("Dependabot body must retain machine-readable dependency metadata")
+        if not commit_author_logins or any(
+            author != DEPENDABOT_LOGIN for author in commit_author_logins
+        ):
+            errors.append(
+                "Dependabot machine contract requires every PR commit to be authored by "
+                f"{DEPENDABOT_LOGIN}"
+            )
     if not changed_files:
         errors.append("Dependabot update must change at least one managed dependency file")
     elif len(set(changed_files)) != len(changed_files):
@@ -298,6 +307,7 @@ def validate(
     *,
     expected_revision: str | None = None,
     changed_files: tuple[str, ...] = (),
+    commit_author_logins: tuple[str, ...] = (),
     author_login: str | None = None,
     head_ref: str | None = None,
     base_ref: str | None = None,
@@ -307,6 +317,7 @@ def validate(
             body,
             expected_revision=expected_revision,
             changed_files=changed_files,
+            commit_author_logins=commit_author_logins,
             head_ref=head_ref,
             base_ref=base_ref,
         )
@@ -331,10 +342,22 @@ def main() -> int:
         except OSError as error:
             print(f"pull request contract input error: {error}")
             return 1
+    commit_authors_path = os.environ.get("PR_COMMIT_AUTHORS_PATH")
+    commit_author_logins: tuple[str, ...] = ()
+    if commit_authors_path:
+        try:
+            commit_author_logins = tuple(
+                line.strip()
+                for line in Path(commit_authors_path).read_text(encoding="utf-8").splitlines()
+            )
+        except OSError as error:
+            print(f"pull request contract input error: {error}")
+            return 1
     errors = validate(
         body,
         expected_revision=os.environ.get("PR_HEAD_SHA"),
         changed_files=changed_files,
+        commit_author_logins=commit_author_logins,
         author_login=os.environ.get("PR_AUTHOR_LOGIN"),
         head_ref=os.environ.get("PR_HEAD_REF"),
         base_ref=os.environ.get("PR_BASE_REF"),
