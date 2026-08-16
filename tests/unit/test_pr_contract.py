@@ -218,19 +218,23 @@ def test_pr_contract_rejects_unbounded_dependabot_context() -> None:
 
 
 def test_pr_contract_rejects_missing_or_duplicate_dependabot_file_evidence() -> None:
-    context = {
-        "expected_revision": "a" * 40,
-        "commit_author_logins": ("dependabot[bot]",),
-        "author_login": "dependabot[bot]",
-        "head_ref": "dependabot/uv/example-update",
-        "base_ref": "main",
-    }
-
     assert "Dependabot update must change at least one managed dependency file" in validate(
-        dependabot_body(), changed_files=(), **context
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=(),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/uv/example-update",
+        base_ref="main",
     )
     assert "Dependabot changed-file evidence must not contain duplicates" in validate(
-        dependabot_body(), changed_files=("uv.lock", "uv.lock"), **context
+        dependabot_body(),
+        expected_revision="a" * 40,
+        changed_files=("uv.lock", "uv.lock"),
+        commit_author_logins=("dependabot[bot]",),
+        author_login="dependabot[bot]",
+        head_ref="dependabot/uv/example-update",
+        base_ref="main",
     )
 
 
@@ -249,39 +253,55 @@ def test_pr_contract_rejects_dependabot_without_trace_or_full_contract() -> None
 
 
 def test_pr_contract_accepts_full_contract_but_still_bounds_dependabot_files() -> None:
-    context = {
-        "expected_revision": "a" * 40,
-        "author_login": "dependabot[bot]",
-        "head_ref": "dependabot/github_actions/example-update",
-        "base_ref": "main",
-    }
-
-    assert validate(semantic_body(), changed_files=(".github/workflows/ci.yml",), **context) == ()
+    assert (
+        validate(
+            semantic_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
+        == ()
+    )
     assert any(
         "outside its managed surface: src/example.py" in error
         for error in validate(
             semantic_body(),
+            expected_revision="a" * 40,
             changed_files=(".github/workflows/ci.yml", "src/example.py"),
-            **context,
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
         )
     )
 
 
 def test_pr_contract_requires_full_contract_after_human_modifies_dependabot_branch() -> None:
-    context = {
-        "expected_revision": "a" * 40,
-        "changed_files": (".github/workflows/ci.yml",),
-        "commit_author_logins": ("dependabot[bot]", "octocat"),
-        "author_login": "dependabot[bot]",
-        "head_ref": "dependabot/github_actions/example-update",
-        "base_ref": "main",
-    }
-
     assert (
         "Dependabot machine contract requires every PR commit to be authored by dependabot[bot]"
-        in validate(dependabot_body(), **context)
+        in validate(
+            dependabot_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]", "octocat"),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
     )
-    assert validate(semantic_body(), **context) == ()
+    assert (
+        validate(
+            semantic_body(),
+            expected_revision="a" * 40,
+            changed_files=(".github/workflows/ci.yml",),
+            commit_author_logins=("dependabot[bot]", "octocat"),
+            author_login="dependabot[bot]",
+            head_ref="dependabot/github_actions/example-update",
+            base_ref="main",
+        )
+        == ()
+    )
 
 
 def test_pr_contract_requires_every_semantic_scenario_family() -> None:
