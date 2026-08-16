@@ -18,6 +18,8 @@ class EvidenceLocation(Protocol):
 
     def identity_parts(self) -> tuple[object, ...]: ...
 
+    def payload_fields(self) -> dict[str, object]: ...
+
 
 @dataclass(frozen=True)
 class TabularLocation:
@@ -45,6 +47,9 @@ class TabularLocation:
         # Keep the established evidence ID representation stable.
         return (self.sheet, self.row, self.cells)
 
+    def payload_fields(self) -> dict[str, object]:
+        return {"sheet": self.sheet, "row": self.row, "cells": self.cells}
+
 
 @dataclass(frozen=True)
 class RecordLocation:
@@ -63,6 +68,9 @@ class RecordLocation:
 
     def identity_parts(self) -> tuple[object, ...]:
         return (self.location_kind, self.collection, self.record_key)
+
+    def payload_fields(self) -> dict[str, object]:
+        return {"collection": self.collection, "record_key": self.record_key}
 
 
 @dataclass(frozen=True, init=False)
@@ -86,7 +94,7 @@ class EvidenceRef:
         row: int | None = None,
         cells: tuple[str, ...] | None = None,
     ) -> None:
-        if not artifact_id or not content_hash:
+        if not artifact_id.strip() or not content_hash.strip():
             raise ValueError("evidence artifact ID and content hash are required")
         resolved_location: EvidenceLocation
         if isinstance(location, str):
@@ -138,17 +146,13 @@ class EvidenceRef:
             "location_kind": self.location.location_kind,
             "evidence_id": self.evidence_id,
         }
-        if isinstance(self.location, TabularLocation):
-            payload.update(
-                sheet=self.location.sheet,
-                row=self.location.row,
-                cells=self.location.cells,
+        location_fields = self.location.payload_fields()
+        reserved = location_fields.keys() & payload.keys()
+        if reserved:
+            raise ValueError(
+                f"evidence location payload uses reserved fields: {sorted(reserved)!r}"
             )
-        elif isinstance(self.location, RecordLocation):
-            payload.update(
-                collection=self.location.collection,
-                record_key=self.location.record_key,
-            )
+        payload.update(location_fields)
         return payload
 
 

@@ -255,6 +255,25 @@ def test_anomaly_policies_reject_missing_identity_or_invalid_tolerance(
         factory()
 
 
+@pytest.mark.parametrize("value", [Decimal(-1), Decimal("NaN"), Decimal("Infinity")])
+def test_standalone_numeric_detectors_reject_invalid_comparisons(
+    value: Decimal,
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    with pytest.raises(ValueError, match="finite and non-negative"):
+        detect_quantity_mismatch(
+            "GPU-A",
+            Decimal(1),
+            value,
+            evidence,
+            policy=QuantityMismatchPolicy("quantity-v1"),
+            provenance=provenance,
+            detected_at=detected_at,
+        )
+
+
 def test_anomalies_require_timezone_aware_detection_time(
     evidence: tuple[EvidenceRef, ...],
     provenance: DecisionProvenance,

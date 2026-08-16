@@ -29,12 +29,17 @@ class AnomalyKind(StrEnum):
 
 
 def _validate_policy_id(policy_id: str) -> None:
-    if not policy_id:
+    if not policy_id.strip():
         raise ValueError("policy_id must not be empty")
 
 
 def _validate_tolerance(name: str, tolerance: Decimal) -> None:
     if not tolerance.is_finite() or tolerance < Decimal(0):
+        raise ValueError(f"{name} must be finite and non-negative")
+
+
+def _validate_comparison(name: str, value: Decimal) -> None:
+    if not value.is_finite() or value < Decimal(0):
         raise ValueError(f"{name} must be finite and non-negative")
 
 
@@ -333,6 +338,8 @@ def detect_quantity_mismatch(
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
+    _validate_comparison("expected quantity", expected)
+    _validate_comparison("observed quantity", observed)
     if abs(observed - expected) <= policy.tolerance:
         return None
     return _anomaly(
@@ -356,6 +363,8 @@ def detect_price_deviation(
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
+    _validate_comparison("expected price", expected)
+    _validate_comparison("observed price", observed)
     if abs(observed - expected) <= policy.tolerance:
         return None
     return _anomaly(
@@ -402,6 +411,8 @@ def detect_stale_revision(
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly | None:
+    if not expected.strip() or not observed.strip():
+        raise ValueError("expected and observed revisions are required")
     if observed == expected:
         return None
     return _anomaly(
@@ -425,6 +436,8 @@ def detect_unresolved_identity(
     provenance: DecisionProvenance,
     detected_at: datetime,
 ) -> Anomaly:
+    if not observed.strip():
+        raise ValueError("observed identity mention is required")
     return _anomaly(
         subject_key,
         UnresolvedIdentityDetails(expected, observed),

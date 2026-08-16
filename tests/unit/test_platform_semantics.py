@@ -51,6 +51,21 @@ class InventoryObservation:
     source_artifact: str
 
 
+@dataclass(frozen=True)
+class JsonPointerLocation:
+    pointer: str
+
+    @property
+    def location_kind(self) -> str:
+        return "json_pointer"
+
+    def identity_parts(self) -> tuple[object, ...]:
+        return (self.location_kind, self.pointer)
+
+    def payload_fields(self) -> dict[str, object]:
+        return {"pointer": self.pointer}
+
+
 def _provenance() -> DecisionProvenance:
     return DecisionProvenance(
         ProvenanceContext(
@@ -151,6 +166,13 @@ def test_record_evidence_has_typed_payload_and_rejects_tabular_accessors() -> No
     for accessor in (lambda: evidence.sheet, lambda: evidence.row, lambda: evidence.cells):
         with pytest.raises(TypeError, match="tabular"):
             accessor()
+
+
+def test_custom_evidence_location_extends_identity_and_public_payload() -> None:
+    evidence = EvidenceRef("inventory.json", "hash", JsonPointerLocation("/racks/7/count"))
+
+    assert evidence.as_dict()["pointer"] == "/racks/7/count"
+    assert evidence.as_dict()["location_kind"] == "json_pointer"
 
 
 def test_unresolved_evidence_result_cannot_carry_a_value() -> None:

@@ -63,6 +63,9 @@ class PurchaseOrderLine:
             value is None for value in boq_reference
         ):
             raise ValueError("BoQ document, line, and scope references must be supplied together")
+        for name, value in (("boq_id", self.boq_id), ("boq_line_id", self.boq_line_id)):
+            if value is not None:
+                _require_text(name, value)
 
     @property
     def total(self) -> Decimal:

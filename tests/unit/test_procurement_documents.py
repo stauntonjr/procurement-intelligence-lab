@@ -177,6 +177,21 @@ def test_purchase_order_line_rejects_partial_boq_reference() -> None:
             boq_line_id="line-id",
         )
 
+    with pytest.raises(ValueError, match="boq_id"):
+        PurchaseOrderLine(
+            "po-line-1",
+            "gpu",
+            Decimal(1),
+            "each",
+            Decimal(100),
+            "USD",
+            None,
+            _evidence(),
+            boq_id=" ",
+            boq_line_id="line-id",
+            boq_scope=_scope(),
+        )
+
 
 def test_purchase_order_rejects_invalid_header_time_and_duplicate_lines() -> None:
     line = PurchaseOrderLine(
