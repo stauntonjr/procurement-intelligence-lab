@@ -1,6 +1,8 @@
 import json
+from pathlib import Path
+from typing import Any
 
-from tools.check_pr_contract import SCENARIO_IDS, SCENARIO_ROWS, validate
+from tools.check_pr_contract import SCENARIO_IDS, SCENARIO_ROWS, main, validate
 
 
 def semantic_body(revision: str = "a" * 40) -> str:
@@ -210,3 +212,13 @@ N/A
 """
 
     assert "non-semantic changes require a concrete Non-semantic rationale" in validate(body)
+
+
+def test_pr_contract_fails_closed_when_changed_files_input_is_unreadable(
+    monkeypatch: Any, tmp_path: Path, capsys: Any
+) -> None:
+    monkeypatch.setenv("PR_BODY", semantic_body())
+    monkeypatch.setenv("PR_CHANGED_FILES_PATH", str(tmp_path / "missing.txt"))
+
+    assert main() == 1
+    assert "pull request contract input error" in capsys.readouterr().out

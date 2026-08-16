@@ -242,6 +242,7 @@ def validate_routing(value: object, *, root: Path = ROOT) -> tuple[str, ...]:
         prompt = case.get("prompt")
         if not _nonempty_string(prompt):
             errors.append(f"{prefix}.prompt must be a non-empty string")
+        elif challenge_leak.search(str(prompt)):
             errors.append(f"{prefix}.prompt references public challenge IDs or known-bad fixtures")
         expected = _string_list(case.get("expected_skills"))
         forbidden = _string_list(case.get("forbidden_skills"))

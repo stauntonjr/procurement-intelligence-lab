@@ -120,7 +120,7 @@ def test_skill_routing_fixture_rejects_answer_leakage_and_unknown_skills() -> No
 
     errors = validate_routing(routing)
 
-    assert "cases[0].prompt leaks a public challenge answer" in errors
+    assert "cases[0].prompt references public challenge IDs or known-bad fixtures" in errors
     assert "cases[0] references unknown skill: missing-skill" in errors
 
 
