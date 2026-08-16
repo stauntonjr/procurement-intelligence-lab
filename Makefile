@@ -1,4 +1,4 @@
-.PHONY: check check-fast unit contract integration regression coverage-ratchet package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
+.PHONY: check check-fast dependabot-validate unit contract integration regression coverage-ratchet package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
 
 check-fast:
 	uv run ruff format --check .
@@ -6,6 +6,10 @@ check-fast:
 	uv run pyright
 	uv run python tools/check_architecture.py
 	uv run python tools/run_challenges.py --validate-only
+	$(MAKE) dependabot-validate
+
+dependabot-validate:
+	uv run pytest -q tests/unit/test_dependabot_config.py
 
 unit:
 	uv run pytest -q tests/unit

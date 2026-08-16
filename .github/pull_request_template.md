@@ -54,5 +54,5 @@
 
 ## Review disposition
 
-- Automated review arrived for the latest commit:
+- Automated review (if requested) was considered for the latest commit; arrival is advisory, not a merge gate:
 - Actionable findings resolved or rebutted:

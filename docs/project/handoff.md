@@ -8,7 +8,7 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-- **M0 — Engineering and architecture harness:** active hardening. PR #119 delivered ADR-021, layered tests, package/UI smoke checks, C001-C008 deterministic oracles, and credentialed GitHub planning administration. Issues #110, #111, #112, #113, #114, and #115 are complete; #116 is the active protected-evaluator slice, while #117 and #120-#130 remain queued. Domain-package contracts #134-#135 are complete. See [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
+- **M0 — Engineering and architecture harness:** active hardening. PR #119 delivered ADR-021, layered tests, package/UI smoke checks, C001-C008 deterministic oracles, and credentialed GitHub planning administration. Issues #110, #111, #112, #113, #114, and #115 are complete; #116 is the active protected-evaluator slice, and #120 is the current dependency/action-update slice. Domain-package contracts #134-#135 are complete. See [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
 - **M4 — Reconciliation and governed state:** in progress. Explicit source precedence and state invariants are implemented, while the broader governing-claim contract in [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) remains open.
 - **M5 — Evidence-first UX:** in progress. The local inspector is runnable and now has a real HTTP happy-path check; [Issue #8](https://github.com/stauntonjr/procurement-intelligence-lab/issues/8) still governs the full drill-down showcase.
 - **M6 — Retrieval:** in progress. The lexical lifecycle foundation exists and now rejects unsupported projection kinds; later adapters and evaluation remain.
@@ -63,7 +63,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 ## Recommended next work
 
 1. Complete the remaining M0 closeout gap: validate the private evaluator boundary for [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116) (access policy, schema validation, and manual dispatch wiring) before running the two-variant protected baseline.
-2. Start [Issue #120](https://github.com/stauntonjr/procurement-intelligence-lab/issues/120) to establish bot-compatible dependency and GitHub Actions updates, then pin and restrict the Actions supply chain in [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121).
+2. Complete and merge [Issue #120](https://github.com/stauntonjr/procurement-intelligence-lab/issues/120)'s Dependabot policy, then pin and restrict the Actions supply chain in [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121).
 3. Baseline the C001-C008 prevention/detection/repair challenge scores in a protected evaluator through [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116).
 4. Complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) with temporal and reviewed governing-claim inputs beyond the current source-precedence slice.
 5. Continue [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) without collapsing anomaly detection into prediction, decisions, or actions.
