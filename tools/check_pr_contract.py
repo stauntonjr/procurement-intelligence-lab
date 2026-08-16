@@ -17,33 +17,91 @@ REQUIRED_HEADINGS = (
 REQUIRED_VALUES = (
     "Primary milestone",
     "Linked issue",
+)
+SEMANTIC_VALUES = (
     "Authoritative inputs",
     "Authoritative output",
     "Scope/as-of rule",
     "Governing policy",
     "Evidence retained",
     "Typed failure behavior",
+    "Behavior evidence",
+    "Reviewed revision",
+)
+SCENARIO_ROWS = (
+    "Empty/missing/unknown",
+    "Duplicate/many/conflict",
+    "Scope/time/as-of",
+    "Zero/negative/fractional/boundary",
+    "Unsupported capability/malformed input",
+    "Public caller and clean package",
+    "Safe counterexample/unrelated change",
 )
 
 
-def validate(body: str) -> tuple[str, ...]:
+def _value(body: str, label: str) -> str | None:
+    match = re.search(rf"(?m)^- {re.escape(label)}:\s*(.*)$", body)
+    if match is None or not match.group(1).strip():
+        return None
+    return match.group(1).strip()
+
+
+def _scenario_rows(body: str) -> dict[str, tuple[str, str]]:
+    row = re.compile(
+        r"(?m)^\s*\|\s*(?P<name>[^|\r\n]+)\|\s*"
+        r"(?P<disposition>yes|no|n/a)\s*\|\s*(?P<evidence>[^|\r\n]+)\s*\|?\s*$",
+        re.IGNORECASE,
+    )
+    return {
+        match.group("name").strip().casefold(): (
+            match.group("disposition").casefold(),
+            match.group("evidence").strip(),
+        )
+        for match in row.finditer(body)
+    }
+
+
+def validate(body: str, *, expected_revision: str | None = None) -> tuple[str, ...]:
     errors: list[str] = []
     for heading in REQUIRED_HEADINGS:
         if not re.search(rf"(?m)^## {re.escape(heading)}\s*$", body):
             errors.append(f"missing heading: {heading}")
     for label in REQUIRED_VALUES:
-        match = re.search(rf"(?m)^- {re.escape(label)}:\s*(.*)$", body)
-        if match is None or not match.group(1).strip():
+        if _value(body, label) is None:
             errors.append(f"missing value: {label}")
-    scenario_row = r"(?m)^\s*\|\s*[^|\r\n]+\|\s*(?:yes|no|n/a)\s*\|\s*[^|\r\n]+\s*\|?\s*$"
-    if not re.search(scenario_row, body, re.IGNORECASE):
-        errors.append("scenario table must contain at least one completed yes/no/n/a row")
+    semantic_change = _value(body, "Semantic change")
+    if semantic_change is None or semantic_change.casefold() not in {"yes", "no"}:
+        errors.append("Semantic change must be yes or no")
+        return tuple(errors)
+    if semantic_change.casefold() == "no":
+        rationale = _value(body, "Non-semantic rationale")
+        if rationale is None or rationale.casefold().startswith(("n/a", "none", "no ")):
+            errors.append("non-semantic changes require a concrete Non-semantic rationale")
+        return tuple(errors)
+    for label in SEMANTIC_VALUES:
+        if _value(body, label) is None:
+            errors.append(f"missing value: {label}")
+    rows = _scenario_rows(body)
+    for scenario in SCENARIO_ROWS:
+        entry = rows.get(scenario.casefold())
+        if entry is None:
+            errors.append(f"missing completed scenario row: {scenario}")
+        elif entry[1].casefold() in {"n/a", "none", "todo", "tbd", "pending", "-"}:
+            errors.append(f"scenario row requires evidence or rationale: {scenario}")
+    reviewed_revision = _value(body, "Reviewed revision")
+    if reviewed_revision is not None:
+        if re.fullmatch(r"[0-9a-f]{40}", reviewed_revision) is None:
+            errors.append("Reviewed revision must be a 40-character lowercase git SHA")
+        elif expected_revision is not None and reviewed_revision != expected_revision:
+            errors.append(
+                f"Reviewed revision {reviewed_revision} does not match PR head {expected_revision}"
+            )
     return tuple(errors)
 
 
 def main() -> int:
     body = os.environ.get("PR_BODY", "")
-    errors = validate(body)
+    errors = validate(body, expected_revision=os.environ.get("PR_HEAD_SHA"))
     if errors:
         print("Pull request contract is incomplete:")
         for error in errors:

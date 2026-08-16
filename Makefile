@@ -1,4 +1,4 @@
-.PHONY: check check-fast dependabot-validate unit contract integration regression coverage-ratchet package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
+.PHONY: check check-fast dependabot-validate semantic-preflight unit contract integration regression coverage-ratchet package-smoke challenge-validate challenges eval demo github-plan-preflight github-plan-audit github-plan-sync-views
 
 check-fast:
 	uv run ruff format --check .
@@ -6,7 +6,12 @@ check-fast:
 	uv run pyright
 	uv run python tools/check_architecture.py
 	uv run python tools/run_challenges.py --validate-only
+	$(MAKE) semantic-preflight
 	$(MAKE) dependabot-validate
+
+semantic-preflight:
+	uv run python tools/validate_semantic_change.py --skills --evidence docs/development/semantic-change-evidence.example.json --routing evals/development_agents/skill-routing.json
+	uv run pytest -q tests/unit/test_semantic_change_harness.py tests/unit/test_pr_contract.py
 
 dependabot-validate:
 	uv run pytest -q tests/unit/test_dependabot_config.py

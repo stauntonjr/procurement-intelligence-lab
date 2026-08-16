@@ -15,7 +15,7 @@ Every implementation PR must:
 ## Authoritative administration path
 
 Agents administer GitHub planning from Codex with the keyring-backed `gh` session. Follow
-[`skills/manage-github-planning/SKILL.md`](../../skills/manage-github-planning/SKILL.md); the
+[`.agents/skills/manage-github-planning/SKILL.md`](../../.agents/skills/manage-github-planning/SKILL.md); the
 machine-readable expected state is [`.github/planning.json`](../../.github/planning.json).
 
 The supported control surfaces are:

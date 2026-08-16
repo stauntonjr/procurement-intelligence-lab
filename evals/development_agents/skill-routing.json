@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "domain-calculation-implementation",
+      "kind": "positive",
+      "prompt": "Change the authoritative allocation calculation and preserve its evidence and failure semantics.",
+      "expected_skills": ["semantic-change-loop", "implement-domain-logic"],
+      "forbidden_skills": []
+    },
+    {
+      "id": "public-interface-contract",
+      "kind": "positive",
+      "prompt": "Update the CLI argument that selects project scope and prove the installed command behaves correctly.",
+      "expected_skills": ["semantic-change-loop", "test-public-interface"],
+      "forbidden_skills": []
+    },
+    {
+      "id": "semantic-review",
+      "kind": "positive",
+      "prompt": "Review this reconciliation change for missing business cases and unsupported completion claims.",
+      "expected_skills": ["review-semantic-change"],
+      "forbidden_skills": ["semantic-change-loop"]
+    },
+    {
+      "id": "challenge-maintenance",
+      "kind": "positive",
+      "prompt": "Add an executable development-agent regression manifest for a shipped semantic defect.",
+      "expected_skills": ["run-agent-challenges"],
+      "forbidden_skills": []
+    },
+    {
+      "id": "documentation-typo",
+      "kind": "negative",
+      "prompt": "Correct a spelling error in a documentation paragraph without changing its meaning.",
+      "expected_skills": [],
+      "forbidden_skills": ["semantic-change-loop", "review-semantic-change"]
+    },
+    {
+      "id": "safe-refactor-counterexample",
+      "kind": "safe_counterexample",
+      "prompt": "Rename a private test helper while preserving every assertion and public behavior.",
+      "expected_skills": [],
+      "forbidden_skills": ["semantic-change-loop"]
+    }
+  ]
+}
