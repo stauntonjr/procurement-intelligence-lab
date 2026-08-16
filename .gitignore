@@ -8,11 +8,19 @@ dist/
 build/
 *.egg-info/
 artifacts/
+.coverage
+.coverage.*
+coverage.xml
 .DS_Store
 vision_chat.txt
 Fluidstack Anthropic $50B Deal.md
 *.code-workspace
 node_modules/
+
+# SpecStory local session data
+.specstory/.project.json
+.specstory/history/
+.specstory/statistics.json
 
 # Gemini CLI local state / credentials
 .gemini/
