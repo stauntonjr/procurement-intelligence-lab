@@ -35,7 +35,7 @@ challenge-validate:
 	uv run python tools/run_challenges.py --validate-only
 
 challenges:
-	uv run python tools/run_challenges.py --results artifacts/challenges/latest.json
+	uv run python tools/run_challenges.py --verify-known-bad --results artifacts/challenges/latest.json
 
 eval:
 	uv run python tools/run_challenges.py --validate-only

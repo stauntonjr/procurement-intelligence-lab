@@ -1,9 +1,11 @@
 {
   "id": "C003",
   "title": "Default browser flow carries required scope",
-  "finding_commit": "a86e1fd13966f39ceb51a89010944dc7cde7c005",
+  "introducing_commit": "a86e1fd13966f39ceb51a89010944dc7cde7c005",
   "oracle": "Submitting the shipped default form reaches the real API with HTTP 200.",
   "known_bad": "Drop the required scope field from the shipped default form submission.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/interfaces/web.py", "find": "<input type=\"hidden\" name=\"project_id\" value=\"synthetic-project\">", "replace": ""}],
+  "known_bad_failure_pattern": "HTTP Error 403: Forbidden",
   "test_command": ["uv", "run", "pytest", "-q", "tests/integration/test_web_happy_path.py"],
   "surfaces": ["http", "browser", "authorization"],
   "prevention": ["public-interface smoke test", "caller-contract review"]

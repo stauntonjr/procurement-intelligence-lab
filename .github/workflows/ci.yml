@@ -83,7 +83,7 @@ jobs:
         with: { enable-cache: true }
       - run: uv sync --all-groups
       - run: make challenge-validate
-      - run: uv run python tools/run_challenges.py --results artifacts/challenges/latest.json --model "github-actions" --configuration "public-oracles"
+      - run: uv run python tools/run_challenges.py --verify-known-bad --results artifacts/challenges/latest.json --model "not-evaluated" --configuration "public-oracles-with-known-bad-mutations"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
