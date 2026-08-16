@@ -91,7 +91,7 @@ def compile_domain_package(
 ) -> CompiledManifest:
     """Validate and compile a package into deterministic, provider-neutral JSON."""
 
-    validate_stage_contract_registry()
+    # Contract registry is validated at import time (via CONTRACT_REGISTRY); no need to revalidate per compilation.
     issues: list[ValidationIssue] = []
     if not isinstance(package, DomainPackage):
         raise DomainPackageValidationError(
