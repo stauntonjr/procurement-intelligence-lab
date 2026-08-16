@@ -51,7 +51,7 @@ class Anomaly:
     scope: StateScope
 
     def __post_init__(self) -> None:
-        if not self.subject_key or not self.policy_id:
+        if not self.subject_key.strip() or not self.policy_id.strip():
             raise ValueError("anomaly subject and policy ID are required")
         if not self.evidence:
             raise ValueError("anomalies require evidence")
