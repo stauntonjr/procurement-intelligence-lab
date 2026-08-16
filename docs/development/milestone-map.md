@@ -6,7 +6,7 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 
 | Milestone | Capability | Repository evidence | Status boundary |
 |---|---|---|---|
-| M0 | Engineering and architecture harness | CI, `AGENTS.md`, ADR-021, checked-in coverage ratchet, C001-C009 | In progress until Issue #3 and harness-hardening sub-issues satisfy acceptance |
+| M0 | Engineering and architecture harness | CI, `AGENTS.md`, ADR-021, checked-in coverage ratchet, C001-C010 | In progress until Issue #3 and harness-hardening sub-issues satisfy acceptance |
 | M1 | Synthetic documents and structure/mapping | XLSX adapter, fixtures, contract tests | In progress; Issue #7 remains authoritative |
 | M2 | Assertion ledger and provenance | assertion ledger and execution provenance | In progress; milestone state lives in GitHub |
 | M3 | Entity resolution | conservative resolver and retained decisions | In progress; broader acceptance remains issue-driven |
@@ -45,7 +45,7 @@ This workstream cuts across the existing M0-M9 delivery taxonomy; it does not cr
 
 | Step | Primary milestone alignment | Deliverable | Acceptance boundary |
 |---|---|---|---|
-| Platform contracts | M0 Engineering and architecture harness | Ratified stage definitions, fixed meta-schema, neutral modes, reusable semantic/strategy contracts, dependency rules, and conformance/versioning rules | Stage contract ratified by M0.33; compiler delivered by M0.34; platform ownership correction and CI boundary enforcement tracked by M0.35 / Issue #149 |
+| Platform contracts | M0 Engineering and architecture harness | Ratified stage definitions, fixed meta-schema, neutral modes, reusable semantic/strategy contracts, dependency rules, and conformance/versioning rules | Stage contract ratified by M0.33; compiler delivered by M0.34; ownership correction tracked by #149; complete typed topology and contract registry tracked by M0.36 / #151 |
 | Procurement extraction | M1-M4 semantic pipeline | Procurement package, BOM/BoQ/PO records, source profiles, policy/config refs, and evaluation refs | Initial BoQ/PO pressure-test records are part of Issue #149; complete package extraction still requires no observable semantic or provenance regression |
 | Compiler and manifest | M0 Engineering and architecture harness | Deterministic compiler, validator, manifest hash, compatibility tests under `platform/domain_packages` | Delivered by M0.34; equivalent authoring data yields byte-equivalent canonical JSON |
 | Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | No domain-name branching; incompatible implementations fail closed |

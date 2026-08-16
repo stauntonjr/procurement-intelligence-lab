@@ -1,5 +1,5 @@
 ---
-applyTo: "src/procurement_intelligence_lab/{platform,domains}/**/*.py"
+applyTo: "src/procurement_intelligence_lab/platform/**/*.py,src/procurement_intelligence_lab/domains/**/*.py"
 ---
 
 # Domain review rules

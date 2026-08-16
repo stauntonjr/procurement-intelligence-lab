@@ -14,6 +14,7 @@ from procurement_intelligence_lab.platform.semantics.anomalies import (
 )
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
+from procurement_intelligence_lab.platform.semantics.scope import StateScope
 from procurement_intelligence_lab.platform.semantics.state import StateFreshness
 
 
@@ -217,6 +218,7 @@ def _anomaly(
     policy_id: str,
     provenance: DecisionProvenance,
     detected_at: datetime,
+    scope: StateScope,
 ) -> Anomaly:
     # The public Anomaly constructor accepts the structural AnomalyDetails protocol.
     return Anomaly(
@@ -228,6 +230,7 @@ def _anomaly(
         policy_id,
         provenance,
         detected_at,
+        scope,
     )
 
 
@@ -260,6 +263,7 @@ def detect_expected_observed_anomalies(
                     missing_policy.policy_id,
                     provenance,
                     detected_at,
+                    expected.scope,
                 )
             )
     elif (
@@ -275,6 +279,7 @@ def detect_expected_observed_anomalies(
                 policy.quantity_mismatch.policy_id,
                 provenance,
                 detected_at,
+                expected.scope,
             )
         )
 
@@ -291,6 +296,7 @@ def detect_expected_observed_anomalies(
                 policy.substitution.policy_id,
                 provenance,
                 detected_at,
+                expected.scope,
             )
         )
 
@@ -307,6 +313,7 @@ def detect_expected_observed_anomalies(
                 coverage_policy.policy_id,
                 provenance,
                 detected_at,
+                expected.scope,
             )
         )
 
@@ -337,6 +344,7 @@ def detect_quantity_mismatch(
     policy: QuantityMismatchPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
+    scope: StateScope,
 ) -> Anomaly | None:
     _validate_comparison("expected quantity", expected)
     _validate_comparison("observed quantity", observed)
@@ -350,6 +358,7 @@ def detect_quantity_mismatch(
         policy.policy_id,
         provenance,
         detected_at,
+        scope,
     )
 
 
@@ -362,6 +371,7 @@ def detect_price_deviation(
     policy: PriceDeviationPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
+    scope: StateScope,
 ) -> Anomaly | None:
     _validate_comparison("expected price", expected)
     _validate_comparison("observed price", observed)
@@ -375,6 +385,7 @@ def detect_price_deviation(
         policy.policy_id,
         provenance,
         detected_at,
+        scope,
     )
 
 
@@ -387,6 +398,7 @@ def detect_late_commitment(
     policy: LateCommitmentPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
+    scope: StateScope,
 ) -> Anomaly | None:
     if observed <= expected + policy.tolerance:
         return None
@@ -398,6 +410,7 @@ def detect_late_commitment(
         policy.policy_id,
         provenance,
         detected_at,
+        scope,
     )
 
 
@@ -410,6 +423,7 @@ def detect_stale_revision(
     policy: StaleRevisionPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
+    scope: StateScope,
 ) -> Anomaly | None:
     if not expected.strip() or not observed.strip():
         raise ValueError("expected and observed revisions are required")
@@ -423,6 +437,7 @@ def detect_stale_revision(
         policy.policy_id,
         provenance,
         detected_at,
+        scope,
     )
 
 
@@ -435,6 +450,7 @@ def detect_unresolved_identity(
     policy: UnresolvedIdentityPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
+    scope: StateScope,
 ) -> Anomaly:
     if not observed.strip():
         raise ValueError("observed identity mention is required")
@@ -446,4 +462,5 @@ def detect_unresolved_identity(
         policy.policy_id,
         provenance,
         detected_at,
+        scope,
     )
