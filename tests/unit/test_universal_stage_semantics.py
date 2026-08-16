@@ -466,6 +466,23 @@ def test_unresolved_resolution_cannot_become_a_canonical_assertion() -> None:
         replace(pipeline.canonicalized, assertion=unrelated)
 
 
+def test_resolution_decision_rejects_blank_identifiers_with_typed_failures() -> None:
+    pipeline = _pipeline_fixture()
+
+    with pytest.raises(SemanticContractError, match="mention and rationale"):
+        replace(pipeline.resolution, mention=" ")
+    with pytest.raises(SemanticContractError, match="mention and rationale"):
+        replace(pipeline.resolution, rationale="\t")
+    with pytest.raises(SemanticContractError, match="canonical key"):
+        replace(pipeline.resolution, canonical_key=" ")
+    with pytest.raises(SemanticContractError, match="must not carry"):
+        replace(
+            pipeline.resolution,
+            canonical_key="rack-7",
+            status=ResolutionStatus.UNRESOLVED,
+        )
+
+
 def test_reconciliation_rejects_duplicate_and_cross_scope_claims() -> None:
     pipeline = _pipeline_fixture()
     other_scope = StateScope("tenant", "other", "warehouse", "snapshot-v1")

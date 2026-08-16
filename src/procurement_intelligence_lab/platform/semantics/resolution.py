@@ -59,12 +59,14 @@ class ResolutionDecision:
     provenance: DecisionProvenance
 
     def __post_init__(self) -> None:
-        if not self.mention or not self.rationale:
-            raise ValueError("resolution mention and rationale are required")
-        if self.status is ResolutionStatus.RESOLVED and not self.canonical_key:
-            raise ValueError("resolved decisions require a canonical key")
+        if not self.mention.strip() or not self.rationale.strip():
+            raise SemanticContractError("resolution mention and rationale are required")
+        if self.status is ResolutionStatus.RESOLVED and (
+            self.canonical_key is None or not self.canonical_key.strip()
+        ):
+            raise SemanticContractError("resolved decisions require a canonical key")
         if self.status is ResolutionStatus.UNRESOLVED and self.canonical_key is not None:
-            raise ValueError("unresolved decisions must not carry a canonical key")
+            raise SemanticContractError("unresolved decisions must not carry a canonical key")
 
     @property
     def decision_id(self) -> str:
