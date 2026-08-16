@@ -10,6 +10,9 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import cast
 
+from procurement_intelligence_lab.platform.domain_packages.contract_registry import (
+    validate_stage_contract_registry,
+)
 from procurement_intelligence_lab.platform.domain_packages.package import (
     STAGE_DEFINITIONS,
     STAGE_ORDER,
@@ -88,7 +91,7 @@ def compile_domain_package(
 ) -> CompiledManifest:
     """Validate and compile a package into deterministic, provider-neutral JSON."""
 
-    # Contract registry is validated at import time (via CONTRACT_REGISTRY); no need to revalidate per compilation.
+    validate_stage_contract_registry()
     issues: list[ValidationIssue] = []
     if not isinstance(package, DomainPackage):
         raise DomainPackageValidationError(
