@@ -94,7 +94,9 @@ class EvidenceRef:
         row: int | None = None,
         cells: tuple[str, ...] | None = None,
     ) -> None:
-        if not artifact_id.strip() or not content_hash.strip():
+        artifact_id = artifact_id.strip()
+        content_hash = content_hash.strip()
+        if not artifact_id or not content_hash:
             raise ValueError("evidence artifact ID and content hash are required")
         resolved_location: EvidenceLocation
         if isinstance(location, str):
