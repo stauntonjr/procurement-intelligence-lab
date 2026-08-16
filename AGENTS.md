@@ -59,4 +59,6 @@ For every non-trivial repository slice, use the `.agents/skills/architecture-pla
 
 The roadmap steward is advisory and read-only. It cannot access Chat/Work history or update repository/GitHub state; agents and maintainers deliberately materialize durable corrections through normal PRs and Issue/Project updates.
 
-Do not merge while required deterministic checks are pending or failing. Automated review remains advisory, but its review must arrive and every actionable thread must be resolved or explicitly rebutted before merge.
+Do not merge while required deterministic checks are pending or failing. Automated review remains
+advisory and its arrival is not a merge invariant. When an automated review is present, resolve or
+explicitly rebut every actionable thread before merge.

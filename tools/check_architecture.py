@@ -25,6 +25,7 @@ REQUIRED_HARNESS_PATHS = (
     ".agents/skills/semantic-change-loop/SKILL.md",
     ".agents/skills/review-semantic-change/SKILL.md",
     "docs/development/semantic-change-evidence.schema.json",
+    "docs/development/conventions.md",
     "evals/development_agents/skill-routing.json",
     "tools/validate_semantic_change.py",
     ".github/planning.json",

@@ -45,7 +45,9 @@ from procurement_intelligence_lab.platform.semantics.documents import (
 from procurement_intelligence_lab.platform.semantics.epistemics import EpistemicStatus
 from procurement_intelligence_lab.platform.semantics.errors import (
     AuthorityContractError,
+    AuthorityScopeMismatchError,
     IdempotencyContractError,
+    ScopeContractError,
     ScopeMismatchError,
     SemanticContractError,
     TemporalContractError,
@@ -637,7 +639,7 @@ def test_late_stage_identities_change_with_material_inputs() -> None:
 def test_decision_inputs_reject_unscoped_anomalies_and_future_results() -> None:
     pipeline = _pipeline_fixture()
 
-    with pytest.raises(ScopeMismatchError, match="explicit state scope"):
+    with pytest.raises(ScopeContractError, match="explicit state scope"):
         replace(
             pipeline.decision_input,
             anomalies=(replace(pipeline.anomaly, scope=cast(StateScope, None)),),
@@ -671,7 +673,7 @@ def test_decision_inputs_and_authority_fail_closed() -> None:
         )
     with pytest.raises(AuthorityContractError, match="principal"):
         replace(pipeline.decision.authority, principal_id="")
-    with pytest.raises(ScopeMismatchError, match="authority"):
+    with pytest.raises(AuthorityScopeMismatchError, match="authority"):
         replace(
             pipeline.decision,
             authority=replace(pipeline.decision.authority, scope=other_scope),
@@ -724,7 +726,7 @@ def test_approval_and_action_audit_transitions_fail_closed() -> None:
         )
     with pytest.raises(AuthorityContractError, match="exact decision"):
         replace(pipeline.approved, approval=replace(approval, decision_id="decision:other"))
-    with pytest.raises(ScopeMismatchError, match="share one scope"):
+    with pytest.raises(AuthorityScopeMismatchError, match="share one scope"):
         replace(
             pipeline.approved,
             approval=replace(

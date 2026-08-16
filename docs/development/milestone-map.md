@@ -6,7 +6,7 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 
 | Milestone | Capability | Repository evidence | Status boundary |
 |---|---|---|---|
-| M0 | Engineering and architecture harness | CI, `AGENTS.md`, ADR-021, checked-in coverage ratchet, C001-C011 | In progress until Issue #3 and harness-hardening sub-issues satisfy acceptance |
+| M0 | Engineering and architecture harness | CI, `AGENTS.md`, typed error codes, ADR-021, checked-in coverage ratchet, C001-C011 | In progress until Issue #3 and harness-hardening sub-issues satisfy acceptance |
 | M1 | Synthetic documents and structure/mapping | XLSX adapter, fixtures, contract tests | In progress; Issue #7 remains authoritative |
 | M2 | Assertion ledger and provenance | assertion ledger and execution provenance | In progress; milestone state lives in GitHub |
 | M3 | Entity resolution | conservative resolver and retained decisions | In progress; broader acceptance remains issue-driven |

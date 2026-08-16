@@ -11,8 +11,8 @@ from procurement_intelligence_lab.platform.semantics.decisions import (
 )
 from procurement_intelligence_lab.platform.semantics.errors import (
     AuthorityContractError,
+    AuthorityScopeMismatchError,
     IdempotencyContractError,
-    ScopeMismatchError,
     SemanticContractError,
     TemporalContractError,
 )
@@ -62,7 +62,7 @@ class ApprovedDecision:
         if self.approval.decision_id != self.decision.decision_id:
             raise AuthorityContractError("approval must reference the exact decision")
         if self.approval.authority.scope != self.decision.inputs.scope:
-            raise ScopeMismatchError("approval and decision must share one scope")
+            raise AuthorityScopeMismatchError("approval and decision must share one scope")
         if self.approval.approved_at < self.decision.decided_at:
             raise TemporalContractError("approval cannot precede the decision")
 

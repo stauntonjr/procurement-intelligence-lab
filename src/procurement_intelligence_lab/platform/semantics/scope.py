@@ -3,6 +3,11 @@
 from dataclasses import dataclass
 from enum import StrEnum
 
+from procurement_intelligence_lab.platform.semantics.errors import (
+    ScopeAuthorizationError,
+    ScopeContractError,
+)
+
 
 class Permission(StrEnum):
     READ_EVIDENCE = "read_evidence"
@@ -10,10 +15,6 @@ class Permission(StrEnum):
     SEARCH = "search"
     REVIEW = "review"
     ACT = "act"
-
-
-class ScopeAuthorizationError(PermissionError):
-    """Raised when a request lacks an explicit authorized scope."""
 
 
 @dataclass(frozen=True)
@@ -31,7 +32,7 @@ class RequestContext:
         if not all(
             (self.principal_id, self.tenant_id, self.project_id, self.site_id, self.trace_id)
         ):
-            raise ValueError("principal, tenant, project, site, and trace IDs are required")
+            raise ScopeContractError("principal, tenant, project, site, and trace IDs are required")
 
     def require(self, permission: Permission) -> None:
         if permission not in self.permissions:
@@ -58,4 +59,4 @@ class StateScope:
 
     def __post_init__(self) -> None:
         if not all((self.tenant_id, self.project_id, self.site_id, self.version)):
-            raise ValueError("state scope identifiers and version are required")
+            raise ScopeContractError("state scope identifiers and version are required")
