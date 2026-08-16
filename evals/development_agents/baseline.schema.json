@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/stauntonjr/procurement-intelligence-lab/main/evals/development_agents/baseline.schema.json",
+  "title": "Protected development-agent baseline report",
+  "type": "object",
+  "required": ["schema_version", "public_revision", "evaluator_revision", "instruction_variant", "model", "configuration", "challenge_set", "started_at", "completed_at", "results"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "public_revision": {"type": "string", "minLength": 7},
+    "evaluator_revision": {"type": "string", "minLength": 7},
+    "instruction_variant": {"enum": ["pre-hardening", "hardened"]},
+    "model": {"type": "string", "minLength": 1},
+    "configuration": {"type": "string", "minLength": 1},
+    "challenge_set": {"const": "C001-C008-held-out-v1"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "results": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["challenge_id", "duration_seconds", "prevention", "pre_merge_detection", "repair"],
+        "properties": {
+          "challenge_id": {"pattern": "^C[0-9]{3}$"},
+          "duration_seconds": {"type": "number", "minimum": 0},
+          "prevention": {"enum": ["success", "failure", "not_evaluated", "not_applicable"]},
+          "pre_merge_detection": {"enum": ["success", "failure", "not_evaluated", "not_applicable"]},
+          "repair": {"enum": ["success", "failure", "not_evaluated", "not_applicable"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
