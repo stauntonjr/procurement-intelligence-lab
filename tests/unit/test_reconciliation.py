@@ -38,7 +38,11 @@ def test_reconciliation_selects_governing_claim_and_retains_conflicts() -> None:
     assert result[0].unit_price == Decimal(20)
     assert result[0].governing_source_artifact == "bom-a.xlsx"
     assert result[0].status == "conflict"
+    assert result[0].source_artifacts == ("bom-a.xlsx", "bom-b.xlsx")
+    assert result[0].losing_evidence == (evidence,)
     assert result[0].provenance.provenance_id == provenance.provenance_id
     assert result[1].canonical_key == "gpu"
     assert result[1].quantity == Decimal(4)
     assert result[1].status == "conflict"
+    assert result[1].source_artifacts == ("bom-a.xlsx", "bom-b.xlsx")
+    assert result[1].losing_evidence == (evidence,)

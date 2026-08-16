@@ -1,9 +1,11 @@
 {
   "id": "C005",
   "title": "Reconciliation selects a governing claim",
-  "finding_commit": "cf24590218ee7d410f407af22f48527aceb8810b",
+  "introducing_commit": "cf24590218ee7d410f407af22f48527aceb8810b",
   "oracle": "Explicit source precedence selects the value while losing and conflicting evidence remains visible.",
   "known_bad": "Select the first conflicting assertion and discard the losing evidence.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/domains/procurement/reconciliation.py", "find": "tuple(line.evidence for line in losing),", "replace": "(),"}],
+  "known_bad_failure_pattern": "assert \\(\\) == \\(EvidenceRef",
   "test_command": ["uv", "run", "pytest", "-q", "tests/unit/test_reconciliation.py"],
   "surfaces": ["domain", "reconciliation", "policy"],
   "prevention": ["business truth table", "conflicting-claim fixture"]

@@ -1,9 +1,11 @@
 {
   "id": "C002",
   "title": "Sparse XLSX coordinates preserve fields",
-  "finding_commit": "c05b0107a4d327154801138c6144612a2f971af7",
+  "introducing_commit": "c05b0107a4d327154801138c6144612a2f971af7",
   "oracle": "Missing XML cells do not shift values into adjacent business columns.",
   "known_bad": "Index sparse worksheet cells by position instead of their declared coordinates.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/adapters/xlsx.py", "find": "index = _column_index(reference) if reference else next_index", "replace": "index = next_index"}],
+  "known_bad_failure_pattern": "assert '4' == ''",
   "test_command": ["uv", "run", "pytest", "-q", "tests/contract/test_xlsx_coordinates.py"],
   "surfaces": ["adapter", "xlsx", "provenance"],
   "prevention": ["adapter contract matrix", "golden sparse fixture"]

@@ -10,7 +10,7 @@ Several deterministic defects survived green unit tests because fixtures mirrore
 
 Use GitHub's M0-M9 milestones as the only milestone taxonomy. Historical implementation sequence labels use S0-S9.
 
-Enforce known contracts with required static, unit, contract, integration, regression, package-smoke, and challenge-manifest checks. Put shipped semantic defects into C001-C008 manifests with deterministic oracles. Keep AI review advisory: do not require it to arrive, consume a model API credential, or make merge eligibility wait.
+Enforce known contracts with required static, unit, contract, integration, regression, package-smoke, and challenge-manifest checks. Put shipped semantic defects into C001-C008 manifests with deterministic oracles and executable known-bad mutations. Current code must pass each oracle, while the equivalent mutation must be rejected in an isolated checkout. Keep AI review advisory: do not require it to arrive, consume a model API credential, or make merge eligibility wait.
 
 Public regression tests measure recurrence prevention. Truly blind development-agent evaluation uses the private companion repository [`stauntonjr/procurement-intelligence-lab-evaluator`](https://github.com/stauntonjr/procurement-intelligence-lab-evaluator) because a public repository cannot hide its oracle. Its aggregate output follows the public [baseline report schema](../../evals/development_agents/baseline.schema.json); held-out oracles, credentials, and transcripts remain private.
 

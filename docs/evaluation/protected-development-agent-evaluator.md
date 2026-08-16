@@ -1,7 +1,7 @@
 # Protected development-agent evaluator
 
-Status: protected evaluator established; baseline execution pending an explicitly authorized
-model/configuration run.
+Status: private workflow registered and credential-free dispatch smoke passed; baseline execution
+remains pending an explicitly authorized model/configuration run.
 
 The blind evaluator lives outside this public repository at
 [`stauntonjr/procurement-intelligence-lab-evaluator`](https://github.com/stauntonjr/procurement-intelligence-lab-evaluator),
@@ -40,11 +40,17 @@ The private runner validates the same shape before publishing an aggregate basel
 5. Record the run URL and aggregate report in the Issue/PR without copying hidden oracle details.
 
 No baseline score is claimed by this public-repository slice until an authorized model run has
-completed. A missing score is evidence of an unexecuted experiment, not a green result.
+completed. A missing score is evidence of an unexecuted experiment, not a green result. The
+credential-free registration smoke completed successfully in
+[private run 31921776482](https://github.com/stauntonjr/procurement-intelligence-lab-evaluator/actions/runs/31921776482);
+its baseline job was intentionally skipped and its smoke artifact expires after seven days.
 
 ## Access and CI controls
 
 The companion repository is private, uses manual dispatch for baseline runs, least-privilege
-workflow permissions, environment-protected secrets, and artifact retention limits. Public PRs in
-this repository cannot invoke it with trusted credentials. The evaluator may read a public commit
-or release artifact, but public code never receives the held-out oracle or secret-bearing token.
+workflow permissions, a named `protected-evaluator` environment boundary, and explicit artifact
+retention. No model credential or held-out oracle is installed yet. The current account plan did
+not permit adding a wait-timer protection rule, so the repository does not claim reviewer or timer
+protection that is absent in live GitHub state. Public PRs in this repository cannot invoke the
+private workflow. The evaluator may read a public commit or release artifact, but public code never
+receives the held-out oracle or a secret-bearing token.

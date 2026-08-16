@@ -1,9 +1,11 @@
 {
   "id": "C001",
   "title": "Claims use governed resolved state",
-  "finding_commit": "51eaad04e551b564757b2bca003bd7744355ef76",
+  "introducing_commit": "51eaad04e551b564757b2bca003bd7744355ef76",
   "oracle": "An unresolved identifier cannot produce an authoritative material claim.",
   "known_bad": "Remove the unresolved-identity guard before constructing the claim.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/application/evidence_service.py", "find": "if unresolved or not source_lines or not relevant_reconciled:", "replace": "if not source_lines:"}],
+  "known_bad_failure_pattern": "assert Decimal\\('0'\\) is None",
   "test_command": ["uv", "run", "pytest", "-q", "tests/contract/test_claim_semantics.py::test_unresolved_identity_cannot_become_an_authoritative_gpu_claim"],
   "surfaces": ["application", "entity-resolution", "claims"],
   "prevention": ["authoritative-state declaration", "cross-layer contract test"]

@@ -1,9 +1,11 @@
 {
   "id": "C004",
   "title": "Installed wheel runs the advertised demo",
-  "finding_commit": "b5f5d62003651c5eccadce5a3067b0df8f2891a5",
+  "introducing_commit": "b5f5d62003651c5eccadce5a3067b0df8f2891a5",
   "oracle": "A clean wheel installation contains its runtime fixture and executes outside the checkout.",
   "known_bad": "Omit the runtime fixture from wheel package data and run the installed demo.",
+  "known_bad_mutation": [{"path": "pyproject.toml", "find": "packages = [\"src/procurement_intelligence_lab\"]", "replace": "packages = [\"src/procurement_intelligence_lab\"]\nexclude = [\"src/procurement_intelligence_lab/examples/synthetic_bom.xlsx\"]"}],
+  "known_bad_failure_pattern": "wheel is missing runtime resource",
   "test_command": ["uv", "run", "python", "tools/package_smoke.py"],
   "surfaces": ["packaging", "cli", "runtime-resource"],
   "prevention": ["clean-install smoke", "wheel-content assertion"]

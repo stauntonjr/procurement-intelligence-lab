@@ -1,9 +1,11 @@
 {
   "id": "C007",
   "title": "Adapters reject unsupported capabilities",
-  "finding_commit": "bd4ab97c8a959eb54c8c4ac63cedc13dfebab733",
+  "introducing_commit": "bd4ab97c8a959eb54c8c4ac63cedc13dfebab733",
   "oracle": "The lexical adapter rejects vector and graph build requests.",
   "known_bad": "Silently accept an unsupported vector or graph projection request in the lexical adapter.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/adapters/memory_retrieval.py", "find": "        if request.kind is not ProjectionKind.LEXICAL:\n            raise ValueError(\n                f\"lexical projection adapter does not support {request.kind.value!r} builds\"\n            )\n", "replace": ""}],
+  "known_bad_failure_pattern": "DID NOT RAISE ValueError",
   "test_command": ["uv", "run", "pytest", "-q", "tests/contract/test_retrieval_adapter.py"],
   "surfaces": ["adapter", "retrieval", "capability"],
   "prevention": ["port conformance suite", "enum rejection matrix"]

@@ -1,9 +1,11 @@
 {
   "id": "C008",
   "title": "State constructors enforce semantic invariants",
-  "finding_commit": "0ccd0a66e43d70a948e6dab5738343c047ebba47",
+  "introducing_commit": "0ccd0a66e43d70a948e6dab5738343c047ebba47",
   "oracle": "Negative or non-finite quantities and mismatched state pairs are rejected without discarding anomaly-worthy overages.",
   "known_bad": "Coerce invalid quantities to zero or discard overage-only observed lines.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/domains/procurement/state.py", "find": "    if not value.is_finite() or value < Decimal(0):\n        raise ValueError(f\"{name} must be a finite non-negative quantity\")", "replace": "    if not value.is_finite() or value < Decimal(0):\n        return"}],
+  "known_bad_failure_pattern": "DID NOT RAISE ValueError",
   "test_command": ["uv", "run", "pytest", "-q", "tests/regression/test_state_invariants.py"],
   "surfaces": ["domain", "state", "invariants"],
   "prevention": ["constructor invariants", "property-based boundary tests"]
