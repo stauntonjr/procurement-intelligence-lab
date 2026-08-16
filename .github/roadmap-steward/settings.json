@@ -1,0 +1,11 @@
+{
+  "maxSessionTurns": 20,
+  "telemetry": {
+    "enabled": false
+  },
+  "tools": {
+    "core": [
+      "read_file"
+    ]
+  }
+}

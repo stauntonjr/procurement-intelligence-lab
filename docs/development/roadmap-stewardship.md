@@ -8,7 +8,7 @@ It is not an autonomous product manager, issue writer, or authority to change ro
 
 ## What the audit reviews
 
-The manually dispatched or weekly workflow snapshots GitHub Issues, pull requests, milestones, and the repository's planning and architecture documents. Its advisory report can flag:
+The manually dispatched or weekly workflow snapshots GitHub Issues, pull requests, milestones, and the repository's planning and architecture documents. The Gemini CLI runtime is installed from the checked-in npm lockfile rather than a third-party composite Action, and its tool surface is limited to reading files from the ephemeral checkout. A successful workflow run means the CLI returned valid JSON with a non-empty report containing the four required headings; missing credentials, quota errors, malformed output, and incomplete reports fail the run instead of appearing green. Its advisory report can flag:
 
 - completed or closed work still presented as active;
 - stale handoff or milestone-map references;

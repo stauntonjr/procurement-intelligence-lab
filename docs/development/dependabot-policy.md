@@ -1,7 +1,7 @@
 # Dependabot update policy
 
-Dependabot is the repository's bounded intake for routine Python/uv and GitHub
-Actions version drift. The authoritative configuration is
+Dependabot is the repository's bounded intake for routine Python/uv, GitHub
+Actions, and the lockfile-pinned roadmap-review CLI. The authoritative configuration is
 [`.github/dependabot.yml`](../../.github/dependabot.yml).
 
 ## Review and merge contract
@@ -19,6 +19,8 @@ Actions version drift. The authoritative configuration is
   that scope.
 - Action updates are constrained by the immutable-reference and allowlist
   policy in [the Actions supply-chain policy](github-actions-supply-chain.md).
+- npm updates are limited to `.github/roadmap-steward`, where the exact Gemini
+  CLI dependency and its transitive integrity hashes are retained in `package-lock.json`.
 
 ## Triage and rollback
 

@@ -25,11 +25,6 @@
       "repository": "github/codeql-action",
       "trust": "github",
       "reason": "CodeQL security analysis"
-    },
-    {
-      "repository": "google-github-actions/run-gemini-cli",
-      "trust": "explicitly-approved",
-      "reason": "Advisory roadmap stewardship only"
     }
   ]
 }

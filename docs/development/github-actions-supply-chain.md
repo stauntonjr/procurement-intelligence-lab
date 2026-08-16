@@ -12,6 +12,13 @@ unallowlisted Action, a mutable tag/branch, a short SHA, or a missing version
 comment. Dependabot may propose SHA revisions, but a human reviews the release
 and the resulting diff.
 
+A top-level SHA does not make a composite Action immutable when its
+`action.yml` invokes other Actions by mutable tag. Explicitly approved
+third-party composite Actions are prohibited unless every transitive `uses:`
+reference is both allowlisted and pinned to a full SHA. Prefer a
+repository-owned wrapper with an ecosystem lockfile when an upstream composite
+does not meet that boundary.
+
 ## Repository setting
 
 The repository Actions setting should be configured to allow only actions
@@ -19,6 +26,13 @@ created by GitHub, verified creators, and the repositories listed in the
 allowlist. The JSON file is deliberately checked in because GitHub's setting
 is remote configuration and must be audited alongside the workflow references;
 it is not treated as a substitute for that setting.
+
+Verify the live setting with `gh api` against
+`repos/stauntonjr/procurement-intelligence-lab/actions/permissions` and its
+`selected-actions` subresource. The expected top-level values are
+`allowed_actions: selected` and `sha_pinning_required: true`; explicit public
+repository patterns must not exceed the repositories justified by the
+checked-in allowlist.
 
 ## Rollback
 
