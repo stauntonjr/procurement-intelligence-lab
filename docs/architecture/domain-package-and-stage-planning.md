@@ -1,6 +1,8 @@
 # Domain packages and stage planning
 
-Status: accepted architecture contract. This document defines the ratified semantic boundary and vocabulary; it does not claim that the compiler, capability registry, physical planner, or multi-domain runtime is implemented on main.
+Status: accepted architecture contract. The deterministic compiler and concrete contracts for all
+twelve logical stages are implemented; the runtime capability registry, physical planner, complete
+procurement package, and multi-domain runtime are not.
 
 The goal is to make procurement one vertical on a reusable evidence-first platform without moving procurement meaning into provider adapters or making a future control plane aware of domain names. Four layers keep those responsibilities separate.
 

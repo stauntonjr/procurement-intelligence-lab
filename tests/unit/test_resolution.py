@@ -3,16 +3,16 @@ from procurement_intelligence_lab.domains.procurement.assertions import (
     SourceAssertion,
 )
 from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
-from procurement_intelligence_lab.domains.procurement.provenance import (
-    ComponentKind,
-    DecisionProvenance,
-    local_provenance_context,
-)
+from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.resolution import (
-    ResolutionStatus,
     normalize_identifier,
     resolve_identifier,
 )
+from procurement_intelligence_lab.platform.semantics.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
+from procurement_intelligence_lab.platform.semantics.resolution import ResolutionStatus
 
 
 def _provenance() -> DecisionProvenance:

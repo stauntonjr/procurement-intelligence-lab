@@ -3,34 +3,15 @@
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
-from enum import StrEnum
 
-from procurement_intelligence_lab.domains.procurement.bom import Bom, EvidenceRef
-from procurement_intelligence_lab.domains.procurement.resolution import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-
-
-class StateFreshness(StrEnum):
-    CURRENT = "current"
-    PARTIAL = "partial"
-    STALE = "stale"
-    UNKNOWN = "unknown"
-
-
-@dataclass(frozen=True)
-class StateScope:
-    """The tenant/project/site/BOM-revision boundary of a state projection."""
-
-    tenant_id: str
-    project_id: str
-    site_id: str
-    bom_revision: str
-
-    def __post_init__(self) -> None:
-        if not all((self.tenant_id, self.project_id, self.site_id, self.bom_revision)):
-            raise ValueError("state scope identifiers are required")
+from procurement_intelligence_lab.platform.semantics.scope import StateScope
+from procurement_intelligence_lab.platform.semantics.state import StateFreshness
 
 
 @dataclass(frozen=True)

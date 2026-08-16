@@ -7,7 +7,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOMAIN = ROOT / "src" / "procurement_intelligence_lab" / "domain"
+PACKAGE = ROOT / "src" / "procurement_intelligence_lab"
+PLATFORM = PACKAGE / "platform"
+DOMAINS = PACKAGE / "domains"
+PORTS = PACKAGE / "ports"
 PROJECT_ROOT = "procurement_intelligence_lab"
 REQUIRED_HARNESS_PATHS = (
     "tests/contract/test_claim_semantics.py",
@@ -40,17 +43,68 @@ def imported_roots(path: Path) -> set[str]:
     return roots
 
 
+def absolute_imports(path: Path) -> set[str]:
+    """Return absolute module names imported by a Python source file."""
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    imports: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imports.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+            imports.add(node.module)
+    return imports
+
+
 def main() -> int:
-    """Fail when the framework-independent domain imports third-party packages."""
+    """Enforce framework and dependency direction for platform and vertical semantics."""
     violations: list[str] = []
     allowed = set(sys.stdlib_module_names) | {PROJECT_ROOT}
 
-    if not DOMAIN.is_dir():
-        violations.append(f"required domain directory is missing: {DOMAIN.relative_to(ROOT)}")
+    if not PLATFORM.is_dir():
+        violations.append(f"required platform directory is missing: {PLATFORM.relative_to(ROOT)}")
 
-    for path in sorted(DOMAIN.rglob("*.py")):
-        for module in sorted(imported_roots(path) - allowed):
-            violations.append(f"{path.relative_to(ROOT)} imports third-party module {module!r}")
+    semantic_roots = (PLATFORM, DOMAINS)
+    for directory in semantic_roots:
+        for path in sorted(directory.rglob("*.py")):
+            for module in sorted(imported_roots(path) - allowed):
+                violations.append(f"{path.relative_to(ROOT)} imports third-party module {module!r}")
+
+    for path in sorted(PLATFORM.rglob("*.py")):
+        for module in sorted(absolute_imports(path)):
+            if module.startswith(f"{PROJECT_ROOT}.domains."):
+                violations.append(
+                    f"{path.relative_to(ROOT)} imports vertical-owned module {module!r}"
+                )
+
+    for path in sorted(PORTS.rglob("*.py")):
+        for module in sorted(absolute_imports(path)):
+            if module.startswith(f"{PROJECT_ROOT}.domains."):
+                violations.append(
+                    f"{path.relative_to(ROOT)} imports concrete vertical module {module!r}"
+                )
+
+    if DOMAINS.is_dir():
+        for vertical in sorted(path for path in DOMAINS.iterdir() if path.is_dir()):
+            own_prefix = f"{PROJECT_ROOT}.domains.{vertical.name}"
+            for path in sorted(vertical.rglob("*.py")):
+                for module in sorted(absolute_imports(path)):
+                    if module.startswith(f"{PROJECT_ROOT}.domains.") and not module.startswith(
+                        own_prefix
+                    ):
+                        violations.append(
+                            f"{path.relative_to(ROOT)} imports sibling vertical module {module!r}"
+                        )
+    else:
+        violations.append(f"required domains directory is missing: {DOMAINS.relative_to(ROOT)}")
+    legacy_domain = PACKAGE / "domain"
+    if legacy_domain.exists() and any(legacy_domain.iterdir()):
+        violations.append(
+            "ambiguous legacy package src/procurement_intelligence_lab/domain must remain absent"
+        )
+
+    legacy_root_package = ROOT / "procurement_lab"
+    if legacy_root_package.exists():
+        violations.append("superseded root package procurement_lab must remain absent")
 
     for required in REQUIRED_HARNESS_PATHS:
         if not (ROOT / required).is_file():

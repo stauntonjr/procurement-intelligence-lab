@@ -8,17 +8,17 @@ from procurement_intelligence_lab.domains.procurement.bom import (
     EvidenceRef,
     bom_cost,
 )
-from procurement_intelligence_lab.domains.procurement.evidence import EvidenceNodeKind
-from procurement_intelligence_lab.domains.procurement.provenance import (
-    ComponentKind,
-    DecisionProvenance,
-    local_provenance_context,
-)
+from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.reconciliation import (
     ReconciliationPolicy,
     reconcile_lines,
 )
 from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
+from procurement_intelligence_lab.platform.semantics.evidence_graph import EvidenceNodeKind
+from procurement_intelligence_lab.platform.semantics.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
 
 
 def line(sku: str, quantity: str, price: str | None, row: int) -> BomLine:

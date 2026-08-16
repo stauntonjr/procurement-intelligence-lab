@@ -1,0 +1,32 @@
+{
+  "id": "C010",
+  "title": "Every logical stage contract resolves to a concrete platform type",
+  "introducing_commit": "07b2820107717cb420cc673135b170a1f75de34a",
+  "oracle": "Every input and output name in the universal stage catalog resolves to exactly one concrete, same-named platform semantic type.",
+  "known_bad": "Leave ActionResult as an unimplemented catalog string by removing its concrete contract registration.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/platform/domain_packages/contract_registry.py",
+      "find": "    ContractRegistration(\"ActionResult\", ActionResult),\n",
+      "replace": ""
+    }
+  ],
+  "known_bad_failure_pattern": "missing_stage_contract for ActionResult",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_universal_stage_semantics.py::test_every_catalog_contract_resolves_to_a_concrete_type"
+  ],
+  "surfaces": [
+    "platform stage catalog",
+    "semantic contracts",
+    "domain package compiler"
+  ],
+  "prevention": [
+    "immutable concrete contract registry",
+    "compiler-time catalog validation",
+    "complete non-procurement topology fixture"
+  ]
+}

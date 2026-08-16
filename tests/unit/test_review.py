@@ -2,12 +2,12 @@ from typing import cast
 
 import pytest
 
-from procurement_intelligence_lab.domains.procurement.scope import Permission, RequestContext
 from procurement_intelligence_lab.interfaces.web import (
     ReviewContextNotFoundError,
     claim_payload,
     review_context_payload,
 )
+from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 
 
 def _context() -> RequestContext:

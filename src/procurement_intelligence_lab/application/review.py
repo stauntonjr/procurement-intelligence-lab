@@ -8,7 +8,7 @@ from procurement_intelligence_lab.application.evidence_service import (
     inspect_bom_claims,
 )
 from procurement_intelligence_lab.domains.procurement.bom import Bom
-from procurement_intelligence_lab.domains.procurement.scope import Permission, RequestContext
+from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 
 
 class ReviewReason(StrEnum):

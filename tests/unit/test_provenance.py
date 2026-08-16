@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from procurement_intelligence_lab.domains.procurement.provenance import (
+from procurement_intelligence_lab.platform.semantics.provenance import (
     ComponentKind,
     DecisionProvenance,
     ProvenanceContext,

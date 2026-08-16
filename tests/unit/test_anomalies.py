@@ -1,31 +1,47 @@
-from datetime import UTC, date, datetime
+from collections.abc import Callable
+from dataclasses import replace
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 
 import pytest
 
 from procurement_intelligence_lab.domains.procurement.anomalies import (
-    Anomaly,
     AnomalyKind,
-    AnomalyPolicy,
-    AnomalySeverity,
-    AnomalyStatus,
+    CoverageGapDetails,
+    CoverageGapPolicy,
+    ExpectedObservedAnomalyPolicies,
+    LateCommitmentPolicy,
+    MissingPurchaseOrderPolicy,
+    PriceDeviationPolicy,
+    QuantityMismatchDetails,
+    QuantityMismatchPolicy,
+    StaleRevisionPolicy,
+    SubstitutionPolicy,
+    UnresolvedIdentityPolicy,
     detect_expected_observed_anomalies,
     detect_late_commitment,
     detect_price_deviation,
     detect_quantity_mismatch,
+    detect_stale_revision,
+    detect_unresolved_identity,
 )
 from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
-from procurement_intelligence_lab.domains.procurement.provenance import (
-    ComponentKind,
-    DecisionProvenance,
-)
 from procurement_intelligence_lab.domains.procurement.state import (
     ExpectedObservedState,
     ExpectedRequirement,
     ObservedProcurement,
-    StateFreshness,
-    StateScope,
 )
+from procurement_intelligence_lab.platform.semantics.anomalies import (
+    Anomaly,
+    AnomalySeverity,
+    AnomalyStatus,
+)
+from procurement_intelligence_lab.platform.semantics.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
+from procurement_intelligence_lab.platform.semantics.scope import StateScope
+from procurement_intelligence_lab.platform.semantics.state import StateFreshness
 
 
 @pytest.fixture
@@ -58,71 +74,88 @@ def test_anomaly_ids_are_stable_and_evidence_backed(
 ) -> None:
     anomaly = Anomaly(
         "GPU-A",
-        AnomalyKind.QUANTITY_MISMATCH,
-        Decimal(4),
-        Decimal(8),
+        QuantityMismatchDetails(Decimal(4), Decimal(8)),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         evidence,
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
 
     equivalent = Anomaly(
         "GPU-A",
-        AnomalyKind.QUANTITY_MISMATCH,
-        Decimal(4),
-        Decimal(8),
+        QuantityMismatchDetails(Decimal(4), Decimal(8)),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         evidence,
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
     different_evidence = Anomaly(
         "GPU-A",
-        AnomalyKind.QUANTITY_MISMATCH,
-        Decimal(4),
-        Decimal(8),
+        QuantityMismatchDetails(Decimal(4), Decimal(8)),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         (EvidenceRef("other.xlsx", "hash", "BOM", 2, ("A", "B")),),
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
     multi_evidence = evidence + (EvidenceRef("bom.xlsx", "hash", "BOM", 3, ("C", "D")),)
     multi = Anomaly(
         "GPU-A",
-        AnomalyKind.QUANTITY_MISMATCH,
-        Decimal(4),
-        Decimal(8),
+        QuantityMismatchDetails(Decimal(4), Decimal(8)),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         multi_evidence,
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
     reordered = Anomaly(
         "GPU-A",
-        AnomalyKind.QUANTITY_MISMATCH,
-        Decimal(4),
-        Decimal(8),
+        QuantityMismatchDetails(Decimal(4), Decimal(8)),
         AnomalySeverity.WARNING,
         AnomalyStatus.OPEN,
         tuple(reversed(multi_evidence)),
         "default-v1",
         provenance,
         detected_at,
+        _state_scope(),
     )
 
     assert anomaly.anomaly_id == equivalent.anomaly_id
     assert multi.anomaly_id == reordered.anomaly_id
     assert anomaly.anomaly_id != different_evidence.anomaly_id
+    assert (
+        anomaly.anomaly_id != replace(anomaly, scope=StateScope("other", "p", "s", "v")).anomaly_id
+    )
     assert anomaly.provenance.provenance_id == provenance.provenance_id
+
+
+def test_anomaly_rejects_duplicate_evidence(
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    with pytest.raises(ValueError, match="evidence must be unique"):
+        Anomaly(
+            "GPU-A",
+            QuantityMismatchDetails(Decimal(4), Decimal(8)),
+            AnomalySeverity.WARNING,
+            AnomalyStatus.OPEN,
+            evidence + evidence,
+            "default-v1",
+            provenance,
+            detected_at,
+            _state_scope(),
+        )
 
 
 def test_quantity_tolerance_is_configurable(
@@ -130,7 +163,7 @@ def test_quantity_tolerance_is_configurable(
     detected_at: datetime,
     provenance: DecisionProvenance,
 ) -> None:
-    policy = AnomalyPolicy("quantity-v1", quantity_tolerance=Decimal(1))
+    policy = QuantityMismatchPolicy("quantity-v1", tolerance=Decimal(1))
 
     assert (
         detect_quantity_mismatch(
@@ -141,6 +174,7 @@ def test_quantity_tolerance_is_configurable(
             policy=policy,
             provenance=provenance,
             detected_at=detected_at,
+            scope=_state_scope(),
         )
         is None
     )
@@ -152,6 +186,7 @@ def test_quantity_tolerance_is_configurable(
         policy=policy,
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
 
     assert anomaly is not None
@@ -164,29 +199,25 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
     detected_at: datetime,
     provenance: DecisionProvenance,
 ) -> None:
-    policy = AnomalyPolicy(
-        "commercial-v1",
-        price_tolerance=Decimal("0.05"),
-        late_days_tolerance=2,
-    )
-
     price = detect_price_deviation(
         "GPU-A",
         Decimal(100),
         Decimal(101),
         evidence,
-        policy=policy,
+        policy=PriceDeviationPolicy("price-v1", tolerance=Decimal("0.05")),
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
     late = detect_late_commitment(
         "PO-1",
         date(2026, 1, 10),
         date(2026, 1, 13),
         evidence,
-        policy=policy,
+        policy=LateCommitmentPolicy("schedule-v1", tolerance=timedelta(days=2)),
         provenance=provenance,
         detected_at=detected_at,
+        scope=_state_scope(),
     )
 
     assert price is not None
@@ -196,6 +227,89 @@ def test_price_and_schedule_comparisons_preserve_expected_observed_values(
     assert late.kind is AnomalyKind.LATE_COMMITMENT
 
 
+def test_revision_and_identity_anomalies_have_dedicated_policies_and_details(
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    stale = detect_stale_revision(
+        "PO-1",
+        "boq-r2",
+        "boq-r1",
+        evidence,
+        policy=StaleRevisionPolicy("revision-v1"),
+        provenance=provenance,
+        detected_at=detected_at,
+        scope=_state_scope(),
+    )
+    unresolved = detect_unresolved_identity(
+        "supplier-mention",
+        "Acme-ish",
+        evidence,
+        expected=None,
+        policy=UnresolvedIdentityPolicy("identity-v1"),
+        provenance=provenance,
+        detected_at=detected_at,
+        scope=_state_scope(),
+    )
+
+    assert stale is not None
+    assert stale.kind is AnomalyKind.STALE_REVISION
+    assert stale.expected == "boq-r2"
+    assert unresolved.kind is AnomalyKind.UNRESOLVED_IDENTITY
+    assert unresolved.observed == "Acme-ish"
+    assert (
+        detect_stale_revision(
+            "PO-1",
+            "boq-r2",
+            "boq-r2",
+            evidence,
+            policy=StaleRevisionPolicy("revision-v1"),
+            provenance=provenance,
+            detected_at=detected_at,
+            scope=_state_scope(),
+        )
+        is None
+    )
+
+
+@pytest.mark.parametrize(
+    "factory",
+    [
+        lambda: QuantityMismatchPolicy("", Decimal(0)),
+        lambda: PriceDeviationPolicy("price", Decimal("NaN")),
+        lambda: LateCommitmentPolicy("schedule", timedelta(days=-1)),
+        lambda: StaleRevisionPolicy(""),
+        lambda: UnresolvedIdentityPolicy(""),
+    ],
+)
+def test_anomaly_policies_reject_missing_identity_or_invalid_tolerance(
+    factory: Callable[[], object],
+) -> None:
+    with pytest.raises(ValueError):
+        factory()
+
+
+@pytest.mark.parametrize("value", [Decimal(-1), Decimal("NaN"), Decimal("Infinity")])
+def test_standalone_numeric_detectors_reject_invalid_comparisons(
+    value: Decimal,
+    evidence: tuple[EvidenceRef, ...],
+    detected_at: datetime,
+    provenance: DecisionProvenance,
+) -> None:
+    with pytest.raises(ValueError, match="finite and non-negative"):
+        detect_quantity_mismatch(
+            "GPU-A",
+            Decimal(1),
+            value,
+            evidence,
+            policy=QuantityMismatchPolicy("quantity-v1"),
+            provenance=provenance,
+            detected_at=detected_at,
+            scope=_state_scope(),
+        )
+
+
 def test_anomalies_require_timezone_aware_detection_time(
     evidence: tuple[EvidenceRef, ...],
     provenance: DecisionProvenance,
@@ -203,20 +317,28 @@ def test_anomalies_require_timezone_aware_detection_time(
     with pytest.raises(ValueError, match="timezone-aware"):
         Anomaly(
             "GPU-A",
-            AnomalyKind.COVERAGE_GAP,
-            None,
-            None,
+            CoverageGapDetails(Decimal(0), Decimal(0)),
             AnomalySeverity.INFO,
             AnomalyStatus.OPEN,
             evidence,
             "coverage-v1",
             provenance,
             datetime(2026, 1, 10),  # noqa: DTZ001
+            _state_scope(),
         )
 
 
 def _state_scope() -> StateScope:
     return StateScope("tenant", "project", "site", "bom-v1")
+
+
+def _state_policies(*, quantity_tolerance: Decimal = Decimal(0)) -> ExpectedObservedAnomalyPolicies:
+    return ExpectedObservedAnomalyPolicies(
+        MissingPurchaseOrderPolicy("missing-po-v1"),
+        QuantityMismatchPolicy("quantity-v1", quantity_tolerance),
+        SubstitutionPolicy("substitution-v1"),
+        CoverageGapPolicy("coverage-v1"),
+    )
 
 
 def test_state_orchestration_distinguishes_missing_po_from_quantity_mismatch(
@@ -234,7 +356,7 @@ def test_state_orchestration_distinguishes_missing_po_from_quantity_mismatch(
 
     anomalies = detect_expected_observed_anomalies(
         ExpectedObservedState(expected, None),
-        policy=AnomalyPolicy("state-v1"),
+        policy=_state_policies(),
         provenance=provenance,
         detected_at=detected_at,
     )
@@ -271,7 +393,7 @@ def test_state_orchestration_preserves_scope_and_incomplete_observation(
 
     anomalies = detect_expected_observed_anomalies(
         ExpectedObservedState(expected, observed),
-        policy=AnomalyPolicy("state-v1"),
+        policy=_state_policies(),
         provenance=provenance,
         detected_at=detected_at,
     )
@@ -281,6 +403,7 @@ def test_state_orchestration_preserves_scope_and_incomplete_observation(
         AnomalyKind.SUBSTITUTION,
         AnomalyKind.COVERAGE_GAP,
     ]
+    assert all(anomaly.scope == _state_scope() for anomaly in anomalies)
     assert anomalies[-1].severity is AnomalySeverity.INFO
 
 
@@ -311,7 +434,7 @@ def test_state_orchestration_tolerance_does_not_hide_nonzero_order(
 
     anomalies = detect_expected_observed_anomalies(
         ExpectedObservedState(expected, observed),
-        policy=AnomalyPolicy("state-v1", quantity_tolerance=Decimal(1)),
+        policy=_state_policies(quantity_tolerance=Decimal(1)),
         provenance=provenance,
         detected_at=detected_at,
     )

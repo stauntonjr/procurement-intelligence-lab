@@ -2,15 +2,15 @@ from typing import cast
 
 import pytest
 
-from procurement_intelligence_lab.domains.procurement.scope import (
-    Permission,
-    RequestContext,
-    ScopeAuthorizationError,
-)
 from procurement_intelligence_lab.interfaces.web import (
     EvidenceNotFoundError,
     claim_payload,
     source_payload,
+)
+from procurement_intelligence_lab.platform.semantics.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
 )
 
 

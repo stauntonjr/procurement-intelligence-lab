@@ -1,16 +1,16 @@
 from decimal import Decimal
 
 from procurement_intelligence_lab.domains.procurement.bom import EvidenceRef
-from procurement_intelligence_lab.domains.procurement.provenance import (
-    ComponentKind,
-    DecisionProvenance,
-    local_provenance_context,
-)
+from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.reconciliation import (
     ReconciliationPolicy,
     reconcile_lines,
 )
 from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
+from procurement_intelligence_lab.platform.semantics.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
 
 
 def test_reconciliation_selects_governing_claim_and_retains_conflicts() -> None:

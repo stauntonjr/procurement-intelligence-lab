@@ -5,16 +5,17 @@ from decimal import Decimal
 from enum import StrEnum
 
 from procurement_intelligence_lab.application.pipeline import run_bom_pipeline
-from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
+from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine
 from procurement_intelligence_lab.domains.procurement.evidence import EvidenceChain, pipeline_chain
-from procurement_intelligence_lab.domains.procurement.identity import stable_id
 from procurement_intelligence_lab.domains.procurement.reconciliation import ReconciledLine
-from procurement_intelligence_lab.domains.procurement.resolution import (
+from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.identity import stable_id
+from procurement_intelligence_lab.platform.semantics.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-from procurement_intelligence_lab.domains.procurement.scope import RequestContext
-from procurement_intelligence_lab.domains.procurement.state import OperationalBomLine
+from procurement_intelligence_lab.platform.semantics.scope import RequestContext
 
 
 class ClaimKind(StrEnum):

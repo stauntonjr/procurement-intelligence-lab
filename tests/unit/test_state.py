@@ -2,24 +2,24 @@ from datetime import UTC, datetime
 from decimal import Decimal
 
 from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
-from procurement_intelligence_lab.domains.procurement.provenance import (
-    ComponentKind,
-    DecisionProvenance,
-    local_provenance_context,
-)
-from procurement_intelligence_lab.domains.procurement.resolution import (
-    ResolutionDecision,
-    ResolutionStatus,
-)
+from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.state import (
     ExpectedRequirement,
     ObservedProcurement,
-    StateFreshness,
-    StateScope,
     compare_expected_observed,
     expected_requirements,
     project_operational_lines,
 )
+from procurement_intelligence_lab.platform.semantics.provenance import (
+    ComponentKind,
+    DecisionProvenance,
+)
+from procurement_intelligence_lab.platform.semantics.resolution import (
+    ResolutionDecision,
+    ResolutionStatus,
+)
+from procurement_intelligence_lab.platform.semantics.scope import StateScope
+from procurement_intelligence_lab.platform.semantics.state import StateFreshness
 
 
 def _provenance() -> DecisionProvenance:

@@ -2,8 +2,8 @@
 
 from datetime import datetime
 
-from procurement_intelligence_lab.domains.procurement.assertions import SourceAssertion
-from procurement_intelligence_lab.domains.procurement.ledger import AssertionLedgerEntry
+from procurement_intelligence_lab.platform.semantics.assertions import SourceAssertion
+from procurement_intelligence_lab.platform.semantics.ledger import AssertionLedgerEntry
 
 
 class InMemoryAssertionLedger:

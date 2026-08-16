@@ -12,15 +12,16 @@ from procurement_intelligence_lab.domains.procurement.assertions import (
     SourceAssertion,
     assertions_for_bom,
 )
-from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine, EvidenceRef
-from procurement_intelligence_lab.domains.procurement.provenance import (
+from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine
+from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef, TabularLocation
+from procurement_intelligence_lab.platform.semantics.provenance import (
     ComponentKind,
     DecisionProvenance,
     ProvenanceContext,
     ProvenanceEdge,
     ProvenanceRelation,
     TransformationEvent,
-    local_provenance_context,
 )
 
 
@@ -158,7 +159,11 @@ def read_bom_with_provenance(
                 padded[1],
                 Decimal(padded[2]),
                 price,
-                EvidenceRef(artifact_id, digest, sheet, row_number, populated_columns),
+                EvidenceRef(
+                    artifact_id,
+                    digest,
+                    TabularLocation(sheet, row_number, populated_columns),
+                ),
             )
         )
 
