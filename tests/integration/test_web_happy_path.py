@@ -2,6 +2,7 @@ import json
 from html.parser import HTMLParser
 from http.server import ThreadingHTTPServer
 from threading import Thread
+from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -44,6 +45,32 @@ def test_default_browser_form_completes_the_real_http_happy_path() -> None:
             assert response.status == 200
         assert payload["claim"] == "gpu_quantity"
         assert payload["value"] == "4"
+        assert payload["status"] == "reconciled"
+        evidence = payload["evidence"][0]
+        params = {key: value for key, value in parser.fields.items() if key != "q"}
+        params["evidence_id"] = evidence["evidence_id"]
+        with urlopen(
+            f"http://{host}:{port}/api/source?{urlencode(params)}",
+            timeout=HTTP_TIMEOUT_SECONDS,
+        ) as response:
+            source = json.load(response)
+        assert source["evidence"] == evidence
+        assert source["line"]["sku"] == "GPU-A"
+        assert source["line"]["quantity"] == payload["value"]
+        assert source["evidence"]["row"] == 2
+        assert source["evidence"]["cells"] == ["A", "B", "C", "D"]
+
+        for changes, status in [
+            ({"evidence_id": "evidence:unknown"}, 404),
+            ({"tenant_id": "another-tenant"}, 403),
+            ({"project_id": ""}, 403),
+        ]:
+            with pytest.raises(HTTPError) as error:
+                urlopen(
+                    f"http://{host}:{port}/api/source?{urlencode(params | changes)}",
+                    timeout=HTTP_TIMEOUT_SECONDS,
+                )
+            assert error.value.code == status
     finally:
         server.shutdown()
         server.server_close()
