@@ -65,7 +65,10 @@ Suggested labels are `area:architecture`, `area:domain`, `area:ingestion`, `area
 - Define the synthetic data specification and evaluation manifests.
 - Prefer small vertical issues with explicit acceptance evidence over speculative issue floods.
 
-Project field/view reconciliation is tracked by Issue #110. Branch/ruleset enforcement is tracked by Issue #111. Do not claim either live setting is complete from repository code alone; verify it with the authoritative administration audit after the required checks have appeared on a pull request.
+Project field/view reconciliation was completed through Issue #110, and branch/ruleset enforcement
+was completed through Issue #111. Treat those items as historical controls; verify current live
+settings with the authoritative administration audit after the required checks have appeared on a
+pull request rather than inferring them from repository code.
 
 ## Runner security
 

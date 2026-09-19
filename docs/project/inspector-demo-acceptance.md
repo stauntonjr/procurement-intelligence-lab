@@ -1,6 +1,7 @@
 # Local inspector showcase
 
-Date: 2026-09-18
+Baseline date: 2026-09-18
+Last verified: 2026-09-19
 
 Part of [Issue #50](https://github.com/stauntonjr/procurement-intelligence-lab/issues/50).
 Related contracts: Issues #15, #38, #46, #49, and #58; ADR-019; ADR-023; and the existing
