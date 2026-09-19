@@ -3,15 +3,32 @@
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 
 from procurement_intelligence_lab.domains.procurement.bom import Bom
+from procurement_intelligence_lab.domains.procurement.governance import (
+    GoverningClaim,
+    GoverningClaimDecision,
+    GoverningClaimStatus,
+    reconcile_required_quantity,
+)
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.resolution import (
     ResolutionDecision,
     ResolutionStatus,
 )
-from procurement_intelligence_lab.platform.semantics.scope import StateScope
+from procurement_intelligence_lab.platform.semantics.scope import RequestContext, StateScope
 from procurement_intelligence_lab.platform.semantics.state import StateFreshness
+
+
+class ProcurementStateBasis(StrEnum):
+    """How a procurement state value entered the operational projection."""
+
+    OBSERVED = "observed"
+    INFERRED = "inferred"
+    RECONCILED = "reconciled"
+    HUMAN_CONFIRMED = "human_confirmed"
 
 
 @dataclass(frozen=True)
@@ -30,6 +47,7 @@ class ExpectedRequirement:
     scope: StateScope
     as_of: datetime
     evidence: tuple[EvidenceRef, ...]
+    basis: ProcurementStateBasis = ProcurementStateBasis.INFERRED
 
     def __post_init__(self) -> None:
         if not self.canonical_key:
@@ -53,6 +71,7 @@ class ObservedProcurement:
     as_of: datetime
     freshness: StateFreshness
     evidence: tuple[EvidenceRef, ...]
+    basis: ProcurementStateBasis = ProcurementStateBasis.OBSERVED
 
     def __post_init__(self) -> None:
         if not self.canonical_key:
@@ -93,6 +112,79 @@ class ExpectedObservedState:
     @property
     def freshness(self) -> StateFreshness:
         return self.observed.freshness if self.observed is not None else StateFreshness.UNKNOWN
+
+
+@dataclass(frozen=True)
+class GovernedRequiredQuantityState:
+    """Policy decision plus its optional expected-state projection.
+
+    An unresolved decision deliberately has no expected requirement.  The decision retains
+    all candidate claims, so callers can explain the abstention without treating it as zero.
+    """
+
+    decision: GoverningClaimDecision
+    expected: ExpectedRequirement | None
+
+    def __post_init__(self) -> None:
+        if self.decision.status is GoverningClaimStatus.UNRESOLVED:
+            if self.expected is not None:
+                raise ValueError("unresolved governing decisions cannot project expected state")
+            return
+        if self.expected is None:
+            raise ValueError("governed decisions require an expected-state projection")
+        if self.expected.canonical_key != self.decision.canonical_key:
+            raise ValueError("expected state must match the governing decision subject")
+        if self.expected.required_quantity != self.decision.value:
+            raise ValueError("expected state must preserve the governed required quantity")
+        if self.expected.as_of != self.decision.as_of:
+            raise ValueError("expected state must preserve the governing decision as-of time")
+
+
+def project_governed_required_quantity(
+    candidates: tuple[GoverningClaim, ...],
+    *,
+    canonical_key: str,
+    request_context: RequestContext,
+    as_of: datetime,
+) -> GovernedRequiredQuantityState:
+    """Reconcile resolved claims before projecting a scoped expected requirement.
+
+    The projection version identifies the policy decision, not an arbitrary source revision.
+    This lets equal active revisions jointly govern while retaining their individual revision
+    identities on the decision and evidence records.
+    """
+
+    decision = reconcile_required_quantity(
+        candidates,
+        canonical_key=canonical_key,
+        request_context=request_context,
+        as_of=as_of,
+    )
+    if decision.status is GoverningClaimStatus.UNRESOLVED:
+        return GovernedRequiredQuantityState(decision, None)
+    if not isinstance(decision.value, Decimal):
+        raise TypeError("required-quantity decisions must contain a numeric value")
+    scope = StateScope(
+        request_context.tenant_id,
+        request_context.project_id,
+        request_context.site_id,
+        stable_id(
+            "governed-required-quantity-scope",
+            decision.policy_id,
+            decision.canonical_key,
+            decision.as_of.isoformat(),
+            tuple(item.claim_id for item in decision.governing),
+        ),
+    )
+    expected = ExpectedRequirement(
+        decision.canonical_key,
+        decision.value,
+        scope,
+        decision.as_of,
+        tuple(item.evidence for item in decision.governing),
+        ProcurementStateBasis.RECONCILED,
+    )
+    return GovernedRequiredQuantityState(decision, expected)
 
 
 def _require_nonnegative(name: str, value: Decimal) -> None:

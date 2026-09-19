@@ -12,7 +12,10 @@ from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningClaimDecision,
     GoverningPredicate,
     GoverningSourceType,
-    reconcile_required_quantity,
+)
+from procurement_intelligence_lab.domains.procurement.state import (
+    GovernedRequiredQuantityState,
+    project_governed_required_quantity,
 )
 from procurement_intelligence_lab.platform.semantics.scope import RequestContext, StateScope
 
@@ -34,6 +37,7 @@ class ShowcaseRequiredQuantityResult:
     as_of: datetime
     candidates: tuple[GoverningClaim, ...]
     decision: GoverningClaimDecision
+    governed_state: GovernedRequiredQuantityState
 
 
 def showcase_required_quantity(
@@ -44,13 +48,19 @@ def showcase_required_quantity(
     """Evaluate one fixed scenario through the v1 governing-claim policy."""
 
     candidates = _scenario_candidates(scenario)
-    decision = reconcile_required_quantity(
+    governed_state = project_governed_required_quantity(
         candidates,
         canonical_key="GPU-A",
         request_context=request_context,
         as_of=_AS_OF,
     )
-    return ShowcaseRequiredQuantityResult(scenario, _AS_OF, candidates, decision)
+    return ShowcaseRequiredQuantityResult(
+        scenario,
+        _AS_OF,
+        candidates,
+        governed_state.decision,
+        governed_state,
+    )
 
 
 def _scenario_candidates(scenario: ShowcaseScenario) -> tuple[GoverningClaim, ...]:

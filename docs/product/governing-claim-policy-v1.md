@@ -72,6 +72,11 @@ eligible candidates, governing and losing assertion IDs, dispositions and reason
 or explicit abstention, and all EvidenceRefs. A public explanation may summarize this decision but
 must not select authority or arithmetic in the browser or a model.
 
+For required quantity, a governed decision projects a typed `ExpectedRequirement`; an unresolved
+decision projects none. The projection has a deterministic policy-decision scope identity so that
+equal jointly governing revisions do not force an arbitrary source revision into operational state.
+See [ADR-024](../adr/024-governed-state-projection-identity.md).
+
 ## Showcase acceptance examples
 
 1. Revision A requires 4 GPUs and revision B requires 6; both are approved and effective without

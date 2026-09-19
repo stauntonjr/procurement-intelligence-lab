@@ -103,6 +103,9 @@ def test_browser_http_scenario_exposes_abstention_and_original_conflicting_sourc
         assert payload["value"] is None
         assert payload["decision"]["policy_id"] == "procurement-governing-claims/v1"
         assert len(payload["decision"]["candidates"]) == 2
+        assert payload["governed_state"]["expected_quantity"] is None
+        assert payload["governed_state"]["basis"] is None
+        assert payload["governed_state"]["scope"] is None
 
         evidence = payload["evidence"][1]
         with urlopen(
