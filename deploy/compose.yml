@@ -27,6 +27,7 @@ services:
       start_period: 5s
     labels:
       traefik.enable: "true"
+      traefik.docker.network: vps-srv_traefik_public
       traefik.http.routers.procurement.rule: "Host(`procurement.ediacarian.dedyn.io`)"
       traefik.http.routers.procurement.entrypoints: websecure
       traefik.http.routers.procurement.tls.certresolver: desecresolver
