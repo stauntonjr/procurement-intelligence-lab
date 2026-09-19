@@ -1,0 +1,35 @@
+WEBVTT
+
+00:00:00.034 --> 00:00:12.127
+Synthetic, read-only procurement evidence. The browser displays deterministic service results.
+
+00:00:12.127 --> 00:00:22.187
+The standard BOM establishes 4 GPUs. This is the fixture quantity, not an ordered or received total.
+
+00:00:22.187 --> 00:00:37.087
+Open the admitted original workbook: GPU-A, quantity 4, unit price 100. Highlighted cells support the answer.
+
+00:00:37.087 --> 00:00:47.972
+The recorded reconciliation stage links back to its source evidence.
+
+00:00:47.972 --> 00:01:05.729
+Two approved revisions disagree: 4 versus 6. The policy establishes no value and projects no expected quantity.
+
+00:01:05.729 --> 00:01:21.477
+Open revision B and inspect its original quantity 6. Disagreeing evidence is retained rather than discarded.
+
+00:01:21.477 --> 00:01:39.396
+Explicit supersession makes revision B govern: 6 GPUs. Revision A remains visible as superseded. This is replacement, not 4 plus 6.
+
+00:01:39.396 --> 00:01:50.110
+Inspect the governing revision against the original cells. The browser does not choose the winner.
+
+00:01:50.110 --> 00:02:08.842
+When both approved revisions say 4, the result is 4 with both sources retained as governing evidence.
+
+00:02:08.842 --> 00:02:26.814
+A newer revision without approval does not establish a quantity. Unresolved is distinct from zero.
+
+00:02:26.814 --> 00:02:40.560
+Return to the reproducible baseline. No customer data, purchasing actions, correction workflow or model calls are shown.
+

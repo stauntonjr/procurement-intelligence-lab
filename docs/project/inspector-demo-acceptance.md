@@ -80,3 +80,11 @@ Independent review found no actionable correctness findings. Reviewed `web.py` S
 `38879c153c18a005820647d0d9a404656f03af5f8d6f1daa4ef311c71489ecd4`.
 The semantic evidence artifact records the implementation commit separately. Python coverage does
 not measure browser JavaScript; browser checks above are separate observed acceptance evidence.
+
+## Recorded discrepancy packet — 2026-09-19
+
+The [new walkthrough](showcase-walkthrough.md) supplements this historical implementation
+acceptance with a continuous 2:41 recording at application revision `8829775`, all four revision
+scenarios, captioned explanation, source/fixture hashes and fresh offline setup/restart evidence.
+The original three-frame GIF is preserved; the README now links the 25-second discrepancy excerpt.
+These artifacts do not expand the runtime contract or close the remaining umbrella issues.

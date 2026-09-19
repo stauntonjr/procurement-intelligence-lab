@@ -10,12 +10,12 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 | M1 | Synthetic documents and structure/mapping | XLSX adapter, fixtures, contract tests | In progress; Issue #7 remains authoritative |
 | M2 | Assertion ledger and provenance | assertion ledger and execution provenance | In progress; milestone state lives in GitHub |
 | M3 | Entity resolution | conservative resolver and retained decisions | In progress; broader acceptance remains issue-driven |
-| M4 | Reconciliation and governed state | explicit policy, retained decisions, governed expected/observed state | In progress; Issue #15 is pending final acceptance audit |
+| M4 | Reconciliation and governed state | explicit policy, retained decisions, governed expected/observed state | In progress; Issue #15 closed through PR #161; other M4 work remains |
 | M5 | Evidence-first UX | chat, inspector, source/review context | In progress; Issue #8 remains open |
 | M6 | Retrieval | rebuildable lexical projection lifecycle | In progress; follow-on adapters/evaluation remain open |
 | M7 | Intelligence | evidence-backed anomaly taxonomy/orchestration | In progress |
 | M8 | Agent tools and guarded workflows | planned issue slices | Planned |
-| M9 | Integrated public demo | package smoke and future full walkthrough | Planned |
+| M9 | Integrated public demo | public synthetic release and bounded recorded walkthrough | In progress; full integrated acceptance remains open |
 
 ## Historical implementation slices
 

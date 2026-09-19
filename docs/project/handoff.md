@@ -8,10 +8,10 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 ## Current milestone and status
 
-Status refreshed against GitHub Issues and merged PRs on 2026-09-18. This refresh does not certify live Project fields or deployment state.
+Status refreshed against GitHub Issues and merged PRs on 2026-09-19. This refresh does not certify live Project fields or deployment state.
 
 - **M0 — Engineering and architecture harness:** active hardening. Issue #16's repository bootstrap and package-boundary acceptance is verified complete; [Issue #17](https://github.com/stauntonjr/procurement-intelligence-lab/issues/17)'s development conventions and typed error contract are complete through [PR #154](https://github.com/stauntonjr/procurement-intelligence-lab/pull/154). PR #119 delivered ADR-021, layered tests, package/UI smoke checks, and the initial C001-C008 deterministic oracles; C009 covers platform-to-vertical dependency inversion, C010 covers the universal stage-contract registry, and C011 covers bounded generated Dependabot pull requests. Issues #110-#115 and #145 are complete; #116 remains open until both protected baseline variants run, #120 remains open pending representative update evidence, and #121 remains open for full Actions supply-chain acceptance. Domain-package contracts #134-#135 are complete. [Issue #149](https://github.com/stauntonjr/procurement-intelligence-lab/issues/149) completed platform-versus-procurement ownership separation and BoQ/PO pressure tests in [PR #150](https://github.com/stauntonjr/procurement-intelligence-lab/pull/150); [Issue #151](https://github.com/stauntonjr/procurement-intelligence-lab/issues/151) completed concrete semantic contracts across all twelve logical stages in [PR #152](https://github.com/stauntonjr/procurement-intelligence-lab/pull/152). See [Issue #5](https://github.com/stauntonjr/procurement-intelligence-lab/issues/5) and [Issue #109](https://github.com/stauntonjr/procurement-intelligence-lab/issues/109) under [Issue #3](https://github.com/stauntonjr/procurement-intelligence-lab/issues/3).
-- **M4 — Reconciliation and governed state:** governed required-quantity decisions now project into typed expected state while retaining unresolved claims and evidence. Issue #15 is pending its final acceptance audit and close-out.
+- **M4 — Reconciliation and governed state:** governed required-quantity decisions now project into typed expected state while retaining unresolved claims and evidence. Issue #15 is closed through PR #161; remaining M4 acceptance stays issue-driven.
 - **M5 — Evidence-first UX:** in progress. The local inspector is runnable and now has a real HTTP happy-path check; [Issue #8](https://github.com/stauntonjr/procurement-intelligence-lab/issues/8) still governs the full drill-down showcase.
 - **M6 — Retrieval:** in progress. The lexical lifecycle foundation exists and now rejects unsupported projection kinds; later adapters and evaluation remain.
 - GitHub's M0-M9 milestones are canonical. `S0`-`S9` in the [milestone map](../development/milestone-map.md) describe historical implementation order only.
@@ -62,7 +62,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Open decisions and questions
 
-- The governing-claim authority and temporal policy is ratified in [ADR-023](../adr/023-predicate-specific-governing-claim-policy.md), with governed state projection identity in [ADR-024](../adr/024-governed-state-projection-identity.md). Reconcile the merged implementation against [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) before closing it.
+- The governing-claim authority and temporal policy is ratified in [ADR-023](../adr/023-predicate-specific-governing-claim-policy.md), with governed state projection identity in [ADR-024](../adr/024-governed-state-projection-identity.md). [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) is closed after PR #161 integrated governed state projection.
 - How should the request-scope contract evolve from the synthetic fixture boundary to authenticated multi-project adapters? See [ADR-019](../adr/019-explicit-request-scope.md).
 - Which retrieval projections and fusion strategy earn adoption under the M6 evaluation plan? Start with [Issue #55](https://github.com/stauntonjr/procurement-intelligence-lab/issues/55), [Issue #57](https://github.com/stauntonjr/procurement-intelligence-lab/issues/57), and [Issue #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
@@ -72,10 +72,10 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 The owner prioritizes independent employer-facing showcases for Procurement Intelligence Lab and
 SciFact RAG, with explicit integration planning. See the [parallel product development plan](parallel-product-development.md).
-Package the current runnable procurement slice for demonstration while keeping broader product
-acceptance below separate; SciFact research and shared-platform migration are not showcase prerequisites.
+Use the current showcase packet for demonstration while keeping broader product acceptance
+below separate; SciFact research and shared-platform migration are not showcase prerequisites.
 
-The next showcase improvements are sequenced in the [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md): freeze a discrepancy contract, implement its governing decision, explain it in the UI, highlight original XLSX cells, and record a clearer walkthrough. This is planned work, not delivered capability.
+The [reviewable showcase packet](showcase-walkthrough.md) now records the merged discrepancy scenarios, source cells, captions, and reproducible offline/reset checks. Its media uses application revision `8829775`. The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) remains the historical slice plan; the packet does not complete the broader M4/M5/M9 issues.
 
 The synthetic Inspector is publicly available at
 [procurement.ediacarian.dedyn.io](https://procurement.ediacarian.dedyn.io/). The verified VPS
@@ -84,7 +84,7 @@ deployment convention, release boundary, and evidence are in the
 [deployment evidence note](procurement-vps-deployment-2026-09-19.md). It remains a synthetic,
 read-only showcase rather than a production procurement system.
 
-1. Return to product work: use the governed expected/observed state path from [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) when continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
+1. With the bounded procurement packet reviewable, return to product work: use the governed expected/observed state path from [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) when continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
 2. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
 3. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
 4. Keep DSPy or other prompt/program optimization deferred until the baseline exists and a separate benchmark issue defines train/development/held-out separation and an exit criterion.

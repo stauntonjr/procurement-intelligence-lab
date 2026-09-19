@@ -1,0 +1,55 @@
+{
+  "sourceRevision": "88297758bdc9025167ed830cce743a14fdaa75ac",
+  "startedAt": "2026-09-19T15:35:29.445Z",
+  "browser": "153.0.8010.48",
+  "events": [
+    {
+      "t": 0.034,
+      "name": "Introduction: synthetic, read-only procurement evidence"
+    },
+    {
+      "t": 12.127,
+      "name": "Standard BOM: deterministic quantity of 4 GPUs"
+    },
+    {
+      "t": 22.187,
+      "name": "Original BOM cells: GPU-A, quantity 4, unit price 100"
+    },
+    {
+      "t": 37.087,
+      "name": "Recorded reconciliation trace and linked source"
+    },
+    {
+      "t": 47.972,
+      "name": "Approved revisions disagree: 4 versus 6; quantity not established"
+    },
+    {
+      "t": 65.729,
+      "name": "Open competing revision B: original quantity 6"
+    },
+    {
+      "t": 81.477,
+      "name": "Explicit supersession: required quantity 6, retained alternatives"
+    },
+    {
+      "t": 99.396,
+      "name": "Verify selected revision against its original cells"
+    },
+    {
+      "t": 110.11,
+      "name": "Equal values: 4 GPUs with both governing sources retained"
+    },
+    {
+      "t": 128.842,
+      "name": "Missing approval: no applicable quantity, not zero"
+    },
+    {
+      "t": 146.814,
+      "name": "Return to reproducible baseline; no purchasing or correction actions"
+    },
+    {
+      "t": 160.843,
+      "name": "End"
+    }
+  ]
+}
