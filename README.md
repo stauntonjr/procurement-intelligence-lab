@@ -8,7 +8,24 @@ BOM, BoQ, Purchase Order, state, reconciliation, and anomaly behavior lives unde
 
 ## Showcase
 
-The showcase is a chat interface paired with an evidence inspector and source viewer. A material answer claim can be opened from calculation, through operational state, reconciliation, canonical entities, resolution decisions, source assertions, mapped fields, document structure, and the original synthetic document. Epistemic status and correction/review actions remain visible.
+Ask a synthetic BOM question, inspect its deterministic answer, and open the contributing XLSX
+row values and cell references. The local inspector also includes four fixed required-quantity
+revision scenarios: an abstaining conflict, explicit supersession, equal-value competing revisions,
+and a missing-approval case. Each exposes its policy ID, as-of time, retained alternatives, and
+original source rows.
+
+![Recorded demo: ask for GPU quantity, see 4 GPUs, and inspect the supporting BOM row](docs/assets/procurement-demo.gif)
+
+[Still image](docs/assets/procurement-demo.png) · [Demo scope and verification](docs/project/inspector-demo-acceptance.md)
+
+The animation uses actual local browser states with pauses for readability. The source panel shows
+original cells from admitted XLSX fixtures, highlighted by EvidenceRef. The discrepancy scenario
+is governed by [policy v1](docs/product/governing-claim-policy-v1.md) and its
+[frozen contract](docs/product/showcase-discrepancy-contract.md). Broader correction workflows
+remain separate work.
+
+Start the browser demo with `uv run python -m procurement_intelligence_lab.interfaces.web`, then
+open <http://127.0.0.1:8000/>. It runs locally without model services or external credentials.
 
 ## Architecture
 

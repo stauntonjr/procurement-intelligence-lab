@@ -48,6 +48,17 @@ class XlsxStructuredBom:
         return assertions_for_bom(self.bom, self.transformation.event_id)
 
 
+@dataclass(frozen=True)
+class XlsxSourceRow:
+    """Original cell text for one admitted worksheet row."""
+
+    sheet: str
+    row: int
+    headers: tuple[str, ...]
+    cells: tuple[str, ...]
+    highlighted_columns: tuple[str, ...]
+
+
 def _text(node: ET.Element | None) -> str:
     return "".join(node.itertext()) if node is not None else ""
 
@@ -94,6 +105,70 @@ def _row_values(row: ET.Element, shared_strings: list[str]) -> tuple[list[str], 
     return [indexed.get(index, "") for index in range(width)], tuple(populated)
 
 
+def read_source_row(
+    path: str | Path,
+    *,
+    evidence: EvidenceRef,
+) -> XlsxSourceRow:
+    """Read the original cells identified by an admitted tabular evidence reference."""
+
+    if not isinstance(evidence.location, TabularLocation):
+        raise TypeError("XLSX source viewing requires a tabular evidence location")
+    raw = Path(path).read_bytes()
+    if sha256(raw).hexdigest() != evidence.content_hash:
+        raise ValueError("XLSX source content hash does not match the evidence reference")
+
+    with ZipFile(path) as archive:
+        shared = (
+            [
+                _text(node)
+                for node in ET.fromstring(archive.read("xl/sharedStrings.xml")).findall(
+                    ".//x:si", _NS
+                )
+            ]
+            if "xl/sharedStrings.xml" in archive.namelist()
+            else []
+        )
+        root = _worksheet_root(archive, evidence.sheet)
+        rows = {
+            int(row.attrib["r"]): _row_values(row, shared)
+            for row in root.findall(".//x:sheetData/x:row", _NS)
+            if row.attrib.get("r", "").isdigit()
+        }
+    if evidence.row not in rows:
+        raise ValueError("XLSX source row is not available")
+    header_values, _ = rows.get(1, ([], ()))
+    row_values, _ = rows[evidence.row]
+    width = max(len(header_values), len(row_values))
+    headers = tuple(
+        header_values[index] if index < len(header_values) else "" for index in range(width)
+    )
+    cells = tuple(row_values[index] if index < len(row_values) else "" for index in range(width))
+    return XlsxSourceRow(
+        evidence.sheet,
+        evidence.row,
+        headers,
+        cells,
+        evidence.cells,
+    )
+
+
+def _worksheet_root(archive: ZipFile, sheet: str) -> ET.Element:
+    workbook = ET.fromstring(archive.read("xl/workbook.xml"))
+    rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+    relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
+    sheet_node = next(
+        (item for item in workbook.findall(".//x:sheet", _NS) if item.attrib["name"] == sheet),
+        None,
+    )
+    if sheet_node is None:
+        raise ValueError(f"sheet {sheet!r} not found in workbook")
+    target = sheet_node.attrib.get(f"{{{_NS['r']}}}id", sheet_node.attrib.get("r:id", ""))
+    if not target or target not in relmap:
+        raise ValueError(f"sheet {sheet!r} has no valid relationship")
+    return ET.fromstring(archive.read("xl/" + relmap[target].lstrip("/")))
+
+
 def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
     """Read a BOM while preserving the original simple adapter boundary."""
 
@@ -121,20 +196,7 @@ def read_bom_with_provenance(
             if "xl/sharedStrings.xml" in archive.namelist()
             else []
         )
-        workbook = ET.fromstring(archive.read("xl/workbook.xml"))
-        rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
-        relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
-        sheet_node = next(
-            (item for item in workbook.findall(".//x:sheet", _NS) if item.attrib["name"] == sheet),
-            None,
-        )
-        if sheet_node is None:
-            raise ValueError(f"sheet {sheet!r} not found in workbook")
-        target = sheet_node.attrib.get(f"{{{_NS['r']}}}id", sheet_node.attrib.get("r:id", ""))
-        if not target or target not in relmap:
-            raise ValueError(f"sheet {sheet!r} has no valid relationship")
-        worksheet = "xl/" + relmap[target].lstrip("/")
-        root = ET.fromstring(archive.read(worksheet))
+        root = _worksheet_root(archive, sheet)
         rows: list[tuple[int, list[str], tuple[str, ...]]] = []
         for fallback_row_number, row in enumerate(
             root.findall(".//x:sheetData/x:row", _NS), start=1
