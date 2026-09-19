@@ -6,6 +6,22 @@ This page is a concise orientation index for a fresh human or development agent.
 
 Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](https://github.com/stauntonjr/procurement-intelligence-lab/issues), linked ADRs, and the authoritative documents below before changing the repository.
 
+## Named agent roles
+
+- **`mac-planning-agent`** — Mac-hosted planning and review role. It handles architecture review,
+  cross-repository sequencing, issue decomposition, acceptance design, and evidence planning. It
+  is the preferred planning surface for work that benefits from GPT-6 while GPT-6 is unavailable
+  in the VS Code Codex extension and Linux desktop clients. It does not implement product code or
+  run the implementation delivery loop.
+- **`dgx-implementation-agent`** — DGX-hosted implementation role. It owns all implementation
+  changes, including source, tests, documentation, packaging, CI, benchmarks, deployment changes,
+  verification, and PR preparation, in an isolated checkout.
+
+The Mac role hands off a bounded plan with its governing Issue, source revision, touched contracts,
+acceptance examples, evidence requirements, and unresolved decisions. The DGX role re-grounds that
+plan against the current checkout and authoritative artifacts before changing anything. The
+handoff is planning input, not implementation or release authorization.
+
 ## Current milestone and status
 
 Status refreshed against GitHub Issues and merged PRs on 2026-09-18. This refresh does not certify live Project fields or deployment state.
