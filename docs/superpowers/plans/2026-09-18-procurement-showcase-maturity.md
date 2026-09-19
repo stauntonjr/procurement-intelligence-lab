@@ -20,12 +20,18 @@ original cells, policy decisions, captions and offline restart evidence. The che
 preserve the original implementation plan, not a current pending-work queue. Broader #50/#58/#73/#74
 acceptance remains separate; use current issues and the packet evidence before scheduling work.
 
+PR #168 additionally merged the bounded governed-requirement-versus-synthetic-order comparison:
+quantity mismatch, matched, missing observation, and unresolved requirement. Its fixture identity is
+logical and stable across installation paths; it does not add general PO ingestion, receipt or
+outstanding calculations, missing-order inference, or anomaly lifecycle management.
+
 ## Baseline and completion boundary
 
 The current demo has two synthetic BOM rows, three keyword-routed questions, readable values,
-claim status, clickable trace/evidence links, and original XLSX source-row inspection. Its README
-GIF contains three captured browser states. It does not yet explain an explicit temporal revision
-decision, expose a calculation breakdown, or render the original spreadsheet cells.
+claim status, clickable trace/evidence links, original XLSX source-row inspection, and the recorded
+discrepancy packet. Its README media explains the governing revision decisions and retained source
+cells. The order comparison remains intentionally one admitted synthetic observation rather than a
+general purchase-order workflow.
 
 The next showcase is complete when a reviewer can answer, within a short walkthrough:
 

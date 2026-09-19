@@ -88,3 +88,20 @@ acceptance with a continuous 2:41 recording at application revision `8829775`, a
 scenarios, captioned explanation, source/fixture hashes and fresh offline setup/restart evidence.
 The original three-frame GIF is preserved; the README now links the 25-second discrepancy excerpt.
 These artifacts do not expand the runtime contract or close the remaining umbrella issues.
+
+## Current merged order-comparison slice
+
+PR [#168](https://github.com/stauntonjr/procurement-intelligence-lab/pull/168) extends the
+showcase with one explicitly admitted synthetic order observation. On merged `main`
+(`cff0905398909fe9378dfd4f3ce4ce2f9da6895c`), the public form and clean-package path demonstrate:
+
+- required 4 versus ordered 2: `quantity_mismatch`;
+- required 4 versus ordered 4: `matched`;
+- no order observation: `not_assessed` with `missing_observation`;
+- unresolved required 4-versus-6 claims with order 2: `not_assessed` with
+  `unresolved_requirement`.
+
+The comparison retains separate requirement and order EvidenceRefs, policy/provenance identity,
+and original source-row drill-down. The fixture identity is logical and stable across installation
+paths. This is a bounded M7.1 showcase slice; Issue #60 remains open for anomaly lifecycle,
+suppression/review, and broader procurement anomaly acceptance.
