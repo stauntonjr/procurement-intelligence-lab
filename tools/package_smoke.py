@@ -60,6 +60,15 @@ def main() -> int:
         payload = json.loads(completed.stdout)
         if payload["claims"]["gpu_quantity"]["value"] != "4":
             raise RuntimeError("installed demo returned an unexpected GPU quantity")
+        web_help = subprocess.run(
+            [str(python), "-m", "procurement_intelligence_lab.interfaces.web", "--help"],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        if "--host" not in web_help.stdout or "--port" not in web_help.stdout:
+            raise RuntimeError("installed web server does not document host and port options")
 
     print("package smoke test passed")
     return 0

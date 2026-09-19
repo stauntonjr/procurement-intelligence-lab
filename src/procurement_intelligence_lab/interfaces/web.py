@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from argparse import ArgumentParser
 from decimal import Decimal
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import as_file, files
@@ -464,6 +465,10 @@ class InspectorHandler(BaseHTTPRequestHandler):
             body = _HTML.encode()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
+        elif parsed.path == "/healthz":
+            body = json.dumps({"status": "ok"}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
         elif parsed.path == "/api/ask":
             question = query.get("q", [""])[0]
             scenario = query.get("scenario", [""])[0] or None
@@ -524,5 +529,17 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     ThreadingHTTPServer((host, port), InspectorHandler).serve_forever()
 
 
+def main() -> None:
+    parser = ArgumentParser(description="Run the Procurement Evidence Inspector HTTP server.")
+    parser.add_argument(
+        "--host", default="127.0.0.1", help="Interface to bind (default: %(default)s)."
+    )
+    parser.add_argument(
+        "--port", default=8000, type=int, help="TCP port to bind (default: %(default)s)."
+    )
+    arguments = parser.parse_args()
+    run_server(host=arguments.host, port=arguments.port)
+
+
 if __name__ == "__main__":
-    run_server()
+    main()
