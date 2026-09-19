@@ -13,6 +13,25 @@ from procurement_intelligence_lab.interfaces.web import InspectorHandler
 HTTP_TIMEOUT_SECONDS = 5
 
 
+@pytest.mark.integration
+def test_health_endpoint_is_available_without_demo_scope() -> None:
+    server = ThreadingHTTPServer(("127.0.0.1", 0), InspectorHandler)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    host, port = (str(server.server_address[0]), int(server.server_address[1]))
+    try:
+        with urlopen(f"http://{host}:{port}/healthz", timeout=HTTP_TIMEOUT_SECONDS) as response:
+            payload = json.load(response)
+
+        assert response.status == 200
+        assert response.headers["Content-Type"] == "application/json"
+        assert payload == {"status": "ok"}
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+
 class _FormParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
