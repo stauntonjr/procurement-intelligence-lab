@@ -150,6 +150,7 @@ function render(data){
   if(data.decision){
     const details=element('div',undefined,'decision');
     details.append(element('p','Policy: '+data.decision.policy_id+' · as of '+data.decision.as_of,'small'));
+    if(data.governed_state)details.append(element('p',data.governed_state.expected_quantity===null?'Expected state: not projected while this claim is unresolved.':'Expected state: '+data.governed_state.expected_quantity+' GPUs · '+data.governed_state.scope.version,'small'));
     for(const candidate of data.decision.candidates)details.append(element('p',candidate.revision_id+' · '+candidate.value+' '+candidate.unit+' · '+candidate.disposition,'small'));
     answer.append(details)
   }
@@ -311,6 +312,7 @@ def _showcase_claim_payload(
 ) -> dict[str, object]:
     result = showcase_required_quantity(scenario, request_context=request_context)
     decision = result.decision
+    expected = result.governed_state.expected
     evidence = tuple(item.evidence for item in result.candidates)
     claim_id = stable_id(
         "showcase-required-quantity",
@@ -324,6 +326,7 @@ def _showcase_claim_payload(
         ("canonical identity", "fixture-pinned"),
         ("governing policy", decision.policy_id),
         ("reconciliation", decision.status.value),
+        ("governed expected state", "projected" if expected is not None else "not projected"),
     )
     return {
         "question": "Required GPU quantity under the selected discrepancy scenario",
@@ -337,6 +340,17 @@ def _showcase_claim_payload(
             "as_of": result.as_of.isoformat(),
             "governing_claim_ids": [item.claim_id for item in decision.governing],
             "candidates": [_candidate_payload(item, decision) for item in result.candidates],
+        },
+        "governed_state": {
+            "expected_quantity": str(expected.required_quantity) if expected is not None else None,
+            "scope": {
+                "tenant_id": expected.scope.tenant_id,
+                "project_id": expected.scope.project_id,
+                "site_id": expected.scope.site_id,
+                "version": expected.scope.version,
+            }
+            if expected is not None
+            else None,
         },
         "execution_trace": {
             "claim": "required_quantity",

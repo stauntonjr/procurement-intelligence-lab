@@ -64,6 +64,9 @@ def test_claim_payload_exposes_policy_backed_showcase_decision() -> None:
     assert decision["policy_id"] == "procurement-governing-claims/v1"
     assert decision["as_of"] == "2026-01-15T00:00:00+00:00"
     assert len(cast(list[dict[str, object]], decision["candidates"])) == 2
+    governed_state = cast(dict[str, object], payload["governed_state"])
+    assert governed_state["expected_quantity"] is None
+    assert governed_state["scope"] is None
 
     evidence = cast(list[dict[str, object]], payload["evidence"])[0]
     source = source_payload(
@@ -72,6 +75,19 @@ def test_claim_payload_exposes_policy_backed_showcase_decision() -> None:
     )
     source_line = cast(dict[str, object], source["line"])
     assert source_line["quantity"] in {"4", "6"}
+
+
+def test_policy_backed_showcase_projects_governed_expected_state() -> None:
+    payload = claim_payload(
+        "How many GPUs are required?",
+        scenario="shared_value",
+        request_context=_context(Permission.READ_STATE),
+    )
+
+    governed_state = cast(dict[str, object], payload["governed_state"])
+    scope = cast(dict[str, object], governed_state["scope"])
+    assert governed_state["expected_quantity"] == "4"
+    assert cast(str, scope["version"]).startswith("governed-required-quantity-scope:")
 
 
 def test_source_payload_resolves_a_stable_evidence_id() -> None:

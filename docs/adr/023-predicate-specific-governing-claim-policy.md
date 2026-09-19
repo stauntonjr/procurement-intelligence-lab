@@ -31,7 +31,8 @@ remain unresolved and the public answer abstains.
 
 Ordered quantity, planned/committed price, expected delivery, and observed delivery use their
 predicate-specific authority rules in the policy. Expected requirements and observed procurement
-state remain separate projections under ADR-020.
+state remain separate projections under ADR-020. Required-quantity decisions now project into
+expected state according to ADR-024.
 
 ## Consequences
 
