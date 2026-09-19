@@ -75,6 +75,7 @@ def test_order_comparison_is_repeatable_and_keeps_governance_separate() -> None:
     expected = first.requirement.governed_state.expected
     assert expected is not None
     assert first.anomalies[0].scope == expected.scope
+    assert all(ref.artifact_id.startswith("showcase:") for ref in first.anomalies[0].evidence)
     assert first.anomalies[0].provenance.context.input_snapshot_ids == tuple(
         ref.evidence_id for ref in first.anomalies[0].evidence
     )

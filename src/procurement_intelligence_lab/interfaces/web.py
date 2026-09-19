@@ -252,7 +252,8 @@ class ReviewContextNotFoundError(LookupError):
 def _read_fixture_bom(resource_name: str = "synthetic_bom.xlsx") -> Bom:
     resource = files("procurement_intelligence_lab.examples").joinpath(resource_name)
     with as_file(resource) as path:
-        return read_bom(path)
+        artifact_id = None if resource_name == "synthetic_bom.xlsx" else f"showcase:{resource_name}"
+        return read_bom(path, artifact_id=artifact_id)
 
 
 def _request_context(
@@ -280,11 +281,10 @@ def claim_payload(
 ) -> dict[str, object]:
     if scenario:
         try:
-            return _showcase_claim_payload(
-                ShowcaseScenario(scenario), request_context=request_context
-            )
+            parsed_scenario = ShowcaseScenario(scenario)
         except ValueError as error:
             raise UnsupportedQuestionError("unknown showcase scenario") from error
+        return _showcase_claim_payload(parsed_scenario, request_context=request_context)
     bom = _read_fixture_bom()
     claim = answer_question(
         question,

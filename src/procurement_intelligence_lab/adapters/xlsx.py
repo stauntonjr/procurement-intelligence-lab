@@ -169,10 +169,15 @@ def _worksheet_root(archive: ZipFile, sheet: str) -> ET.Element:
     return ET.fromstring(archive.read("xl/" + relmap[target].lstrip("/")))
 
 
-def read_bom(path: str | Path, sheet: str = "BOM") -> Bom:
+def read_bom(
+    path: str | Path,
+    sheet: str = "BOM",
+    *,
+    artifact_id: str | None = None,
+) -> Bom:
     """Read a BOM while preserving the original simple adapter boundary."""
 
-    return read_bom_with_provenance(path, sheet).bom
+    return read_bom_with_provenance(path, sheet, artifact_id=artifact_id).bom
 
 
 def read_bom_with_provenance(
@@ -181,6 +186,8 @@ def read_bom_with_provenance(
     provenance_context: ProvenanceContext | None = None,
     implementation_version: str = _STRUCTURER_VERSION,
     schema_version: str = _BOM_SCHEMA_VERSION,
+    *,
+    artifact_id: str | None = None,
 ) -> XlsxStructuredBom:
     """Read a BOM and record the deterministic structuring transformation."""
 
@@ -207,7 +214,7 @@ def read_bom_with_provenance(
     if not rows or rows[0][1][:4] != ["SKU", "Description", "Quantity", "Unit Price"]:
         raise ValueError("expected BOM headers: SKU, Description, Quantity, Unit Price")
 
-    artifact_id = str(path)
+    artifact_id = artifact_id or str(path)
     digest = sha256(raw).hexdigest()
     lines: list[BomLine] = []
     for row_number, row, populated_columns in rows[1:]:

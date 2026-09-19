@@ -122,7 +122,7 @@ def _claim(
     }[revision]
     resource = files("procurement_intelligence_lab.examples").joinpath(resource_name)
     with as_file(resource) as path:
-        evidence = read_bom(path).lines[0].evidence
+        evidence = read_bom(path, artifact_id=f"showcase:{resource_name}").lines[0].evidence
         source_row = read_source_row(path, evidence=evidence)
     try:
         unit = source_row.cells[source_row.headers.index("Unit")]
@@ -186,7 +186,7 @@ def showcase_order_comparison(
         )
         resource = files("procurement_intelligence_lab.examples").joinpath(name)
         with as_file(resource) as path:
-            rows = read_bom(path).lines
+            rows = read_bom(path, artifact_id=f"showcase:{name}").lines
             if len(rows) != 1 or rows[0].sku != "GPU-A":
                 raise SemanticContractError("synthetic order requires one GPU-A row")
             row = rows[0]
