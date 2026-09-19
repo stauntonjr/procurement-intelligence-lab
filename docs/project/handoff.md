@@ -75,6 +75,8 @@ SciFact RAG, with explicit integration planning. See the [parallel product devel
 Package the current runnable procurement slice for demonstration while keeping broader product
 acceptance below separate; SciFact research and shared-platform migration are not showcase prerequisites.
 
+The next showcase improvements are sequenced in the [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md): freeze a discrepancy contract, implement its governing decision, explain it in the UI, highlight original XLSX cells, and record a clearer walkthrough. This is planned work, not delivered capability.
+
 1. Return to product work: use BoQ and PO assertions to complete [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15)'s governing-claim policy before continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
 2. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
 3. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.

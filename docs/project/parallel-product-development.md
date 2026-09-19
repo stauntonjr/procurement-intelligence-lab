@@ -86,3 +86,7 @@ an experiment completed.
   is a candidate; adapter adoption depends on its evidence.
 - Keep the distinction between runnable capabilities, verified showcase cases, and broader
   milestone completion visible in each handoff and README.
+
+## Procurement showcase follow-on
+
+The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) turns the current basic inspector into a discrepancy investigation with policy explanations, original-cell evidence, and a clearer recording. Its quantity-first scope remains independent of SciFact research and integration work.
