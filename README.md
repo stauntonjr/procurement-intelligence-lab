@@ -18,6 +18,10 @@ original source rows.
 
 [Still image](docs/assets/procurement-demo.png) · [Demo scope and verification](docs/project/inspector-demo-acceptance.md)
 
+Try the live synthetic showcase at [procurement.ediacarian.dedyn.io](https://procurement.ediacarian.dedyn.io/).
+Its public release record, verification results, and limits are in the
+[deployment evidence note](docs/project/procurement-vps-deployment-2026-09-19.md).
+
 The animation uses actual local browser states with pauses for readability. The source panel shows
 original cells from admitted XLSX fixtures, highlighted by EvidenceRef. The discrepancy scenario
 is governed by [policy v1](docs/product/governing-claim-policy-v1.md) and its
