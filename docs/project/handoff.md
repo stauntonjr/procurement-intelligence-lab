@@ -23,7 +23,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 ## Recently completed
 
 - The local inspector now presents readable claim values, clickable evidence and execution stages,
-  and parsed XLSX source-row values with cell references. The README includes an actual-browser
+  and original XLSX source-row values with EvidenceRef-highlighted cells. The README includes an actual-browser
   animation. See [demo acceptance](inspector-demo-acceptance.md); this is a bounded Issue #50 slice,
   not completion of the full inspector or original-document viewer milestones.
 - M0–M4 repository, evidence, claims, and constrained chat foundations.

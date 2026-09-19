@@ -70,6 +70,26 @@ def test_source_payload_resolves_a_stable_evidence_id() -> None:
     assert source_line["sku"] == "GPU-A"
 
 
+def test_source_payload_returns_original_xlsx_cells_for_selected_evidence() -> None:
+    claim = claim_payload(
+        "How many GPUs are in the BOM?",
+        request_context=_context(Permission.READ_STATE),
+    )
+    evidence = cast(list[dict[str, object]], claim["evidence"])[0]
+
+    payload = source_payload(
+        cast(str, evidence["evidence_id"]),
+        request_context=_context(Permission.READ_EVIDENCE),
+    )
+
+    grid = cast(dict[str, object], payload["source_grid"])
+    assert grid["sheet"] == "BOM"
+    assert grid["headers"] == ["SKU", "Description", "Quantity", "Unit Price"]
+    assert grid["row"] == 2
+    assert grid["cells"] == ["GPU-A", "GPU accelerator", "4", "100"]
+    assert grid["highlighted_columns"] == ["A", "B", "C", "D"]
+
+
 def test_source_payload_rejects_unknown_evidence_id() -> None:
     with pytest.raises(EvidenceNotFoundError):
         source_payload(

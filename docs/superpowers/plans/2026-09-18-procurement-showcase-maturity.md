@@ -10,12 +10,12 @@
 
 **Specification:** [Procurement use cases](../../product/use-cases.md), [current demo acceptance](../../project/inspector-demo-acceptance.md), [parallel product direction](../../project/parallel-product-development.md), and the governing issues linked below.
 
-**Status:** Planned on 2026-09-18. The owner requested this plan; this file does not claim that the richer scenario or policy is implemented. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
+**Status:** Planned on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch; the richer scenario and policy remain unimplemented. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
 
 ## Baseline and completion boundary
 
 The current demo has two synthetic BOM rows, three keyword-routed questions, readable values,
-claim status, clickable trace/evidence links, and parsed XLSX source-row inspection. Its README
+claim status, clickable trace/evidence links, and original XLSX source-row inspection. Its README
 GIF contains three captured browser states. It does not yet explain an explicit temporal revision
 decision, expose a calculation breakdown, or render the original spreadsheet cells.
 
@@ -152,6 +152,11 @@ what is visible in the application. The frontend never selects the winner.
 
 **Exit:** The viewer can visually match a claim to original synthetic cell content and coordinates.
 This can proceed alongside Slice 2 using the current fixture and agreed source contract.
+
+**Execution note (2026-09-18):** The current branch delivers the bounded viewer for the admitted
+fixture, including content-hash verification, original header/cell text, EvidenceRef-based
+highlighting, and browser coverage. The discrepancy scenario, decision explanation, and refreshed
+walkthrough remain dependent on the authoritative governing-claim policy described in Slice 1.
 
 ## Slice 5 — Publish a clearer showcase packet
 

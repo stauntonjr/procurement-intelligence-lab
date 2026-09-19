@@ -13,10 +13,12 @@ Selecting an evidence reference sends its stable identifier and the form's expli
 tenant/project/site scope to `/api/source`. That endpoint retains authorization and fixture
 lookup responsibility. The browser performs no quantity, cost, or reconciliation calculation.
 
-The source view labels the returned line as parsed XLSX values. Sheet, row, cells, source status,
-and evidence identity remain inspectable. No PDF viewer, original spreadsheet rendering,
-production authentication, correction submission, or complete multi-document procurement state
-is claimed. Cost displays no invented currency. Null values remain “Not established.”
+The source view reads the admitted original synthetic workbook after verifying its content hash.
+It renders the original XLSX headers and cell text for the selected row, highlighting only the
+columns named by the EvidenceRef. Sheet, row, cells, source status, and evidence identity remain
+inspectable. No PDF viewer, full spreadsheet editing, production authentication, correction
+submission, or complete multi-document procurement state is claimed. Cost displays no invented
+currency. Null values remain “Not established.”
 
 New queries clear prior source/results; request sequence identifiers prevent older responses
 from replacing newer query or source selections. DOM text insertion preserves untrusted text

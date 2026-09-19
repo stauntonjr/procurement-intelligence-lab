@@ -2,9 +2,12 @@ from decimal import Decimal
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
+import pytest
+
 from procurement_intelligence_lab.adapters.xlsx import (
     read_bom,
     read_bom_with_provenance,
+    read_source_row,
 )
 from procurement_intelligence_lab.domains.procurement.bom import bom_cost, gpu_quantity
 from procurement_intelligence_lab.platform.semantics.provenance import ProvenanceRelation
@@ -48,3 +51,18 @@ def test_xlsx_structuring_records_event_and_carries_it_into_assertions(
         for edge in result.transformation.input_edges
     )
     assert {item.transformation_event_id for item in assertions} == {result.transformation.event_id}
+
+
+def test_source_viewer_reads_original_cells_and_rejects_content_drift(tmp_path: Path) -> None:
+    path = tmp_path / "bom.xlsx"
+    _write_bom(path)
+    evidence = read_bom(path).lines[0].evidence
+
+    source_row = read_source_row(path, evidence=evidence)
+
+    assert source_row.headers == ("SKU", "Description", "Quantity", "Unit Price")
+    assert source_row.cells == ("GPU-A", "GPU accelerator", "4", "100")
+    assert source_row.highlighted_columns == ("A", "B", "C", "D")
+    path.write_bytes(path.read_bytes() + b"drift")
+    with pytest.raises(ValueError, match="content hash"):
+        read_source_row(path, evidence=evidence)

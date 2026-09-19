@@ -8,7 +8,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import as_file, files
 from urllib.parse import parse_qs, urlparse
 
-from procurement_intelligence_lab.adapters.xlsx import read_bom
+from procurement_intelligence_lab.adapters.xlsx import read_bom, read_source_row
 from procurement_intelligence_lab.application.chat import (
     UnsupportedQuestionError,
     answer_question,
@@ -27,7 +27,7 @@ _HTML = r"""<!doctype html>
 <style>
 :root{color-scheme:light;--ink:#172d34;--muted:#546b72;--line:#d9e2df;--green:#186750;--soft:#edf5ef}
 *{box-sizing:border-box}body{margin:0;background:#f4f6f2;color:var(--ink);font:16px/1.5 system-ui,sans-serif}main{max-width:1160px;margin:auto;padding:30px 32px 50px}.masthead{display:flex;justify-content:space-between;gap:16px;font-size:12px;font-weight:700;letter-spacing:.1em}.tag{color:var(--green)}h1{font:48px/1.1 Georgia,serif;letter-spacing:-.03em;margin:32px 0 12px}h2{font-size:18px;margin:0 0 14px}p{color:var(--muted);margin:8px 0 18px}.intro{max-width:690px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px}.query{margin:26px 0 20px}label,.eyebrow{display:block;font-size:11px;font-weight:750;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}.input-row{display:flex;gap:10px}input{min-width:0;flex:1;padding:14px;border:1px solid #b6c7c0;border-radius:8px;font:inherit;color:var(--ink)}button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:disabled{cursor:wait;opacity:.65}button.primary{background:var(--green);color:#fff;border-color:var(--green);font-weight:650;padding:12px 22px}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #c08c28;outline-offset:3px}.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.examples button{font-size:12px;padding:5px 10px;border:0;background:#f1f4f1}.workspace{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}.result-value{font:54px/1.1 Georgia,serif;margin:10px 0;overflow-wrap:anywhere}.status{display:inline-block;background:var(--soft);color:var(--green);font-size:12px;font-weight:700;padding:5px 10px;border-radius:20px}.status.caution{background:#fff3dc;color:#855a10}.evidence-list{display:grid;gap:8px;margin-top:16px}.evidence-button{width:100%;text-align:left;display:flex;justify-content:space-between;gap:10px}.evidence-button[aria-pressed=true]{border-color:var(--green);background:var(--soft)}.small{font-size:13px}.trace{margin-top:20px}.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stage{text-align:left;padding:14px;background:#f8faf7;font-size:13px}.stage small{display:block;color:var(--muted);margin-top:6px}.source-placeholder{min-height:175px;display:flex;flex-direction:column;justify-content:center}.location{font-weight:650;overflow-wrap:anywhere}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px;margin-top:14px}caption{text-align:left;font-size:12px;color:var(--muted);margin-bottom:8px}th,td{padding:10px;text-align:left;border-bottom:1px solid var(--line)}th{font-size:11px;color:var(--muted)}td{background:var(--soft)}details{margin-top:18px;font-size:12px}summary{cursor:pointer;color:var(--muted)}pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto}.notice{font-size:14px;min-height:22px;margin:10px 0 0}.notice.error{color:#a13729}.footer{font-size:12px;margin-top:20px} [hidden]{display:none!important}@media(max-width:760px){main{padding:22px 16px}h1{font-size:38px}.workspace{grid-template-columns:1fr}.stages{grid-template-columns:1fr 1fr}.panel{padding:18px}.masthead{font-size:10px}.input-row{flex-direction:column}.result-value{font-size:44px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
-</style></head><body><main>
+</style><style>td{background:#fff}.highlight{background:var(--soft);box-shadow:inset 0 0 0 1px #afd0bd}</style></head><body><main>
 <header class="masthead"><span>PROCUREMENT INTELLIGENCE LAB</span><span class="tag">SYNTHETIC DATA · READ ONLY</span></header>
 <h1>Every answer has a trail.</h1><p class="intro">From a BOM question to the source row. Deterministic calculations, visible evidence, and no hidden assumptions.</p>
 <section class="panel query" aria-label="Ask a BOM question"><form>
@@ -106,13 +106,17 @@ async function openSource(ref,button){
     const file=data.evidence.artifact_id.split(/[\\/]/).pop();
     source.replaceChildren(element('div',file,'location'),element('p',locationText(data.evidence),'small'));
     const wrap=element('div',undefined,'table-wrap'),table=element('table');
-    table.append(element('caption','Parsed XLSX row values · highlighted cells support this claim'));
+    table.append(element('caption','Original worksheet cells · highlighted cells support this claim'));
     const head=element('thead'),headRow=element('tr'),body=element('tbody'),row=element('tr');
-    for(const [label,key] of [['SKU','sku'],['Description','description'],['Quantity','quantity'],['Unit price','unit_price']]){
-      const th=element('th',label);
+    for(let index=0;index<data.source_grid.headers.length;index++){
+      const column=String.fromCharCode('A'.charCodeAt(0)+index);
+      const th=element('th',data.source_grid.headers[index]);
       th.scope='col';
+      if(data.source_grid.highlighted_columns.includes(column))th.className='highlight';
       headRow.append(th);
-      row.append(element('td',data.line[key]===null?'Not provided':String(data.line[key])))
+      const cell=element('td',data.source_grid.cells[index]);
+      if(data.source_grid.highlighted_columns.includes(column))cell.className='highlight';
+      row.append(cell)
     }
     head.append(headRow);
     body.append(row);
@@ -268,6 +272,9 @@ def source_payload(
     for line in bom.lines:
         evidence = line.evidence
         if evidence.evidence_id == evidence_id:
+            resource = files("procurement_intelligence_lab.examples").joinpath("synthetic_bom.xlsx")
+            with as_file(resource) as path:
+                source_row = read_source_row(path, evidence=evidence)
             return {
                 "evidence": evidence.as_dict(),
                 "line": {
@@ -276,6 +283,13 @@ def source_payload(
                     "quantity": str(line.quantity),
                     "unit_price": str(line.unit_price) if line.unit_price is not None else None,
                     "status": line.status,
+                },
+                "source_grid": {
+                    "sheet": source_row.sheet,
+                    "row": source_row.row,
+                    "headers": list(source_row.headers),
+                    "cells": list(source_row.cells),
+                    "highlighted_columns": list(source_row.highlighted_columns),
                 },
             }
     raise EvidenceNotFoundError(f"unknown evidence ID: {evidence_id}")
