@@ -10,7 +10,15 @@
 
 **Specification:** [Procurement use cases](../../product/use-cases.md), [current demo acceptance](../../project/inspector-demo-acceptance.md), [parallel product direction](../../project/parallel-product-development.md), and the governing issues linked below.
 
-**Status:** In progress on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch. The governing policy was ratified as `procurement-governing-claims/v1` in ADR-023; the frozen required-quantity scenario and its service/browser implementation are in progress. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
+**Historical status (superseded by the reconciliation below):** In progress on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch. The governing policy was ratified as `procurement-governing-claims/v1` in ADR-023; the frozen required-quantity scenario and its service/browser implementation are in progress. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
+
+## Status reconciliation — 2026-09-19
+
+PRs #160/#161 merged the discrepancy scenarios and governed state projection; #15 is closed.
+The [showcase packet](../../project/showcase-walkthrough.md) now records the real browser path,
+original cells, policy decisions, captions and offline restart evidence. The checkboxes below
+preserve the original implementation plan, not a current pending-work queue. Broader #50/#58/#73/#74
+acceptance remains separate; use current issues and the packet evidence before scheduling work.
 
 ## Baseline and completion boundary
 

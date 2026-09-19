@@ -14,15 +14,15 @@ revision scenarios: an abstaining conflict, explicit supersession, equal-value c
 and a missing-approval case. Each exposes its policy ID, as-of time, retained alternatives, and
 original source rows.
 
-![Recorded demo: ask for GPU quantity, see 4 GPUs, and inspect the supporting BOM row](docs/assets/procurement-demo.gif)
+[![Recorded discrepancy walkthrough: quantity, conflict, original evidence, and supersession](docs/assets/showcase/procurement-discrepancy.gif)](docs/project/showcase-walkthrough.md)
 
-[Still image](docs/assets/procurement-demo.png) · [Demo scope and verification](docs/project/inspector-demo-acceptance.md)
+[2:41 recording and reproduction guide](docs/project/showcase-walkthrough.md) · [Conflict still](docs/assets/showcase/procurement-conflict.png) · [Demo scope and verification](docs/project/inspector-demo-acceptance.md)
 
 Try the live synthetic showcase at [procurement.ediacarian.dedyn.io](https://procurement.ediacarian.dedyn.io/).
 Its public release record, verification results, and limits are in the
 [deployment evidence note](docs/project/procurement-vps-deployment-2026-09-19.md).
 
-The animation uses actual local browser states with pauses for readability. The source panel shows
+The 25-second animation excerpts the continuous 2:41 browser recording; its cuts and reading pauses are disclosed in the walkthrough. The source panel shows
 original cells from admitted XLSX fixtures, highlighted by EvidenceRef. The discrepancy scenario
 is governed by [policy v1](docs/product/governing-claim-policy-v1.md) and its
 [frozen contract](docs/product/showcase-discrepancy-contract.md). Broader correction workflows

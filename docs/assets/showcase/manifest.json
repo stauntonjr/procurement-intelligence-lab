@@ -1,0 +1,66 @@
+{
+  "recorded_application_revision": "88297758bdc9025167ed830cce743a14fdaa75ac",
+  "capture_started_utc": "2026-09-19T15:35:29.445Z",
+  "browser": "Chrome 153.0.8010.48",
+  "viewport": [
+    1440,
+    1000
+  ],
+  "original_capture_sha256": "7e4e447384b2d919ca0bd90286ea19b1ab8b59057c9f54b09b6b6153c8fcdfa7",
+  "original_duration_seconds": 160.56,
+  "full_video_edits": "Continuous browser recording; encoded to H.264 without cuts or speed changes. Deliberate reading pauses; no audio. Not a latency measurement.",
+  "gif_source_intervals_seconds": [
+    [
+      12,
+      17
+    ],
+    [
+      22,
+      27
+    ],
+    [
+      48,
+      53
+    ],
+    [
+      65,
+      70
+    ],
+    [
+      81,
+      86
+    ]
+  ],
+  "fixtures": {
+    "showcase_bom_revision_a.xlsx": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+    "synthetic_bom.xlsx": "c029f43dcbbf3d1e3bc9ca8dce91f325ca5fa37704cf9ab0578915f0b60f67e5",
+    "showcase_bom_revision_b_equal.xlsx": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+    "showcase_bom_revision_b.xlsx": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2"
+  },
+  "assets": {
+    "capture-events.json": {
+      "bytes": 1353,
+      "sha256": "46f0f383ba5902850e48b3e32fed4016e7e91307684a8cb81b4bcff3f037ed6b"
+    },
+    "procurement-conflict.png": {
+      "bytes": 134953,
+      "sha256": "8d75886f761d4988b4780ee94d40f22b4c5fd0758149f079edb988c1dd588166"
+    },
+    "procurement-discrepancy.gif": {
+      "bytes": 807489,
+      "sha256": "c302bf5460db67852705deeffd72ef9b436c7b60e94ed2c9430d0075f75ca77d"
+    },
+    "procurement-walkthrough.mp4": {
+      "bytes": 2324370,
+      "sha256": "9a68a6501db30c65c00c0d4db99b4529fb8b3312128b46f59935cc56613c4543"
+    },
+    "procurement-walkthrough.vtt": {
+      "bytes": 1498,
+      "sha256": "3585d1e4c4ca4dc9936703afa3c30f89efb3416189304c37236427358c664153"
+    },
+    "reproduction.json": {
+      "bytes": 45888,
+      "sha256": "72ce1f4023152268cc6bf81633072b116044c672bd6c9e5cec4509eb7860b7b4"
+    }
+  }
+}

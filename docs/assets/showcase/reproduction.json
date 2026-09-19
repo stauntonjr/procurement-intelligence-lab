@@ -1,0 +1,1247 @@
+{
+  "source_revision": "88297758bdc9025167ed830cce743a14fdaa75ac",
+  "sync_seconds": 0.45,
+  "setup": "new source tree and virtual environment; existing uv cache reused; not cold-download timing",
+  "cli_json_valid": true,
+  "restart_identical": true,
+  "runs": [
+    {
+      "standard": {
+        "question": "How many GPUs are in the BOM?",
+        "claim": "gpu_quantity",
+        "claim_id": "claim:4016c88937fa5731937097dd",
+        "value": "4",
+        "status": "reconciled",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+            "content_hash": "c029f43dcbbf3d1e3bc9ca8dce91f325ca5fa37704cf9ab0578915f0b60f67e5",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c14c857e6c1c5a946e9cb02d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          }
+        ],
+        "execution_trace": {
+          "claim": "gpu_quantity",
+          "claim_id": "claim:bc5b1c46b5c8618cf7c82aca",
+          "chain_id": "evidence-chain:b92fd23dee2bb1248d195ada",
+          "nodes": [
+            {
+              "node_id": "evidence-node:8cdd66746b211eb8c22f5d2e",
+              "kind": "source_assertion",
+              "label": "source assertions",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            },
+            {
+              "node_id": "evidence-node:0b345dbbf6677d5797e62abc",
+              "kind": "resolution",
+              "label": "entity resolution",
+              "status": "resolved",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            },
+            {
+              "node_id": "evidence-node:1f0d7f484c721a93f10e9439",
+              "kind": "operational_state",
+              "label": "operational state",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            },
+            {
+              "node_id": "evidence-node:149783db4d8b455b34ddc770",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "reconciled",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            }
+          ]
+        }
+      },
+      "conflict": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:7b774b874dca991794ee5ef2",
+        "value": null,
+        "status": "unresolved",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c4a2023adbfce2ff3cd3a487",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "conflicting: no value established",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B",
+              "revision_id": "B",
+              "value": "6",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "conflicting: no value established",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": null,
+          "basis": null,
+          "scope": null
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:7b774b874dca991794ee5ef2",
+          "chain_id": "showcase-chain:875ea45e9491185290998dd1",
+          "nodes": [
+            {
+              "node_id": "showcase-node:9b6b5a1874305cbce9db95de",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:7c469580c33f1265f3411cf3",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:8976e1534edeffca4d7c93f4",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:a5f743ce954f32d5f8ef3ee3",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "unresolved",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:372b5701f4e2566b80d948c6",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "not projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            }
+          ]
+        }
+      },
+      "superseded": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:7b16186589d794679a2f8b38",
+        "value": "6",
+        "status": "governed",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c4a2023adbfce2ff3cd3a487",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [
+            "showcase:B"
+          ],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "retained: superseded",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B",
+              "revision_id": "B",
+              "value": "6",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "governing",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-10T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": "6",
+          "basis": "reconciled",
+          "scope": {
+            "tenant_id": "synthetic-tenant",
+            "project_id": "synthetic-project",
+            "site_id": "synthetic-site",
+            "version": "governed-required-quantity-scope:53de4af894df4da45c33a14f"
+          }
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:7b16186589d794679a2f8b38",
+          "chain_id": "showcase-chain:1e698ccb9e483ab12b5fc927",
+          "nodes": [
+            {
+              "node_id": "showcase-node:1ea2784a737cf52205bc1f80",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:31ba7016bc5477c323610284",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:05b3fcd66cfc07b8c2a75831",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:2b2d481bd38615c1caca1bea",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "governed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c83e1a96d3170322be74b414",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            }
+          ]
+        }
+      },
+      "shared_value": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:a889583276573011b95c86e2",
+        "value": "4",
+        "status": "governed_shared_value",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b_equal.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c232c7553ce6093c4e130069",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [
+            "showcase:A",
+            "showcase:B-equal"
+          ],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "governing",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B-equal",
+              "revision_id": "B-equal",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "governing",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": "4",
+          "basis": "reconciled",
+          "scope": {
+            "tenant_id": "synthetic-tenant",
+            "project_id": "synthetic-project",
+            "site_id": "synthetic-site",
+            "version": "governed-required-quantity-scope:aa13c3121f971991d46cd169"
+          }
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:a889583276573011b95c86e2",
+          "chain_id": "showcase-chain:1a960819537da85cae1f43f7",
+          "nodes": [
+            {
+              "node_id": "showcase-node:0c6726c01add3459ffbef7bf",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:a3fb7fe64114cb833e5fb763",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:88631e0e8a7d060c3f52427d",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c36eb5a94329ac1fd31de79d",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "governed_shared_value",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:a4c3e353aab53a8d0049ef2d",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            }
+          ]
+        }
+      },
+      "missing_approval": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:8bec85a71bf2155c3d620d5d",
+        "value": null,
+        "status": "unresolved",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c4a2023adbfce2ff3cd3a487",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "stale: effective interval ended",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": "2026-01-10T00:00:00+00:00",
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B",
+              "revision_id": "B",
+              "value": "6",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "ineligible: approval missing",
+              "approved_at": null,
+              "effective_from": "2026-01-10T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": null,
+          "basis": null,
+          "scope": null
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:8bec85a71bf2155c3d620d5d",
+          "chain_id": "showcase-chain:2f542234694f97d822205da0",
+          "nodes": [
+            {
+              "node_id": "showcase-node:83eb50b1e091b193832790db",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c6a50f04cf757cfbc36adf80",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:7b2bc3e0b596d365f1d7516d",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:17c83fae00797937a13c1392",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "unresolved",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c4a0f3a16396d1fea0b2217f",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "not projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "standard": {
+        "question": "How many GPUs are in the BOM?",
+        "claim": "gpu_quantity",
+        "claim_id": "claim:4016c88937fa5731937097dd",
+        "value": "4",
+        "status": "reconciled",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+            "content_hash": "c029f43dcbbf3d1e3bc9ca8dce91f325ca5fa37704cf9ab0578915f0b60f67e5",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c14c857e6c1c5a946e9cb02d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          }
+        ],
+        "execution_trace": {
+          "claim": "gpu_quantity",
+          "claim_id": "claim:bc5b1c46b5c8618cf7c82aca",
+          "chain_id": "evidence-chain:b92fd23dee2bb1248d195ada",
+          "nodes": [
+            {
+              "node_id": "evidence-node:8cdd66746b211eb8c22f5d2e",
+              "kind": "source_assertion",
+              "label": "source assertions",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            },
+            {
+              "node_id": "evidence-node:0b345dbbf6677d5797e62abc",
+              "kind": "resolution",
+              "label": "entity resolution",
+              "status": "resolved",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            },
+            {
+              "node_id": "evidence-node:1f0d7f484c721a93f10e9439",
+              "kind": "operational_state",
+              "label": "operational state",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            },
+            {
+              "node_id": "evidence-node:149783db4d8b455b34ddc770",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "reconciled",
+              "evidence_ids": [
+                "evidence:c14c857e6c1c5a946e9cb02d"
+              ]
+            }
+          ]
+        }
+      },
+      "conflict": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:7b774b874dca991794ee5ef2",
+        "value": null,
+        "status": "unresolved",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c4a2023adbfce2ff3cd3a487",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "conflicting: no value established",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B",
+              "revision_id": "B",
+              "value": "6",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "conflicting: no value established",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": null,
+          "basis": null,
+          "scope": null
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:7b774b874dca991794ee5ef2",
+          "chain_id": "showcase-chain:875ea45e9491185290998dd1",
+          "nodes": [
+            {
+              "node_id": "showcase-node:9b6b5a1874305cbce9db95de",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:7c469580c33f1265f3411cf3",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:8976e1534edeffca4d7c93f4",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:a5f743ce954f32d5f8ef3ee3",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "unresolved",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:372b5701f4e2566b80d948c6",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "not projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            }
+          ]
+        }
+      },
+      "superseded": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:7b16186589d794679a2f8b38",
+        "value": "6",
+        "status": "governed",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c4a2023adbfce2ff3cd3a487",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [
+            "showcase:B"
+          ],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "retained: superseded",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B",
+              "revision_id": "B",
+              "value": "6",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "governing",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-10T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": "6",
+          "basis": "reconciled",
+          "scope": {
+            "tenant_id": "synthetic-tenant",
+            "project_id": "synthetic-project",
+            "site_id": "synthetic-site",
+            "version": "governed-required-quantity-scope:53de4af894df4da45c33a14f"
+          }
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:7b16186589d794679a2f8b38",
+          "chain_id": "showcase-chain:1e698ccb9e483ab12b5fc927",
+          "nodes": [
+            {
+              "node_id": "showcase-node:1ea2784a737cf52205bc1f80",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:31ba7016bc5477c323610284",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:05b3fcd66cfc07b8c2a75831",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:2b2d481bd38615c1caca1bea",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "governed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c83e1a96d3170322be74b414",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            }
+          ]
+        }
+      },
+      "shared_value": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:a889583276573011b95c86e2",
+        "value": "4",
+        "status": "governed_shared_value",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b_equal.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c232c7553ce6093c4e130069",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [
+            "showcase:A",
+            "showcase:B-equal"
+          ],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "governing",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B-equal",
+              "revision_id": "B-equal",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "governing",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": "4",
+          "basis": "reconciled",
+          "scope": {
+            "tenant_id": "synthetic-tenant",
+            "project_id": "synthetic-project",
+            "site_id": "synthetic-site",
+            "version": "governed-required-quantity-scope:aa13c3121f971991d46cd169"
+          }
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:a889583276573011b95c86e2",
+          "chain_id": "showcase-chain:1a960819537da85cae1f43f7",
+          "nodes": [
+            {
+              "node_id": "showcase-node:0c6726c01add3459ffbef7bf",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:a3fb7fe64114cb833e5fb763",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:88631e0e8a7d060c3f52427d",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c36eb5a94329ac1fd31de79d",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "governed_shared_value",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            },
+            {
+              "node_id": "showcase-node:a4c3e353aab53a8d0049ef2d",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c232c7553ce6093c4e130069"
+              ]
+            }
+          ]
+        }
+      },
+      "missing_approval": {
+        "question": "Required GPU quantity under the selected discrepancy scenario",
+        "claim": "required_quantity",
+        "claim_id": "showcase-required-quantity:8bec85a71bf2155c3d620d5d",
+        "value": null,
+        "status": "unresolved",
+        "evidence": [
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:5c52d8f2165cf078ed13349d",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "artifact_id": "/private/tmp/procurement-reproduction/src/procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "location_kind": "tabular",
+            "evidence_id": "evidence:c4a2023adbfce2ff3cd3a487",
+            "sheet": "BOM",
+            "row": 2,
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          }
+        ],
+        "decision": {
+          "policy_id": "procurement-governing-claims/v1",
+          "as_of": "2026-01-15T00:00:00+00:00",
+          "governing_claim_ids": [],
+          "candidates": [
+            {
+              "claim_id": "showcase:A",
+              "revision_id": "A",
+              "value": "4",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "stale: effective interval ended",
+              "approved_at": "2026-01-01T00:00:00+00:00",
+              "effective_from": "2026-01-01T00:00:00+00:00",
+              "effective_until": "2026-01-10T00:00:00+00:00",
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            },
+            {
+              "claim_id": "showcase:B",
+              "revision_id": "B",
+              "value": "6",
+              "unit": "each",
+              "source_type": "approved_bom_revision",
+              "disposition": "ineligible: approval missing",
+              "approved_at": null,
+              "effective_from": "2026-01-10T00:00:00+00:00",
+              "effective_until": null,
+              "document_at": "2025-12-31T00:00:00+00:00",
+              "ingested_at": "2026-01-02T00:00:00+00:00"
+            }
+          ]
+        },
+        "governed_state": {
+          "expected_quantity": null,
+          "basis": null,
+          "scope": null
+        },
+        "execution_trace": {
+          "claim": "required_quantity",
+          "claim_id": "showcase-required-quantity:8bec85a71bf2155c3d620d5d",
+          "chain_id": "showcase-chain:2f542234694f97d822205da0",
+          "nodes": [
+            {
+              "node_id": "showcase-node:83eb50b1e091b193832790db",
+              "kind": "source_candidates",
+              "label": "source candidates",
+              "status": "observed",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c6a50f04cf757cfbc36adf80",
+              "kind": "canonical_identity",
+              "label": "canonical identity",
+              "status": "fixture-pinned",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:7b2bc3e0b596d365f1d7516d",
+              "kind": "governing_policy",
+              "label": "governing policy",
+              "status": "procurement-governing-claims/v1",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:17c83fae00797937a13c1392",
+              "kind": "reconciliation",
+              "label": "reconciliation",
+              "status": "unresolved",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            },
+            {
+              "node_id": "showcase-node:c4a0f3a16396d1fea0b2217f",
+              "kind": "governed_expected_state",
+              "label": "governed expected state",
+              "status": "not projected",
+              "evidence_ids": [
+                "evidence:5c52d8f2165cf078ed13349d",
+                "evidence:c4a2023adbfce2ff3cd3a487"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

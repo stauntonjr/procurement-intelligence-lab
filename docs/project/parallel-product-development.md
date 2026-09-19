@@ -20,7 +20,7 @@ its roadmap.
 | Product | Demonstrate now from accepted capabilities | Evidence and limits to show | Separate follow-on |
 |---|---|---|---|
 | [SciFact RAG](https://github.com/stauntonjr/scifact-rag) | Search, cited answer, explicit insufficiency, and inspection of supplied evidence through its accepted UI | One fixed retrieval comparison and latency tradeoff; citation validity versus semantic support; DGX-local deployment boundary | Bounded Evidence Inference reader research; its results are not required for the existing prototype showcase |
-| Procurement Intelligence Lab | Synthetic BOM question, deterministic quantity or cost, evidence drill-down to the source, and a verified unresolved/conflict case | Source assertions versus governing claims, calculation provenance, and the current scope of the runnable inspector | Broader BoQ/PO governing-claim acceptance under [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15), then dependent anomaly work |
+| Procurement Intelligence Lab | Synthetic BOM question, deterministic quantity or cost, evidence drill-down to the source, and a verified unresolved/conflict case | Source assertions versus governing claims, calculation provenance, and the current scope of the runnable inspector | Governed quantity/state foundation delivered under [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15); dependent anomaly work remains a follow-on |
 
 Before presenting a case, verify it through the actual public entry point at a recorded commit.
 Use existing acceptance examples where possible. Do not present planned ordered/received/
@@ -90,3 +90,21 @@ an experiment completed.
 ## Procurement showcase follow-on
 
 The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) turns the current basic inspector into a discrepancy investigation with policy explanations, original-cell evidence, and a clearer recording. Its quantity-first scope remains independent of SciFact research and integration work.
+
+## Showcase packet reconciliation — 2026-09-19
+
+The [procurement packet](showcase-walkthrough.md) now contains a 2:41 continuous browser recording,
+a 25-second excerpt, captions, source/fixture identities, architecture summary, and verified
+offline setup/restart examples. It uses accepted discrepancy behavior rather than adding a feature.
+The duration is sufficient for the demonstrated cases; the three-to-five-minute target above is
+a presentation guide, not a reason to pad a recording.
+
+SciFact [Issue #25](https://github.com/stauntonjr/scifact-rag/issues/25) accepted its 100.8-second
+captioned recording and published assets. Reuse that owner-approved packet. Its optional live
+path remains under [Issue #27](https://github.com/stauntonjr/scifact-rag/issues/27), with outage,
+rollback and release-review acceptance separate from recorded-showcase readiness. Research
+Issues #23/#28 remain independent. Each repository owns its exact current acceptance record.
+
+Once each bounded packet is reviewed, select the next product slice independently. Procurement
+#60 is a candidate; no shared package migration or model experiment is a prerequisite. This
+reconciliation schedules no integration pilot and closes no umbrella issue.
