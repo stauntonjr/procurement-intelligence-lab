@@ -124,7 +124,8 @@ and EvidenceRefs. Final Python types/signatures belong in Slice 1's reviewed con
   review. Add a regression oracle/challenge if a shipped semantic defect is discovered.
 
 **Exit:** The application returns the contract's explicit result for both a governed case and an
-abstention case, with retained alternatives. This does not complete all of Issue #15.
+abstention case, with retained alternatives. Issue #15 is now closed through PR #161; broader M4,
+M5, and M7 acceptance remains tracked by their respective open issues.
 
 ## Slice 3 — Explain the decision in the browser
 

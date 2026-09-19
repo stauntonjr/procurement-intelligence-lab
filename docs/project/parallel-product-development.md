@@ -89,7 +89,7 @@ an experiment completed.
 
 ## Procurement showcase follow-on
 
-The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) turns the current basic inspector into a discrepancy investigation with policy explanations, original-cell evidence, and a clearer recording. Its quantity-first scope remains independent of SciFact research and integration work.
+The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) records the historical sequence that produced the discrepancy investigation, policy explanations, original-cell evidence, and clearer recording now present in the packet. Its quantity-first scope remains independent of SciFact research and integration work.
 
 ## Showcase packet reconciliation — 2026-09-19
 
@@ -100,11 +100,12 @@ The duration is sufficient for the demonstrated cases; the three-to-five-minute 
 a presentation guide, not a reason to pad a recording.
 
 SciFact [Issue #25](https://github.com/stauntonjr/scifact-rag/issues/25) accepted its 100.8-second
-captioned recording and published assets. Reuse that owner-approved packet. Its optional live
-path remains under [Issue #27](https://github.com/stauntonjr/scifact-rag/issues/27), with outage,
-rollback and release-review acceptance separate from recorded-showcase readiness. Research
-Issues #23/#28 remain independent. Each repository owns its exact current acceptance record.
+captioned recording and published assets. Reuse that owner-approved packet. The bounded public
+live-demo work in [Issue #27](https://github.com/stauntonjr/scifact-rag/issues/27) is also closed;
+any later outage, rollback, or release-review work belongs to a new explicitly scoped issue.
+Research Issues #23/#28 remain independent. Each repository owns its exact current acceptance
+record.
 
 Once each bounded packet is reviewed, select the next product slice independently. Procurement
-#60 is a candidate; no shared package migration or model experiment is a prerequisite. This
-reconciliation schedules no integration pilot and closes no umbrella issue.
+#60, #62, and #74 remain candidate follow-ons; no shared package migration or model experiment is
+a prerequisite. This reconciliation schedules no integration pilot and closes no umbrella issue.
