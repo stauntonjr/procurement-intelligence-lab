@@ -10,7 +10,7 @@
 
 **Specification:** [Procurement use cases](../../product/use-cases.md), [current demo acceptance](../../project/inspector-demo-acceptance.md), [parallel product direction](../../project/parallel-product-development.md), and the governing issues linked below.
 
-**Status:** Planned on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch; the richer scenario and policy remain unimplemented. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
+**Status:** Planned on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch. The governing policy was ratified as `procurement-governing-claims/v1` in ADR-023; the richer scenario and implementation remain unimplemented. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
 
 ## Baseline and completion boundary
 
@@ -64,9 +64,10 @@ and `tests/contract/test_showcase_discrepancy.py` with literal expected values a
 - [ ] Start with one canonical GPU SKU, one project/site, and two BOM revisions. Proposed story:
   revision A states 4 GPUs, revision B states 6. Include an explicit approval/effectivity record;
   a larger revision number or later ingestion time must not establish authority by itself.
-- [ ] Record policy ID/version, required-quantity precedence, approval evidence, effective interval,
-  query as-of time, tie behavior, and unresolved behavior in the governing issue/contract before
-  implementing selection. Ratify any architectural change through an ADR.
+- [x] Record policy ID/version, required-quantity precedence, approval evidence, effective interval,
+  query as-of time, tie behavior, and unresolved behavior in the governing
+  [policy v1](../../product/governing-claim-policy-v1.md) before implementing selection. ADR-023
+  ratifies the architecture decision.
 - [ ] Define the relationship between disagreement and answer eligibility explicitly. Today
   `reconcile_lines` can select a governing source while retaining `conflict`, and the claim
   service can withhold the value. Do not silently relabel this result as reconciled to make the
@@ -155,8 +156,9 @@ This can proceed alongside Slice 2 using the current fixture and agreed source c
 
 **Execution note (2026-09-18):** The current branch delivers the bounded viewer for the admitted
 fixture, including content-hash verification, original header/cell text, EvidenceRef-based
-highlighting, and browser coverage. The discrepancy scenario, decision explanation, and refreshed
-walkthrough remain dependent on the authoritative governing-claim policy described in Slice 1.
+highlighting, and browser coverage. The policy gate for the discrepancy scenario is resolved by
+`procurement-governing-claims/v1`; the scenario, decision explanation, and refreshed walkthrough
+remain implementation work.
 
 ## Slice 5 — Publish a clearer showcase packet
 

@@ -62,7 +62,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Open decisions and questions
 
-- How should scoped expected and observed procurement records be populated from append-only inputs, and what temporal correction evidence is required? Build on completed [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) and [Issue #91](https://github.com/stauntonjr/procurement-intelligence-lab/issues/91); the broader governing-claim acceptance remains in [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15).
+- The governing-claim authority and temporal policy is ratified in [ADR-023](../adr/023-predicate-specific-governing-claim-policy.md). Implement its fixture, decisions, and evidence before treating the broader governing-claim acceptance in [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) as complete.
 - How should the request-scope contract evolve from the synthetic fixture boundary to authenticated multi-project adapters? See [ADR-019](../adr/019-explicit-request-scope.md).
 - Which retrieval projections and fusion strategy earn adoption under the M6 evaluation plan? Start with [Issue #55](https://github.com/stauntonjr/procurement-intelligence-lab/issues/55), [Issue #57](https://github.com/stauntonjr/procurement-intelligence-lab/issues/57), and [Issue #59](https://github.com/stauntonjr/procurement-intelligence-lab/issues/59).
 - Which review, guarded-action, and product-feedback slices should be sequenced next? Use the [milestone map](../development/milestone-map.md) and linked issue acceptance criteria.
