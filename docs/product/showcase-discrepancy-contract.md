@@ -49,7 +49,7 @@ EvidenceRefs, and either a governed value or explicit abstention. `/api/source` 
 EvidenceRef ID under the normal scope check and renders the original row from the matching fixture.
 
 For a governed scenario, the response also contains the typed expected-state quantity and its
-deterministic policy-decision scope. For an unresolved scenario, that projected quantity and scope
+`reconciled` basis plus deterministic policy-decision scope. For an unresolved scenario, that projected quantity and scope
 are both `null`; the response retains the decision and every candidate instead of reporting zero.
 
 The browser displays the service decision. It does not select a revision, infer a supersession,

@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 
 from procurement_intelligence_lab.domains.procurement.bom import Bom
 from procurement_intelligence_lab.domains.procurement.governance import (
@@ -21,6 +22,15 @@ from procurement_intelligence_lab.platform.semantics.scope import RequestContext
 from procurement_intelligence_lab.platform.semantics.state import StateFreshness
 
 
+class ProcurementStateBasis(StrEnum):
+    """How a procurement state value entered the operational projection."""
+
+    OBSERVED = "observed"
+    INFERRED = "inferred"
+    RECONCILED = "reconciled"
+    HUMAN_CONFIRMED = "human_confirmed"
+
+
 @dataclass(frozen=True)
 class OperationalBomLine:
     canonical_key: str
@@ -37,6 +47,7 @@ class ExpectedRequirement:
     scope: StateScope
     as_of: datetime
     evidence: tuple[EvidenceRef, ...]
+    basis: ProcurementStateBasis = ProcurementStateBasis.INFERRED
 
     def __post_init__(self) -> None:
         if not self.canonical_key:
@@ -60,6 +71,7 @@ class ObservedProcurement:
     as_of: datetime
     freshness: StateFreshness
     evidence: tuple[EvidenceRef, ...]
+    basis: ProcurementStateBasis = ProcurementStateBasis.OBSERVED
 
     def __post_init__(self) -> None:
         if not self.canonical_key:
@@ -170,6 +182,7 @@ def project_governed_required_quantity(
         scope,
         decision.as_of,
         tuple(item.evidence for item in decision.governing),
+        ProcurementStateBasis.RECONCILED,
     )
     return GovernedRequiredQuantityState(decision, expected)
 

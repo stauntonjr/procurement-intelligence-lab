@@ -150,7 +150,7 @@ function render(data){
   if(data.decision){
     const details=element('div',undefined,'decision');
     details.append(element('p','Policy: '+data.decision.policy_id+' · as of '+data.decision.as_of,'small'));
-    if(data.governed_state)details.append(element('p',data.governed_state.expected_quantity===null?'Expected state: not projected while this claim is unresolved.':'Expected state: '+data.governed_state.expected_quantity+' GPUs · '+data.governed_state.scope.version,'small'));
+    if(data.governed_state)details.append(element('p',data.governed_state.expected_quantity===null?'Expected state: not projected while this claim is unresolved.':'Expected state: '+data.governed_state.expected_quantity+' GPUs · '+data.governed_state.basis+' · '+data.governed_state.scope.version,'small'));
     for(const candidate of data.decision.candidates)details.append(element('p',candidate.revision_id+' · '+candidate.value+' '+candidate.unit+' · '+candidate.disposition,'small'));
     answer.append(details)
   }
@@ -343,6 +343,7 @@ def _showcase_claim_payload(
         },
         "governed_state": {
             "expected_quantity": str(expected.required_quantity) if expected is not None else None,
+            "basis": expected.basis.value if expected is not None else None,
             "scope": {
                 "tenant_id": expected.scope.tenant_id,
                 "project_id": expected.scope.project_id,

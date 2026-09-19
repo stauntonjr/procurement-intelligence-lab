@@ -66,6 +66,7 @@ def test_claim_payload_exposes_policy_backed_showcase_decision() -> None:
     assert len(cast(list[dict[str, object]], decision["candidates"])) == 2
     governed_state = cast(dict[str, object], payload["governed_state"])
     assert governed_state["expected_quantity"] is None
+    assert governed_state["basis"] is None
     assert governed_state["scope"] is None
 
     evidence = cast(list[dict[str, object]], payload["evidence"])[0]
@@ -87,6 +88,7 @@ def test_policy_backed_showcase_projects_governed_expected_state() -> None:
     governed_state = cast(dict[str, object], payload["governed_state"])
     scope = cast(dict[str, object], governed_state["scope"])
     assert governed_state["expected_quantity"] == "4"
+    assert governed_state["basis"] == "reconciled"
     assert cast(str, scope["version"]).startswith("governed-required-quantity-scope:")
 
 

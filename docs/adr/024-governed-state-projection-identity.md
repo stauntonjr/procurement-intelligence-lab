@@ -25,6 +25,10 @@ Observed records that are compared to the projected requirement must use the sam
 `ExpectedObservedState` continues to calculate outstanding quantity deterministically from these
 typed records. It does not infer an expected requirement for an unresolved claim.
 
+Every procurement state record also declares its basis: `observed`, `inferred`, `reconciled`, or
+`human_confirmed`. A policy-backed required-quantity projection is `reconciled`; a later review can
+record `human_confirmed` without rewriting its source evidence or pretending it was inferred.
+
 ## Consequences
 
 The reconciliation stage has an explicit, reproducible boundary before operational state. Equal
