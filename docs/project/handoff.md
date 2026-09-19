@@ -77,6 +77,10 @@ acceptance below separate; SciFact research and shared-platform migration are no
 
 The next showcase improvements are sequenced in the [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md): freeze a discrepancy contract, implement its governing decision, explain it in the UI, highlight original XLSX cells, and record a clearer walkthrough. This is planned work, not delivered capability.
 
+Public hosting is a separate, planned showcase slice. The verified VPS deployment convention and
+acceptance boundary for `procurement.ediacarian.dedyn.io` are in the
+[VPS deployment plan](../superpowers/plans/2026-09-18-vps-procurement-inspector.md).
+
 1. Return to product work: use the governed expected/observed state path from [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) when continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
 2. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
 3. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
