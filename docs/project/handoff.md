@@ -46,7 +46,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) remains open: proceed with deterministic orchestration only after the governing-claim policy in Issue #15 is complete, using explicit scoped expected and observed state.
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) remains open after the bounded order-comparison slice in [PR #168](https://github.com/stauntonjr/procurement-intelligence-lab/pull/168); anomaly lifecycle, suppression/review, and broader anomaly acceptance remain open.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) remains open despite the delivered lexical lifecycle foundation and unsupported-kind rejection; reconcile its full acceptance evidence before closure. Follow-on M6 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - Identity, source-viewer, and review-context slices are complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -75,7 +75,7 @@ SciFact RAG, with explicit integration planning. See the [parallel product devel
 Use the current showcase packet for demonstration while keeping broader product acceptance
 below separate; SciFact research and shared-platform migration are not showcase prerequisites.
 
-The [reviewable showcase packet](showcase-walkthrough.md) now records the merged discrepancy scenarios, source cells, captions, and reproducible offline/reset checks. Its media uses application revision `8829775`. The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) remains the historical slice plan; the packet does not complete the broader M4/M5/M9 issues.
+The [reviewable showcase packet](showcase-walkthrough.md) records the merged discrepancy scenarios, source cells, captions, and reproducible offline/reset checks. PR #168 adds the bounded synthetic-order comparison on top of that packet. The [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md) remains the historical slice plan; these slices do not complete the broader M5/M7/M9 issues.
 
 The synthetic Inspector is publicly available at
 [procurement.ediacarian.dedyn.io](https://procurement.ediacarian.dedyn.io/). The verified VPS
@@ -84,7 +84,7 @@ deployment convention, release boundary, and evidence are in the
 [deployment evidence note](procurement-vps-deployment-2026-09-19.md). It remains a synthetic,
 read-only showcase rather than a production procurement system.
 
-1. With the bounded procurement packet reviewable, return to product work: use the governed expected/observed state path from [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) when continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
+1. With the bounded procurement packet and order comparison reviewable, choose one explicit follow-on under [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60), [Issue #62](https://github.com/stauntonjr/procurement-intelligence-lab/issues/62), or [Issue #74](https://github.com/stauntonjr/procurement-intelligence-lab/issues/74); do not expand the synthetic order fixture into general PO semantics without a new contract.
 2. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
 3. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
 4. Keep DSPy or other prompt/program optimization deferred until the baseline exists and a separate benchmark issue defines train/development/held-out separation and an exit criterion.
