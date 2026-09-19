@@ -3,8 +3,9 @@
 **Goal:** Serve the synthetic, read-only Procurement Evidence Inspector at
 `https://procurement.ediacarian.dedyn.io` as an independently deployable showcase.
 
-**Status:** Planned. This document records the verified VPS conventions and implementation steps;
-it does not authorize a DNS, VPS, image-registry, or public-release change by itself.
+**Status:** Released on 2026-09-19. The completed HTTPS release is recorded in the
+[deployment evidence note](../../project/procurement-vps-deployment-2026-09-19.md). This document
+preserves the verified VPS conventions and release boundary.
 
 ## Verified deployment context
 

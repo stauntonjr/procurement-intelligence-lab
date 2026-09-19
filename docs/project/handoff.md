@@ -77,9 +77,12 @@ acceptance below separate; SciFact research and shared-platform migration are no
 
 The next showcase improvements are sequenced in the [showcase maturity plan](../superpowers/plans/2026-09-18-procurement-showcase-maturity.md): freeze a discrepancy contract, implement its governing decision, explain it in the UI, highlight original XLSX cells, and record a clearer walkthrough. This is planned work, not delivered capability.
 
-Public hosting is a separate, planned showcase slice. The verified VPS deployment convention and
-acceptance boundary for `procurement.ediacarian.dedyn.io` are in the
-[VPS deployment plan](../superpowers/plans/2026-09-18-vps-procurement-inspector.md).
+The synthetic Inspector is publicly available at
+[procurement.ediacarian.dedyn.io](https://procurement.ediacarian.dedyn.io/). The verified VPS
+deployment convention, release boundary, and evidence are in the
+[VPS deployment plan](../superpowers/plans/2026-09-18-vps-procurement-inspector.md) and its
+[deployment evidence note](procurement-vps-deployment-2026-09-19.md). It remains a synthetic,
+read-only showcase rather than a production procurement system.
 
 1. Return to product work: use the governed expected/observed state path from [Issue #15](https://github.com/stauntonjr/procurement-intelligence-lab/issues/15) when continuing [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60)'s anomaly orchestration.
 2. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
