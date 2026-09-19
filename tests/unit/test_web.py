@@ -50,6 +50,30 @@ def test_claim_payload_exposes_trace_and_source_evidence() -> None:
     ]
 
 
+def test_claim_payload_exposes_policy_backed_showcase_decision() -> None:
+    payload = claim_payload(
+        "How many GPUs are required?",
+        scenario="conflict",
+        request_context=_context(Permission.READ_STATE),
+    )
+
+    assert payload["claim"] == "required_quantity"
+    assert payload["value"] is None
+    assert payload["status"] == "unresolved"
+    decision = cast(dict[str, object], payload["decision"])
+    assert decision["policy_id"] == "procurement-governing-claims/v1"
+    assert decision["as_of"] == "2026-01-15T00:00:00+00:00"
+    assert len(cast(list[dict[str, object]], decision["candidates"])) == 2
+
+    evidence = cast(list[dict[str, object]], payload["evidence"])[0]
+    source = source_payload(
+        cast(str, evidence["evidence_id"]),
+        request_context=_context(Permission.READ_EVIDENCE),
+    )
+    source_line = cast(dict[str, object], source["line"])
+    assert source_line["quantity"] in {"4", "6"}
+
+
 def test_source_payload_resolves_a_stable_evidence_id() -> None:
     claim = claim_payload(
         "How many GPUs are in the BOM?",

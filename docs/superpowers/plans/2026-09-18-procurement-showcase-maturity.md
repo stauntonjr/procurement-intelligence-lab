@@ -10,7 +10,7 @@
 
 **Specification:** [Procurement use cases](../../product/use-cases.md), [current demo acceptance](../../project/inspector-demo-acceptance.md), [parallel product direction](../../project/parallel-product-development.md), and the governing issues linked below.
 
-**Status:** Planned on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch. The governing policy was ratified as `procurement-governing-claims/v1` in ADR-023; the richer scenario and implementation remain unimplemented. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
+**Status:** In progress on 2026-09-18. Slice 4's bounded original-XLSX viewer is delivered on the current showcase branch. The governing policy was ratified as `procurement-governing-claims/v1` in ADR-023; the frozen required-quantity scenario and its service/browser implementation are in progress. Start from the accepted local showcase implementation `ee90446`; inspect current code and live issue state before execution.
 
 ## Baseline and completion boundary
 
@@ -61,9 +61,10 @@ unresolved as distinct from zero. Do not add confidential data.
 `src/procurement_intelligence_lab/examples/showcase/` synthetic XLSX inputs and versioned manifest,
 and `tests/contract/test_showcase_discrepancy.py` with literal expected values and evidence locations.
 
-- [ ] Start with one canonical GPU SKU, one project/site, and two BOM revisions. Proposed story:
-  revision A states 4 GPUs, revision B states 6. Include an explicit approval/effectivity record;
-  a larger revision number or later ingestion time must not establish authority by itself.
+- [x] Freeze one canonical GPU SKU, one project/site, and two BOM revisions in the
+  [showcase discrepancy contract](../../product/showcase-discrepancy-contract.md): revision A
+  states 4 GPUs and revision B states 6. The fixture records approval/effectivity; a larger
+  revision number or later ingestion time cannot establish authority by itself.
 - [x] Record policy ID/version, required-quantity precedence, approval evidence, effective interval,
   query as-of time, tie behavior, and unresolved behavior in the governing
   [policy v1](../../product/governing-claim-policy-v1.md) before implementing selection. ADR-023
@@ -73,9 +74,9 @@ and `tests/contract/test_showcase_discrepancy.py` with literal expected values a
   service can withhold the value. Do not silently relabel this result as reconciled to make the
   demonstration look successful. Specify whether the public response carries an applicable
   value plus a conflict diagnostic or abstains, and how each is distinguished.
-- [ ] Freeze gold source hashes, sheet names, cell addresses, assertion IDs, expected decision
-  outcomes, and a literal hand-checked explanation. Keep reference outcomes separate from
-  application input; runtime must not read the gold answers.
+- [x] Freeze gold source hashes, sheet names, cell addresses, expected decision outcomes, and a
+  literal hand-checked explanation in the discrepancy contract. Reference outcomes stay separate
+  from application input; runtime does not read the contract.
 - [ ] Include cases before B becomes effective, after it becomes effective with valid authority,
   missing approval, and equally authoritative incompatible assertions. The approval/tie rules
   must come from the ratified contract, not this illustrative story.

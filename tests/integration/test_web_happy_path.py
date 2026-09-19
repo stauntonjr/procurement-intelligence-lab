@@ -77,3 +77,42 @@ def test_default_browser_form_completes_the_real_http_happy_path() -> None:
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
+
+
+@pytest.mark.integration
+def test_browser_http_scenario_exposes_abstention_and_original_conflicting_sources() -> None:
+    server = ThreadingHTTPServer(("127.0.0.1", 0), InspectorHandler)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    host, port = (str(server.server_address[0]), int(server.server_address[1]))
+    params = {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "synthetic-project",
+        "site_id": "synthetic-site",
+        "q": "How many GPUs are required?",
+        "scenario": "conflict",
+    }
+    try:
+        with urlopen(
+            f"http://{host}:{port}/api/ask?{urlencode(params)}",
+            timeout=HTTP_TIMEOUT_SECONDS,
+        ) as response:
+            payload = json.load(response)
+        assert payload["claim"] == "required_quantity"
+        assert payload["status"] == "unresolved"
+        assert payload["value"] is None
+        assert payload["decision"]["policy_id"] == "procurement-governing-claims/v1"
+        assert len(payload["decision"]["candidates"]) == 2
+
+        evidence = payload["evidence"][1]
+        with urlopen(
+            f"http://{host}:{port}/api/source?{urlencode(params | {'evidence_id': evidence['evidence_id']})}",
+            timeout=HTTP_TIMEOUT_SECONDS,
+        ) as response:
+            source = json.load(response)
+        assert source["line"]["quantity"] == "6"
+        assert source["source_grid"]["cells"][2] == "6"
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)

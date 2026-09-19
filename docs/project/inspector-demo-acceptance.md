@@ -3,12 +3,13 @@
 Date: 2026-09-18
 
 Part of [Issue #50](https://github.com/stauntonjr/procurement-intelligence-lab/issues/50).
-Related contracts: Issues #49 and #58, ADR-019, and the existing claim/source HTTP endpoints.
-This slice does not complete those issues.
+Related contracts: Issues #15, #38, #46, #49, and #58; ADR-019; ADR-023; and the existing
+claim/source HTTP endpoints. This bounded showcase slice does not by itself complete those issues.
 
 ## Contract
 
-The browser renders `/api/ask` values, statuses, evidence references, and recorded trace nodes.
+The browser renders `/api/ask` values, statuses, evidence references, policy-backed decision
+metadata when a discrepancy scenario is selected, and recorded trace nodes.
 Selecting an evidence reference sends its stable identifier and the form's explicit synthetic
 tenant/project/site scope to `/api/source`. That endpoint retains authorization and fixture
 lookup responsibility. The browser performs no quantity, cost, or reconciliation calculation.
@@ -18,7 +19,8 @@ It renders the original XLSX headers and cell text for the selected row, highlig
 columns named by the EvidenceRef. Sheet, row, cells, source status, and evidence identity remain
 inspectable. No PDF viewer, full spreadsheet editing, production authentication, correction
 submission, or complete multi-document procurement state is claimed. Cost displays no invented
-currency. Null values remain “Not established.”
+currency. Null values remain “Not established.” The browser never selects the governing revision:
+it displays the service's policy ID, as-of key, candidate dispositions, and retained evidence.
 
 New queries clear prior source/results; request sequence identifiers prevent older responses
 from replacing newer query or source selections. DOM text insertion preserves untrusted text
@@ -32,6 +34,13 @@ as text. Errors clear the answer or source and provide a retry path.
 4. Select that evidence. Confirm **GPU-A**, **GPU accelerator**, quantity **4**, unit price
    **100**, and cells **A2, B2, C2, D2** from `synthetic_bom.xlsx`.
 5. Optionally select a recorded trace stage to filter its evidence, or inspect the full response.
+6. Select **Competing approved revisions: 4 versus 6 GPUs** and submit. Confirm **Not
+   established**, policy `procurement-governing-claims/v1`, the fixed as-of time, and competing
+   A/4 and B/6 dispositions. Select the B source and confirm original quantity **6** from
+   `showcase_bom_revision_b.xlsx`.
+7. Select the shared-value scenario. Confirm **4 GPUs**, `governed_shared_value`, and both
+   revisions retained as governing evidence. The other scenarios demonstrate explicit
+   supersession and missing approval.
 
 The README GIF retains three actual full-page browser screenshots: initial question, calculated
 answer, and selected source. Frames pause for 3/4/7 seconds; the canvas is padded to a common
@@ -41,8 +50,10 @@ size. It is an edited walkthrough, not a latency measurement. The PNG provides a
 
 - Before implementation, the same browser submission produced JSON and noninteractive stages;
   no source-row action existed. This reproduced the missing public flow.
-- Real-browser GPU walkthrough: expected value, status, source identity, coordinates, and parsed
-  fields passed.
+- Real-browser GPU walkthrough: expected value, status, source identity, coordinates, and original
+  cells passed.
+- Real-browser conflict walkthrough: an unresolved 4-versus-6 decision displayed the policy ID,
+  as-of key, both retained candidates, and the original revision-B quantity 6 source row.
 - Cost example: **500**, currency unspecified, two evidence rows. Selecting row 3 returned
   **CPU-A**, quantity **2**, unit price **50**.
 - SKU example: **CPU-A, GPU-A**; submitting it cleared the previously selected source.

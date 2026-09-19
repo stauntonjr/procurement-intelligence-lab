@@ -12,7 +12,12 @@ from pathlib import Path
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
-RESOURCE = "procurement_intelligence_lab/examples/synthetic_bom.xlsx"
+RESOURCES = (
+    "procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+    "procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
+    "procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
+    "procurement_intelligence_lab/examples/showcase_bom_revision_b_equal.xlsx",
+)
 
 
 def main() -> int:
@@ -33,8 +38,9 @@ def main() -> int:
             raise RuntimeError(f"expected one wheel, found {len(wheels)}")
         wheel = wheels[0]
         with ZipFile(wheel) as archive:
-            if RESOURCE not in archive.namelist():
-                raise RuntimeError(f"wheel is missing runtime resource {RESOURCE}")
+            missing = sorted(set(RESOURCES) - set(archive.namelist()))
+            if missing:
+                raise RuntimeError(f"wheel is missing runtime resources {missing}")
 
         environment = temporary / "venv"
         venv.EnvBuilder(with_pip=True).create(environment)

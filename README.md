@@ -9,16 +9,20 @@ BOM, BoQ, Purchase Order, state, reconciliation, and anomaly behavior lives unde
 ## Showcase
 
 Ask a synthetic BOM question, inspect its deterministic answer, and open the contributing XLSX
-row values and cell references. The local inspector supports GPU quantity, BOM cost, and distinct
-SKUs, with claim status and clickable execution stages.
+row values and cell references. The local inspector also includes four fixed required-quantity
+revision scenarios: an abstaining conflict, explicit supersession, equal-value competing revisions,
+and a missing-approval case. Each exposes its policy ID, as-of time, retained alternatives, and
+original source rows.
 
 ![Recorded demo: ask for GPU quantity, see 4 GPUs, and inspect the supporting BOM row](docs/assets/procurement-demo.gif)
 
 [Still image](docs/assets/procurement-demo.png) · [Demo scope and verification](docs/project/inspector-demo-acceptance.md)
 
-The animation uses actual local browser states with pauses for readability. The source panel
-shows parsed fixture values, not a full spreadsheet preview. Broader layer-by-layer inspection,
-highlighted original documents, and correction workflows remain governed by Issues #50 and #58.
+The animation uses actual local browser states with pauses for readability. The source panel shows
+original cells from admitted XLSX fixtures, highlighted by EvidenceRef. The discrepancy scenario
+is governed by [policy v1](docs/product/governing-claim-policy-v1.md) and its
+[frozen contract](docs/product/showcase-discrepancy-contract.md). Broader correction workflows
+remain separate work.
 
 Start the browser demo with `uv run python -m procurement_intelligence_lab.interfaces.web`, then
 open <http://127.0.0.1:8000/>. It runs locally without model services or external credentials.
