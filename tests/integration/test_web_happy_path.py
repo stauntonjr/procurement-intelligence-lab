@@ -138,3 +138,62 @@ def test_browser_http_scenario_exposes_abstention_and_original_conflicting_sourc
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize(
+    ("scenario", "status", "required", "ordered", "count"),
+    [
+        ("order_mismatch", "quantity_mismatch", "4", "2", 1),
+        ("order_matched", "matched", "4", "4", 0),
+        ("order_missing", "not_assessed", "4", None, 0),
+        ("order_unresolved", "not_assessed", None, "2", 0),
+    ],
+)
+def test_order_comparison_from_shipped_form_and_original_sources(
+    scenario: str, status: str, required: str | None, ordered: str | None, count: int
+) -> None:
+    server = ThreadingHTTPServer(("127.0.0.1", 0), InspectorHandler)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{server.server_port}"
+    try:
+        with urlopen(base, timeout=5) as response:
+            document = response.read().decode()
+        assert f'value="{scenario}"' in document
+        parser = _FormParser()
+        parser.feed(document)
+        params = parser.fields | {"scenario": scenario}
+        with urlopen(f"{base}/api/ask?{urlencode(params)}", timeout=5) as response:
+            payload = json.load(response)
+        assert payload["execution_trace"]["claim"] == payload["claim"]
+        comparison = payload["comparison"]
+        assert payload["status"] == status
+        assert comparison["required_quantity"] == required
+        assert comparison["ordered_quantity"] == ordered
+        assert len(comparison["anomalies"]) == count
+        assert comparison["policy_id"] == "procurement-showcase-order-quantity/v1"
+        assert comparison["tolerance"] == "0"
+        assert comparison["as_of"] == "2026-01-15T00:00:00+00:00"
+        if status == "not_assessed":
+            assert comparison["reason"] in ("missing_observation", "unresolved_requirement")
+        if count:
+            anomaly = comparison["anomalies"][0]
+            assert anomaly["kind"] == "quantity_mismatch"
+            assert anomaly["expected"] == "4" and anomaly["observed"] == "2"
+            assert set(anomaly["evidence_ids"]) == {e["evidence_id"] for e in payload["evidence"]}
+        for evidence in payload["evidence"]:
+            query = params | {"evidence_id": evidence["evidence_id"]}
+            with urlopen(f"{base}/api/source?{urlencode(query)}", timeout=5) as response:
+                source = json.load(response)
+            assert source["evidence"] == evidence
+            if evidence["evidence_id"] in comparison["order_evidence_ids"]:
+                assert source["line"]["quantity"] == ordered
+                assert source["source_grid"]["cells"][2] == ordered
+        with pytest.raises(HTTPError) as error:
+            urlopen(f"{base}/api/ask?{urlencode(params | {'tenant_id': 'other'})}", timeout=5)
+        assert error.value.code == 403
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)

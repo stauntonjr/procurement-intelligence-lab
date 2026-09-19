@@ -53,3 +53,8 @@ This workstream cuts across the existing M0-M9 delivery taxonomy; it does not cr
 | Second-vertical proof | M9 Integrated demo | Another domain package plus shared conformance and swap benchmarks | Demonstrates reuse without changing platform topology for domain convenience |
 
 Implementation issues and Project items must be created and reviewed before these steps are treated as scheduled work. This documentation change is part of the M0 domain semantic-model decision record and does not mark any step complete.
+
+The bounded M7/#60 inspector slice now compares synthetic order quantity with the governed
+requirement and retains both source rows; missing/unresolved cases abstain. Broader anomaly
+orchestration, suppression and lifecycle acceptance remain open. See
+[the comparison contract](../product/showcase-order-comparison.md).
