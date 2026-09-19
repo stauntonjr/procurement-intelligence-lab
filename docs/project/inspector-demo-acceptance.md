@@ -69,7 +69,7 @@ size. It is an edited walkthrough, not a latency measurement. The PNG provides a
   verifies evidence equality and quantity, and checks unknown IDs, conflicting tenant, and missing
   project scope (404/403).
 
-Final checks: `make check` passed (236 tests, 90.37% coverage, coverage ratchet, types, lint and
+Final checks: `make check` passed (252 tests, 89.54% coverage, coverage ratchet, types, lint and
 architecture); `make package-smoke` built and installed `procurement_intelligence_lab-0.1.0`;
 `make challenges` passed all eleven current-code oracles and rejected all eleven known-bad
 mutations. HTTP checks required permission to bind localhost; the sandbox-blocked challenge
