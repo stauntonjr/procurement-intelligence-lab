@@ -16,7 +16,10 @@ from procurement_intelligence_lab.application.chat import (
 )
 from procurement_intelligence_lab.application.review import review_context_for_claim
 from procurement_intelligence_lab.application.showcase import (
+    ORDER_POLICY,
+    ORDER_SCENARIOS,
     ShowcaseScenario,
+    showcase_order_comparison,
     showcase_required_quantity,
 )
 from procurement_intelligence_lab.domains.procurement.bom import Bom
@@ -43,7 +46,7 @@ _HTML = r"""<!doctype html>
 <section class="panel query" aria-label="Ask a BOM question"><form>
 <input type="hidden" name="tenant_id" value="synthetic-tenant"><input type="hidden" name="project_id" value="synthetic-project"><input type="hidden" name="site_id" value="synthetic-site">
 <label for="question">Your question</label><div class="input-row"><input id="question" name="q" value="How many GPUs are in the BOM?" required autocomplete="off"><button class="primary" id="ask">Ask</button></div>
-<label for="scenario">Evidence scenario</label><select id="scenario" name="scenario"><option value="">Standard synthetic BOM</option><option value="conflict">Competing approved revisions: 4 versus 6 GPUs</option><option value="superseded">Explicitly superseded revision: 4 to 6 GPUs</option><option value="shared_value">Competing approved revisions: both 4 GPUs</option><option value="missing_approval">Newer revision lacks approval</option></select>
+<label for="scenario">Evidence scenario</label><select id="scenario" name="scenario"><option value="">Standard synthetic BOM</option><option value="order_mismatch">Compare requirement 4 with order 2</option><option value="order_matched">Compare requirement 4 with order 4</option><option value="order_missing">Order observation missing</option><option value="order_unresolved">Requirement unresolved with order 2</option><option value="conflict">Competing approved revisions: 4 versus 6 GPUs</option><option value="superseded">Explicitly superseded revision: 4 to 6 GPUs</option><option value="shared_value">Competing approved revisions: both 4 GPUs</option><option value="missing_approval">Newer revision lacks approval</option></select>
 <div class="examples" aria-label="Example questions"><button type="button" data-question="How many GPUs are in the BOM?">GPU quantity</button><button type="button" data-question="What is the total BOM cost?">BOM cost</button><button type="button" data-question="Which SKUs are in the BOM?">Distinct SKUs</button><button type="button" data-scenario="conflict">Inspect conflict</button></div>
 <div id="notice" class="notice" role="status" aria-live="polite">Ready to inspect the synthetic BOM.</div></form></section>
 <div class="workspace"><section class="panel" aria-labelledby="answer-heading"><span class="eyebrow">01 / Answer</span><h2 id="answer-heading">A result you can inspect</h2><div id="answer"><p>Ask a question to see the calculated value and its evidence.</p></div><div id="evidence" class="evidence-list"></div></section>
@@ -83,6 +86,7 @@ async function request(path,params){
   return response.json()
 }
 function displayValue(data){
+  if(data.comparison)return data.status==='not_assessed'?'Not assessed':data.status==='matched'?'Quantities match':'Quantity mismatch';
   if(data.value===null||data.value===undefined)return 'Not established';
   if(data.claim==='gpu_quantity')return String(data.value)+' GPUs';
   if(data.claim==='required_quantity')return String(data.value)+' GPUs';
@@ -92,14 +96,14 @@ function displayValue(data){
 function locationText(ref){
   return ref.sheet+' · row '+ref.row+' · '+ref.cells.map(cell=>cell+ref.row).join(', ')
 }
-function showEvidence(refs){
+function showEvidence(refs,orderIds=null){
   evidenceList.replaceChildren();
   if(!refs.length)evidenceList.append(element('p','No linked source evidence is available.','small'));
   for(const ref of refs){
     const button=element('button',undefined,'evidence-button');
     button.type='button';
     button.setAttribute('aria-pressed','false');
-    button.append(element('span',locationText(ref)),element('span','View →'));
+    button.append(element('span',(orderIds===null?'':orderIds.includes(ref.evidence_id)?'Order · ':'Requirement · ')+locationText(ref)),element('span','View →'));
     button.addEventListener('click',()=>openSource(ref,button));
     evidenceList.append(button)
   }
@@ -146,8 +150,8 @@ async function openSource(ref,button){
 }
 function render(data){
   answer.replaceChildren();
-  answer.append(element('div',data.status,'status'+(data.status==='reconciled'||data.status==='governed'||data.status==='governed_shared_value'?'':' caution')),element('div',displayValue(data),'result-value'),element('p',data.claim==='bom_cost'?'BOM cost from recorded quantities and unit prices. Currency is not specified by this fixture.':data.claim==='required_quantity'?'Required GPU quantity under the selected policy and as-of context.':data.claim==='gpu_quantity'?'GPU quantity in the synthetic BOM.':'Distinct canonical identifiers in the synthetic BOM.','small'));
-  if(data.value===null)answer.append(element('p','The service has not established a value. Inspect the evidence and status.','small'));
+  answer.append(element('div',data.status,'status'+(data.status==='reconciled'||data.status==='governed'||data.status==='governed_shared_value'?'':' caution')),element('div',displayValue(data),'result-value'),element('p',data.comparison?'Synthetic required-versus-ordered quantity comparison.':data.claim==='bom_cost'?'BOM cost from recorded quantities and unit prices. Currency is not specified by this fixture.':data.claim==='required_quantity'?'Required GPU quantity under the selected policy and as-of context.':data.claim==='gpu_quantity'?'GPU quantity in the synthetic BOM.':'Distinct canonical identifiers in the synthetic BOM.','small'));
+  if(data.value===null&&!data.comparison)answer.append(element('p','The service has not established a value. Inspect the evidence and status.','small'));
   if(data.decision){
     const details=element('div',undefined,'decision');
     details.append(element('p','Policy: '+data.decision.policy_id+' · as of '+data.decision.as_of,'small'));
@@ -155,7 +159,13 @@ function render(data){
     for(const candidate of data.decision.candidates)details.append(element('p',candidate.revision_id+' · '+candidate.value+' '+candidate.unit+' · '+candidate.disposition,'small'));
     answer.append(details)
   }
-  showEvidence(data.evidence);
+  if(data.comparison){
+    const c=data.comparison;
+    answer.append(element('p','Required: '+(c.required_quantity===null?'Not established':c.required_quantity+' each')+' · Ordered: '+(c.ordered_quantity===null?'Not observed':c.ordered_quantity+' each')));
+    answer.append(element('p','Comparison policy: '+c.policy_id+' · tolerance '+c.tolerance+' · as of '+c.as_of,'small'));
+    if(c.reason)answer.append(element('p',c.reason==='missing_observation'?'No order observation is available; this is not a zero quantity or proof of a missing purchase order.':'The requirement is unresolved; order evidence cannot establish the required quantity.','small'));
+  }
+  showEvidence(data.evidence,data.comparison?data.comparison.order_evidence_ids:null);
   trace.replaceChildren();
   for(const node of data.execution_trace.nodes){
     const button=element('button',undefined,'stage');
@@ -165,7 +175,7 @@ function render(data){
       ++sourceVersion;
       sourceReset();
       const ids=new Set(node.evidence_ids);
-      showEvidence(data.evidence.filter(ref=>ids.has(ref.evidence_id)));
+      showEvidence(data.evidence.filter(ref=>ids.has(ref.evidence_id)),data.comparison?data.comparison.order_evidence_ids:null);
       stageNote.textContent=node.label+' · '+node.status;
       const missing=node.evidence_ids.filter(id=>!data.evidence.some(ref=>ref.evidence_id===id));
       if(missing.length)stageNote.textContent+=' · Some source references are unavailable.'
@@ -223,6 +233,8 @@ for(const button of document.querySelectorAll('[data-scenario]'))button.addEvent
 _DEMO_SCOPE = ("synthetic-tenant", "synthetic-project", "synthetic-site")
 _FIXTURE_RESOURCES = (
     "synthetic_bom.xlsx",
+    "showcase_order_short.xlsx",
+    "showcase_order_matched.xlsx",
     "showcase_bom_revision_a.xlsx",
     "showcase_bom_revision_b.xlsx",
     "showcase_bom_revision_b_equal.xlsx",
@@ -240,7 +252,8 @@ class ReviewContextNotFoundError(LookupError):
 def _read_fixture_bom(resource_name: str = "synthetic_bom.xlsx") -> Bom:
     resource = files("procurement_intelligence_lab.examples").joinpath(resource_name)
     with as_file(resource) as path:
-        return read_bom(path)
+        artifact_id = None if resource_name == "synthetic_bom.xlsx" else f"showcase:{resource_name}"
+        return read_bom(path, artifact_id=artifact_id)
 
 
 def _request_context(
@@ -268,11 +281,10 @@ def claim_payload(
 ) -> dict[str, object]:
     if scenario:
         try:
-            return _showcase_claim_payload(
-                ShowcaseScenario(scenario), request_context=request_context
-            )
+            parsed_scenario = ShowcaseScenario(scenario)
         except ValueError as error:
             raise UnsupportedQuestionError("unknown showcase scenario") from error
+        return _showcase_claim_payload(parsed_scenario, request_context=request_context)
     bom = _read_fixture_bom()
     claim = answer_question(
         question,
@@ -311,10 +323,21 @@ def _showcase_claim_payload(
     *,
     request_context: RequestContext,
 ) -> dict[str, object]:
-    result = showcase_required_quantity(scenario, request_context=request_context)
+    comparison = (
+        showcase_order_comparison(scenario, request_context=request_context)
+        if scenario in ORDER_SCENARIOS
+        else None
+    )
+    result = (
+        comparison.requirement
+        if comparison
+        else showcase_required_quantity(scenario, request_context=request_context)
+    )
     decision = result.decision
     expected = result.governed_state.expected
-    evidence = tuple(item.evidence for item in result.candidates)
+    evidence = tuple(item.evidence for item in result.candidates) + (
+        comparison.order_evidence if comparison else ()
+    )
     claim_id = stable_id(
         "showcase-required-quantity",
         scenario.value,
@@ -322,6 +345,13 @@ def _showcase_claim_payload(
         decision.value,
         tuple(item.claim_id for item in result.candidates),
     )
+    if comparison:
+        claim_id = stable_id(
+            "order-comparison",
+            claim_id,
+            ORDER_POLICY.policy_id,
+            tuple(ref.evidence_id for ref in evidence),
+        )
     nodes = (
         ("source candidates", "observed"),
         ("canonical identity", "fixture-pinned"),
@@ -329,7 +359,17 @@ def _showcase_claim_payload(
         ("reconciliation", decision.status.value),
         ("governed expected state", "projected" if expected is not None else "not projected"),
     )
-    return {
+    trace_nodes: list[dict[str, object]] = [
+        {
+            "node_id": stable_id("showcase-node", claim_id, label),
+            "kind": label.replace(" ", "_"),
+            "label": label,
+            "status": status,
+            "evidence_ids": [item.evidence.evidence_id for item in result.candidates],
+        }
+        for label, status in nodes
+    ]
+    payload: dict[str, object] = {
         "question": "Required GPU quantity under the selected discrepancy scenario",
         "claim": "required_quantity",
         "claim_id": claim_id,
@@ -355,21 +395,57 @@ def _showcase_claim_payload(
             else None,
         },
         "execution_trace": {
-            "claim": "required_quantity",
+            "claim": "order_quantity_comparison" if comparison else "required_quantity",
             "claim_id": claim_id,
             "chain_id": stable_id("showcase-chain", claim_id),
-            "nodes": [
-                {
-                    "node_id": stable_id("showcase-node", claim_id, label),
-                    "kind": label.replace(" ", "_"),
-                    "label": label,
-                    "status": status,
-                    "evidence_ids": [ref.evidence_id for ref in evidence],
-                }
-                for label, status in nodes
-            ],
+            "nodes": trace_nodes,
         },
     }
+
+    if comparison:
+        payload.update(
+            {
+                "question": "Does the observed order quantity match the governed requirement?",
+                "claim": "order_quantity_comparison",
+                "status": comparison.status,
+                "value": None,
+                "comparison": {
+                    "required_quantity": str(expected.required_quantity) if expected else None,
+                    "ordered_quantity": str(comparison.ordered_quantity)
+                    if comparison.ordered_quantity is not None
+                    else None,
+                    "order_evidence_ids": [ref.evidence_id for ref in comparison.order_evidence],
+                    "policy_id": ORDER_POLICY.policy_id,
+                    "tolerance": str(ORDER_POLICY.tolerance),
+                    "as_of": result.as_of.isoformat(),
+                    "reason": comparison.reason,
+                    "anomalies": [
+                        {
+                            "anomaly_id": a.anomaly_id,
+                            "kind": a.kind.value,
+                            "expected": str(a.expected),
+                            "observed": str(a.observed),
+                            "severity": a.severity.value,
+                            "status": a.status.value,
+                            "policy_id": a.policy_id,
+                            "provenance_id": a.provenance.provenance_id,
+                            "evidence_ids": [ref.evidence_id for ref in a.evidence],
+                        }
+                        for a in comparison.anomalies
+                    ],
+                },
+            }
+        )
+        trace_nodes.append(
+            {
+                "node_id": stable_id("order-comparison", claim_id),
+                "kind": "quantity_comparison",
+                "label": "Required versus ordered quantity",
+                "status": comparison.status,
+                "evidence_ids": [ref.evidence_id for ref in evidence],
+            }
+        )
+    return payload
 
 
 def _candidate_payload(item: GoverningClaim, decision: GoverningClaimDecision) -> dict[str, object]:

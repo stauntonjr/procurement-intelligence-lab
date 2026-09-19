@@ -53,6 +53,8 @@ def test_showcase_discrepancy_contracts_are_policy_backed(
 @pytest.mark.contract
 def test_showcase_fixture_hashes_and_original_quantities_are_frozen() -> None:
     expected = {
+        "showcase_order_short.xlsx": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+        "showcase_order_matched.xlsx": "9c1a302e151252c91137d94bc1f41169e4333de36c32d86883eeef049acd9903",
         "showcase_bom_revision_a.xlsx": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
         "showcase_bom_revision_b.xlsx": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
         "showcase_bom_revision_b_equal.xlsx": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
@@ -61,3 +63,22 @@ def test_showcase_fixture_hashes_and_original_quantities_are_frozen() -> None:
     for name, content_hash in expected.items():
         raw = files("procurement_intelligence_lab.examples").joinpath(name).read_bytes()
         assert sha256(raw).hexdigest() == content_hash
+
+
+@pytest.mark.contract
+def test_order_comparison_is_repeatable_and_keeps_governance_separate() -> None:
+    from procurement_intelligence_lab.application.showcase import showcase_order_comparison
+
+    first = showcase_order_comparison(ShowcaseScenario.ORDER_MISMATCH, request_context=_context())
+    again = showcase_order_comparison(ShowcaseScenario.ORDER_MISMATCH, request_context=_context())
+    assert first.anomalies[0].anomaly_id == again.anomalies[0].anomaly_id
+    expected = first.requirement.governed_state.expected
+    assert expected is not None
+    assert first.anomalies[0].scope == expected.scope
+    assert all(ref.artifact_id.startswith("showcase:") for ref in first.anomalies[0].evidence)
+    assert first.anomalies[0].provenance.context.input_snapshot_ids == tuple(
+        ref.evidence_id for ref in first.anomalies[0].evidence
+    )
+    assert first.requirement.decision.value == Decimal(4)
+    with pytest.raises(ValueError, match="unsupported order comparison"):
+        showcase_order_comparison(ShowcaseScenario.CONFLICT, request_context=_context())

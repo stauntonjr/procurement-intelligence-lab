@@ -1,12 +1,14 @@
 from typing import cast
 
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 
 from procurement_intelligence_lab.interfaces.web import (
     EvidenceNotFoundError,
     claim_payload,
     source_payload,
 )
+from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
     RequestContext,
@@ -76,6 +78,21 @@ def test_claim_payload_exposes_policy_backed_showcase_decision() -> None:
     )
     source_line = cast(dict[str, object], source["line"])
     assert source_line["quantity"] in {"4", "6"}
+
+
+def test_claim_payload_preserves_valid_scenario_contract_errors(monkeypatch: MonkeyPatch) -> None:
+    from procurement_intelligence_lab.interfaces import web
+
+    def malformed_fixture(*args: object, **kwargs: object) -> dict[str, object]:
+        raise SemanticContractError("synthetic order requires one GPU-A row")
+
+    monkeypatch.setattr(web, "showcase_order_comparison", malformed_fixture)
+    with pytest.raises(SemanticContractError, match="one GPU-A row"):
+        web.claim_payload(
+            "",
+            scenario="order_mismatch",
+            request_context=_context(Permission.READ_STATE),
+        )
 
 
 def test_policy_backed_showcase_projects_governed_expected_state() -> None:

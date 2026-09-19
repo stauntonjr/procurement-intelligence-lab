@@ -99,3 +99,14 @@ Treat this page as a concise index, not a second source of truth. On each meanin
 4. Do not persist hidden chain-of-thought or entire chat transcripts. Chat/Work is for exploration and planning; Codex and other development agents implement against the repository; GitHub docs, issues, ADRs, and PRs are the durable shared state.
 5. Use the roadmap stewardship audit to flag drift, but record material chat decisions deliberately in durable artifacts.
 6. Recheck links and run the lightweight documentation check before opening or updating a PR.
+
+## Bounded Issue #60 order comparison
+
+The inspector's synthetic order scenarios compare a governed requirement with a fixture-pinned
+order quantity using the existing deterministic quantity-mismatch detector. A 4-versus-2 case
+shows a mismatch with both sources; 4-versus-4 matches. Missing observations and unresolved
+requirements remain not assessed, with null quantities and explicit reasons. See the
+[acceptance contract](../product/showcase-order-comparison.md). This is not general PO ingestion,
+a missing-PO conclusion, receipt/outstanding calculation, or completion of #60's lifecycle and
+broader anomaly acceptance. The existing recording remains an accurate recording of its pinned
+older revision; these new scenarios are separate live/local functionality until deployment.

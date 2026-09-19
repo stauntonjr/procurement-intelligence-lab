@@ -14,6 +14,8 @@ from zipfile import ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = (
     "procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+    "procurement_intelligence_lab/examples/showcase_order_short.xlsx",
+    "procurement_intelligence_lab/examples/showcase_order_matched.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_b_equal.xlsx",
@@ -60,6 +62,9 @@ def main() -> int:
         payload = json.loads(completed.stdout)
         if payload["claims"]["gpu_quantity"]["value"] != "4":
             raise RuntimeError("installed demo returned an unexpected GPU quantity")
+        # Exercise the installed public caller from outside the repository.
+        probe = ROOT / "tools/order_package_probe.py"
+        subprocess.run([str(python), str(probe)], cwd=temporary, check=True)
         web_help = subprocess.run(
             [str(python), "-m", "procurement_intelligence_lab.interfaces.web", "--help"],
             cwd=temporary,
