@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "issue": "#60",
+  "revision": "d190c18b8464a9915d972b30b022dead7866c0e5",
+  "surfaces": [
+    "qualified procurement anomaly assessment",
+    "append-only anomaly lifecycle projection",
+    "read-only HTTP inspector and source drill-down",
+    "installed Python wheel and packaged synthetic fixtures"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/project/handoff.md",
+    "docs/superpowers/plans/2026-09-19-issue-60-anomaly-taxonomy.md",
+    "docs/adr/026-qualified-anomaly-assessment-and-lifecycle.md",
+    "docs/product/anomaly-assessment-v1.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/implement-domain-logic/SKILL.md",
+    ".agents/skills/test-public-interface/SKILL.md",
+    ".agents/skills/release-smoke/SKILL.md",
+    ".agents/skills/run-agent-challenges/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md",
+    ".agents/skills/architecture-plan-sync/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "Governed expected requirements with retained decision identity and evidence, independently identified admitted observations, explicit coverage and per-kind qualification records, immutable policies, exact tenant/project/site/version scope, and a timezone-aware as-of instant",
+    "authoritative_output": "One explicit assessment per anomaly kind with anomaly, clear, not_assessed, or not_applicable status; optional immutable anomaly; role-specific evidence; per-kind policy configuration and digest; input dispositions; subject; scope; and as-of, plus a read-only lifecycle projection",
+    "scope_as_of": "Inputs must match the exact tenant/project/site and governed projection version and cannot postdate the assessment as-of; rejected records retain dispositions and never enter totals",
+    "governing_policy": "Procurement-owned deterministic policies qualify and compare each kind independently; complete authoritative coverage is required to prove absence; explicit authoritative supersession is required for staleness; lifecycle transitions use the generic append-only reducer",
+    "evidence_retained": "Hash-pinned corpus records, governing decision and source evidence by role, admitted and rejected input identities, canonical per-kind policy configuration, decision provenance, lifecycle target/scope/predecessor/reason evidence, public source links, and two-install stable semantic IDs",
+    "typed_failures": "Malformed structures raise SemanticContractError, ScopeContractError, or TemporalContractError; legitimate missing, incomplete, stale, future, conflicting, ambiguous, ineligible, or incompatible evidence returns a typed not_assessed reason"
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_missing_po_requires_positive_coverage_evidence",
+        "tests/contract/test_anomaly_assessment.py::test_independent_kinds_abstain_without_blocking_qualified_quantity"
+      ],
+      "rationale": "Missing observation, unresolved requirement, incomplete coverage, and unavailable per-kind evidence are explicit and never converted to zero or clear"
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_quantity_aggregates_distinct_lines_and_deduplicates_exact_replay",
+        "tests/contract/test_anomaly_assessment.py::test_conflicting_reuse_of_assertion_id_abstains",
+        "tests/contract/test_anomaly_assessment.py::test_rejected_extra_line_does_not_poison_eligible_aggregation"
+      ],
+      "rationale": "Distinct eligible lines aggregate, exact replay deduplicates, conflicting assertion reuse abstains, and rejected extras retain dispositions without poisoning eligible totals"
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_invalid_coverage_cannot_support_missing_or_quantity_findings",
+        "tests/contract/test_anomaly_assessment.py::test_scope_and_time_rejections_are_retained_but_do_not_enter_totals",
+        "tests/unit/test_anomaly_lifecycle.py::test_history_requires_exact_anomaly_scope_order_and_predecessor"
+      ],
+      "rationale": "Other-scope and future inputs cannot authorize findings or enter totals, and lifecycle events must target the exact anomaly and scope in chronological predecessor order"
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_exact_tolerance_is_clear_and_fractional_overage_is_anomaly",
+        "tests/contract/test_anomaly_assessment.py::test_price_and_schedule_exact_tolerance_clear_but_just_over_flags",
+        "tests/contract/test_anomaly_assessment.py::test_order_lines_reject_invalid_quantities"
+      ],
+      "rationale": "Zero, fractional, exact-tolerance, just-over, negative, nonfinite, price, and schedule boundaries are exercised with Decimal and explicit dates"
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_input_objects_reject_naive_time_and_missing_evidence",
+        "tests/contract/test_anomaly_assessment.py::test_ambiguous_or_unauthorized_taxonomy_inputs_abstain",
+        "tests/contract/test_anomaly_assessment.py::test_expected_requirement_requires_retained_governance_identity_and_evidence"
+      ],
+      "rationale": "Malformed evidence and time fail with typed errors while unapproved, ambiguous, conflicting, and non-authoritative business inputs abstain"
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/integration/test_web_happy_path.py::test_taxonomy_and_lifecycle_scenarios_cross_the_real_http_boundary",
+        "tests/contract/test_showcase_discrepancy.py::test_public_anomaly_inputs_are_derived_from_packaged_records",
+        "tools/order_package_probe.py",
+        "tools/package_smoke.py"
+      ],
+      "rationale": "Real HTTP verifies all kinds, lifecycle states, 403/404/422, source links, read-only authority, and caller-value rejection; two clean wheel installs compare semantic identities"
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_anomaly_qualification.py",
+        "evals/development_agents/challenges/C012.json",
+        "evals/development_agents/challenges/C013.json"
+      ],
+      "rationale": "C012 and C013 pass current-code oracles and reject mutations that restore absent-observation missing-PO inference or unequal-label revision staleness"
+    }
+  ],
+  "commands": [
+    {
+      "argv": ["make", "check"],
+      "outcome": "passed",
+      "evidence": "348 tests passed with 89.75 percent branch coverage; Ruff, Pyright, architecture imports, semantic preflight, supply-chain checks, and coverage ratchet passed at d190c18b8464a9915d972b30b022dead7866c0e5"
+    },
+    {
+      "argv": ["make", "package-smoke"],
+      "outcome": "passed",
+      "evidence": "Wheel resources verified; two independent virtual-environment installs ran the HTTP probe with identical semantic IDs at d190c18b8464a9915d972b30b022dead7866c0e5"
+    },
+    {
+      "argv": ["make", "challenges"],
+      "outcome": "passed",
+      "evidence": "C001-C013 current oracles passed and every known-bad mutation was rejected at revision d190c18b8464a9915d972b30b022dead7866c0e5"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "python",
+        "tools/validate_semantic_change.py",
+        "--evidence",
+        "artifacts/issue-60-semantic-evidence.json"
+      ],
+      "outcome": "passed",
+      "evidence": "Schema, scenario paths, required instructions, skill routing, exact semantic revision, independent review, and ready completion disposition validated"
+    }
+  ],
+  "review": {
+    "revision": "d190c18b8464a9915d972b30b022dead7866c0e5",
+    "mode": "independent_fresh_context",
+    "findings": [
+      "Initial review found cross-scope coverage admission, rejected-line poisoning, missing governance and subject identity, cross-kind policy identity, incomplete qualification states, hardcoded public inputs, incomplete lifecycle audit fields, and missing two-install evidence",
+      "Corrective review verified domain findings resolved at 362587c175124cf72b90589bedf4ab885302a294 and identified two remaining public fixture-lineage and lifecycle-payload gaps",
+      "Final review of d190c18b8464a9915d972b30b022dead7866c0e5 found no unresolved code findings and verified fixture-derived inputs, qualification facts, lifecycle target/scope/predecessor, manifest hashes, HTTP behavior, and two-install identity stability"
+    ],
+    "unresolved_findings": []
+  },
+  "completion": "ready"
+}

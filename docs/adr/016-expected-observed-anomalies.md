@@ -2,6 +2,10 @@
 
 Status: accepted
 
+Qualification, explicit assessment dispositions, policy-configuration identity, and audited
+lifecycle transitions are extended by [ADR-026](026-qualified-anomaly-assessment-and-lifecycle.md).
+This ADR remains the historical record for the initial taxonomy and helper delivery.
+
 ## Context
 
 The architecture distinguishes operational state from derived intelligence. An anomaly is a typed deviation between an expected value or state and an observed value or state; it is not itself a prediction, decision, or action.

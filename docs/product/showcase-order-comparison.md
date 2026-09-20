@@ -26,4 +26,11 @@ anomaly provenance. Existing request authorization, unknown-scenario and source-
 fixtures contain one complete order observation; no duplicate aggregation, stale selection, future
 selection or cross-project matching is introduced. Existing governing-policy conflict behavior is
 reused. Numeric boundary tests exercise the existing detector; real HTTP and installed-wheel
-checks prove the admitted fixture path. #60 remains open for its broader acceptance.
+checks prove the admitted fixture path.
+
+This legacy response remains unchanged by the broader qualified anomaly examples described in
+[`anomaly-assessment-v1.md`](anomaly-assessment-v1.md). Those examples use a separate September
+2026 corpus/as-of and return `anomaly_assessment` payloads; they do not reinterpret these four
+January order-comparison scenarios or add general PO admission. The broader qualified taxonomy
+and lifecycle acceptance is now merged on `main`; live Issue and Project closure are recorded
+separately in GitHub.

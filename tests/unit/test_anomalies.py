@@ -237,6 +237,7 @@ def test_revision_and_identity_anomalies_have_dedicated_policies_and_details(
         "boq-r2",
         "boq-r1",
         evidence,
+        is_superseded=True,
         policy=StaleRevisionPolicy("revision-v1"),
         provenance=provenance,
         detected_at=detected_at,
@@ -264,6 +265,7 @@ def test_revision_and_identity_anomalies_have_dedicated_policies_and_details(
             "boq-r2",
             "boq-r2",
             evidence,
+            is_superseded=False,
             policy=StaleRevisionPolicy("revision-v1"),
             provenance=provenance,
             detected_at=detected_at,
@@ -341,7 +343,7 @@ def _state_policies(*, quantity_tolerance: Decimal = Decimal(0)) -> ExpectedObse
     )
 
 
-def test_state_orchestration_distinguishes_missing_po_from_quantity_mismatch(
+def test_state_orchestration_does_not_infer_missing_po_from_absent_observation(
     evidence: tuple[EvidenceRef, ...],
     detected_at: datetime,
     provenance: DecisionProvenance,
@@ -361,9 +363,7 @@ def test_state_orchestration_distinguishes_missing_po_from_quantity_mismatch(
         detected_at=detected_at,
     )
 
-    assert [anomaly.kind for anomaly in anomalies] == [AnomalyKind.MISSING_PO]
-    assert anomalies[0].subject_key == "tenant/project/site/bom-v1:GPU-A"
-    assert anomalies[0].evidence == evidence
+    assert anomalies == ()
 
 
 def test_state_orchestration_preserves_scope_and_incomplete_observation(
