@@ -6,7 +6,9 @@ from datetime import datetime
 from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
     AnomalyAssessment,
     AnomalyAssessmentInput,
+    AnomalyAssessmentPolicies,
     QuantityAssessmentPolicies,
+    assess_anomalies,
     assess_quantity,
 )
 from procurement_intelligence_lab.platform.semantics.errors import ScopeAuthorizationError
@@ -16,7 +18,7 @@ from procurement_intelligence_lab.platform.semantics.scope import Permission, Re
 
 @dataclass(frozen=True)
 class AnomalyService:
-    policies: QuantityAssessmentPolicies
+    policies: QuantityAssessmentPolicies | AnomalyAssessmentPolicies
     provenance: DecisionProvenance
     detected_at: datetime
 
@@ -34,6 +36,13 @@ class AnomalyService:
             request_context.site_id,
         ) != (scope.tenant_id, scope.project_id, scope.site_id):
             raise ScopeAuthorizationError("request is not authorized for assessment scope")
+        if isinstance(self.policies, AnomalyAssessmentPolicies):
+            return assess_anomalies(
+                inputs,
+                policies=self.policies,
+                provenance=self.provenance,
+                detected_at=self.detected_at,
+            )
         return assess_quantity(
             inputs,
             policy=self.policies,

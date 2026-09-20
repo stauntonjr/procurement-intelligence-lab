@@ -404,6 +404,7 @@ def detect_stale_revision(
     observed: str,
     evidence: tuple[EvidenceRef, ...],
     *,
+    is_superseded: bool,
     policy: StaleRevisionPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
@@ -411,7 +412,7 @@ def detect_stale_revision(
 ) -> Anomaly | None:
     if not expected.strip() or not observed.strip():
         raise ValueError("expected and observed revisions are required")
-    if observed == expected:
+    if observed == expected or not is_superseded:
         return None
     return _anomaly(
         subject_key,

@@ -6,8 +6,10 @@ from procurement_intelligence_lab.domains.procurement.anomalies import (
     ExpectedObservedAnomalyPolicies,
     MissingPurchaseOrderPolicy,
     QuantityMismatchPolicy,
+    StaleRevisionPolicy,
     SubstitutionPolicy,
     detect_expected_observed_anomalies,
+    detect_stale_revision,
 )
 from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.state import (
@@ -55,4 +57,29 @@ def test_absent_observation_does_not_prove_missing_purchase_order() -> None:
             detected_at=datetime(2026, 1, 2, tzinfo=UTC),
         )
         == ()
+    )
+
+
+def test_unequal_revision_labels_do_not_prove_supersession() -> None:
+    evidence = (EvidenceRef("revision.json", "hash", "revisions", 2, ("A", "B")),)
+    provenance = DecisionProvenance(
+        local_provenance_context(),
+        "revision-assessment",
+        ComponentKind.DETERMINISTIC,
+        "1",
+    )
+
+    assert (
+        detect_stale_revision(
+            "GPU-A",
+            "B",
+            "A",
+            evidence,
+            is_superseded=False,
+            policy=StaleRevisionPolicy("revision/v1"),
+            provenance=provenance,
+            detected_at=datetime(2026, 1, 2, tzinfo=UTC),
+            scope=StateScope("tenant", "project", "site", "governed-v1"),
+        )
+        is None
     )

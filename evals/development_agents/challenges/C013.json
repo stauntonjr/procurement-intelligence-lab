@@ -1,0 +1,32 @@
+{
+  "id": "C013",
+  "title": "Revision staleness requires explicit supersession evidence",
+  "introducing_commit": "b567a00d7bb085bf90f8e59fd15bca3ce73e2820",
+  "oracle": "Unequal revision labels without an explicit applicable supersession path do not produce a stale-revision anomaly.",
+  "known_bad": "Restore the shipped comparison that treats any unequal revision labels as ordered authority.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/domains/procurement/anomalies.py",
+      "find": "    if observed == expected or not is_superseded:\n        return None",
+      "replace": "    if observed == expected:\n        return None"
+    }
+  ],
+  "known_bad_failure_pattern": "is None",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/regression/test_anomaly_qualification.py::test_unequal_revision_labels_do_not_prove_supersession"
+  ],
+  "surfaces": [
+    "procurement revision anomalies",
+    "source authority",
+    "supersession evidence"
+  ],
+  "prevention": [
+    "explicit supersession input",
+    "qualified revision assessment",
+    "executable unequal-label regression oracle"
+  ]
+}

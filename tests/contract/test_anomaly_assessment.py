@@ -1,6 +1,6 @@
 import json
 from dataclasses import replace
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from importlib.resources import files
 from pathlib import Path
@@ -10,16 +10,27 @@ import pytest
 from procurement_intelligence_lab.application.anomaly_service import AnomalyService
 from procurement_intelligence_lab.domains.procurement.anomalies import (
     CoverageGapPolicy,
+    LateCommitmentPolicy,
     MissingPurchaseOrderPolicy,
+    PriceDeviationPolicy,
     QuantityMismatchPolicy,
+    StaleRevisionPolicy,
+    SubstitutionPolicy,
+    UnresolvedIdentityPolicy,
 )
 from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
     AnomalyAssessmentInput,
+    AnomalyAssessmentPolicies,
     AssessmentReason,
     AssessmentStatus,
     CoverageAttestation,
+    PriceEvidence,
     QualifiedOrderLine,
     QuantityAssessmentPolicies,
+    ResolutionEvidence,
+    RevisionEvidence,
+    ScheduleEvidence,
+    SubstitutionEvidence,
 )
 from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.state import ExpectedRequirement
@@ -343,3 +354,326 @@ def test_input_objects_reject_naive_time_and_missing_evidence() -> None:
 def test_order_lines_reject_invalid_quantities(quantity: Decimal) -> None:
     with pytest.raises(SemanticContractError, match="finite and non-negative"):
         replace(_line("po-2", "2"), quantity=quantity)
+
+
+def _all_policies() -> AnomalyAssessmentPolicies:
+    return AnomalyAssessmentPolicies(
+        missing_purchase_order=MissingPurchaseOrderPolicy("missing-po/v1"),
+        quantity_mismatch=QuantityMismatchPolicy("quantity/v1"),
+        coverage_gap=CoverageGapPolicy("coverage/v1"),
+        substitution=SubstitutionPolicy("substitution/v1"),
+        stale_revision=StaleRevisionPolicy("revision/v1"),
+        price_deviation=PriceDeviationPolicy("price/v1", Decimal("0.50")),
+        late_commitment=LateCommitmentPolicy("schedule/v1", timedelta(days=1)),
+        unresolved_identity=UnresolvedIdentityPolicy("identity/v1"),
+    )
+
+
+def _taxonomy_service() -> AnomalyService:
+    provenance = DecisionProvenance(
+        local_provenance_context(),
+        "full-anomaly-assessment",
+        ComponentKind.DETERMINISTIC,
+        "1",
+        policy_version="procurement-anomaly-assessment/v1",
+    )
+    return AnomalyService(_all_policies(), provenance, AS_OF)
+
+
+@pytest.mark.contract
+@pytest.mark.parametrize(
+    ("case_id", "kind", "field", "value"),
+    [
+        (
+            "substitution_positive",
+            "substitution",
+            "substitution",
+            SubstitutionEvidence(
+                "sub-1", Decimal(1), "substitute", SCOPE, AS_OF, (_evidence("substitution"),)
+            ),
+        ),
+        (
+            "revision_stale",
+            "stale_revision",
+            "revision",
+            RevisionEvidence(
+                "rev-path-1",
+                "B",
+                "A",
+                ("A",),
+                SCOPE,
+                AS_OF,
+                (_evidence("revision-a"), _evidence("revision-b")),
+            ),
+        ),
+        (
+            "price_deviation",
+            "price_deviation",
+            "planned_price",
+            PriceEvidence(
+                "planned-1",
+                Decimal(10),
+                "USD",
+                "ea",
+                "unit",
+                SCOPE,
+                AS_OF,
+                (_evidence("price-planned"),),
+            ),
+        ),
+        (
+            "commitment_late",
+            "late_commitment",
+            "required_schedule",
+            ScheduleEvidence(
+                "required-1",
+                date(2026, 10, 1),
+                True,
+                SCOPE,
+                AS_OF,
+                (_evidence("schedule-required"),),
+            ),
+        ),
+        (
+            "identity_unresolved",
+            "unresolved_identity",
+            "resolution",
+            ResolutionEvidence(
+                "resolution-1",
+                "unresolved",
+                "vendor-part-7",
+                None,
+                SCOPE,
+                AS_OF,
+                (_evidence("identity-unresolved"),),
+            ),
+        ),
+    ],
+)
+def test_remaining_taxonomy_kinds_emit_qualified_results(
+    context: RequestContext,
+    case_id: str,
+    kind: str,
+    field: str,
+    value: object,
+) -> None:
+    inputs = AnomalyAssessmentInput("GPU-A", SCOPE, AS_OF, _expected())
+    if field == "planned_price":
+        inputs = replace(
+            inputs,
+            planned_price=value,
+            committed_price=PriceEvidence(
+                "committed-1",
+                Decimal(12),
+                "USD",
+                "ea",
+                "unit",
+                SCOPE,
+                AS_OF,
+                (_evidence("price-committed"),),
+            ),
+        )
+    elif field == "required_schedule":
+        inputs = replace(
+            inputs,
+            required_schedule=value,
+            commitment=ScheduleEvidence(
+                "commitment-1",
+                date(2026, 10, 3),
+                True,
+                SCOPE,
+                AS_OF,
+                (_evidence("schedule-commit"),),
+            ),
+        )
+    else:
+        inputs = replace(inputs, **{field: value})
+
+    result = next(
+        item
+        for item in _taxonomy_service().assess(inputs, request_context=context)
+        if item.kind.value == kind
+    )
+
+    manifest_case = next(item for item in MANIFEST["cases"] if item["id"] == case_id)
+    expected_status, expected_reason = manifest_case["expected"][kind]
+    assert result.status.value == expected_status
+    assert (result.reason.value if result.reason else None) == expected_reason
+    assert result.anomaly is not None
+    assert isinstance(
+        value,
+        (
+            PriceEvidence,
+            ResolutionEvidence,
+            RevisionEvidence,
+            ScheduleEvidence,
+            SubstitutionEvidence,
+        ),
+    )
+    assert {ref.evidence_id for ref in result.evidence} == {
+        _evidence(source_id).evidence_id for source_id in manifest_case["sources"]
+    }
+
+
+@pytest.mark.contract
+def test_independent_kinds_abstain_without_blocking_qualified_quantity(
+    context: RequestContext,
+) -> None:
+    inputs = AnomalyAssessmentInput(
+        "GPU-A",
+        SCOPE,
+        AS_OF,
+        _expected(),
+        ordered_lines=(_line("po-2", "2"),),
+        planned_price=PriceEvidence(
+            "planned-1",
+            Decimal(10),
+            "USD",
+            "ea",
+            "unit",
+            SCOPE,
+            AS_OF,
+            (_evidence("price-planned"),),
+        ),
+        committed_price=PriceEvidence(
+            "committed-1",
+            Decimal(12),
+            "EUR",
+            "ea",
+            "unit",
+            SCOPE,
+            AS_OF,
+            (_evidence("price-committed"),),
+        ),
+    )
+    by_kind = {
+        item.kind.value: item
+        for item in _taxonomy_service().assess(inputs, request_context=context)
+    }
+
+    assert by_kind["quantity_mismatch"].status is AssessmentStatus.ANOMALY
+    assert by_kind["price_deviation"].status is AssessmentStatus.NOT_ASSESSED
+    assert by_kind["price_deviation"].reason is AssessmentReason.INCOMPATIBLE_BASIS
+    assert by_kind["late_commitment"].reason is AssessmentReason.MISSING_SCHEDULE
+    assert by_kind["stale_revision"].reason is AssessmentReason.MISSING_SUPERSESSION
+    assert by_kind["substitution"].reason is AssessmentReason.MISSING_RELATIONSHIP
+    assert by_kind["unresolved_identity"].reason is AssessmentReason.MISSING_RESOLUTION
+    assert {ref.evidence_id for ref in by_kind["quantity_mismatch"].evidence} == {
+        _evidence("req-4").evidence_id,
+        _evidence("po-2").evidence_id,
+    }
+    assert {ref.evidence_id for ref in by_kind["price_deviation"].evidence} == {
+        _evidence("price-planned").evidence_id,
+        _evidence("price-committed").evidence_id,
+    }
+
+
+@pytest.mark.contract
+@pytest.mark.parametrize(
+    ("price_changes", "reason"),
+    [
+        ({"current": False}, AssessmentReason.STALE_INPUT),
+        ({"conflicted": True}, AssessmentReason.CONFLICTING_INPUT),
+        ({"currency": "EUR"}, AssessmentReason.INCOMPATIBLE_BASIS),
+        ({"unit": "kg"}, AssessmentReason.INCOMPATIBLE_BASIS),
+    ],
+)
+def test_price_qualification_abstains_without_blocking_other_kinds(
+    context: RequestContext,
+    price_changes: dict[str, object],
+    reason: AssessmentReason,
+) -> None:
+    planned = PriceEvidence(
+        "planned-1",
+        Decimal(10),
+        "USD",
+        "ea",
+        "unit",
+        SCOPE,
+        AS_OF,
+        (_evidence("price-planned"),),
+    )
+    committed = replace(
+        PriceEvidence(
+            "committed-1",
+            Decimal(12),
+            "USD",
+            "ea",
+            "unit",
+            SCOPE,
+            AS_OF,
+            (_evidence("price-committed"),),
+        ),
+        **price_changes,
+    )
+    result = next(
+        item
+        for item in _taxonomy_service().assess(
+            replace(_input("order_missing"), planned_price=planned, committed_price=committed),
+            request_context=context,
+        )
+        if item.kind.value == "price_deviation"
+    )
+    assert result.status is AssessmentStatus.NOT_ASSESSED
+    assert result.reason is reason
+
+
+@pytest.mark.contract
+def test_price_and_schedule_exact_tolerance_clear_but_just_over_flags(
+    context: RequestContext,
+) -> None:
+    planned = PriceEvidence(
+        "planned-1", Decimal(0), "USD", "ea", "unit", SCOPE, AS_OF, (_evidence("price-planned"),)
+    )
+    required = ScheduleEvidence(
+        "required-1", date(2026, 10, 1), True, SCOPE, AS_OF, (_evidence("schedule-required"),)
+    )
+
+    def statuses(price: str, commitment_day: int) -> tuple[AssessmentStatus, AssessmentStatus]:
+        inputs = replace(
+            _input("order_missing"),
+            planned_price=planned,
+            committed_price=replace(planned, input_id="committed-1", value=Decimal(price)),
+            required_schedule=required,
+            commitment=replace(
+                required,
+                input_id="commitment-1",
+                value=date(2026, 10, commitment_day),
+            ),
+        )
+        by_kind = {
+            item.kind.value: item
+            for item in _taxonomy_service().assess(inputs, request_context=context)
+        }
+        return by_kind["price_deviation"].status, by_kind["late_commitment"].status
+
+    assert statuses("0.50", 2) == (AssessmentStatus.CLEAR, AssessmentStatus.CLEAR)
+    assert statuses("0.5001", 3) == (AssessmentStatus.ANOMALY, AssessmentStatus.ANOMALY)
+
+
+@pytest.mark.contract
+def test_superseded_or_future_commitment_abstains(context: RequestContext) -> None:
+    required = ScheduleEvidence(
+        "required-1", date(2026, 10, 1), True, SCOPE, AS_OF, (_evidence("schedule-required"),)
+    )
+    commitment = ScheduleEvidence(
+        "commitment-1", date(2026, 10, 3), True, SCOPE, AS_OF, (_evidence("schedule-commit"),)
+    )
+    for changed, reason in (
+        (replace(commitment, superseded=True), AssessmentReason.STALE_INPUT),
+        (replace(commitment, as_of=AS_OF.replace(day=20)), AssessmentReason.FUTURE_INPUT),
+    ):
+        result = next(
+            item
+            for item in _taxonomy_service().assess(
+                replace(
+                    _input("order_missing"),
+                    required_schedule=required,
+                    commitment=changed,
+                ),
+                request_context=context,
+            )
+            if item.kind.value == "late_commitment"
+        )
+        assert result.status is AssessmentStatus.NOT_ASSESSED
+        assert result.reason is reason
