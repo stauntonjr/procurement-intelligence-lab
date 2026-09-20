@@ -104,5 +104,5 @@ showcase with one explicitly admitted synthetic order observation. On merged `ma
 
 The comparison retains separate requirement and order EvidenceRefs, policy/provenance identity,
 and original source-row drill-down. The fixture identity is logical and stable across installation
-paths. This is a bounded M7.1 showcase slice; Issue #60 remains open for anomaly lifecycle,
-suppression/review, and broader procurement anomaly acceptance.
+paths. This bounded M7.1 showcase slice is now complemented by Issue #60's merged anomaly
+lifecycle, suppression/review, and broader qualified procurement anomaly acceptance.

@@ -55,9 +55,9 @@ This workstream cuts across the existing M0-M9 delivery taxonomy; it does not cr
 Implementation issues and Project items must be created and reviewed before these steps are treated as scheduled work. This documentation change is part of the M0 domain semantic-model decision record and does not mark any step complete.
 
 The merged bounded M7/#60 inspector slice compares synthetic order quantity with the governed
-requirement and retains both source rows; missing/unresolved cases abstain. The Issue #60
-implementation branch extends that baseline with all eight qualified assessment kinds, canonical
+requirement and retains both source rows; missing/unresolved cases abstain. The completed Issue #60
+implementation extends that baseline with all eight qualified assessment kinds, canonical
 policy evidence, append-only lifecycle projection, real HTTP source drill-down, and clean-wheel
-acceptance. It is not `main` evidence until merged, and M7 remains in progress for forecast and
+acceptance on `main`. M7 remains in progress for forecast and
 decision-support work. See [the comparison contract](../product/showcase-order-comparison.md) and
 [qualified assessment contract](../product/anomaly-assessment-v1.md).

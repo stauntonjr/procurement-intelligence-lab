@@ -99,8 +99,7 @@
       "evidence": [
         "tests/regression/test_anomaly_qualification.py",
         "evals/development_agents/challenges/C012.json",
-        "evals/development_agents/challenges/C013.json",
-        "artifacts/challenges/latest.json"
+        "evals/development_agents/challenges/C013.json"
       ],
       "rationale": "C012 and C013 pass current-code oracles and reject mutations that restore absent-observation missing-PO inference or unequal-label revision staleness"
     }
@@ -119,7 +118,7 @@
     {
       "argv": ["make", "challenges"],
       "outcome": "passed",
-      "evidence": "C001-C013 current oracles passed and every known-bad mutation was rejected; artifacts/challenges/latest.json records revision d190c18b8464a9915d972b30b022dead7866c0e5"
+      "evidence": "C001-C013 current oracles passed and every known-bad mutation was rejected at revision d190c18b8464a9915d972b30b022dead7866c0e5"
     },
     {
       "argv": [

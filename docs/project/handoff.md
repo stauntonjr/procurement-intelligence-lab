@@ -46,7 +46,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) remains open after the bounded order-comparison slice in [PR #168](https://github.com/stauntonjr/procurement-intelligence-lab/pull/168). Branch `codex/issue-60-implementation-plan` implements the broader qualified taxonomy and lifecycle acceptance but is not `main` or merged evidence yet.
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) is complete on `main`: [PR #168](https://github.com/stauntonjr/procurement-intelligence-lab/pull/168) delivered the bounded order-comparison slice, and the qualified taxonomy, lifecycle, public-caller, clean-wheel, and challenge acceptance is recorded in [`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json).
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) remains open despite the delivered lexical lifecycle foundation and unsupported-kind rejection; reconcile its full acceptance evidence before closure. Follow-on M6 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - Identity, source-viewer, and review-context slices are complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -84,10 +84,9 @@ deployment convention, release boundary, and evidence are in the
 [deployment evidence note](procurement-vps-deployment-2026-09-19.md). It remains a synthetic,
 read-only showcase rather than a production procurement system.
 
-1. Review and integrate `codex/issue-60-implementation-plan`, then reconcile Issue #60 and Project #6 only after the acceptance evidence is present on `main`. Do not expand the synthetic fixtures into general PO semantics, forecasting, or decision support without their governing issues.
-2. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
-3. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
-4. Keep DSPy or other prompt/program optimization deferred until the baseline exists and a separate benchmark issue defines train/development/held-out separation and an exit criterion.
+1. Reconcile the delivered work against the still-open acceptance of [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) and [Issue #121](https://github.com/stauntonjr/procurement-intelligence-lab/issues/121); do not infer closure from implementation alone.
+2. Run [Issue #116](https://github.com/stauntonjr/procurement-intelligence-lab/issues/116)'s protected baselines only after a model adapter and configuration are explicitly authorized; do not treat the credential-free smoke as a score.
+3. Keep DSPy or other prompt/program optimization deferred until the baseline exists and a separate benchmark issue defines train/development/held-out separation and an exit criterion.
 
 ## Refresh protocol
 
@@ -111,9 +110,9 @@ a missing-PO conclusion, receipt/outstanding calculation, or completion of #60's
 broader anomaly acceptance. The existing recording remains an accurate recording of its pinned
 older revision; these new scenarios are separate live/local functionality until deployment.
 
-## Issue #60 qualified anomaly branch
+## Issue #60 qualified anomaly acceptance
 
-Branch `codex/issue-60-implementation-plan` adds the ratified qualified-assessment contract and
+The merged implementation adds the ratified qualified-assessment contract and
 ADR-026, a hash-pinned synthetic corpus, all eight procurement assessment kinds, explicit
 coverage and supersession gates, canonical policy identities, C012-C013 regression challenges,
 and a generic append-only lifecycle reducer. The read-only HTTP inspector has source-backed
@@ -121,6 +120,7 @@ taxonomy examples plus suppressed, in-review, and resolved projections; caller v
 replace fixture inputs and no write route is present. Clean-wheel acceptance includes the corpus,
 lifecycle fixture, original order scenarios, new examples, and source drill-down.
 
-Treat this paragraph as branch handoff, not a merged completion claim. Issue #60 and its Project
-item remain open until the branch is reviewed and merged; adjacent review, relationships,
-forecasting, costing, and decision support remain under #41, #44, #61, #52, and #65.
+The acceptance evidence is recorded in
+[`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json).
+Adjacent review, relationships, forecasting, costing, and decision support remain under #41,
+#44, #61, #52, and #65.
