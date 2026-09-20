@@ -1,6 +1,7 @@
 {
   "schema_version": "procurement-anomaly-corpus/v1",
   "assessment_contract": "procurement-anomaly-assessment/v1",
+  "packaged_source_resource": "procurement_intelligence_lab.examples/anomaly_sources_v1.json",
   "policy_id": "synthetic-anomaly-policy/v1",
   "scope": {
     "tenant_id": "tenant-demo",

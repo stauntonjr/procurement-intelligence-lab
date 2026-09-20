@@ -7,9 +7,17 @@ from enum import StrEnum
 from importlib.resources import as_file, files
 
 from procurement_intelligence_lab.adapters.xlsx import read_bom, read_source_row
+from procurement_intelligence_lab.application.anomaly_service import AnomalyService
 from procurement_intelligence_lab.domains.procurement.anomalies import (
+    CoverageGapPolicy,
+    MissingPurchaseOrderPolicy,
     QuantityMismatchPolicy,
-    detect_quantity_mismatch,
+)
+from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
+    AnomalyAssessment,
+    AnomalyAssessmentInput,
+    QualifiedOrderLine,
+    QuantityAssessmentPolicies,
 )
 from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningClaim,
@@ -167,6 +175,7 @@ class ShowcaseOrderComparison:
     status: str
     reason: str | None
     anomalies: tuple[Anomaly, ...]
+    assessments: tuple[AnomalyAssessment, ...]
 
 
 def showcase_order_comparison(
@@ -203,32 +212,21 @@ def showcase_order_comparison(
             "not_assessed",
             "unresolved_requirement" if expected is None else "missing_observation",
             (),
+            _showcase_assessments(
+                requirement,
+                None,
+                (),
+                request_context=request_context,
+            ),
         )
-    from dataclasses import replace
-
-    context = replace(
-        local_provenance_context(),
-        workflow_name="showcase-order-comparison",
-        config_digest=ORDER_POLICY.policy_id,
-        input_snapshot_ids=tuple(ref.evidence_id for ref in expected.evidence + evidence),
-    )
-    provenance = DecisionProvenance(
-        context,
-        "quantity-mismatch",
-        ComponentKind.DETERMINISTIC,
-        "1",
-        policy_version=ORDER_POLICY.policy_id,
-    )
-    anomaly = detect_quantity_mismatch(
-        "GPU-A",
-        expected.required_quantity,
+    assessments = _showcase_assessments(
+        requirement,
         ordered,
-        expected.evidence + evidence,
-        policy=ORDER_POLICY,
-        provenance=provenance,
-        detected_at=requirement.as_of,
-        scope=expected.scope,
+        evidence,
+        request_context=request_context,
     )
+    quantity = next(item for item in assessments if item.kind.value == "quantity_mismatch")
+    anomaly = quantity.anomaly
     return ShowcaseOrderComparison(
         requirement,
         ordered,
@@ -236,4 +234,72 @@ def showcase_order_comparison(
         "quantity_mismatch" if anomaly else "matched",
         None,
         (anomaly,) if anomaly else (),
+        assessments,
+    )
+
+
+def _showcase_assessments(
+    requirement: ShowcaseRequiredQuantityResult,
+    ordered: Decimal | None,
+    evidence: tuple[EvidenceRef, ...],
+    *,
+    request_context: RequestContext,
+) -> tuple[AnomalyAssessment, ...]:
+    from dataclasses import replace
+
+    expected = requirement.governed_state.expected
+    scope = expected.scope if expected is not None else StateScope(*_SCOPE, "unresolved")
+    ordered_lines = (
+        (
+            QualifiedOrderLine(
+                line_id=evidence[0].evidence_id,
+                assertion_id=evidence[0].evidence_id,
+                quantity=ordered,
+                unit="each",
+                scope=scope,
+                as_of=requirement.as_of,
+                approved=True,
+                evidence=evidence,
+            ),
+        )
+        if ordered is not None
+        else ()
+    )
+    policies = QuantityAssessmentPolicies(
+        MissingPurchaseOrderPolicy("procurement-showcase-order-missing/v1"),
+        ORDER_POLICY,
+        CoverageGapPolicy("procurement-showcase-order-coverage/v1"),
+    )
+    all_evidence = tuple(
+        {
+            ref.evidence_id: ref
+            for ref in (tuple(item.evidence for item in requirement.candidates) + evidence)
+        }.values()
+    )
+    context = replace(
+        local_provenance_context(),
+        workflow_name="showcase-order-comparison",
+        config_digest=policies.digest,
+        input_snapshot_ids=tuple(sorted(ref.evidence_id for ref in all_evidence)),
+    )
+    provenance = DecisionProvenance(
+        context,
+        "qualified-quantity-assessment",
+        ComponentKind.DETERMINISTIC,
+        "1",
+        policy_version="procurement-anomaly-assessment/v1",
+    )
+    service = AnomalyService(policies, provenance, requirement.as_of)
+    return service.assess(
+        AnomalyAssessmentInput(
+            "GPU-A",
+            scope,
+            requirement.as_of,
+            expected,
+            expected_unit="each",
+            governance_decision_ids=(requirement.decision.decision_id,),
+            governance_evidence=tuple(item.evidence for item in requirement.candidates),
+            ordered_lines=ordered_lines,
+        ),
+        request_context=request_context,
     )

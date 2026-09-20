@@ -6,7 +6,12 @@ import pytest
 
 from procurement_intelligence_lab.application.showcase import (
     ShowcaseScenario,
+    showcase_order_comparison,
     showcase_required_quantity,
+)
+from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
+    AssessmentReason,
+    AssessmentStatus,
 )
 from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 
@@ -67,8 +72,6 @@ def test_showcase_fixture_hashes_and_original_quantities_are_frozen() -> None:
 
 @pytest.mark.contract
 def test_order_comparison_is_repeatable_and_keeps_governance_separate() -> None:
-    from procurement_intelligence_lab.application.showcase import showcase_order_comparison
-
     first = showcase_order_comparison(ShowcaseScenario.ORDER_MISMATCH, request_context=_context())
     again = showcase_order_comparison(ShowcaseScenario.ORDER_MISMATCH, request_context=_context())
     assert first.anomalies[0].anomaly_id == again.anomalies[0].anomaly_id
@@ -82,3 +85,20 @@ def test_order_comparison_is_repeatable_and_keeps_governance_separate() -> None:
     assert first.requirement.decision.value == Decimal(4)
     with pytest.raises(ValueError, match="unsupported order comparison"):
         showcase_order_comparison(ShowcaseScenario.CONFLICT, request_context=_context())
+
+
+@pytest.mark.contract
+def test_order_showcase_uses_qualified_assessment_service() -> None:
+    mismatch = showcase_order_comparison(
+        ShowcaseScenario.ORDER_MISMATCH, request_context=_context()
+    )
+    missing = showcase_order_comparison(ShowcaseScenario.ORDER_MISSING, request_context=_context())
+
+    mismatch_by_kind = {item.kind.value: item for item in mismatch.assessments}
+    missing_by_kind = {item.kind.value: item for item in missing.assessments}
+    assert mismatch_by_kind["quantity_mismatch"].status is AssessmentStatus.ANOMALY
+    assert mismatch_by_kind["missing_po"].status is AssessmentStatus.NOT_ASSESSED
+    assert mismatch_by_kind["missing_po"].reason is AssessmentReason.MISSING_COVERAGE
+    assert missing_by_kind["missing_po"].status is AssessmentStatus.NOT_ASSESSED
+    assert missing_by_kind["missing_po"].reason is AssessmentReason.MISSING_OBSERVATION
+    assert missing_by_kind["quantity_mismatch"].status is AssessmentStatus.NOT_ASSESSED
