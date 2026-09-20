@@ -18,20 +18,32 @@ from procurement_intelligence_lab.application.review import review_context_for_c
 from procurement_intelligence_lab.application.showcase import (
     ORDER_POLICY,
     ORDER_SCENARIOS,
+    TAXONOMY_SCENARIOS,
     ShowcaseScenario,
+    anomaly_source_evidence,
+    lifecycle_event_evidence,
+    lifecycle_event_source_record,
+    showcase_anomaly_assessment,
     showcase_order_comparison,
     showcase_required_quantity,
+)
+from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
+    AnomalyAssessment,
+    AnomalyAssessmentInput,
 )
 from procurement_intelligence_lab.domains.procurement.bom import Bom
 from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningClaim,
     GoverningClaimDecision,
 )
+from procurement_intelligence_lab.platform.semantics.anomalies import Anomaly
+from procurement_intelligence_lab.platform.semantics.anomaly_lifecycle import AnomalyLifecycleEvent
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
     RequestContext,
     ScopeAuthorizationError,
+    StateScope,
 )
 
 _HTML = r"""<!doctype html>
@@ -46,7 +58,7 @@ _HTML = r"""<!doctype html>
 <section class="panel query" aria-label="Ask a BOM question"><form>
 <input type="hidden" name="tenant_id" value="synthetic-tenant"><input type="hidden" name="project_id" value="synthetic-project"><input type="hidden" name="site_id" value="synthetic-site">
 <label for="question">Your question</label><div class="input-row"><input id="question" name="q" value="How many GPUs are in the BOM?" required autocomplete="off"><button class="primary" id="ask">Ask</button></div>
-<label for="scenario">Evidence scenario</label><select id="scenario" name="scenario"><option value="">Standard synthetic BOM</option><option value="order_mismatch">Compare requirement 4 with order 2</option><option value="order_matched">Compare requirement 4 with order 4</option><option value="order_missing">Order observation missing</option><option value="order_unresolved">Requirement unresolved with order 2</option><option value="conflict">Competing approved revisions: 4 versus 6 GPUs</option><option value="superseded">Explicitly superseded revision: 4 to 6 GPUs</option><option value="shared_value">Competing approved revisions: both 4 GPUs</option><option value="missing_approval">Newer revision lacks approval</option></select>
+<label for="scenario">Evidence scenario</label><select id="scenario" name="scenario"><option value="">Standard synthetic BOM</option><option value="order_mismatch">Compare requirement 4 with order 2</option><option value="order_matched">Compare requirement 4 with order 4</option><option value="order_missing">Order observation missing</option><option value="order_unresolved">Requirement unresolved with order 2</option><option value="qualified_missing_po">Qualified missing purchase order</option><option value="incomplete_coverage">Incomplete order coverage</option><option value="price_deviation">Price deviation</option><option value="late_commitment">Late commitment</option><option value="stale_revision">Stale revision</option><option value="substitution">Substitution</option><option value="unresolved_identity">Unresolved identity</option><option value="lifecycle_suppressed">Suppressed anomaly</option><option value="lifecycle_reviewed">Anomaly in review</option><option value="lifecycle_resolved">Resolved anomaly</option><option value="conflict">Competing approved revisions: 4 versus 6 GPUs</option><option value="superseded">Explicitly superseded revision: 4 to 6 GPUs</option><option value="shared_value">Competing approved revisions: both 4 GPUs</option><option value="missing_approval">Newer revision lacks approval</option></select>
 <div class="examples" aria-label="Example questions"><button type="button" data-question="How many GPUs are in the BOM?">GPU quantity</button><button type="button" data-question="What is the total BOM cost?">BOM cost</button><button type="button" data-question="Which SKUs are in the BOM?">Distinct SKUs</button><button type="button" data-scenario="conflict">Inspect conflict</button></div>
 <div id="notice" class="notice" role="status" aria-live="polite">Ready to inspect the synthetic BOM.</div></form></section>
 <div class="workspace"><section class="panel" aria-labelledby="answer-heading"><span class="eyebrow">01 / Answer</span><h2 id="answer-heading">A result you can inspect</h2><div id="answer"><p>Ask a question to see the calculated value and its evidence.</p></div><div id="evidence" class="evidence-list"></div></section>
@@ -86,6 +98,7 @@ async function request(path,params){
   return response.json()
 }
 function displayValue(data){
+  if(data.selected_assessment)return data.selected_assessment.kind.replaceAll('_',' ');
   if(data.comparison)return data.status==='not_assessed'?'Not assessed':data.status==='matched'?'Quantities match':'Quantity mismatch';
   if(data.value===null||data.value===undefined)return 'Not established';
   if(data.claim==='gpu_quantity')return String(data.value)+' GPUs';
@@ -94,6 +107,7 @@ function displayValue(data){
   return String(data.value)
 }
 function locationText(ref){
+  if(ref.location_kind==='record')return ref.collection+' · '+ref.record_key;
   return ref.sheet+' · row '+ref.row+' · '+ref.cells.map(cell=>cell+ref.row).join(', ')
 }
 function showEvidence(refs,orderIds=null){
@@ -121,6 +135,13 @@ async function openSource(ref,button){
     if(data.evidence.evidence_id!==ref.evidence_id)throw new Error('The returned source does not match this evidence reference.');
     const file=data.evidence.artifact_id.split(/[\\/]/).pop();
     source.replaceChildren(element('div',file,'location'),element('p',locationText(data.evidence),'small'));
+    if(data.source_record){
+      const details=element('details');
+      details.open=true;
+      details.append(element('summary','Source record'),element('pre',JSON.stringify(data.source_record,null,2)));
+      source.append(details);
+      return
+    }
     const wrap=element('div',undefined,'table-wrap'),table=element('table');
     table.append(element('caption','Original worksheet cells · highlighted cells support this claim'));
     const head=element('thead'),headRow=element('tr'),body=element('tbody'),row=element('tr');
@@ -152,6 +173,11 @@ function render(data){
   answer.replaceChildren();
   answer.append(element('div',data.status,'status'+(data.status==='reconciled'||data.status==='governed'||data.status==='governed_shared_value'?'':' caution')),element('div',displayValue(data),'result-value'),element('p',data.comparison?'Synthetic required-versus-ordered quantity comparison.':data.claim==='bom_cost'?'BOM cost from recorded quantities and unit prices. Currency is not specified by this fixture.':data.claim==='required_quantity'?'Required GPU quantity under the selected policy and as-of context.':data.claim==='gpu_quantity'?'GPU quantity in the synthetic BOM.':'Distinct canonical identifiers in the synthetic BOM.','small'));
   if(data.value===null&&!data.comparison)answer.append(element('p','The service has not established a value. Inspect the evidence and status.','small'));
+  if(data.selected_assessment){
+    const selected=data.selected_assessment;
+    answer.append(element('p','Subject: '+selected.subject_key+' · assessment: '+selected.assessment_status+' · lifecycle: '+selected.lifecycle_status+' · policy '+selected.policy_id,'small'));
+    answer.append(element('p',Object.entries(selected.details).map(([key,value])=>key.replaceAll('_',' ')+': '+(Array.isArray(value)?value.join(', '):value)).join(' · '),'small'))
+  }
   if(data.decision){
     const details=element('div',undefined,'decision');
     details.append(element('p','Policy: '+data.decision.policy_id+' · as of '+data.decision.as_of,'small'));
@@ -323,6 +349,8 @@ def _showcase_claim_payload(
     *,
     request_context: RequestContext,
 ) -> dict[str, object]:
+    if scenario in TAXONOMY_SCENARIOS:
+        return _anomaly_claim_payload(scenario, request_context=request_context)
     comparison = (
         showcase_order_comparison(scenario, request_context=request_context)
         if scenario in ORDER_SCENARIOS
@@ -448,6 +476,195 @@ def _showcase_claim_payload(
     return payload
 
 
+def _anomaly_claim_payload(
+    scenario: ShowcaseScenario, *, request_context: RequestContext
+) -> dict[str, object]:
+    result = showcase_anomaly_assessment(scenario, request_context=request_context)
+    selected = result.selected
+    anomaly = selected.anomaly
+    assert anomaly is not None
+    lifecycle_evidence = tuple(
+        ref for event in result.lifecycle_history for ref in lifecycle_event_evidence(event)
+    )
+    evidence = (
+        tuple(
+            {
+                ref.evidence_id: ref
+                for assessment in result.assessments
+                for ref in assessment.evidence
+            }.values()
+        )
+        + lifecycle_evidence
+    )
+    selected_payload = _assessment_payload(selected)
+    selected_payload["lifecycle_status"] = result.projected_anomaly.status.value
+    selected_payload["anomaly"] = _anomaly_payload(anomaly)
+    selected_payload["details"] = _anomaly_details_payload(result.inputs, selected.kind.value)
+    claim_id = selected.assessment_id
+    return {
+        "question": "Which qualified procurement anomaly does the selected fixture establish?",
+        "claim": "anomaly_assessment",
+        "claim_id": claim_id,
+        "value": anomaly.kind.value,
+        "status": selected.status.value,
+        "selected_assessment": selected_payload,
+        "assessments": [_assessment_payload(item) for item in result.assessments],
+        "inputs": {
+            "subject_key": result.inputs.subject_key,
+            "required_quantity": (
+                str(result.inputs.expected.required_quantity) if result.inputs.expected else None
+            ),
+            "expected_unit": result.inputs.expected_unit,
+            "ordered_quantities": [str(item.quantity) for item in result.inputs.ordered_lines],
+            "caller_values_admitted": False,
+        },
+        "lifecycle": {
+            "projected_status": result.projected_anomaly.status.value,
+            "events": [_lifecycle_payload(item) for item in result.lifecycle_history],
+        },
+        "evidence": [ref.as_dict() for ref in evidence],
+        "read_only": True,
+        "execution_trace": {
+            "claim": "anomaly_assessment",
+            "claim_id": claim_id,
+            "chain_id": stable_id("showcase-anomaly-chain", claim_id),
+            "nodes": [
+                {
+                    "node_id": stable_id("showcase-anomaly-node", claim_id, "inputs"),
+                    "kind": "qualified_inputs",
+                    "label": "Qualified evidence inputs",
+                    "status": "admitted",
+                    "evidence_ids": [ref.evidence_id for ref in selected.evidence],
+                },
+                {
+                    "node_id": stable_id("showcase-anomaly-node", claim_id, "policy"),
+                    "kind": "policy_assessment",
+                    "label": "Deterministic policy assessment",
+                    "status": selected.status.value,
+                    "evidence_ids": [ref.evidence_id for ref in selected.evidence],
+                },
+                {
+                    "node_id": stable_id("showcase-anomaly-node", claim_id, "lifecycle"),
+                    "kind": "lifecycle_projection",
+                    "label": "Read-only lifecycle projection",
+                    "status": result.projected_anomaly.status.value,
+                    "evidence_ids": [ref.evidence_id for ref in lifecycle_evidence],
+                },
+            ],
+        },
+    }
+
+
+def _scope_payload(scope: StateScope) -> dict[str, object]:
+    return {
+        "tenant_id": scope.tenant_id,
+        "project_id": scope.project_id,
+        "site_id": scope.site_id,
+        "version": scope.version,
+    }
+
+
+def _assessment_payload(assessment: AnomalyAssessment) -> dict[str, object]:
+    return {
+        "assessment_id": assessment.assessment_id,
+        "subject_key": assessment.subject_key,
+        "kind": assessment.kind.value,
+        "assessment_status": assessment.status.value,
+        "reason": assessment.reason.value if assessment.reason else None,
+        "policy_id": assessment.policy_id,
+        "policy_configuration": assessment.policy_configuration,
+        "policy_digest": assessment.policy_digest,
+        "scope": _scope_payload(assessment.scope),
+        "as_of": assessment.as_of.isoformat(),
+        "input_ids": list(assessment.input_ids),
+        "decision_ids": list(assessment.decision_ids),
+        "input_dispositions": dict(assessment.input_dispositions),
+        "evidence_by_role": {
+            role: [ref.evidence_id for ref in references]
+            for role, references in assessment.evidence_by_role
+        },
+    }
+
+
+def _anomaly_payload(anomaly: Anomaly) -> dict[str, object]:
+    return {
+        "anomaly_id": anomaly.anomaly_id,
+        "kind": anomaly.kind.value,
+        "expected": str(anomaly.expected),
+        "observed": str(anomaly.observed),
+        "severity": anomaly.severity.value,
+        "detection_status": anomaly.status.value,
+        "policy_id": anomaly.policy_id,
+        "provenance_id": anomaly.provenance.provenance_id,
+        "evidence_ids": [ref.evidence_id for ref in anomaly.evidence],
+    }
+
+
+def _anomaly_details_payload(inputs: AnomalyAssessmentInput, kind: str) -> dict[str, object]:
+    if kind in {"missing_po", "quantity_mismatch", "coverage_gap"}:
+        return {
+            "unit": inputs.expected_unit,
+            "required_quantity": (
+                str(inputs.expected.required_quantity) if inputs.expected is not None else None
+            ),
+            "ordered_quantity": str(
+                sum((line.quantity for line in inputs.ordered_lines), Decimal(0))
+            ),
+        }
+    if kind == "price_deviation":
+        planned, committed = inputs.planned_price, inputs.committed_price
+        return {
+            "planned": str(planned.value) if planned else None,
+            "committed": str(committed.value) if committed else None,
+            "currency": planned.currency if planned else None,
+            "unit": planned.unit if planned else None,
+            "basis": planned.basis if planned else None,
+        }
+    if kind == "late_commitment":
+        return {
+            "required_by": str(inputs.required_schedule.value)
+            if inputs.required_schedule
+            else None,
+            "committed_for": str(inputs.commitment.value) if inputs.commitment else None,
+        }
+    if kind == "stale_revision":
+        return {
+            "expected_revision": inputs.revision.expected_revision if inputs.revision else None,
+            "observed_revision": inputs.revision.observed_revision if inputs.revision else None,
+            "supersession_edge_ids": list(inputs.revision.supersession_edge_ids)
+            if inputs.revision
+            else [],
+        }
+    if kind == "substitution":
+        return {
+            "quantity": str(inputs.substitution.quantity) if inputs.substitution else None,
+            "unit": inputs.expected_unit,
+            "relationship": inputs.substitution.relationship_kind if inputs.substitution else None,
+        }
+    return {
+        "mention": inputs.resolution.mention if inputs.resolution else None,
+        "resolution_status": inputs.resolution.status if inputs.resolution else None,
+    }
+
+
+def _lifecycle_payload(event: AnomalyLifecycleEvent) -> dict[str, object]:
+    return {
+        "event_id": event.event_id,
+        "anomaly_id": event.anomaly_id,
+        "scope": _scope_payload(event.scope),
+        "previous_status": event.previous_status.value,
+        "new_status": event.new_status.value,
+        "actor_ref": event.actor_ref,
+        "occurred_at": event.occurred_at.isoformat(),
+        "recorded_at": event.recorded_at.isoformat(),
+        "reason": event.reason,
+        "evidence_ids": list(event.evidence_ids),
+        "evidence_kind": event.evidence_kind.value,
+        "policy_id": event.policy_id,
+        "expected_prior_event_id": event.expected_prior_event_id,
+    }
+
+
 def _candidate_payload(item: GoverningClaim, decision: GoverningClaimDecision) -> dict[str, object]:
     disposition = dict(decision.dispositions)[item.claim_id]
     return {
@@ -469,6 +686,7 @@ def source_payload(
     evidence_id: str,
     *,
     request_context: RequestContext,
+    scenario: str | None = None,
 ) -> dict[str, object]:
     request_context.require(Permission.READ_EVIDENCE)
     for resource_name in _FIXTURE_RESOURCES:
@@ -497,6 +715,31 @@ def source_payload(
                     "highlighted_columns": list(source_row.highlighted_columns),
                 },
             }
+    anomaly_sources = json.loads(
+        files("procurement_intelligence_lab.examples")
+        .joinpath("anomaly_sources_v1.json")
+        .read_text()
+    )
+    for source_id, record in anomaly_sources.items():
+        evidence = anomaly_source_evidence(source_id)
+        if evidence.evidence_id == evidence_id:
+            return {"evidence": evidence.as_dict(), "source_record": record}
+    if scenario:
+        try:
+            parsed = ShowcaseScenario(scenario)
+        except ValueError:
+            parsed = None
+        if parsed is not None and parsed in TAXONOMY_SCENARIOS:
+            result = showcase_anomaly_assessment(parsed, request_context=request_context)
+            for event in result.lifecycle_history:
+                for raw_id, evidence in zip(
+                    event.evidence_ids, lifecycle_event_evidence(event), strict=True
+                ):
+                    if evidence.evidence_id == evidence_id:
+                        return {
+                            "evidence": evidence.as_dict(),
+                            "source_record": lifecycle_event_source_record(event, raw_id),
+                        }
     raise EvidenceNotFoundError(f"unknown evidence ID: {evidence_id}")
 
 
@@ -568,6 +811,7 @@ class InspectorHandler(BaseHTTPRequestHandler):
                     source_payload(
                         evidence_id,
                         request_context=_request_context(query, Permission.READ_EVIDENCE),
+                        scenario=query.get("scenario", [""])[0] or None,
                     )
                 ).encode()
                 self.send_response(200)

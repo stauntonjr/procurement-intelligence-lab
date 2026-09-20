@@ -1,0 +1,85 @@
+{
+  "coverage-complete": {
+    "authoritative": true,
+    "complete": true,
+    "current": true
+  },
+  "coverage-incomplete": {
+    "authoritative": true,
+    "complete": false,
+    "current": true
+  },
+  "identity-unresolved": {
+    "decision": "unresolved",
+    "mention": "vendor-part-7"
+  },
+  "po-2": {
+    "approved": true,
+    "ordered_quantity": "2",
+    "unit": "ea"
+  },
+  "po-4": {
+    "ordered_quantity": "4",
+    "unit": "ea"
+  },
+  "po-conflict": {
+    "ordered_quantity": "3",
+    "unit": "ea",
+    "version": "conflict"
+  },
+  "po-line-a": {
+    "ordered_quantity": "1",
+    "unit": "ea"
+  },
+  "po-line-b": {
+    "ordered_quantity": "3",
+    "unit": "ea"
+  },
+  "po-zero": {
+    "ordered_quantity": "0",
+    "unit": "ea"
+  },
+  "price-committed": {
+    "basis": "unit",
+    "currency": "USD",
+    "unit": "ea",
+    "value": "12.00"
+  },
+  "price-planned": {
+    "basis": "unit",
+    "currency": "USD",
+    "unit": "ea",
+    "value": "10.00"
+  },
+  "req-4": {
+    "required_quantity": "4",
+    "unit": "ea"
+  },
+  "revision-a": {
+    "revision": "A"
+  },
+  "revision-b": {
+    "ambiguous": false,
+    "authoritative": true,
+    "revision": "B",
+    "supersedes": "A",
+    "supersession_edge_ids": ["revision-b-supersedes-a"]
+  },
+  "schedule-commit": {
+    "committed_for": "2026-10-03",
+    "confirmed": true,
+    "conflicted": false,
+    "superseded": false
+  },
+  "schedule-required": {
+    "confirmed": true,
+    "conflicted": false,
+    "required_by": "2026-10-01"
+  },
+  "substitution": {
+    "ambiguous": false,
+    "approved": true,
+    "quantity": "1",
+    "relationship": "substitute"
+  }
+}

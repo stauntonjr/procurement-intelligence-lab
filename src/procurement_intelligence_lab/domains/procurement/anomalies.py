@@ -248,25 +248,12 @@ def detect_expected_observed_anomalies(
     subject_key = _state_subject_key(state)
     anomalies: list[Anomaly] = []
 
-    missing_policy = policy.missing_purchase_order
-    if observed is None or observed.ordered_quantity <= Decimal(0):
-        if expected.required_quantity > missing_policy.minimum_required_quantity:
-            anomalies.append(
-                _anomaly(
-                    subject_key,
-                    MissingPurchaseOrderDetails(
-                        expected.required_quantity,
-                        None if observed is None else observed.ordered_quantity,
-                    ),
-                    AnomalySeverity.WARNING,
-                    evidence,
-                    missing_policy.policy_id,
-                    provenance,
-                    detected_at,
-                    expected.scope,
-                )
-            )
-    elif (
+    if observed is None:
+        # Absence of an observed-state record is not positive evidence of complete PO coverage.
+        # Qualified missing-PO detection lives in anomaly_assessment.
+        return ()
+
+    if (
         abs(observed.ordered_quantity - expected.required_quantity)
         > policy.quantity_mismatch.tolerance
     ):
@@ -282,9 +269,6 @@ def detect_expected_observed_anomalies(
                 expected.scope,
             )
         )
-
-    if observed is None:
-        return tuple(anomalies)
 
     if observed.substituted_quantity > policy.substitution.tolerance:
         anomalies.append(
@@ -420,6 +404,7 @@ def detect_stale_revision(
     observed: str,
     evidence: tuple[EvidenceRef, ...],
     *,
+    is_superseded: bool,
     policy: StaleRevisionPolicy,
     provenance: DecisionProvenance,
     detected_at: datetime,
@@ -427,7 +412,7 @@ def detect_stale_revision(
 ) -> Anomaly | None:
     if not expected.strip() or not observed.strip():
         raise ValueError("expected and observed revisions are required")
-    if observed == expected:
+    if observed == expected or not is_superseded:
         return None
     return _anomaly(
         subject_key,

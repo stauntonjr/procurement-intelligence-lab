@@ -197,3 +197,89 @@ def test_order_comparison_from_shipped_form_and_original_sources(
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize(
+    ("scenario", "kind", "assessment_status", "lifecycle_status"),
+    [
+        ("qualified_missing_po", "missing_po", "anomaly", "open"),
+        ("incomplete_coverage", "coverage_gap", "anomaly", "open"),
+        ("price_deviation", "price_deviation", "anomaly", "open"),
+        ("late_commitment", "late_commitment", "anomaly", "open"),
+        ("stale_revision", "stale_revision", "anomaly", "open"),
+        ("substitution", "substitution", "anomaly", "open"),
+        ("unresolved_identity", "unresolved_identity", "anomaly", "open"),
+        ("lifecycle_suppressed", "quantity_mismatch", "anomaly", "suppressed"),
+        ("lifecycle_reviewed", "quantity_mismatch", "anomaly", "in_review"),
+        ("lifecycle_resolved", "quantity_mismatch", "anomaly", "resolved"),
+    ],
+)
+def test_taxonomy_and_lifecycle_scenarios_cross_the_real_http_boundary(
+    scenario: str,
+    kind: str,
+    assessment_status: str,
+    lifecycle_status: str,
+) -> None:
+    server = ThreadingHTTPServer(("127.0.0.1", 0), InspectorHandler)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{server.server_port}"
+    params = {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "synthetic-project",
+        "site_id": "synthetic-site",
+        "q": "Inspect the anomaly",
+        "scenario": scenario,
+        "required_quantity": "999",
+    }
+    try:
+        with urlopen(f"{base}/api/ask?{urlencode(params)}", timeout=5) as response:
+            payload = json.load(response)
+        selected = payload["selected_assessment"]
+        assert payload["claim"] == "anomaly_assessment"
+        assert selected["kind"] == kind
+        assert selected["subject_key"] == "GPU-A"
+        assert selected["assessment_status"] == assessment_status
+        assert selected["lifecycle_status"] == lifecycle_status
+        assert len(selected["policy_digest"]) == 64
+        assert selected["scope"]["tenant_id"] == "synthetic-tenant"
+        assert selected["as_of"] == "2026-09-19T12:00:00+00:00"
+        assert payload["inputs"]["required_quantity"] == "4"
+        assert payload["read_only"] is True
+        assert "write_controls" not in payload
+        assert selected["details"]
+        if kind in {"missing_po", "quantity_mismatch", "coverage_gap", "substitution"}:
+            assert selected["details"]["unit"] == "ea"
+        if kind == "price_deviation":
+            assert selected["details"] == {
+                "planned": "10.00",
+                "committed": "12.00",
+                "currency": "USD",
+                "unit": "ea",
+                "basis": "unit",
+            }
+        for event in payload["lifecycle"]["events"]:
+            assert event["anomaly_id"] == selected["anomaly"]["anomaly_id"]
+            assert event["scope"] == selected["scope"]
+        for evidence in payload["evidence"]:
+            query = params | {"evidence_id": evidence["evidence_id"]}
+            with urlopen(f"{base}/api/source?{urlencode(query)}", timeout=5) as response:
+                source = json.load(response)
+            assert source["evidence"] == evidence
+            assert "source_record" in source or "source_grid" in source
+            if evidence["artifact_id"] == "anomaly-lifecycle:v1":
+                assert source["source_record"]["anomaly_id"] == selected["anomaly"]["anomaly_id"]
+                assert source["source_record"]["scope"] == selected["scope"]
+                assert "expected_prior_event_id" in source["source_record"]
+
+        with pytest.raises(HTTPError) as error:
+            urlopen(
+                f"{base}/api/ask?{urlencode(params | {'scenario': 'unknown-scenario'})}",
+                timeout=5,
+            )
+        assert error.value.code == 422
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)

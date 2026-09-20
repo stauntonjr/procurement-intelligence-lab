@@ -10,6 +10,7 @@ from procurement_intelligence_lab.platform.semantics.errors import (
     TemporalContractError,
 )
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
     RequestContext,
@@ -159,6 +160,22 @@ class GoverningClaimDecision:
             )
         elif {item[0] for item in self.dispositions} != {item.claim_id for item in candidates}:
             raise SemanticContractError("governing decisions require one disposition per candidate")
+
+    @property
+    def decision_id(self) -> str:
+        """Stable identity for the complete policy-backed governing decision."""
+        return stable_id(
+            "governing-claim-decision",
+            self.canonical_key,
+            self.as_of.isoformat(),
+            self.status.value,
+            str(self.value) if self.value is not None else None,
+            self.unit,
+            tuple(item.claim_id for item in self.governing),
+            tuple(item.claim_id for item in self.losing),
+            self.policy_id,
+            self.dispositions,
+        )
 
 
 def reconcile_required_quantity(
