@@ -19,6 +19,8 @@ RESOURCES = (
     "procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_b.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_b_equal.xlsx",
+    "procurement_intelligence_lab/examples/anomaly_sources_v1.json",
+    "procurement_intelligence_lab/examples/anomaly_lifecycle_v1.json",
 )
 
 

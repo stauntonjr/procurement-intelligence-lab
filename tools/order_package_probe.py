@@ -42,6 +42,35 @@ def main() -> None:
                 assert source["evidence"] == evidence
                 if evidence["evidence_id"] in payload["comparison"]["order_evidence_ids"]:
                     assert source["line"]["quantity"] == quantity
+        for scenario, kind, lifecycle_status in [
+            ("qualified_missing_po", "missing_po", "open"),
+            ("incomplete_coverage", "coverage_gap", "open"),
+            ("price_deviation", "price_deviation", "open"),
+            ("late_commitment", "late_commitment", "open"),
+            ("stale_revision", "stale_revision", "open"),
+            ("substitution", "substitution", "open"),
+            ("unresolved_identity", "unresolved_identity", "open"),
+            ("lifecycle_suppressed", "quantity_mismatch", "suppressed"),
+            ("lifecycle_reviewed", "quantity_mismatch", "in_review"),
+            ("lifecycle_resolved", "quantity_mismatch", "resolved"),
+        ]:
+            query = params | {"scenario": scenario, "required_quantity": "999"}
+            with urlopen(f"{base}/api/ask?{urlencode(query)}", timeout=5) as response:
+                payload = json.load(response)
+            selected = payload["selected_assessment"]
+            assert selected["kind"] == kind
+            assert selected["assessment_status"] == "anomaly"
+            assert selected["lifecycle_status"] == lifecycle_status
+            assert payload["inputs"]["required_quantity"] == "4"
+            assert payload["read_only"] is True
+            for evidence in payload["evidence"]:
+                with urlopen(
+                    f"{base}/api/source?{urlencode(params | {'evidence_id': evidence['evidence_id']})}",
+                    timeout=5,
+                ) as response:
+                    source = json.load(response)
+                assert source["evidence"] == evidence
+                assert "source_record" in source or "source_grid" in source
     finally:
         server.shutdown()
         server.server_close()

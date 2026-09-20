@@ -1,23 +1,38 @@
 """Versioned synthetic discrepancy scenarios for the read-only inspector."""
 
-from dataclasses import dataclass
-from datetime import UTC, datetime
+import json
+from dataclasses import dataclass, replace
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from enum import StrEnum
+from hashlib import sha256
 from importlib.resources import as_file, files
+from typing import cast
 
 from procurement_intelligence_lab.adapters.xlsx import read_bom, read_source_row
 from procurement_intelligence_lab.application.anomaly_service import AnomalyService
 from procurement_intelligence_lab.domains.procurement.anomalies import (
     CoverageGapPolicy,
+    LateCommitmentPolicy,
     MissingPurchaseOrderPolicy,
+    PriceDeviationPolicy,
     QuantityMismatchPolicy,
+    StaleRevisionPolicy,
+    SubstitutionPolicy,
+    UnresolvedIdentityPolicy,
 )
 from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
     AnomalyAssessment,
     AnomalyAssessmentInput,
+    AnomalyAssessmentPolicies,
+    CoverageAttestation,
+    PriceEvidence,
     QualifiedOrderLine,
     QuantityAssessmentPolicies,
+    ResolutionEvidence,
+    RevisionEvidence,
+    ScheduleEvidence,
+    SubstitutionEvidence,
 )
 from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningClaim,
@@ -27,12 +42,18 @@ from procurement_intelligence_lab.domains.procurement.governance import (
 )
 from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.domains.procurement.state import (
+    ExpectedRequirement,
     GovernedRequiredQuantityState,
+    ProcurementStateBasis,
     project_governed_required_quantity,
 )
-from procurement_intelligence_lab.platform.semantics.anomalies import Anomaly
+from procurement_intelligence_lab.platform.semantics.anomalies import Anomaly, AnomalyStatus
+from procurement_intelligence_lab.platform.semantics.anomaly_lifecycle import (
+    AnomalyLifecycleEvent,
+    LifecycleEvidenceKind,
+)
 from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
-from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef, RecordLocation
 from procurement_intelligence_lab.platform.semantics.provenance import (
     ComponentKind,
     DecisionProvenance,
@@ -49,10 +70,22 @@ class ShowcaseScenario(StrEnum):
     SUPERSEDED = "superseded"
     SHARED_VALUE = "shared_value"
     MISSING_APPROVAL = "missing_approval"
+    QUALIFIED_MISSING_PO = "qualified_missing_po"
+    INCOMPLETE_COVERAGE = "incomplete_coverage"
+    PRICE_DEVIATION = "price_deviation"
+    LATE_COMMITMENT = "late_commitment"
+    STALE_REVISION = "stale_revision"
+    SUBSTITUTION = "substitution"
+    UNRESOLVED_IDENTITY = "unresolved_identity"
+    LIFECYCLE_SUPPRESSED = "lifecycle_suppressed"
+    LIFECYCLE_REVIEWED = "lifecycle_reviewed"
+    LIFECYCLE_RESOLVED = "lifecycle_resolved"
 
 
 _AS_OF = datetime(2026, 1, 15, tzinfo=UTC)
 _SCOPE = ("synthetic-tenant", "synthetic-project", "synthetic-site")
+_ANOMALY_AS_OF = datetime(2026, 9, 19, 12, tzinfo=UTC)
+_ANOMALY_SCOPE = StateScope(*_SCOPE, "governed-v1")
 
 
 @dataclass(frozen=True)
@@ -245,8 +278,6 @@ def _showcase_assessments(
     *,
     request_context: RequestContext,
 ) -> tuple[AnomalyAssessment, ...]:
-    from dataclasses import replace
-
     expected = requirement.governed_state.expected
     scope = expected.scope if expected is not None else StateScope(*_SCOPE, "unresolved")
     ordered_lines = (
@@ -302,4 +333,361 @@ def _showcase_assessments(
             ordered_lines=ordered_lines,
         ),
         request_context=request_context,
+    )
+
+
+TAXONOMY_SCENARIOS = frozenset(
+    {
+        ShowcaseScenario.QUALIFIED_MISSING_PO,
+        ShowcaseScenario.INCOMPLETE_COVERAGE,
+        ShowcaseScenario.PRICE_DEVIATION,
+        ShowcaseScenario.LATE_COMMITMENT,
+        ShowcaseScenario.STALE_REVISION,
+        ShowcaseScenario.SUBSTITUTION,
+        ShowcaseScenario.UNRESOLVED_IDENTITY,
+        ShowcaseScenario.LIFECYCLE_SUPPRESSED,
+        ShowcaseScenario.LIFECYCLE_REVIEWED,
+        ShowcaseScenario.LIFECYCLE_RESOLVED,
+    }
+)
+
+
+@dataclass(frozen=True)
+class ShowcaseAnomalyResult:
+    scenario: ShowcaseScenario
+    inputs: AnomalyAssessmentInput
+    assessments: tuple[AnomalyAssessment, ...]
+    selected: AnomalyAssessment
+    lifecycle_history: tuple[AnomalyLifecycleEvent, ...]
+    projected_anomaly: Anomaly
+
+
+def _anomaly_sources() -> dict[str, dict[str, object]]:
+    resource = files("procurement_intelligence_lab.examples").joinpath("anomaly_sources_v1.json")
+    return json.loads(resource.read_text())
+
+
+def anomaly_source_evidence(source_id: str) -> EvidenceRef:
+    """Build the stable evidence identity for one packaged anomaly-corpus record."""
+    payload = _anomaly_sources()[source_id]
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return EvidenceRef(
+        f"anomaly-corpus:{source_id}",
+        sha256(canonical.encode()).hexdigest(),
+        RecordLocation("anomaly-corpus/v1", source_id),
+    )
+
+
+def lifecycle_event_evidence(event: AnomalyLifecycleEvent) -> tuple[EvidenceRef, ...]:
+    """Expose event evidence as immutable fixture records, not mutation controls."""
+    return tuple(
+        EvidenceRef(
+            "anomaly-lifecycle:v1",
+            sha256(_lifecycle_event_canonical(event, evidence_id).encode()).hexdigest(),
+            RecordLocation("anomaly-lifecycle/v1", evidence_id),
+        )
+        for evidence_id in event.evidence_ids
+    )
+
+
+def _lifecycle_event_canonical(event: AnomalyLifecycleEvent, evidence_id: str) -> str:
+    return json.dumps(
+        _lifecycle_source_record(event, evidence_id), sort_keys=True, separators=(",", ":")
+    )
+
+
+def _lifecycle_source_record(event: AnomalyLifecycleEvent, evidence_id: str) -> dict[str, str]:
+    return {
+        "actor_ref": event.actor_ref,
+        "evidence_id": evidence_id,
+        "evidence_kind": event.evidence_kind.value,
+        "event_id": event.event_id,
+        "new_status": event.new_status.value,
+        "occurred_at": event.occurred_at.isoformat(),
+        "policy_id": event.policy_id,
+        "previous_status": event.previous_status.value,
+        "reason": event.reason,
+        "recorded_at": event.recorded_at.isoformat(),
+    }
+
+
+def lifecycle_source_record(evidence_id: str) -> tuple[EvidenceRef, dict[str, str]]:
+    """Resolve one public lifecycle evidence record from the packaged fixture."""
+    payload = json.loads(
+        files("procurement_intelligence_lab.examples")
+        .joinpath("anomaly_lifecycle_v1.json")
+        .read_text()
+    )
+    for history in payload["histories"].values():
+        for item in history:
+            if evidence_id not in item["evidence_ids"]:
+                continue
+            record = {
+                "actor_ref": str(item["actor_ref"]),
+                "evidence_id": evidence_id,
+                "evidence_kind": str(item["evidence_kind"]),
+                "event_id": str(item["event_id"]),
+                "new_status": str(item["new_status"]),
+                "occurred_at": str(item["occurred_at"]),
+                "policy_id": str(item["policy_id"]),
+                "previous_status": str(item["previous_status"]),
+                "reason": str(item["reason"]),
+                "recorded_at": str(item["recorded_at"]),
+            }
+            canonical = json.dumps(record, sort_keys=True, separators=(",", ":"))
+            reference = EvidenceRef(
+                "anomaly-lifecycle:v1",
+                sha256(canonical.encode()).hexdigest(),
+                RecordLocation("anomaly-lifecycle/v1", evidence_id),
+            )
+            return reference, record
+    raise KeyError(evidence_id)
+
+
+def showcase_anomaly_assessment(
+    scenario: ShowcaseScenario, *, request_context: RequestContext
+) -> ShowcaseAnomalyResult:
+    """Assess one fixed corpus scenario and optionally replay its read-only lifecycle."""
+    if scenario not in TAXONOMY_SCENARIOS:
+        raise SemanticContractError("unsupported anomaly showcase scenario")
+    expected = ExpectedRequirement(
+        "GPU-A",
+        Decimal(4),
+        _ANOMALY_SCOPE,
+        _ANOMALY_AS_OF,
+        (anomaly_source_evidence("req-4"),),
+        ProcurementStateBasis.RECONCILED,
+    )
+    inputs = AnomalyAssessmentInput(
+        "GPU-A",
+        _ANOMALY_SCOPE,
+        _ANOMALY_AS_OF,
+        expected,
+        governance_decision_ids=("showcase-required-4",),
+        governance_evidence=expected.evidence,
+    )
+    selected_kind = {
+        ShowcaseScenario.QUALIFIED_MISSING_PO: "missing_po",
+        ShowcaseScenario.INCOMPLETE_COVERAGE: "coverage_gap",
+        ShowcaseScenario.PRICE_DEVIATION: "price_deviation",
+        ShowcaseScenario.LATE_COMMITMENT: "late_commitment",
+        ShowcaseScenario.STALE_REVISION: "stale_revision",
+        ShowcaseScenario.SUBSTITUTION: "substitution",
+        ShowcaseScenario.UNRESOLVED_IDENTITY: "unresolved_identity",
+        ShowcaseScenario.LIFECYCLE_SUPPRESSED: "quantity_mismatch",
+        ShowcaseScenario.LIFECYCLE_REVIEWED: "quantity_mismatch",
+        ShowcaseScenario.LIFECYCLE_RESOLVED: "quantity_mismatch",
+    }[scenario]
+    complete = _coverage("coverage-complete", complete=True)
+    if scenario is ShowcaseScenario.QUALIFIED_MISSING_PO:
+        inputs = replace(inputs, coverage=complete)
+    elif scenario is ShowcaseScenario.INCOMPLETE_COVERAGE:
+        inputs = replace(inputs, coverage=_coverage("coverage-incomplete", complete=False))
+    elif scenario is ShowcaseScenario.PRICE_DEVIATION:
+        inputs = replace(
+            inputs,
+            planned_price=_price("price-planned", "10.00"),
+            committed_price=_price("price-committed", "12.00"),
+        )
+    elif scenario is ShowcaseScenario.LATE_COMMITMENT:
+        inputs = replace(
+            inputs,
+            required_schedule=_schedule("schedule-required", date(2026, 10, 1), False),
+            commitment=_schedule("schedule-commit", date(2026, 10, 3), True),
+        )
+    elif scenario is ShowcaseScenario.STALE_REVISION:
+        inputs = replace(
+            inputs,
+            revision=RevisionEvidence(
+                "revision-comparison",
+                "B",
+                "A",
+                ("A",),
+                _ANOMALY_SCOPE,
+                _ANOMALY_AS_OF,
+                (
+                    anomaly_source_evidence("revision-a"),
+                    anomaly_source_evidence("revision-b"),
+                ),
+            ),
+        )
+    elif scenario is ShowcaseScenario.SUBSTITUTION:
+        inputs = replace(
+            inputs,
+            substitution=SubstitutionEvidence(
+                "substitution",
+                Decimal(1),
+                "substitute",
+                _ANOMALY_SCOPE,
+                _ANOMALY_AS_OF,
+                (anomaly_source_evidence("substitution"),),
+            ),
+        )
+    elif scenario is ShowcaseScenario.UNRESOLVED_IDENTITY:
+        inputs = replace(
+            inputs,
+            resolution=ResolutionEvidence(
+                "identity-unresolved",
+                "unresolved",
+                "vendor-part-7",
+                None,
+                _ANOMALY_SCOPE,
+                _ANOMALY_AS_OF,
+                (anomaly_source_evidence("identity-unresolved"),),
+            ),
+        )
+    else:
+        inputs = replace(inputs, ordered_lines=(_line("po-2", "2"),), coverage=complete)
+
+    policies = _anomaly_policies()
+    context = replace(
+        local_provenance_context(),
+        run_id="showcase-anomaly-v1",
+        workflow_name="showcase-anomaly-assessment",
+        workflow_version="1",
+        config_digest=policies.digest,
+        input_snapshot_ids=tuple(sorted(ref.evidence_id for ref in _input_evidence(inputs))),
+        started_at=_ANOMALY_AS_OF,
+    )
+    provenance = DecisionProvenance(
+        context,
+        "full-anomaly-assessment",
+        ComponentKind.DETERMINISTIC,
+        "1",
+        policy_version="procurement-anomaly-assessment/v1",
+    )
+    assessments = AnomalyService(policies, provenance, _ANOMALY_AS_OF).assess(
+        inputs, request_context=request_context
+    )
+    selected = next(item for item in assessments if item.kind.value == selected_kind)
+    if selected.anomaly is None:
+        raise SemanticContractError("showcase selection must produce an anomaly")
+    history = _lifecycle_history(scenario, selected.anomaly)
+    projected = AnomalyService.project_lifecycle(selected.anomaly, history)
+    return ShowcaseAnomalyResult(scenario, inputs, assessments, selected, history, projected)
+
+
+def _coverage(source_id: str, *, complete: bool) -> CoverageAttestation:
+    return CoverageAttestation(
+        source_id,
+        "GPU-A",
+        _ANOMALY_SCOPE,
+        _ANOMALY_AS_OF,
+        complete,
+        True,
+        True,
+        (anomaly_source_evidence(source_id),),
+    )
+
+
+def _line(source_id: str, quantity: str) -> QualifiedOrderLine:
+    return QualifiedOrderLine(
+        source_id,
+        source_id,
+        Decimal(quantity),
+        "ea",
+        _ANOMALY_SCOPE,
+        _ANOMALY_AS_OF,
+        True,
+        (anomaly_source_evidence(source_id),),
+    )
+
+
+def _price(source_id: str, value: str) -> PriceEvidence:
+    return PriceEvidence(
+        source_id,
+        Decimal(value),
+        "USD",
+        "ea",
+        "unit",
+        _ANOMALY_SCOPE,
+        _ANOMALY_AS_OF,
+        (anomaly_source_evidence(source_id),),
+    )
+
+
+def _schedule(source_id: str, value: date, confirmed: bool) -> ScheduleEvidence:
+    return ScheduleEvidence(
+        source_id,
+        value,
+        confirmed,
+        _ANOMALY_SCOPE,
+        _ANOMALY_AS_OF,
+        (anomaly_source_evidence(source_id),),
+    )
+
+
+def _anomaly_policies() -> AnomalyAssessmentPolicies:
+    return AnomalyAssessmentPolicies(
+        missing_purchase_order=MissingPurchaseOrderPolicy("missing-po/v1"),
+        quantity_mismatch=QuantityMismatchPolicy("quantity/v1"),
+        coverage_gap=CoverageGapPolicy("coverage/v1"),
+        substitution=SubstitutionPolicy("substitution/v1"),
+        stale_revision=StaleRevisionPolicy("revision/v1"),
+        price_deviation=PriceDeviationPolicy("price/v1", Decimal("0.50")),
+        late_commitment=LateCommitmentPolicy("schedule/v1", timedelta(days=1)),
+        unresolved_identity=UnresolvedIdentityPolicy("identity/v1"),
+    )
+
+
+def _input_evidence(inputs: AnomalyAssessmentInput) -> tuple[EvidenceRef, ...]:
+    values = list(inputs.governance_evidence)
+    values.extend(ref for line in inputs.ordered_lines for ref in line.evidence)
+    for item in (
+        inputs.coverage,
+        inputs.planned_price,
+        inputs.committed_price,
+        inputs.required_schedule,
+        inputs.commitment,
+        inputs.revision,
+        inputs.substitution,
+        inputs.resolution,
+    ):
+        if item is not None:
+            values.extend(item.evidence)
+    return tuple({ref.evidence_id: ref for ref in values}.values())
+
+
+def _lifecycle_history(
+    scenario: ShowcaseScenario, anomaly: Anomaly
+) -> tuple[AnomalyLifecycleEvent, ...]:
+    if scenario not in {
+        ShowcaseScenario.LIFECYCLE_SUPPRESSED,
+        ShowcaseScenario.LIFECYCLE_REVIEWED,
+        ShowcaseScenario.LIFECYCLE_RESOLVED,
+    }:
+        return ()
+    payload = json.loads(
+        files("procurement_intelligence_lab.examples")
+        .joinpath("anomaly_lifecycle_v1.json")
+        .read_text()
+    )
+    history_name = {
+        ShowcaseScenario.LIFECYCLE_SUPPRESSED: "suppressed",
+        ShowcaseScenario.LIFECYCLE_REVIEWED: "reviewed",
+        ShowcaseScenario.LIFECYCLE_RESOLVED: "resolved",
+    }[scenario]
+    return tuple(_event_from_fixture(item, anomaly) for item in payload["histories"][history_name])
+
+
+def _event_from_fixture(item: dict[str, object], anomaly: Anomaly) -> AnomalyLifecycleEvent:
+    evidence_ids = cast(list[object], item["evidence_ids"])
+    return AnomalyLifecycleEvent(
+        event_id=str(item["event_id"]),
+        anomaly_id=anomaly.anomaly_id,
+        scope=anomaly.scope,
+        previous_status=AnomalyStatus(str(item["previous_status"])),
+        new_status=AnomalyStatus(str(item["new_status"])),
+        actor_ref=str(item["actor_ref"]),
+        occurred_at=datetime.fromisoformat(str(item["occurred_at"])),
+        recorded_at=datetime.fromisoformat(str(item["recorded_at"])),
+        reason=str(item["reason"]),
+        evidence_ids=tuple(str(value) for value in evidence_ids),
+        evidence_kind=LifecycleEvidenceKind(str(item["evidence_kind"])),
+        policy_id=str(item["policy_id"]),
+        expected_prior_event_id=(
+            str(item["expected_prior_event_id"])
+            if item["expected_prior_event_id"] is not None
+            else None
+        ),
     )
