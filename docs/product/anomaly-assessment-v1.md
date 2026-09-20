@@ -106,3 +106,18 @@ receipt accounting, database rollout, public write path, or autonomous remediati
 synthetic corpus. Every case names exact status, reason, evidence IDs, scope, as-of, and source
 content digests. Runtime and public-boundary tests must consume the corpus rather than reconstruct
 unqualified quantities in helper-only contexts.
+
+## Reference acceptance path
+
+The read-only inspector exposes fixture-backed examples for qualified missing PO, incomplete
+coverage, price deviation, late commitment, stale revision, substitution, unresolved identity,
+and quantity-mismatch lifecycle projections in `OPEN`, `IN_REVIEW`, `SUPPRESSED`, and `RESOLVED`
+states. The response keeps assessment status separate from projected lifecycle status and includes
+the canonical policy configuration/digest, scope/as-of, input and governance IDs, role-specific
+evidence, and lifecycle reasons. Every JSON corpus or lifecycle reference resolves through the
+same `/api/source` boundary as the existing XLSX evidence.
+
+These examples admit only committed fixture values. Query-string business values cannot replace
+the governed requirement or observations, and the HTTP service has no lifecycle mutation route or
+write controls. The installed-wheel probe repeats these scenarios outside the checkout and checks
+their packaged records and source links.
