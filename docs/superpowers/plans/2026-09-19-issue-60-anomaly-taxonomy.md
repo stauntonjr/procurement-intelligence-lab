@@ -93,13 +93,18 @@ Record these decisions in Task 1's product contract and ADR; they are proposed e
 - [ ] Add failing contract cases before implementation. Preserve all four showcase outcomes. Add the following assertions using fixture inputs built from the manifest, not naked helper-only quantities:
 
 ```python
-@pytest.mark.parametrize("case, status, reason", [
-    ("order_missing", "not_assessed", "missing_observation"),
-    ("order_unresolved", "not_assessed", "unresolved_requirement"),
-    ("complete_empty_orders", "anomaly", None),
-    ("incomplete_empty_orders", "not_assessed", "incomplete_coverage"),
-])
-def test_missing_po_requires_positive_coverage_evidence(cases, service, context, case, status, reason):
+@pytest.mark.parametrize(
+    "case, status, reason",
+    [
+        ("order_missing", "not_assessed", "missing_observation"),
+        ("order_unresolved", "not_assessed", "unresolved_requirement"),
+        ("complete_empty_orders", "anomaly", None),
+        ("incomplete_empty_orders", "not_assessed", "incomplete_coverage"),
+    ],
+)
+def test_missing_po_requires_positive_coverage_evidence(
+    cases, service, context, case, status, reason
+):
     results = service.assess(cases[case], request_context=context)
     result = next(r for r in results if r.kind.value == "missing_po")
     assert result.status.value == status

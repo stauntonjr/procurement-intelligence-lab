@@ -1,0 +1,153 @@
+{
+  "schema_version": "procurement-anomaly-corpus/v1",
+  "assessment_contract": "procurement-anomaly-assessment/v1",
+  "policy_id": "synthetic-anomaly-policy/v1",
+  "scope": {
+    "tenant_id": "tenant-demo",
+    "project_id": "project-demo",
+    "site_id": "site-demo",
+    "bom_revision": "B"
+  },
+  "as_of": "2026-09-19T12:00:00+00:00",
+  "sources": {
+    "req-4": {
+      "evidence_id": "ev-req-4",
+      "approved_at": "2026-09-18T12:00:00+00:00",
+      "payload": {"required_quantity": "4", "unit": "ea"},
+      "sha256": "7becc2bb5f181364f040f8958f985ef3388ab110f296095cb14ce2788a879316"
+    },
+    "po-2": {
+      "evidence_id": "ev-po-2",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"ordered_quantity": "2", "unit": "ea"},
+      "sha256": "e0d56cfee416164e6a61e225b33ac10cc691755a0a5dbbd4f62800b12b2c818a"
+    },
+    "po-4": {
+      "evidence_id": "ev-po-4",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"ordered_quantity": "4", "unit": "ea"},
+      "sha256": "018aae6116586d35f01b783673d48050c03e110dee44cd78123341852c3cb5c2"
+    },
+    "coverage-complete": {
+      "evidence_id": "ev-coverage-complete",
+      "approved_at": "2026-09-19T11:00:00+00:00",
+      "payload": {"complete": true, "current": true, "authoritative": true},
+      "sha256": "a143ccb82c36a2924258071a5713b376ca80ee923a9227fe04eaf937fa29c82c"
+    },
+    "coverage-incomplete": {
+      "evidence_id": "ev-coverage-incomplete",
+      "approved_at": "2026-09-19T11:00:00+00:00",
+      "payload": {"complete": false, "current": true, "authoritative": true},
+      "sha256": "a5de60dff74072ca284b1e99e25393f3f555bbb1309eb50377d2a2ba0f02cd0d"
+    },
+    "po-zero": {
+      "evidence_id": "ev-po-zero",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"ordered_quantity": "0", "unit": "ea"},
+      "sha256": "7dfbe3c6d2c2d5927d203ccb1791f822e054df0dae2183934ab338a02b42c66f"
+    },
+    "po-line-a": {
+      "evidence_id": "ev-po-line-a",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"ordered_quantity": "1", "unit": "ea"},
+      "sha256": "6e5bbbcd75725e82aa7455a55a47b4807aa96db8266c33b895d6e388922db01a"
+    },
+    "po-line-b": {
+      "evidence_id": "ev-po-line-b",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"ordered_quantity": "3", "unit": "ea"},
+      "sha256": "0902004e746dcf2b15705598d79fb7249c147a3b9c73c09b9375e179e8608a62"
+    },
+    "po-conflict": {
+      "evidence_id": "ev-po-conflict",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"ordered_quantity": "3", "unit": "ea", "version": "conflict"},
+      "sha256": "6f59dfe455abd16a665430281c68cf4f1eda9d5de62bac60261f506a5529dc61"
+    },
+    "price-planned": {
+      "evidence_id": "ev-price-planned",
+      "approved_at": "2026-09-18T12:00:00+00:00",
+      "payload": {"value": "10.00", "currency": "USD", "unit": "ea", "basis": "unit"},
+      "sha256": "f3b650fce1b224c24e05d1d1d974dbe8118e965898c70bbcc57a144ba32bbe3b"
+    },
+    "price-committed": {
+      "evidence_id": "ev-price-committed",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"value": "12.00", "currency": "USD", "unit": "ea", "basis": "unit"},
+      "sha256": "7430ed6d6ecfc0acad263a89c6bee3f278d439f3687372ff67adb973af1e1550"
+    },
+    "schedule-required": {
+      "evidence_id": "ev-schedule-required",
+      "approved_at": "2026-09-18T12:00:00+00:00",
+      "payload": {"required_by": "2026-10-01"},
+      "sha256": "619c12d437b84f75a5e1421fc6204ed7f6a16728838b2ca21082f7d585eb81e5"
+    },
+    "schedule-commit": {
+      "evidence_id": "ev-schedule-commit",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"committed_for": "2026-10-03", "confirmed": true},
+      "sha256": "850851c8bbcc6fde2913282e3766d5f2ef25a289a961b84a91e95a7fda9a31c1"
+    },
+    "revision-a": {
+      "evidence_id": "ev-revision-a",
+      "approved_at": "2026-09-17T12:00:00+00:00",
+      "payload": {"revision": "A"},
+      "sha256": "24ff1213aa5cfd414f94bd62ab977bedea5ed3e055ee8c8d43eeda7d3edd484f"
+    },
+    "revision-b": {
+      "evidence_id": "ev-revision-b",
+      "approved_at": "2026-09-18T12:00:00+00:00",
+      "payload": {"revision": "B", "supersedes": "A"},
+      "sha256": "2fa9646b42d9831c935861156ebabb4142ca60cb66ba9bfe5f2eff7c51ae6bb9"
+    },
+    "substitution": {
+      "evidence_id": "ev-substitution",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"quantity": "1", "relationship": "substitute"},
+      "sha256": "f441152df92ac7aea6e8ef2bbf3754105f3a1f9d8b171c5924c57ced1018f389"
+    },
+    "identity-unresolved": {
+      "evidence_id": "ev-identity-unresolved",
+      "approved_at": "2026-09-18T13:00:00+00:00",
+      "payload": {"decision": "unresolved", "mention": "vendor-part-7"},
+      "sha256": "0ebd484866e561abcbd60421b334440a60ba24ddbdb065440f2d82f978b1941e"
+    }
+  },
+  "cases": [
+    {"id": "order_missing", "sources": ["req-4"], "expected": {"missing_po": ["not_assessed", "missing_observation"]}},
+    {"id": "complete_empty_orders", "sources": ["req-4", "coverage-complete"], "expected": {"missing_po": ["anomaly", null], "quantity_mismatch": ["anomaly", null]}},
+    {"id": "incomplete_empty_orders", "sources": ["req-4", "coverage-incomplete"], "expected": {"missing_po": ["not_assessed", "incomplete_coverage"], "coverage_gap": ["anomaly", null]}},
+    {"id": "approved_zero_po", "sources": ["req-4", "po-zero", "coverage-complete"], "expected": {"missing_po": ["clear", null], "quantity_mismatch": ["anomaly", null]}},
+    {"id": "quantity_short", "sources": ["req-4", "po-2", "coverage-complete"], "expected": {"quantity_mismatch": ["anomaly", null]}},
+    {"id": "quantity_clear", "sources": ["req-4", "po-4", "coverage-complete"], "expected": {"quantity_mismatch": ["clear", null]}},
+    {"id": "quantity_many", "sources": ["req-4", "po-line-a", "po-line-b", "coverage-complete"], "expected": {"quantity_mismatch": ["clear", null]}},
+    {"id": "quantity_exact_replay", "sources": ["req-4", "po-2", "po-2", "coverage-complete"], "expected": {"quantity_mismatch": ["anomaly", null]}},
+    {"id": "quantity_conflicting_duplicate", "sources": ["req-4", "po-2", "po-conflict", "coverage-complete"], "duplicate_assertion_id": "po-line-conflict", "expected": {"quantity_mismatch": ["not_assessed", "conflicting_input"]}},
+    {"id": "coverage_clear", "sources": ["coverage-complete"], "expected": {"coverage_gap": ["clear", null]}},
+    {"id": "coverage_unknown", "sources": [], "expected": {"coverage_gap": ["not_assessed", "missing_coverage"]}},
+    {"id": "substitution_positive", "sources": ["req-4", "substitution"], "expected": {"substitution": ["anomaly", null]}},
+    {"id": "substitution_clear", "sources": ["req-4", "substitution"], "substitution_quantity_override": "0", "expected": {"substitution": ["clear", null]}},
+    {"id": "substitution_unqualified", "sources": ["req-4"], "expected": {"substitution": ["not_assessed", "missing_relationship"]}},
+    {"id": "revision_stale", "sources": ["revision-a", "revision-b"], "expected": {"stale_revision": ["anomaly", null]}},
+    {"id": "revision_equal", "sources": ["revision-b", "revision-b"], "expected": {"stale_revision": ["clear", null]}},
+    {"id": "revision_unordered", "sources": ["revision-a"], "observed_revision": "Z", "expected": {"stale_revision": ["not_assessed", "missing_supersession"]}},
+    {"id": "price_deviation", "sources": ["price-planned", "price-committed"], "expected": {"price_deviation": ["anomaly", null]}},
+    {"id": "price_clear", "sources": ["price-planned", "price-planned"], "expected": {"price_deviation": ["clear", null]}},
+    {"id": "price_currency_conflict", "sources": ["price-planned", "price-committed"], "committed_currency_override": "EUR", "expected": {"price_deviation": ["not_assessed", "incompatible_basis"]}},
+    {"id": "commitment_late", "sources": ["schedule-required", "schedule-commit"], "expected": {"late_commitment": ["anomaly", null]}},
+    {"id": "commitment_clear", "sources": ["schedule-required", "schedule-required"], "expected": {"late_commitment": ["clear", null]}},
+    {"id": "commitment_unconfirmed", "sources": ["schedule-required"], "expected": {"late_commitment": ["not_assessed", "missing_confirmation"]}},
+    {"id": "identity_unresolved", "sources": ["identity-unresolved"], "expected": {"unresolved_identity": ["anomaly", null]}},
+    {"id": "identity_resolved", "sources": [], "resolution": "resolved", "expected": {"unresolved_identity": ["clear", null]}},
+    {"id": "identity_missing_decision", "sources": [], "expected": {"unresolved_identity": ["not_assessed", "missing_resolution"]}},
+    {"id": "future_observation", "sources": ["req-4", "po-2", "coverage-complete"], "observation_as_of": "2026-09-20T12:00:00+00:00", "expected": {"quantity_mismatch": ["not_assessed", "future_input"]}},
+    {"id": "other_scope_observation", "sources": ["req-4", "po-2", "coverage-complete"], "site_override": "site-other", "expected": {"quantity_mismatch": ["not_assessed", "scope_mismatch"]}},
+    {"id": "order_unresolved", "sources": ["po-2", "coverage-complete"], "governance": "unresolved", "expected": {"missing_po": ["not_assessed", "unresolved_requirement"], "quantity_mismatch": ["not_assessed", "unresolved_requirement"]}}
+  ],
+  "lifecycle_cases": [
+    {"id": "suppress-open", "from": "open", "to": "suppressed", "reason": "approved synthetic suppression", "evidence_ids": ["ev-lifecycle-suppress"]},
+    {"id": "review-open", "from": "open", "to": "in_review", "reason": "assigned synthetic review", "evidence_ids": ["ev-lifecycle-review"]},
+    {"id": "resolve-review", "from": "in_review", "to": "resolved", "reason": "adjudicated synthetic comparison", "evidence_ids": ["ev-lifecycle-resolution"]},
+    {"id": "reopen-resolved", "from": "resolved", "to": "open", "reason": "new synthetic evidence", "evidence_ids": ["ev-lifecycle-reopen"]}
+  ]
+}
