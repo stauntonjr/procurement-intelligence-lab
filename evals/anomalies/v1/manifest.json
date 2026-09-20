@@ -20,8 +20,8 @@
     "po-2": {
       "evidence_id": "ev-po-2",
       "approved_at": "2026-09-18T13:00:00+00:00",
-      "payload": {"ordered_quantity": "2", "unit": "ea"},
-      "sha256": "e0d56cfee416164e6a61e225b33ac10cc691755a0a5dbbd4f62800b12b2c818a"
+      "payload": {"ordered_quantity": "2", "unit": "ea", "approved": true},
+      "sha256": "6805ceaedafa87b470c6fb43dda8fcf9512ca769e3fbfd4c587e245501a2ccd5"
     },
     "po-4": {
       "evidence_id": "ev-po-4",
@@ -80,14 +80,14 @@
     "schedule-required": {
       "evidence_id": "ev-schedule-required",
       "approved_at": "2026-09-18T12:00:00+00:00",
-      "payload": {"required_by": "2026-10-01"},
-      "sha256": "619c12d437b84f75a5e1421fc6204ed7f6a16728838b2ca21082f7d585eb81e5"
+      "payload": {"required_by": "2026-10-01", "confirmed": true, "conflicted": false},
+      "sha256": "87bc72d46fd447700df369052df8b2a057d49e449f12326be2d13025e2f97a33"
     },
     "schedule-commit": {
       "evidence_id": "ev-schedule-commit",
       "approved_at": "2026-09-18T13:00:00+00:00",
-      "payload": {"committed_for": "2026-10-03", "confirmed": true},
-      "sha256": "850851c8bbcc6fde2913282e3766d5f2ef25a289a961b84a91e95a7fda9a31c1"
+      "payload": {"committed_for": "2026-10-03", "confirmed": true, "conflicted": false, "superseded": false},
+      "sha256": "d69482561217cf238eccfae4ed4523fe3717da86142cc80825c68858c628445d"
     },
     "revision-a": {
       "evidence_id": "ev-revision-a",
@@ -98,14 +98,14 @@
     "revision-b": {
       "evidence_id": "ev-revision-b",
       "approved_at": "2026-09-18T12:00:00+00:00",
-      "payload": {"revision": "B", "supersedes": "A"},
-      "sha256": "2fa9646b42d9831c935861156ebabb4142ca60cb66ba9bfe5f2eff7c51ae6bb9"
+      "payload": {"revision": "B", "supersedes": "A", "supersession_edge_ids": ["revision-b-supersedes-a"], "authoritative": true, "ambiguous": false},
+      "sha256": "e6645d50830691f2b8344b9b8aba59246712b251c48f338af27c72646eef8ed8"
     },
     "substitution": {
       "evidence_id": "ev-substitution",
       "approved_at": "2026-09-18T13:00:00+00:00",
-      "payload": {"quantity": "1", "relationship": "substitute"},
-      "sha256": "f441152df92ac7aea6e8ef2bbf3754105f3a1f9d8b171c5924c57ced1018f389"
+      "payload": {"quantity": "1", "relationship": "substitute", "approved": true, "ambiguous": false},
+      "sha256": "c1aae78667c7b01341a8d89dfcead7b350c4da9f2ce83a9e209a6a31f383b8cd"
     },
     "identity-unresolved": {
       "evidence_id": "ev-identity-unresolved",

@@ -259,6 +259,9 @@ def test_taxonomy_and_lifecycle_scenarios_cross_the_real_http_boundary(
                 "unit": "ea",
                 "basis": "unit",
             }
+        for event in payload["lifecycle"]["events"]:
+            assert event["anomaly_id"] == selected["anomaly"]["anomaly_id"]
+            assert event["scope"] == selected["scope"]
         for evidence in payload["evidence"]:
             query = params | {"evidence_id": evidence["evidence_id"]}
             with urlopen(f"{base}/api/source?{urlencode(query)}", timeout=5) as response:

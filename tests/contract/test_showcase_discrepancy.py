@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 from hashlib import sha256
 from importlib.resources import files
@@ -6,6 +7,7 @@ import pytest
 
 from procurement_intelligence_lab.application.showcase import (
     ShowcaseScenario,
+    showcase_anomaly_assessment,
     showcase_order_comparison,
     showcase_required_quantity,
 )
@@ -102,3 +104,36 @@ def test_order_showcase_uses_qualified_assessment_service() -> None:
     assert missing_by_kind["missing_po"].status is AssessmentStatus.NOT_ASSESSED
     assert missing_by_kind["missing_po"].reason is AssessmentReason.MISSING_OBSERVATION
     assert missing_by_kind["quantity_mismatch"].status is AssessmentStatus.NOT_ASSESSED
+
+
+@pytest.mark.contract
+def test_public_anomaly_inputs_are_derived_from_packaged_records() -> None:
+    sources = json.loads(
+        files("procurement_intelligence_lab.examples")
+        .joinpath("anomaly_sources_v1.json")
+        .read_text()
+    )
+    lifecycle = showcase_anomaly_assessment(
+        ShowcaseScenario.LIFECYCLE_REVIEWED, request_context=_context()
+    )
+    substitution = showcase_anomaly_assessment(
+        ShowcaseScenario.SUBSTITUTION, request_context=_context()
+    )
+    revision = showcase_anomaly_assessment(
+        ShowcaseScenario.STALE_REVISION, request_context=_context()
+    )
+
+    line = lifecycle.inputs.ordered_lines[0]
+    assert line.quantity == Decimal(sources["po-2"]["ordered_quantity"])
+    assert line.unit == sources["po-2"]["unit"]
+    assert line.approved is sources["po-2"]["approved"]
+    assert substitution.inputs.substitution is not None
+    assert substitution.inputs.substitution.approved is sources["substitution"]["approved"]
+    assert substitution.inputs.substitution.ambiguous is sources["substitution"]["ambiguous"]
+    assert revision.inputs.revision is not None
+    assert revision.inputs.revision.authoritative is sources["revision-b"]["authoritative"]
+    assert revision.inputs.revision.ambiguous is sources["revision-b"]["ambiguous"]
+    assert (
+        list(revision.inputs.revision.supersession_edge_ids)
+        == sources["revision-b"]["supersession_edge_ids"]
+    )

@@ -480,32 +480,41 @@ def showcase_anomaly_assessment(
             commitment=_schedule("schedule-commit", "committed_for"),
         )
     elif scenario is ShowcaseScenario.STALE_REVISION:
+        expected_revision = _source_record("revision-b")
         inputs = replace(
             inputs,
             revision=RevisionEvidence(
                 "revision-comparison",
-                str(_source_record("revision-b")["revision"]),
+                str(expected_revision["revision"]),
                 str(_source_record("revision-a")["revision"]),
-                (str(_source_record("revision-b")["supersedes"]),),
+                (str(expected_revision["supersedes"]),),
                 _ANOMALY_SCOPE,
                 _ANOMALY_AS_OF,
                 (
                     anomaly_source_evidence("revision-a"),
                     anomaly_source_evidence("revision-b"),
                 ),
-                supersession_edge_ids=("revision-b-supersedes-a",),
+                supersession_edge_ids=tuple(
+                    str(value)
+                    for value in cast(list[object], expected_revision["supersession_edge_ids"])
+                ),
+                authoritative=bool(expected_revision["authoritative"]),
+                ambiguous=bool(expected_revision["ambiguous"]),
             ),
         )
     elif scenario is ShowcaseScenario.SUBSTITUTION:
+        substitution = _source_record("substitution")
         inputs = replace(
             inputs,
             substitution=SubstitutionEvidence(
                 "substitution",
-                Decimal(str(_source_record("substitution")["quantity"])),
-                str(_source_record("substitution")["relationship"]),
+                Decimal(str(substitution["quantity"])),
+                str(substitution["relationship"]),
                 _ANOMALY_SCOPE,
                 _ANOMALY_AS_OF,
                 (anomaly_source_evidence("substitution"),),
+                approved=bool(substitution["approved"]),
+                ambiguous=bool(substitution["ambiguous"]),
             ),
         )
     elif scenario is ShowcaseScenario.UNRESOLVED_IDENTITY:
@@ -522,7 +531,7 @@ def showcase_anomaly_assessment(
             ),
         )
     else:
-        inputs = replace(inputs, ordered_lines=(_line("po-2", "2"),), coverage=complete)
+        inputs = replace(inputs, ordered_lines=(_line("po-2"),), coverage=complete)
 
     policies = _anomaly_policies()
     context = replace(
@@ -566,15 +575,16 @@ def _coverage(source_id: str) -> CoverageAttestation:
     )
 
 
-def _line(source_id: str, quantity: str) -> QualifiedOrderLine:
+def _line(source_id: str) -> QualifiedOrderLine:
+    record = _source_record(source_id)
     return QualifiedOrderLine(
         source_id,
         source_id,
-        Decimal(quantity),
-        "ea",
+        Decimal(str(record["ordered_quantity"])),
+        str(record["unit"]),
         _ANOMALY_SCOPE,
         _ANOMALY_AS_OF,
-        True,
+        bool(record["approved"]),
         (anomaly_source_evidence(source_id),),
     )
 
@@ -602,6 +612,8 @@ def _schedule(source_id: str, value_field: str) -> ScheduleEvidence:
         _ANOMALY_SCOPE,
         _ANOMALY_AS_OF,
         (anomaly_source_evidence(source_id),),
+        superseded=bool(record.get("superseded", False)),
+        conflicted=bool(record["conflicted"]),
     )
 
 

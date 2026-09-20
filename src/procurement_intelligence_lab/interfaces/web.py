@@ -650,6 +650,8 @@ def _anomaly_details_payload(inputs: AnomalyAssessmentInput, kind: str) -> dict[
 def _lifecycle_payload(event: AnomalyLifecycleEvent) -> dict[str, object]:
     return {
         "event_id": event.event_id,
+        "anomaly_id": event.anomaly_id,
+        "scope": _scope_payload(event.scope),
         "previous_status": event.previous_status.value,
         "new_status": event.new_status.value,
         "actor_ref": event.actor_ref,

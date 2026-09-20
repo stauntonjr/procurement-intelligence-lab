@@ -14,6 +14,7 @@
     "mention": "vendor-part-7"
   },
   "po-2": {
+    "approved": true,
     "ordered_quantity": "2",
     "unit": "ea"
   },
@@ -58,17 +59,26 @@
     "revision": "A"
   },
   "revision-b": {
+    "ambiguous": false,
+    "authoritative": true,
     "revision": "B",
-    "supersedes": "A"
+    "supersedes": "A",
+    "supersession_edge_ids": ["revision-b-supersedes-a"]
   },
   "schedule-commit": {
     "committed_for": "2026-10-03",
-    "confirmed": true
+    "confirmed": true,
+    "conflicted": false,
+    "superseded": false
   },
   "schedule-required": {
+    "confirmed": true,
+    "conflicted": false,
     "required_by": "2026-10-01"
   },
   "substitution": {
+    "ambiguous": false,
+    "approved": true,
     "quantity": "1",
     "relationship": "substitute"
   }
