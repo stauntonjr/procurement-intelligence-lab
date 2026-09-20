@@ -1,0 +1,31 @@
+{
+  "schema_version": "anomaly-lifecycle-fixture/v1",
+  "events": [
+    {
+      "event_id": "fixture-review-1",
+      "previous_status": "open",
+      "new_status": "in_review",
+      "actor_ref": "reviewer:synthetic",
+      "occurred_at": "2026-09-19T12:01:00+00:00",
+      "recorded_at": "2026-09-19T12:02:00+00:00",
+      "reason": "assigned synthetic anomaly review",
+      "evidence_ids": ["ev-lifecycle-review"],
+      "evidence_kind": "review",
+      "policy_id": "anomaly-lifecycle/v1",
+      "expected_prior_event_id": null
+    },
+    {
+      "event_id": "fixture-resolution-1",
+      "previous_status": "in_review",
+      "new_status": "resolved",
+      "actor_ref": "reviewer:synthetic",
+      "occurred_at": "2026-09-19T12:03:00+00:00",
+      "recorded_at": "2026-09-19T12:04:00+00:00",
+      "reason": "adjudicated synthetic quantity comparison",
+      "evidence_ids": ["ev-lifecycle-resolution"],
+      "evidence_kind": "adjudication",
+      "policy_id": "anomaly-lifecycle/v1",
+      "expected_prior_event_id": "fixture-review-1"
+    }
+  ]
+}
