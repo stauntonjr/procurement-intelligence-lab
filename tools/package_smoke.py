@@ -46,14 +46,33 @@ def main() -> int:
             if missing:
                 raise RuntimeError(f"wheel is missing runtime resources {missing}")
 
-        environment = temporary / "venv"
-        venv.EnvBuilder(with_pip=True).create(environment)
-        python = environment / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
-        subprocess.run(
-            [str(python), "-m", "pip", "install", "--no-deps", str(wheel)],
-            cwd=temporary,
-            check=True,
-        )
+        probe = ROOT / "tools/order_package_probe.py"
+        probe_outputs: list[str] = []
+        pythons: list[Path] = []
+        for index in (1, 2):
+            environment = temporary / f"venv-{index}"
+            venv.EnvBuilder(with_pip=True).create(environment)
+            python = environment / (
+                "Scripts/python.exe" if sys.platform == "win32" else "bin/python"
+            )
+            pythons.append(python)
+            subprocess.run(
+                [str(python), "-m", "pip", "install", "--no-deps", str(wheel)],
+                cwd=temporary,
+                check=True,
+            )
+            probe_run = subprocess.run(
+                [str(python), str(probe)],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            probe_outputs.append(probe_run.stdout.strip())
+        if probe_outputs[0] != probe_outputs[1]:
+            raise RuntimeError("semantic identities changed across clean installation paths")
+
+        python = pythons[0]
         completed = subprocess.run(
             [str(python), "-m", "procurement_intelligence_lab"],
             cwd=temporary,
@@ -64,9 +83,6 @@ def main() -> int:
         payload = json.loads(completed.stdout)
         if payload["claims"]["gpu_quantity"]["value"] != "4":
             raise RuntimeError("installed demo returned an unexpected GPU quantity")
-        # Exercise the installed public caller from outside the repository.
-        probe = ROOT / "tools/order_package_probe.py"
-        subprocess.run([str(python), str(probe)], cwd=temporary, check=True)
         web_help = subprocess.run(
             [str(python), "-m", "procurement_intelligence_lab.interfaces.web", "--help"],
             cwd=temporary,

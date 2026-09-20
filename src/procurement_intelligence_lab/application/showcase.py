@@ -367,9 +367,13 @@ def _anomaly_sources() -> dict[str, dict[str, object]]:
     return json.loads(resource.read_text())
 
 
+def _source_record(source_id: str) -> dict[str, object]:
+    return _anomaly_sources()[source_id]
+
+
 def anomaly_source_evidence(source_id: str) -> EvidenceRef:
     """Build the stable evidence identity for one packaged anomaly-corpus record."""
-    payload = _anomaly_sources()[source_id]
+    payload = _source_record(source_id)
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     return EvidenceRef(
         f"anomaly-corpus:{source_id}",
@@ -392,13 +396,18 @@ def lifecycle_event_evidence(event: AnomalyLifecycleEvent) -> tuple[EvidenceRef,
 
 def _lifecycle_event_canonical(event: AnomalyLifecycleEvent, evidence_id: str) -> str:
     return json.dumps(
-        _lifecycle_source_record(event, evidence_id), sort_keys=True, separators=(",", ":")
+        lifecycle_event_source_record(event, evidence_id),
+        sort_keys=True,
+        separators=(",", ":"),
     )
 
 
-def _lifecycle_source_record(event: AnomalyLifecycleEvent, evidence_id: str) -> dict[str, str]:
+def lifecycle_event_source_record(
+    event: AnomalyLifecycleEvent, evidence_id: str
+) -> dict[str, object]:
     return {
         "actor_ref": event.actor_ref,
+        "anomaly_id": event.anomaly_id,
         "evidence_id": evidence_id,
         "evidence_kind": event.evidence_kind.value,
         "event_id": event.event_id,
@@ -406,42 +415,16 @@ def _lifecycle_source_record(event: AnomalyLifecycleEvent, evidence_id: str) -> 
         "occurred_at": event.occurred_at.isoformat(),
         "policy_id": event.policy_id,
         "previous_status": event.previous_status.value,
+        "expected_prior_event_id": event.expected_prior_event_id,
         "reason": event.reason,
         "recorded_at": event.recorded_at.isoformat(),
+        "scope": {
+            "tenant_id": event.scope.tenant_id,
+            "project_id": event.scope.project_id,
+            "site_id": event.scope.site_id,
+            "version": event.scope.version,
+        },
     }
-
-
-def lifecycle_source_record(evidence_id: str) -> tuple[EvidenceRef, dict[str, str]]:
-    """Resolve one public lifecycle evidence record from the packaged fixture."""
-    payload = json.loads(
-        files("procurement_intelligence_lab.examples")
-        .joinpath("anomaly_lifecycle_v1.json")
-        .read_text()
-    )
-    for history in payload["histories"].values():
-        for item in history:
-            if evidence_id not in item["evidence_ids"]:
-                continue
-            record = {
-                "actor_ref": str(item["actor_ref"]),
-                "evidence_id": evidence_id,
-                "evidence_kind": str(item["evidence_kind"]),
-                "event_id": str(item["event_id"]),
-                "new_status": str(item["new_status"]),
-                "occurred_at": str(item["occurred_at"]),
-                "policy_id": str(item["policy_id"]),
-                "previous_status": str(item["previous_status"]),
-                "reason": str(item["reason"]),
-                "recorded_at": str(item["recorded_at"]),
-            }
-            canonical = json.dumps(record, sort_keys=True, separators=(",", ":"))
-            reference = EvidenceRef(
-                "anomaly-lifecycle:v1",
-                sha256(canonical.encode()).hexdigest(),
-                RecordLocation("anomaly-lifecycle/v1", evidence_id),
-            )
-            return reference, record
-    raise KeyError(evidence_id)
 
 
 def showcase_anomaly_assessment(
@@ -450,9 +433,10 @@ def showcase_anomaly_assessment(
     """Assess one fixed corpus scenario and optionally replay its read-only lifecycle."""
     if scenario not in TAXONOMY_SCENARIOS:
         raise SemanticContractError("unsupported anomaly showcase scenario")
+    requirement = _source_record("req-4")
     expected = ExpectedRequirement(
         "GPU-A",
-        Decimal(4),
+        Decimal(str(requirement["required_quantity"])),
         _ANOMALY_SCOPE,
         _ANOMALY_AS_OF,
         (anomaly_source_evidence("req-4"),),
@@ -478,37 +462,38 @@ def showcase_anomaly_assessment(
         ShowcaseScenario.LIFECYCLE_REVIEWED: "quantity_mismatch",
         ShowcaseScenario.LIFECYCLE_RESOLVED: "quantity_mismatch",
     }[scenario]
-    complete = _coverage("coverage-complete", complete=True)
+    complete = _coverage("coverage-complete")
     if scenario is ShowcaseScenario.QUALIFIED_MISSING_PO:
         inputs = replace(inputs, coverage=complete)
     elif scenario is ShowcaseScenario.INCOMPLETE_COVERAGE:
-        inputs = replace(inputs, coverage=_coverage("coverage-incomplete", complete=False))
+        inputs = replace(inputs, coverage=_coverage("coverage-incomplete"))
     elif scenario is ShowcaseScenario.PRICE_DEVIATION:
         inputs = replace(
             inputs,
-            planned_price=_price("price-planned", "10.00"),
-            committed_price=_price("price-committed", "12.00"),
+            planned_price=_price("price-planned"),
+            committed_price=_price("price-committed"),
         )
     elif scenario is ShowcaseScenario.LATE_COMMITMENT:
         inputs = replace(
             inputs,
-            required_schedule=_schedule("schedule-required", date(2026, 10, 1), False),
-            commitment=_schedule("schedule-commit", date(2026, 10, 3), True),
+            required_schedule=_schedule("schedule-required", "required_by"),
+            commitment=_schedule("schedule-commit", "committed_for"),
         )
     elif scenario is ShowcaseScenario.STALE_REVISION:
         inputs = replace(
             inputs,
             revision=RevisionEvidence(
                 "revision-comparison",
-                "B",
-                "A",
-                ("A",),
+                str(_source_record("revision-b")["revision"]),
+                str(_source_record("revision-a")["revision"]),
+                (str(_source_record("revision-b")["supersedes"]),),
                 _ANOMALY_SCOPE,
                 _ANOMALY_AS_OF,
                 (
                     anomaly_source_evidence("revision-a"),
                     anomaly_source_evidence("revision-b"),
                 ),
+                supersession_edge_ids=("revision-b-supersedes-a",),
             ),
         )
     elif scenario is ShowcaseScenario.SUBSTITUTION:
@@ -516,8 +501,8 @@ def showcase_anomaly_assessment(
             inputs,
             substitution=SubstitutionEvidence(
                 "substitution",
-                Decimal(1),
-                "substitute",
+                Decimal(str(_source_record("substitution")["quantity"])),
+                str(_source_record("substitution")["relationship"]),
                 _ANOMALY_SCOPE,
                 _ANOMALY_AS_OF,
                 (anomaly_source_evidence("substitution"),),
@@ -528,8 +513,8 @@ def showcase_anomaly_assessment(
             inputs,
             resolution=ResolutionEvidence(
                 "identity-unresolved",
-                "unresolved",
-                "vendor-part-7",
+                str(_source_record("identity-unresolved")["decision"]),
+                str(_source_record("identity-unresolved")["mention"]),
                 None,
                 _ANOMALY_SCOPE,
                 _ANOMALY_AS_OF,
@@ -567,15 +552,16 @@ def showcase_anomaly_assessment(
     return ShowcaseAnomalyResult(scenario, inputs, assessments, selected, history, projected)
 
 
-def _coverage(source_id: str, *, complete: bool) -> CoverageAttestation:
+def _coverage(source_id: str) -> CoverageAttestation:
+    record = _source_record(source_id)
     return CoverageAttestation(
         source_id,
         "GPU-A",
         _ANOMALY_SCOPE,
         _ANOMALY_AS_OF,
-        complete,
-        True,
-        True,
+        bool(record["complete"]),
+        bool(record["current"]),
+        bool(record["authoritative"]),
         (anomaly_source_evidence(source_id),),
     )
 
@@ -593,24 +579,26 @@ def _line(source_id: str, quantity: str) -> QualifiedOrderLine:
     )
 
 
-def _price(source_id: str, value: str) -> PriceEvidence:
+def _price(source_id: str) -> PriceEvidence:
+    record = _source_record(source_id)
     return PriceEvidence(
         source_id,
-        Decimal(value),
-        "USD",
-        "ea",
-        "unit",
+        Decimal(str(record["value"])),
+        str(record["currency"]),
+        str(record["unit"]),
+        str(record["basis"]),
         _ANOMALY_SCOPE,
         _ANOMALY_AS_OF,
         (anomaly_source_evidence(source_id),),
     )
 
 
-def _schedule(source_id: str, value: date, confirmed: bool) -> ScheduleEvidence:
+def _schedule(source_id: str, value_field: str) -> ScheduleEvidence:
+    record = _source_record(source_id)
     return ScheduleEvidence(
         source_id,
-        value,
-        confirmed,
+        date.fromisoformat(str(record[value_field])),
+        bool(record.get("confirmed", True)),
         _ANOMALY_SCOPE,
         _ANOMALY_AS_OF,
         (anomaly_source_evidence(source_id),),

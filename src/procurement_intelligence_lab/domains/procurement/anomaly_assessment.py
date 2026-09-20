@@ -156,6 +156,7 @@ class ScheduleEvidence:
     as_of: datetime
     evidence: tuple[EvidenceRef, ...]
     superseded: bool = False
+    conflicted: bool = False
 
     def __post_init__(self) -> None:
         if not self.input_id.strip():
@@ -173,6 +174,9 @@ class RevisionEvidence:
     scope: StateScope
     as_of: datetime
     evidence: tuple[EvidenceRef, ...]
+    supersession_edge_ids: tuple[str, ...] = ()
+    authoritative: bool = True
+    ambiguous: bool = False
 
     def __post_init__(self) -> None:
         if not all(
@@ -181,6 +185,8 @@ class RevisionEvidence:
             raise SemanticContractError("revision identity and labels are required")
         if any(not item.strip() for item in self.superseded_revision_ids):
             raise SemanticContractError("superseded revision IDs must not be blank")
+        if any(not item.strip() for item in self.supersession_edge_ids):
+            raise SemanticContractError("supersession edge IDs must not be blank")
         _require_aware("revision as_of", self.as_of)
         _require_evidence("revision", self.evidence)
 
@@ -193,6 +199,8 @@ class SubstitutionEvidence:
     scope: StateScope
     as_of: datetime
     evidence: tuple[EvidenceRef, ...]
+    approved: bool = True
+    ambiguous: bool = False
 
     def __post_init__(self) -> None:
         if not self.input_id.strip() or not self.relationship_kind.strip():
@@ -316,6 +324,10 @@ class AnomalyAssessmentInput:
         if any(not item.strip() for item in self.governance_decision_ids):
             raise SemanticContractError("governance decision IDs must not be blank")
         if self.expected is not None:
+            if not self.governance_decision_ids or not self.governance_evidence:
+                raise SemanticContractError(
+                    "expected requirement requires governance decision and evidence"
+                )
             if self.expected.canonical_key != self.subject_key:
                 raise SemanticContractError("expected requirement subject must match assessment")
             if self.expected.scope != self.scope:
@@ -326,6 +338,7 @@ class AnomalyAssessmentInput:
 
 @dataclass(frozen=True)
 class AnomalyAssessment:
+    subject_key: str
     kind: AnomalyKind
     status: AssessmentStatus
     reason: AssessmentReason | None
@@ -341,6 +354,8 @@ class AnomalyAssessment:
     as_of: datetime
 
     def __post_init__(self) -> None:
+        if not self.subject_key.strip():
+            raise SemanticContractError("anomaly assessment subject is required")
         if self.status is AssessmentStatus.ANOMALY and self.anomaly is None:
             raise SemanticContractError("anomaly assessment status requires an anomaly")
         if self.status is not AssessmentStatus.ANOMALY and self.anomaly is not None:
@@ -361,6 +376,7 @@ class AnomalyAssessment:
     def assessment_id(self) -> str:
         return stable_id(
             "anomaly-assessment",
+            self.subject_key,
             self.kind.value,
             self.status.value,
             self.reason.value if self.reason else None,
@@ -386,15 +402,32 @@ def assess_quantity(
     evidence_roles = _roles_for(
         _evidence_roles(inputs), "requirement", "governance", "observation", "coverage"
     )
-    provenance = _assessment_provenance(provenance, policy, evidence_roles)
     invalid_reason, lines = _admit_lines(inputs)
     missing = _assess_missing_po(
-        inputs, lines, invalid_reason, evidence_roles, policy, provenance, detected_at
+        inputs,
+        lines,
+        invalid_reason,
+        evidence_roles,
+        policy,
+        _assessment_provenance(provenance, policy, AnomalyKind.MISSING_PO, evidence_roles),
+        detected_at,
     )
     quantity = _assess_quantity_mismatch(
-        inputs, lines, invalid_reason, evidence_roles, policy, provenance, detected_at
+        inputs,
+        lines,
+        invalid_reason,
+        evidence_roles,
+        policy,
+        _assessment_provenance(provenance, policy, AnomalyKind.QUANTITY_MISMATCH, evidence_roles),
+        detected_at,
     )
-    coverage = _assess_coverage(inputs, evidence_roles, policy, provenance, detected_at)
+    coverage = _assess_coverage(
+        inputs,
+        evidence_roles,
+        policy,
+        _assessment_provenance(provenance, policy, AnomalyKind.COVERAGE_GAP, evidence_roles),
+        detected_at,
+    )
     return missing, quantity, coverage
 
 
@@ -423,35 +456,43 @@ def assess_anomalies(
             inputs,
             substitution_roles,
             policies,
-            _assessment_provenance(provenance, policies, substitution_roles),
+            _assessment_provenance(
+                provenance, policies, AnomalyKind.SUBSTITUTION, substitution_roles
+            ),
             detected_at,
         ),
         _assess_revision(
             inputs,
             revision_roles,
             policies,
-            _assessment_provenance(provenance, policies, revision_roles),
+            _assessment_provenance(
+                provenance, policies, AnomalyKind.STALE_REVISION, revision_roles
+            ),
             detected_at,
         ),
         _assess_price(
             inputs,
             price_roles,
             policies,
-            _assessment_provenance(provenance, policies, price_roles),
+            _assessment_provenance(provenance, policies, AnomalyKind.PRICE_DEVIATION, price_roles),
             detected_at,
         ),
         _assess_schedule(
             inputs,
             schedule_roles,
             policies,
-            _assessment_provenance(provenance, policies, schedule_roles),
+            _assessment_provenance(
+                provenance, policies, AnomalyKind.LATE_COMMITMENT, schedule_roles
+            ),
             detected_at,
         ),
         _assess_identity(
             inputs,
             identity_roles,
             policies,
-            _assessment_provenance(provenance, policies, identity_roles),
+            _assessment_provenance(
+                provenance, policies, AnomalyKind.UNRESOLVED_IDENTITY, identity_roles
+            ),
             detected_at,
         ),
     )
@@ -474,6 +515,30 @@ def _assess_substitution(
             AssessmentReason.MISSING_RELATIONSHIP,
             None,
             (),
+            evidence_roles,
+            policies.substitution.policy_id,
+            policies,
+        )
+    if value.ambiguous:
+        return _result(
+            inputs,
+            kind,
+            AssessmentStatus.NOT_ASSESSED,
+            AssessmentReason.CONFLICTING_INPUT,
+            None,
+            (value.input_id,),
+            evidence_roles,
+            policies.substitution.policy_id,
+            policies,
+        )
+    if not value.approved:
+        return _result(
+            inputs,
+            kind,
+            AssessmentStatus.NOT_ASSESSED,
+            AssessmentReason.INELIGIBLE_INPUT,
+            None,
+            (value.input_id,),
             evidence_roles,
             policies.substitution.policy_id,
             policies,
@@ -571,8 +636,20 @@ def _assess_revision(
             policies.stale_revision.policy_id,
             policies,
         )
+    if value.ambiguous:
+        return _result(
+            inputs,
+            kind,
+            AssessmentStatus.NOT_ASSESSED,
+            AssessmentReason.CONFLICTING_INPUT,
+            None,
+            (value.input_id,),
+            evidence_roles,
+            policies.stale_revision.policy_id,
+            policies,
+        )
     is_superseded = value.observed_revision in value.superseded_revision_ids
-    if not is_superseded:
+    if not is_superseded or not value.authoritative or not value.supersession_edge_ids:
         return _result(
             inputs,
             kind,
@@ -736,6 +813,18 @@ def _assess_schedule(
             AssessmentReason.MISSING_CONFIRMATION,
             None,
             (commitment.input_id,),
+            evidence_roles,
+            policies.late_commitment.policy_id,
+            policies,
+        )
+    if required.conflicted or commitment.conflicted:
+        return _result(
+            inputs,
+            kind,
+            AssessmentStatus.NOT_ASSESSED,
+            AssessmentReason.CONFLICTING_INPUT,
+            None,
+            (required.input_id, commitment.input_id),
             evidence_roles,
             policies.late_commitment.policy_id,
             policies,
@@ -908,6 +997,19 @@ def _assess_missing_po(
             policy.missing_purchase_order.policy_id,
             policy,
         )
+    coverage_reason = _coverage_rejection(inputs, inputs.coverage)
+    if coverage_reason is not None:
+        return _result(
+            inputs,
+            kind,
+            AssessmentStatus.NOT_ASSESSED,
+            coverage_reason,
+            None,
+            (inputs.coverage.attestation_id,),
+            evidence_roles,
+            policy.missing_purchase_order.policy_id,
+            policy,
+        )
     if not inputs.coverage.qualified_complete:
         return _result(
             inputs,
@@ -1001,6 +1103,20 @@ def _assess_quantity_mismatch(
             policy.quantity_mismatch.policy_id,
             policy,
         )
+    if inputs.coverage is not None:
+        coverage_reason = _coverage_rejection(inputs, inputs.coverage)
+        if coverage_reason is not None:
+            return _result(
+                inputs,
+                kind,
+                AssessmentStatus.NOT_ASSESSED,
+                coverage_reason,
+                None,
+                (inputs.coverage.attestation_id,),
+                evidence_roles,
+                policy.quantity_mismatch.policy_id,
+                policy,
+            )
     if inputs.coverage is not None and not inputs.coverage.qualified_complete:
         return _result(
             inputs,
@@ -1086,24 +1202,13 @@ def _assess_coverage(
             policy.coverage_gap.policy_id,
             policy,
         )
-    if coverage.subject_key != inputs.subject_key or coverage.scope != inputs.scope:
+    rejection = _coverage_rejection(inputs, coverage)
+    if rejection is not None:
         return _result(
             inputs,
             kind,
             AssessmentStatus.NOT_ASSESSED,
-            AssessmentReason.SCOPE_MISMATCH,
-            None,
-            (coverage.attestation_id,),
-            evidence_roles,
-            policy.coverage_gap.policy_id,
-            policy,
-        )
-    if coverage.as_of > inputs.as_of:
-        return _result(
-            inputs,
-            kind,
-            AssessmentStatus.NOT_ASSESSED,
-            AssessmentReason.FUTURE_INPUT,
+            rejection,
             None,
             (coverage.attestation_id,),
             evidence_roles,
@@ -1111,6 +1216,18 @@ def _assess_coverage(
             policy,
         )
     if coverage.qualified_complete:
+        return _result(
+            inputs,
+            kind,
+            AssessmentStatus.CLEAR,
+            None,
+            None,
+            (coverage.attestation_id,),
+            evidence_roles,
+            policy.coverage_gap.policy_id,
+            policy,
+        )
+    if coverage.complete and coverage.authoritative and not policy.coverage_gap.flag_non_current:
         return _result(
             inputs,
             kind,
@@ -1160,14 +1277,7 @@ def _admit_lines(
     inputs: AnomalyAssessmentInput,
 ) -> tuple[AssessmentReason | None, tuple[QualifiedOrderLine, ...]]:
     dispositions = dict(_input_dispositions(inputs))
-    values = set(dispositions.values())
-    if "rejected_scope" in values:
-        return AssessmentReason.SCOPE_MISMATCH, ()
-    if "rejected_future" in values:
-        return AssessmentReason.FUTURE_INPUT, ()
-    if "rejected_ineligible" in values:
-        return AssessmentReason.INELIGIBLE_INPUT, ()
-    if "conflicting_version" in values:
+    if "conflicting_version" in set(dispositions.values()):
         return AssessmentReason.CONFLICTING_INPUT, ()
     eligible = {
         line.assertion_id: line
@@ -1175,6 +1285,16 @@ def _admit_lines(
         if dispositions[line.line_id] == "eligible"
     }
     return None, tuple(sorted(eligible.values(), key=lambda item: item.line_id))
+
+
+def _coverage_rejection(
+    inputs: AnomalyAssessmentInput, coverage: CoverageAttestation
+) -> AssessmentReason | None:
+    if coverage.subject_key != inputs.subject_key or coverage.scope != inputs.scope:
+        return AssessmentReason.SCOPE_MISMATCH
+    if coverage.as_of > inputs.as_of:
+        return AssessmentReason.FUTURE_INPUT
+    return None
 
 
 def _input_dispositions(inputs: AnomalyAssessmentInput) -> tuple[tuple[str, str], ...]:
@@ -1257,16 +1377,60 @@ def _roles_for(
 def _assessment_provenance(
     provenance: DecisionProvenance,
     policies: QuantityAssessmentPolicies,
+    kind: AnomalyKind,
     evidence_roles: tuple[tuple[str, tuple[EvidenceRef, ...]], ...],
 ) -> DecisionProvenance:
+    _, digest = _policy_contract(policies, kind)
     context = replace(
         provenance.context,
-        config_digest=policies.digest,
+        config_digest=digest,
         input_snapshot_ids=tuple(
             sorted(ref.evidence_id for ref in _flatten_evidence(evidence_roles))
         ),
     )
     return replace(provenance, context=context)
+
+
+def _policy_contract(policies: QuantityAssessmentPolicies, kind: AnomalyKind) -> tuple[str, str]:
+    if kind is AnomalyKind.MISSING_PO:
+        policy = policies.missing_purchase_order
+        payload = {
+            "minimum_required_quantity": str(policy.minimum_required_quantity),
+            "policy_id": policy.policy_id,
+        }
+    elif kind is AnomalyKind.QUANTITY_MISMATCH:
+        policy = policies.quantity_mismatch
+        payload = {"policy_id": policy.policy_id, "tolerance": str(policy.tolerance)}
+    elif kind is AnomalyKind.COVERAGE_GAP:
+        policy = policies.coverage_gap
+        payload = {
+            "flag_non_current": policy.flag_non_current,
+            "policy_id": policy.policy_id,
+            "unknown_quantity_tolerance": str(policy.unknown_quantity_tolerance),
+        }
+    elif isinstance(policies, AnomalyAssessmentPolicies):
+        if kind is AnomalyKind.SUBSTITUTION:
+            policy = policies.substitution
+            payload = {"policy_id": policy.policy_id, "tolerance": str(policy.tolerance)}
+        elif kind is AnomalyKind.STALE_REVISION:
+            payload = {"policy_id": policies.stale_revision.policy_id}
+        elif kind is AnomalyKind.PRICE_DEVIATION:
+            policy = policies.price_deviation
+            payload = {"policy_id": policy.policy_id, "tolerance": str(policy.tolerance)}
+        elif kind is AnomalyKind.LATE_COMMITMENT:
+            policy = policies.late_commitment
+            payload = {
+                "policy_id": policy.policy_id,
+                "tolerance_seconds": str(policy.tolerance.total_seconds()),
+            }
+        elif kind is AnomalyKind.UNRESOLVED_IDENTITY:
+            payload = {"policy_id": policies.unresolved_identity.policy_id}
+        else:  # pragma: no cover - exhaustive guard for future enum members
+            raise SemanticContractError(f"unsupported policy kind: {kind.value}")
+    else:
+        raise SemanticContractError(f"policy bundle does not support kind: {kind.value}")
+    configuration = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return configuration, sha256(configuration.encode()).hexdigest()
 
 
 def _flatten_evidence(
@@ -1309,7 +1473,9 @@ def _result(
     policy_id: str,
     policies: QuantityAssessmentPolicies,
 ) -> AnomalyAssessment:
+    policy_configuration, policy_digest = _policy_contract(policies, kind)
     return AnomalyAssessment(
+        inputs.subject_key,
         kind,
         status,
         reason,
@@ -1319,8 +1485,8 @@ def _result(
         _input_dispositions(inputs),
         evidence_roles,
         policy_id,
-        policies.canonical_configuration,
-        policies.digest,
+        policy_configuration,
+        policy_digest,
         inputs.scope,
         inputs.as_of,
     )

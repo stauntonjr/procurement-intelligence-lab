@@ -239,6 +239,7 @@ def test_taxonomy_and_lifecycle_scenarios_cross_the_real_http_boundary(
         selected = payload["selected_assessment"]
         assert payload["claim"] == "anomaly_assessment"
         assert selected["kind"] == kind
+        assert selected["subject_key"] == "GPU-A"
         assert selected["assessment_status"] == assessment_status
         assert selected["lifecycle_status"] == lifecycle_status
         assert len(selected["policy_digest"]) == 64
@@ -247,12 +248,34 @@ def test_taxonomy_and_lifecycle_scenarios_cross_the_real_http_boundary(
         assert payload["inputs"]["required_quantity"] == "4"
         assert payload["read_only"] is True
         assert "write_controls" not in payload
+        assert selected["details"]
+        if kind in {"missing_po", "quantity_mismatch", "coverage_gap", "substitution"}:
+            assert selected["details"]["unit"] == "ea"
+        if kind == "price_deviation":
+            assert selected["details"] == {
+                "planned": "10.00",
+                "committed": "12.00",
+                "currency": "USD",
+                "unit": "ea",
+                "basis": "unit",
+            }
         for evidence in payload["evidence"]:
             query = params | {"evidence_id": evidence["evidence_id"]}
             with urlopen(f"{base}/api/source?{urlencode(query)}", timeout=5) as response:
                 source = json.load(response)
             assert source["evidence"] == evidence
             assert "source_record" in source or "source_grid" in source
+            if evidence["artifact_id"] == "anomaly-lifecycle:v1":
+                assert source["source_record"]["anomaly_id"] == selected["anomaly"]["anomaly_id"]
+                assert source["source_record"]["scope"] == selected["scope"]
+                assert "expected_prior_event_id" in source["source_record"]
+
+        with pytest.raises(HTTPError) as error:
+            urlopen(
+                f"{base}/api/ask?{urlencode(params | {'scenario': 'unknown-scenario'})}",
+                timeout=5,
+            )
+        assert error.value.code == 422
     finally:
         server.shutdown()
         server.server_close()

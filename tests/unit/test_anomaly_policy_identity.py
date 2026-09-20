@@ -83,6 +83,7 @@ def _input() -> AnomalyAssessmentInput:
         AS_OF,
         expected,
         governance_decision_ids=("decision-1",),
+        governance_evidence=(EVIDENCE,),
         ordered_lines=(line,),
     )
 
@@ -138,3 +139,34 @@ def test_semantic_identity_tracks_scope_as_of_evidence_and_governance() -> None:
         )
         == 4
     )
+
+
+def test_assessment_identity_tracks_subject_even_without_anomaly() -> None:
+    baseline_input = replace(_input(), ordered_lines=())
+    assert baseline_input.expected is not None
+    other_expected = replace(baseline_input.expected, canonical_key="GPU-B")
+    other_input = replace(baseline_input, subject_key="GPU-B", expected=other_expected)
+
+    baseline = _quantity(_service("0"), baseline_input)
+    other = _quantity(_service("0"), other_input)
+
+    assert baseline.status.value == other.status.value == "not_assessed"
+    assert baseline.assessment_id != other.assessment_id
+
+
+def test_unrelated_policy_configuration_does_not_change_quantity_identity() -> None:
+    baseline_service = _service("0")
+    changed_policies = replace(
+        baseline_service.policies,
+        price_deviation=PriceDeviationPolicy("price/v1", Decimal(99)),
+    )
+    changed_service = replace(baseline_service, policies=changed_policies)
+
+    baseline = _quantity(baseline_service)
+    changed = _quantity(changed_service)
+
+    assert baseline.policy_configuration == changed.policy_configuration
+    assert baseline.policy_digest == changed.policy_digest
+    assert baseline.assessment_id == changed.assessment_id
+    assert baseline.anomaly is not None and changed.anomaly is not None
+    assert baseline.anomaly.anomaly_id == changed.anomaly.anomaly_id

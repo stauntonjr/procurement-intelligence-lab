@@ -114,7 +114,14 @@ def _coverage(source_id: str, *, complete: bool) -> CoverageAttestation:
 
 def _input(case: str) -> AnomalyAssessmentInput:
     if case == "order_missing":
-        return AnomalyAssessmentInput("GPU-A", SCOPE, AS_OF, _expected())
+        return AnomalyAssessmentInput(
+            "GPU-A",
+            SCOPE,
+            AS_OF,
+            _expected(),
+            governance_decision_ids=("decision-required-4",),
+            governance_evidence=(_evidence("req-4"),),
+        )
     if case == "order_unresolved":
         return AnomalyAssessmentInput(
             "GPU-A",
@@ -133,6 +140,7 @@ def _input(case: str) -> AnomalyAssessmentInput:
             AS_OF,
             _expected(),
             governance_decision_ids=("decision-required-4",),
+            governance_evidence=(_evidence("req-4"),),
             coverage=_coverage("coverage-complete", complete=True),
         )
     if case == "incomplete_empty_orders":
@@ -142,6 +150,7 @@ def _input(case: str) -> AnomalyAssessmentInput:
             AS_OF,
             _expected(),
             governance_decision_ids=("decision-required-4",),
+            governance_evidence=(_evidence("req-4"),),
             coverage=_coverage("coverage-incomplete", complete=False),
         )
     raise AssertionError(case)
@@ -215,6 +224,7 @@ def test_quantity_aggregates_distinct_lines_and_deduplicates_exact_replay(
         AS_OF,
         _expected(),
         governance_decision_ids=("decision-required-4",),
+        governance_evidence=(_evidence("req-4"),),
         ordered_lines=(three, one, one),
         coverage=_coverage("coverage-complete", complete=True),
     )
@@ -243,6 +253,8 @@ def test_conflicting_reuse_of_assertion_id_abstains(
         SCOPE,
         AS_OF,
         _expected(),
+        governance_decision_ids=("decision-required-4",),
+        governance_evidence=(_evidence("req-4"),),
         ordered_lines=(first, conflict),
         coverage=_coverage("coverage-complete", complete=True),
     )
@@ -264,14 +276,14 @@ def test_conflicting_reuse_of_assertion_id_abstains(
 
 
 @pytest.mark.contract
-def test_scope_and_time_rejections_are_explicit(
+def test_scope_and_time_rejections_are_retained_but_do_not_enter_totals(
     service: AnomalyService, context: RequestContext
 ) -> None:
     other_scope = replace(SCOPE, site_id="site-other")
     future = AS_OF.replace(day=20)
-    for line, reason in (
-        (_line("po-2", "2", scope=other_scope), AssessmentReason.SCOPE_MISMATCH),
-        (_line("po-2", "2", as_of=future), AssessmentReason.FUTURE_INPUT),
+    for line, expected_disposition in (
+        (_line("po-2", "2", scope=other_scope), "rejected_scope"),
+        (_line("po-2", "2", as_of=future), "rejected_future"),
     ):
         result = next(
             item
@@ -281,6 +293,8 @@ def test_scope_and_time_rejections_are_explicit(
                     SCOPE,
                     AS_OF,
                     _expected(),
+                    governance_decision_ids=("decision-required-4",),
+                    governance_evidence=(_evidence("req-4"),),
                     ordered_lines=(line,),
                     coverage=_coverage("coverage-complete", complete=True),
                 ),
@@ -288,12 +302,33 @@ def test_scope_and_time_rejections_are_explicit(
             )
             if item.kind.value == "quantity_mismatch"
         )
-        assert result.status is AssessmentStatus.NOT_ASSESSED
-        assert result.reason is reason
-        disposition = dict(result.input_dispositions)
-        assert disposition[line.line_id] == (
-            "rejected_scope" if reason is AssessmentReason.SCOPE_MISMATCH else "rejected_future"
+        assert result.status is AssessmentStatus.ANOMALY
+        assert result.anomaly is not None and result.anomaly.observed == Decimal(0)
+        dispositions = dict(result.input_dispositions)
+        assert dispositions[line.line_id] == expected_disposition
+
+
+@pytest.mark.contract
+def test_rejected_extra_line_does_not_poison_eligible_aggregation(
+    service: AnomalyService, context: RequestContext
+) -> None:
+    eligible = _line("po-4", "4")
+    rejected = _line("po-2", "2", scope=replace(SCOPE, site_id="other-site"))
+    result = next(
+        item
+        for item in service.assess(
+            replace(_input("order_missing"), ordered_lines=(rejected, eligible)),
+            request_context=context,
         )
+        if item.kind.value == "quantity_mismatch"
+    )
+
+    assert result.status is AssessmentStatus.CLEAR
+    assert result.input_ids == ("po-4",)
+    assert dict(result.input_dispositions) == {
+        "po-2": "rejected_scope",
+        "po-4": "eligible",
+    }
 
 
 @pytest.mark.contract
@@ -312,7 +347,15 @@ def test_exact_tolerance_is_clear_and_fractional_overage_is_anomaly(
 
     def quantity_status(line: QualifiedOrderLine) -> AssessmentStatus:
         results = tolerant.assess(
-            AnomalyAssessmentInput("GPU-A", SCOPE, AS_OF, _expected(), ordered_lines=(line,)),
+            AnomalyAssessmentInput(
+                "GPU-A",
+                SCOPE,
+                AS_OF,
+                _expected(),
+                governance_decision_ids=("decision-required-4",),
+                governance_evidence=(_evidence("req-4"),),
+                ordered_lines=(line,),
+            ),
             request_context=context,
         )
         return next(item.status for item in results if item.kind.value == "quantity_mismatch")
@@ -331,6 +374,8 @@ def test_approved_zero_line_is_not_misclassified_as_missing_po(
             SCOPE,
             AS_OF,
             _expected(),
+            governance_decision_ids=("decision-required-4",),
+            governance_evidence=(_evidence("req-4"),),
             ordered_lines=(_line("po-zero", "0"),),
             coverage=_coverage("coverage-complete", complete=True),
         ),
@@ -404,6 +449,7 @@ def _taxonomy_service() -> AnomalyService:
                 SCOPE,
                 AS_OF,
                 (_evidence("revision-a"), _evidence("revision-b")),
+                supersession_edge_ids=("revision-b-supersedes-a",),
             ),
         ),
         (
@@ -457,7 +503,7 @@ def test_remaining_taxonomy_kinds_emit_qualified_results(
     field: str,
     value: object,
 ) -> None:
-    inputs = AnomalyAssessmentInput("GPU-A", SCOPE, AS_OF, _expected())
+    inputs = _input("order_missing")
     if field == "planned_price":
         inputs = replace(
             inputs,
@@ -512,7 +558,7 @@ def test_remaining_taxonomy_kinds_emit_qualified_results(
     )
     assert {ref.evidence_id for ref in result.evidence} == {
         _evidence(source_id).evidence_id for source_id in manifest_case["sources"]
-    }
+    } | {_evidence("req-4").evidence_id}
 
 
 @pytest.mark.contract
@@ -524,6 +570,8 @@ def test_independent_kinds_abstain_without_blocking_qualified_quantity(
         SCOPE,
         AS_OF,
         _expected(),
+        governance_decision_ids=("decision-required-4",),
+        governance_evidence=(_evidence("req-4"),),
         ordered_lines=(_line("po-2", "2"),),
         planned_price=PriceEvidence(
             "planned-1",
@@ -565,7 +613,164 @@ def test_independent_kinds_abstain_without_blocking_qualified_quantity(
     assert {ref.evidence_id for ref in by_kind["price_deviation"].evidence} == {
         _evidence("price-planned").evidence_id,
         _evidence("price-committed").evidence_id,
+        _evidence("req-4").evidence_id,
     }
+
+
+@pytest.mark.contract
+@pytest.mark.parametrize(
+    ("coverage", "reason"),
+    [
+        (
+            CoverageAttestation(
+                "other-scope",
+                "GPU-A",
+                replace(SCOPE, site_id="other-site"),
+                AS_OF,
+                True,
+                True,
+                True,
+                (_evidence("coverage-complete"),),
+            ),
+            AssessmentReason.SCOPE_MISMATCH,
+        ),
+        (
+            CoverageAttestation(
+                "future",
+                "GPU-A",
+                SCOPE,
+                AS_OF + timedelta(days=1),
+                True,
+                True,
+                True,
+                (_evidence("coverage-complete"),),
+            ),
+            AssessmentReason.FUTURE_INPUT,
+        ),
+    ],
+)
+def test_invalid_coverage_cannot_support_missing_or_quantity_findings(
+    service: AnomalyService,
+    context: RequestContext,
+    coverage: CoverageAttestation,
+    reason: AssessmentReason,
+) -> None:
+    results = service.assess(
+        AnomalyAssessmentInput(
+            "GPU-A",
+            SCOPE,
+            AS_OF,
+            _expected(),
+            governance_decision_ids=("decision-required-4",),
+            governance_evidence=(_evidence("req-4"),),
+            coverage=coverage,
+        ),
+        request_context=context,
+    )
+
+    by_kind = {item.kind.value: item for item in results}
+    for kind in ("missing_po", "quantity_mismatch", "coverage_gap"):
+        assert by_kind[kind].status is AssessmentStatus.NOT_ASSESSED
+        assert by_kind[kind].reason is reason
+
+
+@pytest.mark.contract
+def test_expected_requirement_requires_retained_governance_identity_and_evidence() -> None:
+    with pytest.raises(SemanticContractError, match="governance decision and evidence"):
+        AnomalyAssessmentInput("GPU-A", SCOPE, AS_OF, _expected())
+
+
+@pytest.mark.contract
+@pytest.mark.parametrize(
+    ("field", "changes", "reason"),
+    [
+        ("substitution", {"approved": False}, AssessmentReason.INELIGIBLE_INPUT),
+        ("substitution", {"ambiguous": True}, AssessmentReason.CONFLICTING_INPUT),
+        ("revision", {"ambiguous": True}, AssessmentReason.CONFLICTING_INPUT),
+        ("revision", {"authoritative": False}, AssessmentReason.MISSING_SUPERSESSION),
+        ("commitment", {"conflicted": True}, AssessmentReason.CONFLICTING_INPUT),
+    ],
+)
+def test_ambiguous_or_unauthorized_taxonomy_inputs_abstain(
+    context: RequestContext,
+    field: str,
+    changes: dict[str, object],
+    reason: AssessmentReason,
+) -> None:
+    substitution = SubstitutionEvidence(
+        "sub-1", Decimal(1), "substitute", SCOPE, AS_OF, (_evidence("substitution"),)
+    )
+    revision = RevisionEvidence(
+        "rev-path-1",
+        "B",
+        "A",
+        ("A",),
+        SCOPE,
+        AS_OF,
+        (_evidence("revision-a"), _evidence("revision-b")),
+        supersession_edge_ids=("revision-b-supersedes-a",),
+    )
+    required = ScheduleEvidence(
+        "required-1", date(2026, 10, 1), True, SCOPE, AS_OF, (_evidence("schedule-required"),)
+    )
+    commitment = ScheduleEvidence(
+        "commitment-1", date(2026, 10, 3), True, SCOPE, AS_OF, (_evidence("schedule-commit"),)
+    )
+    values = {
+        "substitution": substitution,
+        "revision": revision,
+        "commitment": commitment,
+    }
+    changed = replace(values[field], **changes)
+    inputs = replace(
+        _input("order_missing"),
+        substitution=changed if field == "substitution" else None,
+        revision=changed if field == "revision" else None,
+        required_schedule=required if field == "commitment" else None,
+        commitment=changed if field == "commitment" else None,
+    )
+    kind = {
+        "substitution": "substitution",
+        "revision": "stale_revision",
+        "commitment": "late_commitment",
+    }[field]
+    result = next(
+        item
+        for item in _taxonomy_service().assess(inputs, request_context=context)
+        if item.kind.value == kind
+    )
+
+    assert result.status is AssessmentStatus.NOT_ASSESSED
+    assert result.reason is reason
+
+
+@pytest.mark.contract
+def test_non_current_coverage_policy_switch_is_effective(context: RequestContext) -> None:
+    stale = replace(_coverage("coverage-complete", complete=True), current=False)
+    inputs = replace(_input("order_missing"), coverage=stale)
+    flagging = _taxonomy_service()
+    non_flagging = replace(
+        flagging,
+        policies=replace(
+            flagging.policies,
+            coverage_gap=CoverageGapPolicy("coverage/v1", flag_non_current=False),
+        ),
+    )
+
+    flagged = next(
+        item
+        for item in flagging.assess(inputs, request_context=context)
+        if item.kind.value == "coverage_gap"
+    )
+    clear = next(
+        item
+        for item in non_flagging.assess(inputs, request_context=context)
+        if item.kind.value == "coverage_gap"
+    )
+
+    assert flagged.status is AssessmentStatus.ANOMALY
+    assert clear.status is AssessmentStatus.CLEAR
+    assert flagged.policy_digest != clear.policy_digest
 
 
 @pytest.mark.contract

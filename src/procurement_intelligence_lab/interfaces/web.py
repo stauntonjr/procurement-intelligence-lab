@@ -22,12 +22,15 @@ from procurement_intelligence_lab.application.showcase import (
     ShowcaseScenario,
     anomaly_source_evidence,
     lifecycle_event_evidence,
-    lifecycle_source_record,
+    lifecycle_event_source_record,
     showcase_anomaly_assessment,
     showcase_order_comparison,
     showcase_required_quantity,
 )
-from procurement_intelligence_lab.domains.procurement.anomaly_assessment import AnomalyAssessment
+from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
+    AnomalyAssessment,
+    AnomalyAssessmentInput,
+)
 from procurement_intelligence_lab.domains.procurement.bom import Bom
 from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningClaim,
@@ -172,7 +175,8 @@ function render(data){
   if(data.value===null&&!data.comparison)answer.append(element('p','The service has not established a value. Inspect the evidence and status.','small'));
   if(data.selected_assessment){
     const selected=data.selected_assessment;
-    answer.append(element('p','Assessment: '+selected.assessment_status+' · lifecycle: '+selected.lifecycle_status+' · policy '+selected.policy_id,'small'))
+    answer.append(element('p','Subject: '+selected.subject_key+' · assessment: '+selected.assessment_status+' · lifecycle: '+selected.lifecycle_status+' · policy '+selected.policy_id,'small'));
+    answer.append(element('p',Object.entries(selected.details).map(([key,value])=>key.replaceAll('_',' ')+': '+(Array.isArray(value)?value.join(', '):value)).join(' · '),'small'))
   }
   if(data.decision){
     const details=element('div',undefined,'decision');
@@ -495,6 +499,7 @@ def _anomaly_claim_payload(
     selected_payload = _assessment_payload(selected)
     selected_payload["lifecycle_status"] = result.projected_anomaly.status.value
     selected_payload["anomaly"] = _anomaly_payload(anomaly)
+    selected_payload["details"] = _anomaly_details_payload(result.inputs, selected.kind.value)
     claim_id = selected.assessment_id
     return {
         "question": "Which qualified procurement anomaly does the selected fixture establish?",
@@ -562,6 +567,7 @@ def _scope_payload(scope: StateScope) -> dict[str, object]:
 def _assessment_payload(assessment: AnomalyAssessment) -> dict[str, object]:
     return {
         "assessment_id": assessment.assessment_id,
+        "subject_key": assessment.subject_key,
         "kind": assessment.kind.value,
         "assessment_status": assessment.status.value,
         "reason": assessment.reason.value if assessment.reason else None,
@@ -591,6 +597,53 @@ def _anomaly_payload(anomaly: Anomaly) -> dict[str, object]:
         "policy_id": anomaly.policy_id,
         "provenance_id": anomaly.provenance.provenance_id,
         "evidence_ids": [ref.evidence_id for ref in anomaly.evidence],
+    }
+
+
+def _anomaly_details_payload(inputs: AnomalyAssessmentInput, kind: str) -> dict[str, object]:
+    if kind in {"missing_po", "quantity_mismatch", "coverage_gap"}:
+        return {
+            "unit": inputs.expected_unit,
+            "required_quantity": (
+                str(inputs.expected.required_quantity) if inputs.expected is not None else None
+            ),
+            "ordered_quantity": str(
+                sum((line.quantity for line in inputs.ordered_lines), Decimal(0))
+            ),
+        }
+    if kind == "price_deviation":
+        planned, committed = inputs.planned_price, inputs.committed_price
+        return {
+            "planned": str(planned.value) if planned else None,
+            "committed": str(committed.value) if committed else None,
+            "currency": planned.currency if planned else None,
+            "unit": planned.unit if planned else None,
+            "basis": planned.basis if planned else None,
+        }
+    if kind == "late_commitment":
+        return {
+            "required_by": str(inputs.required_schedule.value)
+            if inputs.required_schedule
+            else None,
+            "committed_for": str(inputs.commitment.value) if inputs.commitment else None,
+        }
+    if kind == "stale_revision":
+        return {
+            "expected_revision": inputs.revision.expected_revision if inputs.revision else None,
+            "observed_revision": inputs.revision.observed_revision if inputs.revision else None,
+            "supersession_edge_ids": list(inputs.revision.supersession_edge_ids)
+            if inputs.revision
+            else [],
+        }
+    if kind == "substitution":
+        return {
+            "quantity": str(inputs.substitution.quantity) if inputs.substitution else None,
+            "unit": inputs.expected_unit,
+            "relationship": inputs.substitution.relationship_kind if inputs.substitution else None,
+        }
+    return {
+        "mention": inputs.resolution.mention if inputs.resolution else None,
+        "resolution_status": inputs.resolution.status if inputs.resolution else None,
     }
 
 
@@ -631,6 +684,7 @@ def source_payload(
     evidence_id: str,
     *,
     request_context: RequestContext,
+    scenario: str | None = None,
 ) -> dict[str, object]:
     request_context.require(Permission.READ_EVIDENCE)
     for resource_name in _FIXTURE_RESOURCES:
@@ -668,21 +722,22 @@ def source_payload(
         evidence = anomaly_source_evidence(source_id)
         if evidence.evidence_id == evidence_id:
             return {"evidence": evidence.as_dict(), "source_record": record}
-    lifecycle_fixture = json.loads(
-        files("procurement_intelligence_lab.examples")
-        .joinpath("anomaly_lifecycle_v1.json")
-        .read_text()
-    )
-    raw_lifecycle_ids = {
-        raw_id
-        for history in lifecycle_fixture["histories"].values()
-        for event in history
-        for raw_id in event["evidence_ids"]
-    }
-    for raw_id in raw_lifecycle_ids:
-        evidence, record = lifecycle_source_record(raw_id)
-        if evidence.evidence_id == evidence_id:
-            return {"evidence": evidence.as_dict(), "source_record": record}
+    if scenario:
+        try:
+            parsed = ShowcaseScenario(scenario)
+        except ValueError:
+            parsed = None
+        if parsed is not None and parsed in TAXONOMY_SCENARIOS:
+            result = showcase_anomaly_assessment(parsed, request_context=request_context)
+            for event in result.lifecycle_history:
+                for raw_id, evidence in zip(
+                    event.evidence_ids, lifecycle_event_evidence(event), strict=True
+                ):
+                    if evidence.evidence_id == evidence_id:
+                        return {
+                            "evidence": evidence.as_dict(),
+                            "source_record": lifecycle_event_source_record(event, raw_id),
+                        }
     raise EvidenceNotFoundError(f"unknown evidence ID: {evidence_id}")
 
 
@@ -754,6 +809,7 @@ class InspectorHandler(BaseHTTPRequestHandler):
                     source_payload(
                         evidence_id,
                         request_context=_request_context(query, Permission.READ_EVIDENCE),
+                        scenario=query.get("scenario", [""])[0] or None,
                     )
                 ).encode()
                 self.send_response(200)

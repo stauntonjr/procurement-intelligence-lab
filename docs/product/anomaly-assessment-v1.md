@@ -31,9 +31,10 @@ The service returns one `AnomalyAssessment` for every requested anomaly kind:
 
 An empty anomaly list is not proof of a clear result. Each result retains its kind, status, optional
 reason, scope, as-of instant, subject and input identities, role-specific evidence, policy ID,
-canonical policy configuration and digest, and optional anomaly. Evidence roles are `requirement`,
-`observation`, `governance`, `coverage`, `supersession`, `relationship`, `resolution`, and
-`lifecycle`. The anomaly envelope retains the unique flattened evidence set for compatibility.
+canonical per-kind policy configuration and digest, and optional anomaly. Evidence roles are
+`requirement`, `observation`, `governance`, `coverage`, `planned_price`, `committed_price`,
+`required_schedule`, `commitment`, `supersession`, `relationship`, `resolution`, and `lifecycle`.
+The anomaly envelope retains the unique flattened evidence set for compatibility.
 
 Structurally invalid values raise the existing typed semantic, scope, or temporal contract error.
 Legitimate uncertainty returns `not_assessed`; it is not an exception and is never converted to
@@ -46,10 +47,10 @@ zero.
 | `missing_po` | Positive governed requirement plus current, complete, authoritative PO coverage for the exact scope/item/as-of | No applicable approved PO line and requirement is strictly above the configured minimum | Missing/incomplete/stale coverage, unresolved requirement, ambiguous duplicate, or unknown eligibility |
 | `quantity_mismatch` | Governed requirement and independently identified eligible PO lines in one unit | Absolute difference between required and summed ordered quantity is strictly greater than tolerance | Unit conflict, incomplete coverage, unresolved requirement, competing line versions, or unknown quantity |
 | `coverage_gap` | Explicit coverage/freshness evidence | Coverage is incomplete or stale according to policy | Missing coverage evidence is `not_assessed`, not a gap inferred from silence |
-| `substitution` | Evinced substitute relationship distinct from identity plus substituted quantity | Substituted quantity is strictly above tolerance | Similarity alone, missing relationship evidence, or unapproved/ambiguous relationship |
-| `stale_revision` | Applicable observed revision plus explicit supersession path effective at as-of | Governed revision explicitly supersedes the observation | Unequal or lexically ordered labels without a path; future/ambiguous supersession |
+| `substitution` | Evinced, approved, unambiguous substitute relationship distinct from identity plus substituted quantity | Substituted quantity is strictly above tolerance | Similarity alone, missing relationship evidence, or unapproved/ambiguous relationship |
+| `stale_revision` | Applicable observed revision plus authoritative, unambiguous supersession edge/path effective at as-of | Governed revision explicitly supersedes the observation | Unequal or lexically ordered labels without an edge; future/ambiguous/non-authoritative supersession |
 | `price_deviation` | Governed planned and committed unit prices with identical currency, unit, and basis | Absolute difference is strictly greater than the currency-unit tolerance | Missing/conflicting basis, currency/unit mismatch, or stale/future price |
-| `late_commitment` | Evinced required-by date and supplier-confirmed commitment effective at as-of | Commitment is later than required-by plus tolerance | Missing required-by, missing confirmation, future approval, or conflicting commitment |
+| `late_commitment` | Evinced required-by date and supplier-confirmed, unconflicted commitment effective at as-of | Commitment is later than required-by plus tolerance | Missing required-by, missing confirmation, future approval, superseded or conflicting commitment |
 | `unresolved_identity` | Explicit unresolved or ambiguous resolution decision and mention evidence | Decision remains unresolved for the assessed mention | No fabricated canonical key; resolved decisions are clear |
 
 Exact tolerance equality is clear. Quantities and prices use finite, non-negative `Decimal` values.

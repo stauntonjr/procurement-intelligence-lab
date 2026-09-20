@@ -20,6 +20,7 @@ def main() -> None:
         "site_id": "synthetic-site",
         "q": "How many GPUs are required?",
     }
+    identities: list[str] = []
     try:
         for scenario, status, quantity in [
             ("order_mismatch", "quantity_mismatch", "2"),
@@ -32,6 +33,7 @@ def main() -> None:
             ) as response:
                 payload = json.load(response)
             assert payload["status"] == status
+            identities.append(payload["claim_id"])
             assert payload["comparison"]["ordered_quantity"] == quantity
             for evidence in payload["evidence"]:
                 with urlopen(
@@ -58,6 +60,7 @@ def main() -> None:
             with urlopen(f"{base}/api/ask?{urlencode(query)}", timeout=5) as response:
                 payload = json.load(response)
             selected = payload["selected_assessment"]
+            identities.extend((payload["claim_id"], selected["anomaly"]["anomaly_id"]))
             assert selected["kind"] == kind
             assert selected["assessment_status"] == "anomaly"
             assert selected["lifecycle_status"] == lifecycle_status
@@ -65,7 +68,7 @@ def main() -> None:
             assert payload["read_only"] is True
             for evidence in payload["evidence"]:
                 with urlopen(
-                    f"{base}/api/source?{urlencode(params | {'evidence_id': evidence['evidence_id']})}",
+                    f"{base}/api/source?{urlencode(query | {'evidence_id': evidence['evidence_id']})}",
                     timeout=5,
                 ) as response:
                     source = json.load(response)
@@ -75,6 +78,7 @@ def main() -> None:
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
+    print(json.dumps(sorted(identities)))
 
 
 if __name__ == "__main__":
