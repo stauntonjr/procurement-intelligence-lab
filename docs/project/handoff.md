@@ -46,7 +46,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) is complete on `main`: [PR #168](https://github.com/stauntonjr/procurement-intelligence-lab/pull/168) delivered the bounded order-comparison slice, and the qualified taxonomy, lifecycle, public-caller, clean-wheel, and challenge acceptance is recorded in [`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json).
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) was reopened after post-merge counterexamples showed assertion/line identity aliasing, lifecycle identity reuse across changed assessment context, and obsolete required schedules driving findings. Branch `codex/issue-60-correctness` carries the bounded correction and C014-C016 evidence; it is not merged acceptance yet.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) remains open despite the delivered lexical lifecycle foundation and unsupported-kind rejection; reconcile its full acceptance evidence before closure. Follow-on M6 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - Identity, source-viewer, and review-context slices are complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -110,7 +110,7 @@ a missing-PO conclusion, receipt/outstanding calculation, or completion of #60's
 broader anomaly acceptance. The existing recording remains an accurate recording of its pinned
 older revision; these new scenarios are separate live/local functionality until deployment.
 
-## Issue #60 qualified anomaly acceptance
+## Issue #60 qualified anomaly correction
 
 The merged implementation adds the ratified qualified-assessment contract and
 ADR-026, a hash-pinned synthetic corpus, all eight procurement assessment kinds, explicit
@@ -120,7 +120,9 @@ taxonomy examples plus suppressed, in-review, and resolved projections; caller v
 replace fixture inputs and no write route is present. Clean-wheel acceptance includes the corpus,
 lifecycle fixture, original order scenarios, new examples, and source drill-down.
 
-The acceptance evidence is recorded in
-[`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json).
-Adjacent review, relationships, forecasting, costing, and decision support remain under #41,
-#44, #61, #52, and #65.
+The original acceptance evidence is retained in
+[`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json) with
+its post-merge findings and `not_ready` disposition. Completion requires merged assertion-first
+line reconciliation, assessment-context-bound anomaly identity, symmetric schedule supersession,
+and C014-C016 known-bad rejection. Adjacent review, relationships, forecasting, costing, and
+decision support remain under #41, #44, #61, #52, and #65.
