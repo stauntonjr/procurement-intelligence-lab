@@ -116,6 +116,7 @@ class QualifiedOrderLine:
     def replay_identity(self) -> tuple[object, ...]:
         return (
             self.assertion_id,
+            self.line_id,
             self.quantity,
             self.unit,
             self.scope,

@@ -107,9 +107,15 @@ def _coverage() -> CoverageAttestation:
     )
 
 
-def _line(assertion_id: str, quantity: str, *, as_of: datetime = AS_OF) -> QualifiedOrderLine:
+def _line(
+    assertion_id: str,
+    quantity: str,
+    *,
+    line_id: str = "po-line-1",
+    as_of: datetime = AS_OF,
+) -> QualifiedOrderLine:
     return QualifiedOrderLine(
-        "po-line-1",
+        line_id,
         assertion_id,
         Decimal(quantity),
         "ea",
@@ -153,6 +159,20 @@ def test_competing_assertions_for_one_po_line_abstain() -> None:
         "assertion-a": "conflicting_version",
         "assertion-b": "conflicting_version",
     }
+
+
+@pytest.mark.regression
+def test_one_assertion_cannot_alias_two_po_line_identities() -> None:
+    result = _result(
+        _quantity_input(
+            _line("assertion-reused", "2", line_id="po-line-1"),
+            _line("assertion-reused", "2", line_id="po-line-2"),
+        ),
+        "quantity_mismatch",
+    )
+    assert result.status is AssessmentStatus.NOT_ASSESSED
+    assert result.reason is AssessmentReason.CONFLICTING_INPUT
+    assert dict(result.input_dispositions) == {"assertion-reused": "conflicting_version"}
 
 
 @pytest.mark.regression
