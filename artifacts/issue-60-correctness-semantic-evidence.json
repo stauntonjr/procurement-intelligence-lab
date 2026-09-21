@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "issue": "#60",
+  "revision": "6ffafbaf47413f39df016217130b167c90cb2e17",
+  "surfaces": [
+    "qualified procurement anomaly assessment",
+    "PO assertion admission and reconciliation",
+    "append-only anomaly lifecycle projection",
+    "schedule qualification",
+    "read-only HTTP inspector and installed Python wheel"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/project/handoff.md",
+    "docs/superpowers/plans/2026-09-19-issue-60-anomaly-taxonomy.md",
+    "docs/adr/026-qualified-anomaly-assessment-and-lifecycle.md",
+    "docs/product/anomaly-assessment-v1.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/implement-domain-logic/SKILL.md",
+    ".agents/skills/test-public-interface/SKILL.md",
+    ".agents/skills/release-smoke/SKILL.md",
+    ".agents/skills/run-agent-challenges/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md",
+    ".agents/skills/architecture-plan-sync/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "Governed expected requirements, assertion-identified PO observations with PO-line identity, explicit coverage and per-kind qualification records, current schedule evidence, immutable policies, exact scope, exact as-of, governing decision IDs, and retained evidence",
+    "authoritative_output": "One explicit assessment per anomaly kind with anomaly, clear, not_assessed, or not_applicable status; immutable anomaly identity bound to assessment context; per-input dispositions; retained evidence; and read-only lifecycle projection",
+    "scope_as_of": "Each assertion is qualified independently against exact tenant, project, site, projection version, and assessment as-of before PO-line versions are reconciled; rejected records retain dispositions and never enter totals",
+    "governing_policy": "Procurement-owned deterministic policies qualify and compare each anomaly kind independently; competing assertion or PO-line identities abstain; anomaly provenance includes exact as-of and governing-decision context; both required and committed schedules must be current",
+    "evidence_retained": "Governing decision and source evidence by role, assertion and PO-line identities, admitted and rejected input dispositions, canonical policy configuration, assessment-context snapshot identity, stale schedule IDs, decision provenance, lifecycle target and predecessor, and challenge mutation results",
+    "typed_failures": "Malformed structures raise typed contract errors; missing, future, stale, superseded, conflicting, ambiguous, ineligible, or incompatible evidence returns a typed not_assessed reason without contributing to a business total or inheriting unrelated lifecycle state"
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_missing_po_requires_positive_coverage_evidence",
+        "tests/contract/test_anomaly_assessment.py::test_independent_kinds_abstain_without_blocking_qualified_quantity"
+      ],
+      "rationale": "Missing observation, incomplete coverage, unavailable evidence, and unresolved state remain distinct from zero or clear"
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_anomaly_assessment_correctness.py::test_competing_assertions_for_one_po_line_abstain",
+        "tests/regression/test_anomaly_assessment_correctness.py::test_one_assertion_cannot_alias_two_po_line_identities",
+        "tests/regression/test_anomaly_assessment_correctness.py::test_future_assertion_cannot_enter_total_through_shared_po_line_id"
+      ],
+      "rationale": "Qualification stays assertion-keyed, replay identity includes PO-line identity, competing versions abstain, and rejected future assertions never enter totals"
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_anomaly_assessment_correctness.py::test_changed_assessment_context_cannot_inherit_lifecycle_history",
+        "tests/contract/test_anomaly_assessment.py::test_scope_and_time_rejections_are_retained_but_do_not_enter_totals",
+        "tests/unit/test_anomaly_lifecycle.py::test_history_requires_exact_anomaly_scope_order_and_predecessor"
+      ],
+      "rationale": "Scope and time rejections remain excluded, while changed as-of or governing decisions produce a different anomaly identity that cannot inherit prior lifecycle events"
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_anomaly_assessment.py::test_exact_tolerance_is_clear_and_fractional_overage_is_anomaly",
+        "tests/contract/test_anomaly_assessment.py::test_price_and_schedule_exact_tolerance_clear_but_just_over_flags",
+        "tests/contract/test_anomaly_assessment.py::test_order_lines_reject_invalid_quantities"
+      ],
+      "rationale": "Zero, fractional, exact-tolerance, just-over, negative, nonfinite, price, and schedule boundaries remain covered"
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_anomaly_assessment_correctness.py::test_superseded_required_schedule_cannot_drive_late_commitment",
+        "tests/contract/test_anomaly_assessment.py::test_input_objects_reject_naive_time_and_missing_evidence",
+        "tests/contract/test_anomaly_assessment.py::test_ambiguous_or_unauthorized_taxonomy_inputs_abstain"
+      ],
+      "rationale": "Malformed structures fail with typed errors, while superseded required schedules and other ineligible business inputs abstain with retained identities"
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/integration/test_web_happy_path.py::test_taxonomy_and_lifecycle_scenarios_cross_the_real_http_boundary",
+        "tests/contract/test_showcase_discrepancy.py::test_public_anomaly_inputs_are_derived_from_packaged_records",
+        "tools/package_smoke.py"
+      ],
+      "rationale": "The real HTTP caller and two clean wheel installations retain the corrected domain behavior and stable context-bound semantic identities"
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": [
+        "evals/development_agents/challenges/C014.json",
+        "evals/development_agents/challenges/C015.json",
+        "evals/development_agents/challenges/C016.json",
+        "tests/regression/test_anomaly_assessment_correctness.py"
+      ],
+      "rationale": "C014-C016 pass current-code oracles and reject mutations restoring line/assertion aliasing, assessment-context lifecycle transfer, or superseded required-schedule admission"
+    }
+  ],
+  "commands": [
+    {
+      "argv": ["make", "check"],
+      "outcome": "passed",
+      "evidence": "353 tests passed with 89.81 percent branch coverage; Ruff, Pyright, architecture imports, semantic preflight, challenge-manifest validation, supply-chain checks, and coverage ratchet passed at 6ffafbaf47413f39df016217130b167c90cb2e17"
+    },
+    {
+      "argv": ["make", "integration"],
+      "outcome": "passed",
+      "evidence": "17 integration tests passed through the real HTTP boundary at 6ffafbaf47413f39df016217130b167c90cb2e17"
+    },
+    {
+      "argv": ["make", "package-smoke"],
+      "outcome": "passed",
+      "evidence": "Source distribution and wheel built; two isolated wheel installations completed the advertised package smoke at 6ffafbaf47413f39df016217130b167c90cb2e17"
+    },
+    {
+      "argv": ["make", "challenges"],
+      "outcome": "passed",
+      "evidence": "C001-C016 current oracles passed and every known-bad mutation was rejected, including the three C014 assertion and PO-line counterexamples, at 6ffafbaf47413f39df016217130b167c90cb2e17"
+    },
+    {
+      "argv": ["uv", "run", "python", "tools/validate_semantic_change.py", "--evidence", "artifacts/issue-60-correctness-semantic-evidence.json"],
+      "outcome": "passed",
+      "evidence": "Schema, scenario paths, required instructions, skill routing, exact semantic revision, independent review, and ready completion disposition validated"
+    }
+  ],
+  "review": {
+    "revision": "6ffafbaf47413f39df016217130b167c90cb2e17",
+    "mode": "independent_fresh_context",
+    "findings": [
+      "Initial post-merge review reproduced assertion eligibility aliasing through line IDs, lifecycle identity reuse across changed assessment context, and superseded required schedules driving late-commitment findings",
+      "First corrective review found assertion replay identity omitted PO-line identity, allowing one assertion ID to alias two lines; the finding was reproduced before implementation and corrected with a regression oracle and C014 mutation",
+      "Fresh review of 6ffafbaf47413f39df016217130b167c90cb2e17 found no P0-P2 findings and verified the prior PO-line identity finding plus all three reported correctness defects were resolved"
+    ],
+    "unresolved_findings": []
+  },
+  "completion": "ready"
+}

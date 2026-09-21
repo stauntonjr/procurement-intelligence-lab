@@ -50,7 +50,7 @@ zero.
 | `substitution` | Evinced, approved, unambiguous substitute relationship distinct from identity plus substituted quantity | Substituted quantity is strictly above tolerance | Similarity alone, missing relationship evidence, or unapproved/ambiguous relationship |
 | `stale_revision` | Applicable observed revision plus authoritative, unambiguous supersession edge/path effective at as-of | Governed revision explicitly supersedes the observation | Unequal or lexically ordered labels without an edge; future/ambiguous/non-authoritative supersession |
 | `price_deviation` | Governed planned and committed unit prices with identical currency, unit, and basis | Absolute difference is strictly greater than the currency-unit tolerance | Missing/conflicting basis, currency/unit mismatch, or stale/future price |
-| `late_commitment` | Evinced required-by date and supplier-confirmed, unconflicted commitment effective at as-of | Commitment is later than required-by plus tolerance | Missing required-by, missing confirmation, future approval, superseded or conflicting commitment |
+| `late_commitment` | Evinced, current required-by date and supplier-confirmed, unconflicted current commitment effective at as-of | Commitment is later than required-by plus tolerance | Missing required-by, missing confirmation, future approval, superseded required-by or commitment, or conflicting schedule input |
 | `unresolved_identity` | Explicit unresolved or ambiguous resolution decision and mention evidence | Decision remains unresolved for the assessed mention | No fabricated canonical key; resolved decisions are clear |
 
 Exact tolerance equality is clear. Quantities and prices use finite, non-negative `Decimal` values.
@@ -59,17 +59,20 @@ performed.
 
 ## Multiplicity, ordering, and replay
 
-Distinct eligible PO lines sum. Exact assertion replay, identified by the same source assertion ID
-and content, contributes once. Divergent content under one assertion ID and competing effective
-versions are conflicts and cause the affected kind to abstain. Input and evidence order never
-changes the result. Other-scope and future records are rejected with retained dispositions and
-never participate in totals.
+Assertions are qualified independently before PO-line identity is reconciled. Distinct eligible PO
+lines sum. Exact assertion replay, identified by the same source assertion ID and content,
+contributes once. Divergent content under one assertion ID and multiple eligible assertions for one
+line are competing versions that cause the affected kind to abstain. A rejected assertion cannot
+make another assertion eligible, even when they share a line ID. Input and evidence order never
+changes the result. Other-scope and future records are rejected with retained assertion-level
+dispositions and never participate in totals.
 
 Each immutable per-kind policy has a nonblank policy ID and validated configuration. Canonical
 serialization preserves Decimal, date, duration, booleans, and sorted unordered IDs. Its digest is
 part of decision provenance and assessment identity, so two configurations sharing a display ID do
 not alias. Installation location and detection wall-clock time do not change semantic identity;
-scope, as-of, governing decision, inputs, evidence, or policy configuration do.
+scope, exact assessment as-of, governing-decision identities, inputs, evidence, or policy
+configuration do.
 
 ## Lifecycle
 

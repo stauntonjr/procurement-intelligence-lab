@@ -1,0 +1,32 @@
+{
+  "id": "C016",
+  "title": "Late commitment rejects superseded required schedules",
+  "introducing_commit": "02fda5f4a0c146b2510f40a1eeb8d3f9a76df192",
+  "oracle": "A superseded required-by schedule returns not_assessed with stale_input and cannot produce a late-commitment anomaly.",
+  "known_bad": "Check supersession only on the supplier commitment and continue comparing an obsolete required-by date.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/domains/procurement/anomaly_assessment.py",
+      "find": "    superseded_input_ids = tuple(\n        value.input_id for value in (required, commitment) if value.superseded\n    )\n",
+      "replace": "    superseded_input_ids = tuple(\n        value.input_id for value in (commitment,) if value.superseded\n    )\n"
+    }
+  ],
+  "known_bad_failure_pattern": "AssessmentStatus.ANOMALY",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/regression/test_anomaly_assessment_correctness.py::test_superseded_required_schedule_cannot_drive_late_commitment"
+  ],
+  "surfaces": [
+    "procurement schedule qualification",
+    "late commitment assessment",
+    "stale input evidence"
+  ],
+  "prevention": [
+    "symmetric schedule supersession check",
+    "typed stale-input abstention",
+    "executable obsolete required-by oracle"
+  ]
+}

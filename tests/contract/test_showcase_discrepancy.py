@@ -81,9 +81,11 @@ def test_order_comparison_is_repeatable_and_keeps_governance_separate() -> None:
     assert expected is not None
     assert first.anomalies[0].scope == expected.scope
     assert all(ref.artifact_id.startswith("showcase:") for ref in first.anomalies[0].evidence)
-    assert first.anomalies[0].provenance.context.input_snapshot_ids == tuple(
-        ref.evidence_id for ref in first.anomalies[0].evidence
-    )
+    snapshot_ids = set(first.anomalies[0].provenance.context.input_snapshot_ids)
+    evidence_ids = {ref.evidence_id for ref in first.anomalies[0].evidence}
+    assert evidence_ids < snapshot_ids
+    assert len(snapshot_ids - evidence_ids) == 1
+    assert next(iter(snapshot_ids - evidence_ids)).startswith("anomaly-assessment-context:")
     assert first.requirement.decision.value == Decimal(4)
     with pytest.raises(ValueError, match="unsupported order comparison"):
         showcase_order_comparison(ShowcaseScenario.CONFLICT, request_context=_context())

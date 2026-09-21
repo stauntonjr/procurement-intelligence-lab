@@ -116,6 +116,7 @@ class QualifiedOrderLine:
     def replay_identity(self) -> tuple[object, ...]:
         return (
             self.assertion_id,
+            self.line_id,
             self.quantity,
             self.unit,
             self.scope,
@@ -409,7 +410,7 @@ def assess_quantity(
         invalid_reason,
         evidence_roles,
         policy,
-        _assessment_provenance(provenance, policy, AnomalyKind.MISSING_PO, evidence_roles),
+        _assessment_provenance(inputs, provenance, policy, AnomalyKind.MISSING_PO, evidence_roles),
         detected_at,
     )
     quantity = _assess_quantity_mismatch(
@@ -418,14 +419,18 @@ def assess_quantity(
         invalid_reason,
         evidence_roles,
         policy,
-        _assessment_provenance(provenance, policy, AnomalyKind.QUANTITY_MISMATCH, evidence_roles),
+        _assessment_provenance(
+            inputs, provenance, policy, AnomalyKind.QUANTITY_MISMATCH, evidence_roles
+        ),
         detected_at,
     )
     coverage = _assess_coverage(
         inputs,
         evidence_roles,
         policy,
-        _assessment_provenance(provenance, policy, AnomalyKind.COVERAGE_GAP, evidence_roles),
+        _assessment_provenance(
+            inputs, provenance, policy, AnomalyKind.COVERAGE_GAP, evidence_roles
+        ),
         detected_at,
     )
     return missing, quantity, coverage
@@ -457,7 +462,7 @@ def assess_anomalies(
             substitution_roles,
             policies,
             _assessment_provenance(
-                provenance, policies, AnomalyKind.SUBSTITUTION, substitution_roles
+                inputs, provenance, policies, AnomalyKind.SUBSTITUTION, substitution_roles
             ),
             detected_at,
         ),
@@ -466,7 +471,7 @@ def assess_anomalies(
             revision_roles,
             policies,
             _assessment_provenance(
-                provenance, policies, AnomalyKind.STALE_REVISION, revision_roles
+                inputs, provenance, policies, AnomalyKind.STALE_REVISION, revision_roles
             ),
             detected_at,
         ),
@@ -474,7 +479,9 @@ def assess_anomalies(
             inputs,
             price_roles,
             policies,
-            _assessment_provenance(provenance, policies, AnomalyKind.PRICE_DEVIATION, price_roles),
+            _assessment_provenance(
+                inputs, provenance, policies, AnomalyKind.PRICE_DEVIATION, price_roles
+            ),
             detected_at,
         ),
         _assess_schedule(
@@ -482,7 +489,7 @@ def assess_anomalies(
             schedule_roles,
             policies,
             _assessment_provenance(
-                provenance, policies, AnomalyKind.LATE_COMMITMENT, schedule_roles
+                inputs, provenance, policies, AnomalyKind.LATE_COMMITMENT, schedule_roles
             ),
             detected_at,
         ),
@@ -491,7 +498,7 @@ def assess_anomalies(
             identity_roles,
             policies,
             _assessment_provenance(
-                provenance, policies, AnomalyKind.UNRESOLVED_IDENTITY, identity_roles
+                inputs, provenance, policies, AnomalyKind.UNRESOLVED_IDENTITY, identity_roles
             ),
             detected_at,
         ),
@@ -829,14 +836,17 @@ def _assess_schedule(
             policies.late_commitment.policy_id,
             policies,
         )
-    if commitment.superseded:
+    superseded_input_ids = tuple(
+        value.input_id for value in (required, commitment) if value.superseded
+    )
+    if superseded_input_ids:
         return _result(
             inputs,
             kind,
             AssessmentStatus.NOT_ASSESSED,
             AssessmentReason.STALE_INPUT,
             None,
-            (commitment.input_id,),
+            superseded_input_ids,
             evidence_roles,
             policies.late_commitment.policy_id,
             policies,
@@ -1282,9 +1292,11 @@ def _admit_lines(
     eligible = {
         line.assertion_id: line
         for line in inputs.ordered_lines
-        if dispositions[line.line_id] == "eligible"
+        if dispositions[line.assertion_id] == "eligible"
     }
-    return None, tuple(sorted(eligible.values(), key=lambda item: item.line_id))
+    return None, tuple(
+        sorted(eligible.values(), key=lambda item: (item.line_id, item.assertion_id))
+    )
 
 
 def _coverage_rejection(
@@ -1299,31 +1311,36 @@ def _coverage_rejection(
 
 def _input_dispositions(inputs: AnomalyAssessmentInput) -> tuple[tuple[str, str], ...]:
     dispositions: dict[str, str] = {}
-    by_assertion: dict[str, QualifiedOrderLine] = {}
-    ordered = sorted(
-        inputs.ordered_lines,
-        key=lambda item: (item.assertion_id, item.line_id, item.evidence[0].evidence_id),
-    )
-    for line in ordered:
+    grouped_assertions: dict[str, list[QualifiedOrderLine]] = {}
+    for line in inputs.ordered_lines:
+        grouped_assertions.setdefault(line.assertion_id, []).append(line)
+
+    eligible_by_line: dict[str, list[QualifiedOrderLine]] = {}
+    for assertion_id, assertion_lines in sorted(grouped_assertions.items()):
+        versions = {line.replay_identity for line in assertion_lines}
+        if len(versions) != 1:
+            dispositions[assertion_id] = "conflicting_version"
+            continue
+        line = min(
+            assertion_lines,
+            key=lambda item: (item.line_id, item.evidence[0].evidence_id),
+        )
         if line.scope != inputs.scope:
-            dispositions[line.line_id] = "rejected_scope"
+            dispositions[assertion_id] = "rejected_scope"
             continue
         if line.as_of > inputs.as_of:
-            dispositions[line.line_id] = "rejected_future"
+            dispositions[assertion_id] = "rejected_future"
             continue
         if not line.approved:
-            dispositions[line.line_id] = "rejected_ineligible"
+            dispositions[assertion_id] = "rejected_ineligible"
             continue
-        prior = by_assertion.get(line.assertion_id)
-        if prior is None:
-            by_assertion[line.assertion_id] = line
-            dispositions[line.line_id] = "eligible"
-        elif prior.replay_identity == line.replay_identity:
-            if prior.line_id != line.line_id:
-                dispositions[line.line_id] = "exact_replay"
-        else:
-            dispositions[prior.line_id] = "conflicting_version"
-            dispositions[line.line_id] = "conflicting_version"
+        dispositions[assertion_id] = "eligible"
+        eligible_by_line.setdefault(line.line_id, []).append(line)
+
+    for line_versions in eligible_by_line.values():
+        if len(line_versions) > 1:
+            for line in line_versions:
+                dispositions[line.assertion_id] = "conflicting_version"
     return tuple(sorted(dispositions.items()))
 
 
@@ -1375,17 +1392,30 @@ def _roles_for(
 
 
 def _assessment_provenance(
+    inputs: AnomalyAssessmentInput,
     provenance: DecisionProvenance,
     policies: QuantityAssessmentPolicies,
     kind: AnomalyKind,
     evidence_roles: tuple[tuple[str, tuple[EvidenceRef, ...]], ...],
 ) -> DecisionProvenance:
     _, digest = _policy_contract(policies, kind)
+    assessment_context_id = stable_id(
+        "anomaly-assessment-context",
+        inputs.subject_key,
+        inputs.scope,
+        inputs.as_of.isoformat(),
+        tuple(sorted(inputs.governance_decision_ids)),
+    )
     context = replace(
         provenance.context,
         config_digest=digest,
         input_snapshot_ids=tuple(
-            sorted(ref.evidence_id for ref in _flatten_evidence(evidence_roles))
+            sorted(
+                {
+                    assessment_context_id,
+                    *(ref.evidence_id for ref in _flatten_evidence(evidence_roles)),
+                }
+            )
         ),
     )
     return replace(provenance, context=context)

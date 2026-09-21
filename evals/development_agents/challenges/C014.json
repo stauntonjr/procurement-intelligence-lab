@@ -1,0 +1,43 @@
+{
+  "id": "C014",
+  "title": "PO assertions are qualified before line reconciliation",
+  "introducing_commit": "d4b1c6b4c882594895d187190964f35a73d16be7",
+  "oracle": "Eligibility is retained per assertion, assertion replays preserve PO-line identity, future or otherwise ineligible assertions never enter totals through a shared line ID, and multiple eligible assertions for one line abstain as competing versions.",
+  "known_bad": "Restore line-keyed eligibility lookup, omit PO-line identity from assertion replay identity, and disable competing-line reconciliation so aliased, duplicate, and future assertions can be aggregated.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/domains/procurement/anomaly_assessment.py",
+      "find": "        if dispositions[line.assertion_id] == \"eligible\"\n",
+      "replace": "        if dispositions.get(line.line_id, \"eligible\") == \"eligible\"\n"
+    },
+    {
+      "path": "src/procurement_intelligence_lab/domains/procurement/anomaly_assessment.py",
+      "find": "        if len(line_versions) > 1:\n            for line in line_versions:\n                dispositions[line.assertion_id] = \"conflicting_version\"\n",
+      "replace": "        if False and len(line_versions) > 1:\n            for line in line_versions:\n                dispositions[line.assertion_id] = \"conflicting_version\"\n"
+    },
+    {
+      "path": "src/procurement_intelligence_lab/domains/procurement/anomaly_assessment.py",
+      "find": "            self.assertion_id,\n            self.line_id,\n            self.quantity,\n",
+      "replace": "            self.assertion_id,\n            self.quantity,\n"
+    }
+  ],
+  "known_bad_failure_pattern": "3 failed, 2 passed",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/regression/test_anomaly_assessment_correctness.py"
+  ],
+  "surfaces": [
+    "procurement PO assertion admission",
+    "quantity aggregation",
+    "input dispositions"
+  ],
+  "prevention": [
+    "assertion-keyed qualification",
+    "PO-line-aware assertion replay identity",
+    "line-version conflict reconciliation",
+    "executable duplicate and future assertion oracles"
+  ]
+}

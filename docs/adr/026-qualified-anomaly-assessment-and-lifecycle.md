@@ -21,15 +21,16 @@ Adopt [`procurement-anomaly-assessment/v1`](../product/anomaly-assessment-v1.md)
   configuration digest.
 - Missing PO requires positive evidence of current, complete, authoritative coverage. Source
   silence does not establish absence.
-- Quantity aggregation deduplicates exact assertion replays, sums independently identified eligible
-  lines, and abstains on ambiguous duplicates, competing versions, unit conflicts, or incomplete
-  coverage.
+- Quantity aggregation qualifies each assertion before reconciling PO-line identity, deduplicates
+  exact assertion replays, sums independently identified eligible lines, and abstains on ambiguous
+  duplicates, multiple eligible assertions for one line, unit conflicts, or incomplete coverage.
 - Revision staleness requires an explicit applicable supersession path. Unequal labels alone do not
   order revisions.
 - Price, schedule, substitution, identity, and coverage comparisons retain their own eligibility;
   failure to assess one kind does not block a qualified independent kind.
-- Policy configuration, not only its human-readable ID, participates in assessment provenance and
-  identity. The established generic `Anomaly.anomaly_id` formula remains compatible.
+- Policy configuration, the exact assessment as-of, and governing-decision identities participate
+  in assessment provenance and anomaly identity. The established generic `Anomaly.anomaly_id`
+  formula remains compatible.
 - The platform owns a pure lifecycle reducer over append-only events. Events reference one exact
   anomaly and predecessor; replay is idempotent only for byte-equivalent event meaning.
 - Public acceptance is read-only and fixture-backed. No web mutation authority is introduced.

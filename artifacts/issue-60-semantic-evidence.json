@@ -139,9 +139,14 @@
     "findings": [
       "Initial review found cross-scope coverage admission, rejected-line poisoning, missing governance and subject identity, cross-kind policy identity, incomplete qualification states, hardcoded public inputs, incomplete lifecycle audit fields, and missing two-install evidence",
       "Corrective review verified domain findings resolved at 362587c175124cf72b90589bedf4ab885302a294 and identified two remaining public fixture-lineage and lifecycle-payload gaps",
-      "Final review of d190c18b8464a9915d972b30b022dead7866c0e5 found no unresolved code findings and verified fixture-derived inputs, qualification facts, lifecycle target/scope/predecessor, manifest hashes, HTTP behavior, and two-install identity stability"
+      "Final review of d190c18b8464a9915d972b30b022dead7866c0e5 found no unresolved code findings and verified fixture-derived inputs, qualification facts, lifecycle target/scope/predecessor, manifest hashes, HTTP behavior, and two-install identity stability",
+      "Post-merge executable review found assertion eligibility aliasing through line IDs, lifecycle identity reuse across changed assessment context, and superseded required schedules driving late-commitment findings"
     ],
-    "unresolved_findings": []
+    "unresolved_findings": [
+      "Qualify assertions before reconciling PO-line identity",
+      "Bind anomaly provenance to assessment as-of and governing-decision context",
+      "Reject superseded required schedules"
+    ]
   },
-  "completion": "ready"
+  "completion": "not_ready"
 }
