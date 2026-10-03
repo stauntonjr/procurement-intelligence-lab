@@ -67,12 +67,14 @@ class ReviewState(TypedDict):
 
 
 def await_review(state: ReviewState) -> dict:
-    receipt_id = interrupt({
-        "kind": "review_brief",
-        "brief_id": state["brief_id"],
-        "brief_digest": state["brief_digest"],
-        "evidence_snapshot_id": state["evidence_snapshot_id"],
-    })
+    receipt_id = interrupt(
+        {
+            "kind": "review_brief",
+            "brief_id": state["brief_id"],
+            "brief_digest": state["brief_digest"],
+            "evidence_snapshot_id": state["evidence_snapshot_id"],
+        }
+    )
     if not isinstance(receipt_id, str) or not receipt_id:
         raise ValueError("a persisted review receipt ID is required")
     return {"review_receipt_id": receipt_id}

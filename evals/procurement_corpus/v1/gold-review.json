@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-03",
+  "reviewer": "independent Codex agent /root/pilot_preflight_review",
+  "review_type": "source-and-policy gold audit; no application/service output used",
+  "scope": "one-project-development-only",
+  "disposition": "accepted",
+  "method": [
+    "Parsed XLSX ZIP worksheet XML directly with Python stdlib, not the production XLSX adapter.",
+    "Compared all 240 rendered data rows and matching authority records against generation specification; all matched.",
+    "Recomputed SHA-256 of six workbooks and six sidecars; all matched runtime manifest declarations.",
+    "Reviewed exact labels and arithmetic against original cells, scope/role metadata, approval/effective timestamps, line identities, and existing policy documents.",
+    "Read existing quantity admission/reason selection to check exact before-boundary disposition without calling production functions.",
+    "Refreshed review after author corrected GOLD-001 and added role/scope/artifact document descriptors to every authority sidecar; all six descriptors match manifest and all 240 original cells/record fields remain specification-consistent."
+  ],
+  "inventory_verified": {
+    "projects": 1,
+    "documents": 6,
+    "source_row_occurrences": 240,
+    "authority_records": 240,
+    "gold_cases": 12,
+    "units": [
+      "each"
+    ],
+    "scope": {
+      "tenant_id": "synthetic-tenant",
+      "project_id": "atlas",
+      "site_id": "lab"
+    }
+  },
+  "input_sha256": {
+    "synthetic/specs/procurement-corpus-v1.json": "8d5001fe0f829e85c3089f9ee8a7648fb95a35da47d1199b91e463682b4a0272",
+    "evals/procurement_corpus/v1/gold.json": "ab7f22d7b0309280681042071ab1ff97cae6297fd3c8ebd30a49a2902579abec",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r1.authority.json": "d95b662db1c7d7dab4d66bf03af993bb2424d0e7dd5e784a72bfb0cbf54e3121",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r1.xlsx": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r2.authority.json": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r2.xlsx": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-commitment.authority.json": "5f51f4e524f8f1483d3ece4af9635e4ff3b2f2d19c9c34a2e08cbaea185008cd",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-commitment.xlsx": "42e098eedd3a43cdbb4c6328898554f58ff6d7595ddc5968d6239c88fae1a298",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-po-a.authority.json": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-po-a.xlsx": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-po-b.authority.json": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-po-b.xlsx": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-quote.authority.json": "47a7428b304b0a2e73f37a2fccbe9dee503a6d37c10bd97df1c76dd9fdcb4c58",
+    "src/procurement_intelligence_lab/examples/corpus_v1/atlas-quote.xlsx": "42e098eedd3a43cdbb4c6328898554f58ff6d7595ddc5968d6239c88fae1a298",
+    "src/procurement_intelligence_lab/examples/corpus_v1/manifest.json": "ebd9cb5071a2e4ae1eae50b9984b367e24059e3d3d46fc2e10dfd05f8ca244f7",
+    "docs/product/governing-claim-policy-v1.md": "cac32eed8f0977a15f69e846bbb787c3f85fc2c291c646e3a1760c57ed649909",
+    "docs/product/anomaly-assessment-v1.md": "1c11fba4e5aee9a050fbaa4b05c94bf5b186ae760c2a74e987dd8e8bd2ff7671",
+    "src/procurement_intelligence_lab/domains/procurement/anomaly_assessment.py": "cecc19ba654ba163aead1f6eb0679b3fd0c46670b48ccdf1031653f891d4d1cc"
+  },
+  "cases": [
+    {
+      "case_id": "mismatch",
+      "disposition": "accepted",
+      "reviewed_status": "anomaly",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "8",
+      "reviewed_eligible_ordered_quantity": "6",
+      "arithmetic_and_authority_review": "BOM r1 ends September 1; r2 approved/effective September 1 establishes 8. Distinct approved po-a and po-b line identities each establish 3; difference 2 exceeds zero tolerance.",
+      "source_rows_checked": [
+        "bom-r2:2",
+        "po-a:2",
+        "po-b:2"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "match",
+      "disposition": "accepted",
+      "reviewed_status": "clear",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "4",
+      "reviewed_eligible_ordered_quantity": "4",
+      "arithmetic_and_authority_review": "Active BOM r2 quantity 4 equals independent approved PO quantities 2 plus 2.",
+      "source_rows_checked": [
+        "bom-r2:3",
+        "po-a:3",
+        "po-b:3"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "conflict",
+      "disposition": "accepted",
+      "reviewed_status": "not_assessed",
+      "reviewed_reason": "unresolved_requirement",
+      "reviewed_required_quantity": null,
+      "reviewed_eligible_ordered_quantity": null,
+      "arithmetic_and_authority_review": "BOM r1 quantity 4 has no end; r2 quantity 8 has no supersession edge for GPU-C. Both are eligible, so requirement is unresolved regardless of ordered values.",
+      "source_rows_checked": [
+        "bom-r1:4",
+        "bom-r2:4"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "missing",
+      "disposition": "accepted",
+      "reviewed_status": "not_assessed",
+      "reviewed_reason": "missing_observation",
+      "reviewed_required_quantity": "4",
+      "reviewed_eligible_ordered_quantity": null,
+      "arithmetic_and_authority_review": "BOM r2 establishes 4. Complete workbook inspection shows both PO row 5 entries are ORDER-ONLY, and neither PO has GPU-D anywhere. No coverage attestation exists, so no eligible observation does not establish zero.",
+      "source_rows_checked": [
+        "bom-r2:5"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "future-approval",
+      "disposition": "accepted",
+      "reviewed_status": "not_assessed",
+      "reviewed_reason": "unresolved_requirement",
+      "reviewed_required_quantity": null,
+      "reviewed_eligible_ordered_quantity": null,
+      "arithmetic_and_authority_review": "BOM r1 expired September 1; BOM r2 approval October 10 is later than October 1 cutoff. No eligible approved requirement exists.",
+      "source_rows_checked": [
+        "bom-r1:6",
+        "bom-r2:6"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "fractional",
+      "disposition": "accepted",
+      "reviewed_status": "clear",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "1.5",
+      "reviewed_eligible_ordered_quantity": "1.50",
+      "arithmetic_and_authority_review": "Exact Decimal arithmetic: independently identified approved quantities 0.75 plus 0.75 equal required 1.5 each. Existing policy permits fractional finite nonnegative quantities.",
+      "source_rows_checked": [
+        "bom-r2:7",
+        "po-a:7",
+        "po-b:7"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "zero",
+      "disposition": "accepted",
+      "reviewed_status": "clear",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "0",
+      "reviewed_eligible_ordered_quantity": "0",
+      "arithmetic_and_authority_review": "Two explicit approved zero PO quantities and explicit required zero support a clear quantity comparison; this is not absence inferred as zero.",
+      "source_rows_checked": [
+        "bom-r2:8",
+        "po-a:8",
+        "po-b:8"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "effective-boundary",
+      "disposition": "accepted",
+      "reviewed_status": "anomaly",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "8",
+      "reviewed_eligible_ordered_quantity": "6",
+      "arithmetic_and_authority_review": "At September 1 exactly, r1 end is exclusive and r2 start/approval inclusive. Both PO start/approval timestamps equal cutoff; 8 differs from 3 plus 3.",
+      "source_rows_checked": [
+        "bom-r1:2",
+        "bom-r2:2",
+        "po-a:2",
+        "po-b:2"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "before-boundary",
+      "disposition": "accepted",
+      "reviewed_status": "not_assessed",
+      "reviewed_reason": "missing_observation",
+      "reviewed_required_quantity": "4",
+      "reviewed_eligible_ordered_quantity": null,
+      "arithmetic_and_authority_review": "At August 31 23:59:59, r1 remains effective and r2 is future. Both PO records are future and must retain rejected_future dispositions. Existing assertion qualification excludes them, then quantity assessment with no eligible lines and no coverage returns missing_observation, not future_input.",
+      "source_rows_checked": [
+        "bom-r1:2",
+        "po-a:2",
+        "po-b:2"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "approved-boundary",
+      "disposition": "accepted",
+      "reviewed_status": "clear",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "4",
+      "reviewed_eligible_ordered_quantity": "4",
+      "arithmetic_and_authority_review": "October 10 approval at exact cutoff is eligible; r2 required 4 equals two separately identified PO quantities 2 plus 2.",
+      "source_rows_checked": [
+        "bom-r2:6",
+        "po-a:6",
+        "po-b:6"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "no-requirement",
+      "disposition": "accepted",
+      "reviewed_status": "not_assessed",
+      "reviewed_reason": "unresolved_requirement",
+      "reviewed_required_quantity": null,
+      "reviewed_eligible_ordered_quantity": null,
+      "arithmetic_and_authority_review": "ORDER-ONLY appears in both PO documents, but no BOM requirement exists; a PO cannot establish a required quantity. Required state remains unresolved.",
+      "source_rows_checked": [
+        "po-a:5",
+        "po-b:5"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    },
+    {
+      "case_id": "ordinary",
+      "disposition": "accepted",
+      "reviewed_status": "clear",
+      "reviewed_reason": null,
+      "reviewed_required_quantity": "4",
+      "reviewed_eligible_ordered_quantity": "4",
+      "arithmetic_and_authority_review": "PART-008 has approved active BOM required 4 and distinct PO quantities 2 plus 2. Quote and supplier commitment roles containing 999 are unauthorized required/ordered-quantity sources.",
+      "source_rows_checked": [
+        "bom-r2:9",
+        "po-a:9",
+        "po-b:9",
+        "quote:9"
+      ],
+      "authority_records_checked": "Matching one-based row records and document artifact/role/tenant/project/site descriptor in each cited hash-pinned authority sidecar."
+    }
+  ],
+  "findings": [
+    {
+      "id": "GOLD-001",
+      "case_id": "before-boundary",
+      "severity": "blocking_exact_label",
+      "status": "resolved",
+      "finding": "Gold expects future_input but existing quantity assessment yields missing_observation when all future lines are rejected and coverage is absent.",
+      "required_correction": "Change reason to missing_observation and retain/assert both rejected_future assertion dispositions; do not change domain semantics to satisfy this gold label.",
+      "resolution": "Author corrected gold reason to missing_observation and explanatory arithmetic to preserve rejected_future context; reviewer verified exact label without changing domain policy."
+    }
+  ],
+  "limitations": [
+    "This is an independent agent review, not external procurement-expert certification.",
+    "Only one synthetic development project is reviewed; no held-out, retrieval, live-model, or application acceptance is established.",
+    "PO workbooks share identical bytes, but explicit distinct artifact/assertion/line identities in authority metadata establish independent lines. Dataset volume is not document diversity.",
+    "Gold source_rows are fixture aliases, not runtime evidence IDs; eventual evidence scorer must also validate authority records, role support, and complete admissible candidate inventory.",
+    "No explicit numeric ordered_quantity field exists in gold.json; reviewed eligible totals are retained here and should be asserted in public-caller tests."
+  ]
+}

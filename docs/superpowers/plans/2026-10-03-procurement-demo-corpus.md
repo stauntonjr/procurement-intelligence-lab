@@ -88,11 +88,11 @@ Existing files below were inspected; new paths are proposed and must not be mist
 
 **Issues:** #12/#27/#29/#71/#73. No product code in this task.
 
-- [ ] Re-read live Issue bodies, main/PR state, AGENTS, handoff, milestone map and ADR-019/023/024/026. Preserve concurrent work.
-- [ ] Record the new corpus slice in existing Issues using manage-github-planning; inspect before writes, retain broader criteria, and audit afterward. Identify one primary issue per implementation PR.
-- [ ] Correct stale #60 status in `docs/project/handoff.md` and `docs/development/milestone-map.md`; link this proposal with its actual approval/implementation status.
-- [ ] Add an ADR using the next available number for admission, authority records, source lookup, and runtime/gold separation. Ratify it before architectural code changes.
-- [ ] Diagnose the public 404 under #73 using the documented hosting/runbook. Record the actual cause and pin the restored revision; do not assume a healthy process proves working browser routes.
+- [x] Re-read live Issue bodies, main/PR state, AGENTS, handoff, milestone map and ADR-019/023/024/026. Preserve concurrent work.
+- [x] Record the new corpus slice in existing Issues using manage-github-planning; inspect before writes, retain broader criteria, and audit afterward. Identify one primary issue per implementation PR.
+- [x] Correct stale #60 status in `docs/project/handoff.md` and `docs/development/milestone-map.md`; link this proposal with its actual approval/implementation status.
+- [x] Add an ADR using the next available number for admission, authority records, source lookup, and runtime/gold separation. Ratify it before architectural code changes.
+- [x] Diagnose the public 404 under #73 using the documented hosting/runbook. Record the actual cause and pin the restored revision; do not assume a healthy process proves working browser routes.
 - [ ] Verify root, health, question submission and original source click on the restored release. Preserve the current service until the new release passes. Commit the documentation/ADR slice through normal PR review.
 
 ## Task 1: freeze pilot scenarios and independent gold

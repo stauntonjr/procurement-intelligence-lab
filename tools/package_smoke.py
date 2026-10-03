@@ -46,6 +46,21 @@ def main() -> int:
             if missing:
                 raise RuntimeError(f"wheel is missing runtime resources {missing}")
 
+            corpus = "procurement_intelligence_lab/examples/corpus_v1/"
+            manifest = json.loads(archive.read(corpus + "manifest.json"))
+            for doc in manifest["documents"]:
+                for key in ("path", "metadata_path"):
+                    if corpus + doc[key] not in archive.namelist():
+                        raise RuntimeError("wheel is missing an admitted corpus source")
+            if any(
+                "/evals/" in name
+                or name.endswith(
+                    ("/gold.json", "/qrels.json", "/queries.json", "/gold-review.json")
+                )
+                for name in archive.namelist()
+            ):
+                raise RuntimeError("wheel includes evaluator-only material")
+
         probe = ROOT / "tools/order_package_probe.py"
         probe_outputs: list[str] = []
         pythons: list[Path] = []
@@ -68,7 +83,14 @@ def main() -> int:
                 capture_output=True,
                 text=True,
             )
-            probe_outputs.append(probe_run.stdout.strip())
+            corpus_probe = subprocess.run(
+                [str(python), str(ROOT / "tools/corpus_package_probe.py")],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            probe_outputs.append(probe_run.stdout.strip() + corpus_probe.stdout.strip())
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")
 

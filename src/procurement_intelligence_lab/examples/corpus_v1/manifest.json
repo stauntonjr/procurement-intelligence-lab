@@ -1,0 +1,71 @@
+{
+  "documents": [
+    {
+      "artifact_id": "atlas-bom-r1",
+      "content_hash": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a",
+      "metadata_hash": "d95b662db1c7d7dab4d66bf03af993bb2424d0e7dd5e784a72bfb0cbf54e3121",
+      "metadata_path": "atlas-bom-r1.authority.json",
+      "path": "atlas-bom-r1.xlsx",
+      "project_id": "atlas",
+      "role": "approved_bom_revision",
+      "site_id": "lab",
+      "tenant_id": "synthetic-tenant"
+    },
+    {
+      "artifact_id": "atlas-bom-r2",
+      "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a",
+      "metadata_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc",
+      "metadata_path": "atlas-bom-r2.authority.json",
+      "path": "atlas-bom-r2.xlsx",
+      "project_id": "atlas",
+      "role": "approved_bom_revision",
+      "site_id": "lab",
+      "tenant_id": "synthetic-tenant"
+    },
+    {
+      "artifact_id": "atlas-po-a",
+      "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d",
+      "metadata_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6",
+      "metadata_path": "atlas-po-a.authority.json",
+      "path": "atlas-po-a.xlsx",
+      "project_id": "atlas",
+      "role": "approved_purchase_order_line",
+      "site_id": "lab",
+      "tenant_id": "synthetic-tenant"
+    },
+    {
+      "artifact_id": "atlas-po-b",
+      "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d",
+      "metadata_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d",
+      "metadata_path": "atlas-po-b.authority.json",
+      "path": "atlas-po-b.xlsx",
+      "project_id": "atlas",
+      "role": "approved_purchase_order_line",
+      "site_id": "lab",
+      "tenant_id": "synthetic-tenant"
+    },
+    {
+      "artifact_id": "atlas-quote",
+      "content_hash": "42e098eedd3a43cdbb4c6328898554f58ff6d7595ddc5968d6239c88fae1a298",
+      "metadata_hash": "47a7428b304b0a2e73f37a2fccbe9dee503a6d37c10bd97df1c76dd9fdcb4c58",
+      "metadata_path": "atlas-quote.authority.json",
+      "path": "atlas-quote.xlsx",
+      "project_id": "atlas",
+      "role": "accepted_supplier_quote",
+      "site_id": "lab",
+      "tenant_id": "synthetic-tenant"
+    },
+    {
+      "artifact_id": "atlas-commitment",
+      "content_hash": "42e098eedd3a43cdbb4c6328898554f58ff6d7595ddc5968d6239c88fae1a298",
+      "metadata_hash": "5f51f4e524f8f1483d3ece4af9635e4ff3b2f2d19c9c34a2e08cbaea185008cd",
+      "metadata_path": "atlas-commitment.authority.json",
+      "path": "atlas-commitment.xlsx",
+      "project_id": "atlas",
+      "role": "supplier_confirmed_commitment",
+      "site_id": "lab",
+      "tenant_id": "synthetic-tenant"
+    }
+  ],
+  "schema_version": "procurement-demo-corpus/v1"
+}

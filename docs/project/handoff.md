@@ -141,3 +141,6 @@ and [execution plan](../superpowers/plans/2026-10-03-procurement-demo-corpus.md)
 40-row source workbooks and a generic scoped item/date investigation, then expand to four projects.
 This is branch work, not acceptance on `main`; agent and retrieval milestones remain open.
 See [ADR-027](../adr/027-synthetic-corpus-admission.md) for the admitted-input boundary.
+
+First-increment execution, restored public-release identity, and acceptance boundaries are recorded
+in [the execution note](procurement-demo-execution-2026-10-03.md).
