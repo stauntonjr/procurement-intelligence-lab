@@ -12,8 +12,8 @@ def test_first_project_source_inventory() -> None:
     directory = ROOT / "src/procurement_intelligence_lab/examples/corpus_v1"
     manifest = json.loads((directory / "manifest.json").read_text())
     assert manifest["schema_version"] == "procurement-demo-corpus/v1"
-    assert {d["project_id"] for d in manifest["documents"]} == {"atlas"}
-    assert len(manifest["documents"]) == 6
+    atlas = [d for d in manifest["documents"] if d["project_id"] == "atlas"]
+    assert len(atlas) == 6
     for doc in manifest["documents"]:
         assert len(read_bom(directory / doc["path"]).lines) == 40
     assert not any(
@@ -26,3 +26,34 @@ def test_gold_has_explicit_source_arithmetic() -> None:
     assert len(gold["cases"]) == 12
     assert gold["scope"] == "one-project-development-only"
     assert all(case["source_arithmetic"] and case["source_rows"] for case in gold["cases"])
+
+
+def test_pilot_inventory_and_split_isolation() -> None:
+    from collections import Counter
+
+    directory = ROOT / "src/procurement_intelligence_lab/examples/corpus_v1"
+    runtime = json.loads((directory / "manifest.json").read_text())
+    assert Counter(doc["project_id"] for doc in runtime["documents"]) == {
+        "atlas": 6,
+        "borealis": 6,
+        "cinder": 6,
+        "delta": 6,
+    }
+    evaluation = ROOT / "evals/procurement_corpus/v1"
+    manifest = json.loads((evaluation / "manifest.json").read_text())
+    queries = json.loads((evaluation / "queries.json").read_text())["queries"]
+    assert len(queries) == 48
+    splits = manifest["project_splits"]
+    assert Counter(splits[q["project"]] for q in queries) == {
+        "development": 24,
+        "validation": 12,
+        "test": 12,
+    }
+    for project in splits:
+        assert Counter(q["category"] for q in queries if q["project"] == project) == {
+            "exact_identifier": 3,
+            "paraphrase": 3,
+            "temporal_revision": 2,
+            "missing_conflicting": 2,
+            "unsupported_ambiguous": 2,
+        }

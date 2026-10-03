@@ -98,7 +98,7 @@ def test_source_unknown_and_page(corpus_server: str) -> None:
     assert fetch(corpus_server + "/api/corpus/source?project=atlas&evidence_id=missing")[0] == 404
     with urlopen(corpus_server + "/corpus") as response:
         page = response.read().decode()
-        assert 'name="item"' in page and "240 source-row occurrences" in page
+        assert 'name="item"' in page and "960 source-row occurrences" in page
 
 
 def test_invalid_source_has_typed_503(
@@ -117,3 +117,55 @@ def test_invalid_source_has_typed_503(
     )
     assert status == 503
     assert data["code"] == "corpus_admission_failed" and data["category"] == "infrastructure"
+
+
+def test_source_request_admits_once_and_revalidates_next_request(
+    corpus_server: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from unittest.mock import patch
+
+    from procurement_intelligence_lab.adapters.synthetic_corpus import SyntheticCorpusReader
+    from procurement_intelligence_lab.interfaces import corpus_http
+
+    reader = SyntheticCorpusReader()
+    _, result = fetch(
+        corpus_server
+        + "/api/corpus/investigate?project=atlas&item=GPU-A&as_of=2026-10-01T00:00:00Z"
+    )
+    ref = cast(list[dict[str, object]], result["evidence"])[0]
+    monkeypatch.setattr(corpus_http, "SyntheticCorpusReader", lambda: reader)
+    with patch.object(
+        SyntheticCorpusReader,
+        "_load",
+        autospec=True,
+        side_effect=vars(SyntheticCorpusReader)["_load"],
+    ) as load:
+        assert fetch(corpus_server + str(ref["url"]))[0] == 200
+        assert load.call_count == 1
+        assert fetch(corpus_server + str(ref["url"]))[0] == 200
+        assert load.call_count == 2
+
+
+def test_projects_with_same_item_remain_isolated(corpus_server: str) -> None:
+    requests = {
+        project: fetch(
+            corpus_server
+            + "/api/corpus/investigate?"
+            + urlencode({"project": project, "item": "GPU-A", "as_of": "2026-10-01T00:00:00Z"})
+        )
+        for project in ("atlas", "borealis", "cinder", "delta")
+    }
+    assert all(status == 200 for status, _ in requests.values())
+    assert {project: data["required_quantity"] for project, (_, data) in requests.items()} == {
+        "atlas": "8",
+        "borealis": "6",
+        "cinder": "6",
+        "delta": "12",
+    }
+    reference = cast(list[dict[str, object]], requests["atlas"][1]["evidence"])[0]
+    status, _ = fetch(
+        corpus_server
+        + "/api/corpus/source?"
+        + urlencode({"project": "borealis", "evidence_id": reference["evidence_id"]})
+    )
+    assert status == 404

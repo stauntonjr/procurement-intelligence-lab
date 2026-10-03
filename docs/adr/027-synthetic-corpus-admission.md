@@ -50,3 +50,18 @@ source roles explicitly. This is not the four-project G1 gate or a representativ
 Public HTTP and browser source drill-down, adversarial admission checks, temporal and numeric
 boundaries, and a clean installed wheel must pass before readiness. A subsequent agent uses
 this same service; models provide evidence and policies retain decision authority.
+
+## Four-project G1 extension
+
+The same boundary admits Atlas, Borealis, Cinder and Delta: 24 workbooks and 960 source-row
+occurrences. Each project has its own item vocabulary and quantities; shared identifiers remain
+project-scoped. Cross-item reuse of an order line or assertion identity invalidates the complete
+scoped inventory before item filtering (typed admission failure); same-item replay and competing
+versions still use ADR-026. Source lookup by admitted evidence ID performs one fresh scoped
+admission per request, with no cross-request cache or weaker hash/scope checks.
+
+The 48 authored queries include 40 assessment requests and eight invalid-request boundaries.
+Their natural-language phrasings are future agent inputs; current evaluation supplies explicitly
+authored structured requests. Passing these cases demonstrates deterministic HTTP behavior, not
+language interpretation, clarification quality, or retrieval quality. Two projects are development,
+one validation and one public development-held-out test. Shared generator ancestry is disclosed.

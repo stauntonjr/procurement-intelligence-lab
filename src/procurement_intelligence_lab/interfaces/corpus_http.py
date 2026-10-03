@@ -4,7 +4,10 @@ import json
 from datetime import datetime
 from urllib.parse import urlencode
 
-from procurement_intelligence_lab.adapters.synthetic_corpus import SyntheticCorpusReader
+from procurement_intelligence_lab.adapters.synthetic_corpus import (
+    DEFAULT_SCOPES,
+    SyntheticCorpusReader,
+)
 from procurement_intelligence_lab.application.corpus_investigation import (
     CorpusInvestigationService,
     InvestigationRequest,
@@ -22,13 +25,13 @@ from procurement_intelligence_lab.ports.corpus import (
 
 _HTML = """<!doctype html><html lang="en"><meta charset="utf-8"><title>Corpus investigation</title>
 <style>body{font:17px system-ui;max-width:1000px;margin:3rem auto;padding:0 1rem;color:#17304a}label{display:block;margin:1rem 0}input,select,button{font:inherit;padding:.5rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3f8;padding:1rem}li{margin:.4rem}a{color:#0758aa}#sources{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}#comparison{font-size:1.35rem;padding:1rem;background:#edf3f8;border-radius:8px}pre{max-height:22rem;overflow:auto}details{margin:1rem 0}table{border-collapse:collapse;width:100%;margin:1rem 0}td,th{text-align:left;padding:.6rem;border-bottom:1px solid #cad6e2}[hidden]{display:none!important}@media(max-width:650px){#sources{grid-template-columns:1fr}}</style>
-<h1>Procurement corpus investigation</h1><p>Synthetic development corpus: one project, six workbooks, 240 source-row occurrences. Deterministic policy; no model calls.</p>
+<h1>Procurement corpus investigation</h1><p>Synthetic development corpus: four projects, 24 workbooks, 960 source-row occurrences. Deterministic policy; no model calls.</p>
 <a href="/">Legacy evidence inspector</a>
-<form id="investigation"><label>Project <select name="project"><option value="atlas">Atlas</option></select></label>
+<form id="investigation"><label>Project <select name="project"><option value="atlas">Atlas</option><option value="borealis">Borealis</option><option value="cinder">Cinder</option><option value="delta">Delta</option></select></label>
 <label>Canonical item <input name="item" value="GPU-A" required></label>
 <label>As of (ISO 8601 with timezone) <input name="as_of" value="2026-10-01T00:00:00+00:00" size="32" required></label>
 <button>Investigate</button></form>
-<p>Try GPU-A (mismatch), GPU-B (agreement), GPU-C (conflicting requirements), GPU-D (missing observation), GPU-F (fractional), or GPU-G (zero).</p>
+<p>Atlas: GPU-A through GPU-G. Borealis: ACC-B1 through ACC-B7. Cinder: NIC-C1 through NIC-C7. Delta: STORE-D1 through STORE-D7. Each project includes differing quantities, agreement, conflicts, missing observations and numeric boundaries.</p>
 <p id="status" role="status"></p><p id="comparison" hidden></p><details><summary>Inspect the complete audit response</summary><pre id="result" hidden></pre></details><h2>Quantity and authority evidence</h2><ul id="sources"></ul><h2>Original source</h2><table id="cells" hidden></table><pre id="source">Select a quantity or authority reference.</pre>
 <script>
 const form=document.querySelector('form'),status=document.querySelector('#status'),result=document.querySelector('#result'),sources=document.querySelector('#sources'),source=document.querySelector('#source');
@@ -53,13 +56,12 @@ def corpus_response(path: str, query: dict[str, list[str]]) -> tuple[int, str, b
         )
         if set(query) != allowed or any(len(v) != 1 or not v[0] for v in query.values()):
             raise ValueError("provide each required query parameter exactly once")
-        if query["project"][0] != "atlas":
+        scope = next((scope for scope in DEFAULT_SCOPES if scope[1] == query["project"][0]), None)
+        if scope is None:
             raise ScopeAuthorizationError("project is not authorized for this demo")
         context = RequestContext(
             "public-synthetic-demo",
-            "synthetic-tenant",
-            "atlas",
-            "lab",
+            *scope,
             frozenset({Permission.READ_STATE, Permission.READ_EVIDENCE}),
             "corpus-http",
         )
@@ -107,20 +109,8 @@ def corpus_response(path: str, query: dict[str, list[str]]) -> tuple[int, str, b
             }
         else:
             identifier = query["evidence_id"][0]
-            inventory = reader.inventory(context=context)
-            ref = next(
-                (
-                    ref
-                    for fact in inventory.facts
-                    for ref in (fact.evidence, fact.authority)
-                    if ref.evidence_id == identifier
-                ),
-                None,
-            )
-            if ref is None:
-                raise CorpusNotFoundError("evidence not found in admitted scope")
-            source = reader.source(ref, context=context)
-            data = {"evidence": ref.as_dict()}
+            source = reader.source_by_id(identifier, context=context)
+            data = {"evidence": source.evidence.as_dict()}
             if isinstance(source, CorpusSourceRecord):
                 data["authority"] = json.loads(source.record_json)
             else:

@@ -187,3 +187,20 @@ def test_corrupt_shared_string_is_typed_admission_failure(tmp_path: Path) -> Non
     path.write_text(json.dumps(manifest))
     with pytest.raises(CorpusAdmissionError):
         reader.inventory(context=CONTEXT)
+
+
+def test_admitted_values_follow_actual_workbook(tmp_path: Path) -> None:
+    from tools.generate_procurement_corpus import DEFAULT_SPEC, render
+
+    spec = json.loads(DEFAULT_SPEC.read_text())
+    spec["documents"][0]["rows"][0]["quantity"] = "7"
+    path = tmp_path / "spec.json"
+    path.write_text(json.dumps(spec))
+    directory = tmp_path / "corpus"
+    render(path, directory)
+    fact = next(
+        f
+        for f in SyntheticCorpusReader(directory).inventory(context=CONTEXT).facts
+        if f.revision_id == "atlas-bom-r1" and f.canonical_key == "GPU-A"
+    )
+    assert str(fact.quantity) == "7"

@@ -137,8 +137,9 @@ decision support remain under #41, #44, #61, #52, and #65.
 
 The owner approved the [corpus design](../superpowers/specs/2026-10-03-procurement-demo-corpus-design.md)
 and [execution plan](../superpowers/plans/2026-10-03-procurement-demo-corpus.md). Work began on
-`codex/demo-corpus-pilot`, primarily #29 (part of #12/#27/#71). First deliver one project with six
-40-row source workbooks and a generic scoped item/date investigation, then expand to four projects.
+`codex/demo-corpus-pilot`, primarily #29 (part of #12/#27/#71). PR #175 now contains four projects, 24 source workbooks, 960 row occurrences and 48 structured
+HTTP evaluation cases, extending the first one-project increment. Independent original-source
+audit and evaluator regression checks are recorded with the branch.
 This is branch work, not acceptance on `main`; agent and retrieval milestones remain open.
 See [ADR-027](../adr/027-synthetic-corpus-admission.md) for the admitted-input boundary.
 

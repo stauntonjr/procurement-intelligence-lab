@@ -1,7 +1,8 @@
 # Demo execution: first corpus increment
 
 Primary implementation issue: #29; part of #12/#27/#71/#73. Branch: `codex/demo-corpus-pilot`.
-The four-project corpus, operational agent, and retrieval experiments remain uncompleted gates.
+This record retains first-increment history and the subsequent four-project G1 validation.
+Operational agent and retrieval experiments remain uncompleted gates.
 
 ## Baseline and public recovery
 
@@ -48,3 +49,36 @@ main, public deployment, G1 four-project acceptance, or live-agent acceptance fr
 Final local verification: `make check` passed 385 tests with 90.15% combined coverage and the
 coverage ratchet; `make package-smoke` passed; C001-C016 known-bad challenges were rejected.
 Independent semantic review has no unresolved findings. These are first-increment results.
+
+
+## Four-project G1 continuation
+
+PR #175 expands admission and the browser to Atlas, Borealis, Cinder and Delta: 24 workbooks,
+960 source-row occurrences, 960 authority records and 164 scoped unique items. Shared ancestry
+and worksheet layout are disclosed; these counts are not a production diversity claim.
+
+Independent XML/JSON review audited all 48 expected cases and their support, including 232
+per-case authority-record expectations. The 24/12/12 development/validation/test project splits
+are frozen by hashes. Forty cases assess quantities; eight reject invalid structured requests.
+The evaluator executes authored item/date inputs. Natural-language query text, agent trajectory,
+retrieval quality and live-model behavior are not evaluated by this gate.
+
+The HTTP run passed 48/48 cases and resolved 464 original references. Adversarial scorer tests
+reject incorrect sheet/column/record locations, missing or altered authority and foreign scope;
+malformed responses remain unknown without dropping cases. Runtime review corrected cross-item
+order identity ownership before filtering and removed duplicate admission within a source request.
+Every subsequent source request still revalidates the files.
+
+Chromium exercised keyboard submission, exact quantities, original cells and authority in all four
+projects, plus unknown-item recovery. Real HTTP tests cover cross-project evidence denial and
+same-item scope isolation. Clean wheels installed into two isolated environments successfully;
+all four project identities matched across installations and evaluator files were absent.
+
+`make check` passed 403 tests, 90.19% combined coverage and the coverage ratchet; the subsequently
+added distractor-permutation contract passed separately. Independent review accepted the final
+runtime/evaluator hashes in `pilot-gold-review.json`. No new public deployment or merge is claimed.
+The read-only planning audit found no configured omissions; advisory roadmap run 37146142387
+failed with upstream 503 high-demand errors and is not successful review evidence.
+
+Next: the bounded G2 run/event and exact-brief review/recovery contracts, then one serial agent
+workflow over this service. Preserve model configuration and live-run acceptance as explicit gates.

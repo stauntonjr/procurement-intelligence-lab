@@ -175,8 +175,9 @@ authoritative results, policy and evidence; no gold or expected-answer fields.
 **Files:** new evaluator and `tests/unit/test_corpus_evaluation.py`; evaluation artifact under
 `artifacts/procurement-corpus/v1/`; agent changes remain owned by #53/#66–#74.
 
-**Interface:** `uv run python tools/evaluate_procurement_corpus.py --base-url URL --manifest
-evals/procurement_corpus/v1/manifest.json --split {development,validation,test} --output PATH`.
+**G1 implemented interface:** `uv run python tools/evaluate_procurement_corpus.py --base-url URL
+--dataset evals/procurement_corpus/v1 --output PATH` runs all three project splits.
+The 48 requests are authored structured inputs; natural-language interpretation remains G2.
 Results include per-query outcome, evidence-role checks, errors, actual timing/calls and revision.
 The evaluator supplies only request inputs to HTTP; it never sends gold to the application.
 
@@ -238,3 +239,16 @@ The owner approved native execution with independent review and authorized G0 pl
 one-project vertical increment on 2026-10-03. Checkboxes require verified evidence, not this
 authorization alone. Corpus scale-up and
 retrieval experiments are a separate gated follow-on, not an implicit release prerequisite.
+
+
+## G1 continuation evidence
+
+The four-project implementation is tracked in PR #175. `pilot-gold.json` preserves the original
+Atlas regression file and adds 48 audited expectations; `pilot-gold-review.json` records direct
+XLSX/authority checks. Scorer tests reject missing support, wrong locators, altered authority,
+malformed responses and omitted cases. Runtime tests check shared-item project isolation,
+cross-item line ownership, fresh single admission per source request and distractor permutation.
+Clean-wheel execution excludes gold. There is no top-k/search input in this deterministic service;
+retrieval-omission tests belong to Task 6 when a retrieval adapter participates.
+Combined implementation/review/commit checklist entries above remain open until that entire
+entry is fulfilled; the execution record distinguishes verified substeps from release state.

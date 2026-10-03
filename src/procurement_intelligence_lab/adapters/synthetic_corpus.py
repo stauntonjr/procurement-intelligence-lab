@@ -29,6 +29,9 @@ from procurement_intelligence_lab.ports.corpus import (
 )
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[1] / "examples/corpus_v1"
+DEFAULT_SCOPES = tuple(
+    ("synthetic-tenant", project, "lab") for project in ("atlas", "borealis", "cinder", "delta")
+)
 _ROLES = {
     "approved_bom_revision",
     "approved_purchase_order_line",
@@ -71,7 +74,7 @@ def _read(path: Path) -> dict[str, object]:
 @dataclass(frozen=True)
 class SyntheticCorpusReader:
     root: Path = DEFAULT_ROOT
-    allowed_scopes: tuple[tuple[str, str, str], ...] = (("synthetic-tenant", "atlas", "lab"),)
+    allowed_scopes: tuple[tuple[str, str, str], ...] = DEFAULT_SCOPES
 
     def _authorize(self, context: RequestContext, permission: Permission) -> None:
         context.require(permission)
@@ -237,9 +240,17 @@ class SyntheticCorpusReader:
     def source(
         self, evidence: EvidenceRef, *, context: RequestContext
     ) -> CorpusSourceRow | CorpusSourceRecord:
+        source = self.source_by_id(evidence.evidence_id, context=context)
+        if source.evidence != evidence:
+            raise CorpusNotFoundError("evidence not found in admitted scope")
+        return source
+
+    def source_by_id(
+        self, evidence_id: str, *, context: RequestContext
+    ) -> CorpusSourceRow | CorpusSourceRecord:
+        """Resolve an admitted reference and original content in one fresh scoped load."""
         self._authorize(context, Permission.READ_EVIDENCE)
-        sources = self._admit(context)[1]
-        source = sources.get(evidence.evidence_id)
-        if source is None or source.evidence != evidence:
+        source = self._admit(context)[1].get(evidence_id)
+        if source is None:
             raise CorpusNotFoundError("evidence not found in admitted scope")
         return source

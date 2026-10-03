@@ -55,7 +55,14 @@ def main() -> int:
             if any(
                 "/evals/" in name
                 or name.endswith(
-                    ("/gold.json", "/qrels.json", "/queries.json", "/gold-review.json")
+                    (
+                        "/gold.json",
+                        "/qrels.json",
+                        "/queries.json",
+                        "/gold-review.json",
+                        "/pilot-gold.json",
+                        "/pilot-gold-review.json",
+                    )
                 )
                 for name in archive.namelist()
             ):

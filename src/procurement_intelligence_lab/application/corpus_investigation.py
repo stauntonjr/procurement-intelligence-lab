@@ -38,7 +38,11 @@ from procurement_intelligence_lab.platform.semantics.scope import (
     ScopeAuthorizationError,
     StateScope,
 )
-from procurement_intelligence_lab.ports.corpus import CorpusNotFoundError, CorpusReader
+from procurement_intelligence_lab.ports.corpus import (
+    CorpusAdmissionError,
+    CorpusNotFoundError,
+    CorpusReader,
+)
 
 
 @dataclass(frozen=True)
@@ -79,6 +83,14 @@ class CorpusInvestigationService:
                 context.site_id,
             ):
                 raise ScopeAuthorizationError("source scope does not match request")
+        owners: dict[tuple[str, str], str] = {}
+        for fact in inventory.facts:
+            if fact.role != "approved_purchase_order_line":
+                continue
+            for kind, identifier in (("line", fact.line_id), ("assertion", fact.assertion_id)):
+                owner = owners.setdefault((kind, identifier), fact.canonical_key)
+                if owner != fact.canonical_key:
+                    raise CorpusAdmissionError("order identity belongs to conflicting items")
         facts = tuple(f for f in inventory.facts if f.canonical_key == request.canonical_key)
         if not facts:
             raise CorpusNotFoundError("item not found in admitted scope")

@@ -1,0 +1,530 @@
+{
+  "document": {
+    "artifact_id": "borealis-bom-r2",
+    "project_id": "borealis",
+    "role": "approved_bom_revision",
+    "site_id": "lab",
+    "tenant_id": "synthetic-tenant"
+  },
+  "records": [
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-GPU-A-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-GPU-A",
+      "row": 2,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-031-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-031",
+      "row": 3,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-030-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-030",
+      "row": 4,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B6-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B6",
+      "row": 5,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-035-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-035",
+      "row": 6,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-008-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-008",
+      "row": 7,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-024-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-024",
+      "row": 8,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-018-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-018",
+      "row": 9,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-036-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-036",
+      "row": 10,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B7-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B7",
+      "row": 11,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-028-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-028",
+      "row": 12,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-032-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-032",
+      "row": 13,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-10-10T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B5-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B5",
+      "row": 14,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-020-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-020",
+      "row": 15,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-017-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-017",
+      "row": 16,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-037-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-037",
+      "row": 17,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-015-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-015",
+      "row": 18,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-011-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-011",
+      "row": 19,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B2-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B2",
+      "row": 20,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-021-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-021",
+      "row": 21,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B4-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B4",
+      "row": 22,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-026-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-026",
+      "row": 23,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-013-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-013",
+      "row": 24,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-039-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-039",
+      "row": 25,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-038-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-038",
+      "row": 26,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B3-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B3",
+      "row": 27,
+      "supersedes": []
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-023-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-023",
+      "row": 28,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-009-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-009",
+      "row": 29,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-040-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-040",
+      "row": 30,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-033-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-033",
+      "row": 31,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-014-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-014",
+      "row": 32,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-034-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-034",
+      "row": 33,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-012-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-012",
+      "row": 34,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-022-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-022",
+      "row": 35,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-027-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-027",
+      "row": 36,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-029-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-029",
+      "row": 37,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-025-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-025",
+      "row": 38,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-016-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-016",
+      "row": 39,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-BOREALIS-PART-019-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-BOREALIS-PART-019",
+      "row": 40,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "borealis-bom-r2-ACC-B1-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "borealis-bom-r2-ACC-B1",
+      "row": 41,
+      "supersedes": [
+        "borealis-bom-r1"
+      ]
+    }
+  ],
+  "schema_version": 1
+}

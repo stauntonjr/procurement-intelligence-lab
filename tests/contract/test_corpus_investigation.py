@@ -102,3 +102,62 @@ def test_order_identity_unit_and_scope_boundaries() -> None:
         CorpusInvestigationService(ModifiedReader(replace(original, facts=foreign))).investigate(
             request, context=CONTEXT
         )
+
+
+def test_cross_item_line_and_assertion_ownership_checked_before_filtering() -> None:
+    from dataclasses import replace
+    from unittest.mock import Mock
+
+    import pytest
+
+    from procurement_intelligence_lab.adapters.synthetic_corpus import SyntheticCorpusReader
+    from procurement_intelligence_lab.application.corpus_investigation import (
+        CorpusInvestigationService,
+        InvestigationRequest,
+    )
+    from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError
+
+    inventory = SyntheticCorpusReader().inventory(context=CONTEXT)
+    order = next(
+        f
+        for f in inventory.facts
+        if f.canonical_key == "GPU-A" and f.role == "approved_purchase_order_line"
+    )
+    for field in ("line_id", "assertion_id"):
+        foreign = replace(
+            order, canonical_key="OTHER", line_id="other-line", assertion_id="other-assertion"
+        )
+        foreign = replace(foreign, **{field: getattr(order, field)})
+        reader = Mock()
+        reader.inventory.return_value = replace(inventory, facts=inventory.facts + (foreign,))
+        with pytest.raises(CorpusAdmissionError, match="identity.*item"):
+            CorpusInvestigationService(reader).investigate(
+                InvestigationRequest("GPU-A", datetime.fromisoformat("2026-10-01T00:00:00Z")),
+                context=CONTEXT,
+            )
+
+
+def test_distractor_permutation_does_not_change_assessment() -> None:
+    from dataclasses import replace
+    from unittest.mock import Mock
+
+    from procurement_intelligence_lab.adapters.synthetic_corpus import SyntheticCorpusReader
+    from procurement_intelligence_lab.application.corpus_investigation import (
+        CorpusInvestigationService,
+        InvestigationRequest,
+    )
+
+    inventory = SyntheticCorpusReader().inventory(context=CONTEXT)
+    reader = Mock()
+    reader.inventory.return_value = inventory
+    service = CorpusInvestigationService(reader)
+    request = InvestigationRequest("GPU-A", datetime.fromisoformat("2026-10-01T00:00:00+00:00"))
+    original = service.investigate(request, context=CONTEXT)
+    reader.inventory.return_value = replace(inventory, facts=tuple(reversed(inventory.facts)))
+    permuted = service.investigate(request, context=CONTEXT)
+    assert permuted.assessment.status == original.assessment.status
+    assert permuted.assessment.reason == original.assessment.reason
+    assert permuted.assessment.assessment_id == original.assessment.assessment_id
+    assert set(permuted.evidence) == set(original.evidence)
+    assert permuted.ordered_quantity == original.ordered_quantity
+    assert permuted.governed.expected == original.governed.expected

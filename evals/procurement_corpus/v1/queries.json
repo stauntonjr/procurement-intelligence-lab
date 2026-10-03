@@ -1,0 +1,585 @@
+{
+  "schema_version": 1,
+  "queries": [
+    {
+      "id": "atlas-mismatch",
+      "project": "atlas",
+      "category": "exact_identifier",
+      "text": "Compare GPU-A with the governing requirement.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-A",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-match",
+      "project": "atlas",
+      "category": "exact_identifier",
+      "text": "Does the order cover GPU-B?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-B",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-conflict",
+      "project": "atlas",
+      "category": "exact_identifier",
+      "text": "Which requirement governs GPU-C?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-C",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-fractional",
+      "project": "atlas",
+      "category": "paraphrase",
+      "text": "Are the fractional components fully ordered?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-F",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-zero",
+      "project": "atlas",
+      "category": "paraphrase",
+      "text": "Check the zero-quantity component.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-G",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-ordinary",
+      "project": "atlas",
+      "category": "paraphrase",
+      "text": "Check the ordinary component order.",
+      "request": {
+        "project": "atlas",
+        "item": "PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-before-boundary",
+      "project": "atlas",
+      "category": "temporal_revision",
+      "text": "Compare GPU-A immediately before September.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-A",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-approved-boundary",
+      "project": "atlas",
+      "category": "temporal_revision",
+      "text": "Assess GPU-E exactly when approval starts.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-E",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-missing",
+      "project": "atlas",
+      "category": "missing_conflicting",
+      "text": "Is there order evidence for GPU-D?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-D",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-future-approval",
+      "project": "atlas",
+      "category": "missing_conflicting",
+      "text": "Can GPU-E be assessed before its approval?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-E",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-unsupported",
+      "project": "atlas",
+      "category": "unsupported_ambiguous",
+      "text": "Approve and send a purchase order.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-A",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-ambiguous",
+      "project": "atlas",
+      "category": "unsupported_ambiguous",
+      "text": "Compare the GPU.",
+      "request": {
+        "project": "atlas",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-mismatch",
+      "project": "borealis",
+      "category": "exact_identifier",
+      "text": "Reconcile ACC-B1 quantities.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B1",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-match",
+      "project": "borealis",
+      "category": "exact_identifier",
+      "text": "Is ACC-B2 aligned with its BOM?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B2",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-conflict",
+      "project": "borealis",
+      "category": "exact_identifier",
+      "text": "Resolve the ACC-B3 requirement conflict.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B3",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-fractional",
+      "project": "borealis",
+      "category": "paraphrase",
+      "text": "Check the partially divisible accelerator amount.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B6",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-zero",
+      "project": "borealis",
+      "category": "paraphrase",
+      "text": "Is the explicitly zero accelerator order consistent?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B7",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-ordinary",
+      "project": "borealis",
+      "category": "paraphrase",
+      "text": "Do the ordinary Borealis parts match?",
+      "request": {
+        "project": "borealis",
+        "item": "BOREALIS-PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-before-boundary",
+      "project": "borealis",
+      "category": "temporal_revision",
+      "text": "What was ACC-B1 just before the new revision?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B1",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-approved-boundary",
+      "project": "borealis",
+      "category": "temporal_revision",
+      "text": "Does ACC-B5 agree at approval time?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B5",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-missing",
+      "project": "borealis",
+      "category": "missing_conflicting",
+      "text": "Explain absent observations for ACC-B4.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B4",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-future-approval",
+      "project": "borealis",
+      "category": "missing_conflicting",
+      "text": "Is the pending ACC-B5 requirement usable?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B5",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-unsupported",
+      "project": "borealis",
+      "category": "unsupported_ambiguous",
+      "text": "Place an accelerator order with the supplier.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B1",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-ambiguous",
+      "project": "borealis",
+      "category": "unsupported_ambiguous",
+      "text": "Check that accelerator item.",
+      "request": {
+        "project": "borealis",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-mismatch",
+      "project": "cinder",
+      "category": "exact_identifier",
+      "text": "Assess NIC-C1 as of October 1.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C1",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-match",
+      "project": "cinder",
+      "category": "exact_identifier",
+      "text": "Compare approved NIC-C2 demand and orders.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C2",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-conflict",
+      "project": "cinder",
+      "category": "exact_identifier",
+      "text": "Can NIC-C3 establish one required value?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C3",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-fractional",
+      "project": "cinder",
+      "category": "paraphrase",
+      "text": "Verify fractional network components.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C6",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-zero",
+      "project": "cinder",
+      "category": "paraphrase",
+      "text": "Evaluate the explicit zero demand.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C7",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-ordinary",
+      "project": "cinder",
+      "category": "paraphrase",
+      "text": "Are ordinary network-part orders aligned?",
+      "request": {
+        "project": "cinder",
+        "item": "CINDER-PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "project": "cinder",
+      "category": "temporal_revision",
+      "text": "Assess NIC-C1 before September begins.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C1",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "project": "cinder",
+      "category": "temporal_revision",
+      "text": "Evaluate NIC-C5 at the approval boundary.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C5",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-missing",
+      "project": "cinder",
+      "category": "missing_conflicting",
+      "text": "What evidence exists for NIC-C4 orders?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C4",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-future-approval",
+      "project": "cinder",
+      "category": "missing_conflicting",
+      "text": "Does unapproved NIC-C5 establish demand?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C5",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-unsupported",
+      "project": "cinder",
+      "category": "unsupported_ambiguous",
+      "text": "Email the vendor and commit a purchase.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C1",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "project": "cinder",
+      "category": "unsupported_ambiguous",
+      "text": "Tell me if the network equipment matches.",
+      "request": {
+        "project": "cinder",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-mismatch",
+      "project": "delta",
+      "category": "exact_identifier",
+      "text": "Compare STORE-D1 against its effective requirement.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D1",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-match",
+      "project": "delta",
+      "category": "exact_identifier",
+      "text": "Is STORE-D2 ordered in the required amount?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D2",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-conflict",
+      "project": "delta",
+      "category": "exact_identifier",
+      "text": "Which STORE-D3 quantity is authoritative?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D3",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-fractional",
+      "project": "delta",
+      "category": "paraphrase",
+      "text": "Are fractional storage components aligned?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D6",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-zero",
+      "project": "delta",
+      "category": "paraphrase",
+      "text": "Assess the recorded zero-unit storage item.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D7",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-ordinary",
+      "project": "delta",
+      "category": "paraphrase",
+      "text": "Check ordinary storage-part order agreement.",
+      "request": {
+        "project": "delta",
+        "item": "DELTA-PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-before-boundary",
+      "project": "delta",
+      "category": "temporal_revision",
+      "text": "Show STORE-D1 before revision effectivity.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D1",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "project": "delta",
+      "category": "temporal_revision",
+      "text": "Reconcile STORE-D5 when its approval becomes valid.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D5",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-missing",
+      "project": "delta",
+      "category": "missing_conflicting",
+      "text": "Explain missing STORE-D4 order observations.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D4",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-future-approval",
+      "project": "delta",
+      "category": "missing_conflicting",
+      "text": "Can the future-approved STORE-D5 be reconciled now?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D5",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-unsupported",
+      "project": "delta",
+      "category": "unsupported_ambiguous",
+      "text": "Buy the outstanding drives immediately.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D1",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-ambiguous",
+      "project": "delta",
+      "category": "unsupported_ambiguous",
+      "text": "Check the storage.",
+      "request": {
+        "project": "delta",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    }
+  ]
+}

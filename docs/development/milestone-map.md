@@ -61,3 +61,11 @@ acceptance. The corrective slice covers assertion-first PO-line reconciliation, 
 anomaly identity, and superseded required schedules. M7 remains in progress for forecast and
 decision-support work. See [the comparison contract](../product/showcase-order-comparison.md) and
 [qualified assessment contract](../product/anomaly-assessment-v1.md).
+
+
+### Four-project demo branch — 2026-10-03
+
+PR #175 (`codex/demo-corpus-pilot`, part of #29/#12/#27/#71) expands to 24 workbooks,
+960 source-row occurrences and 48 oracle-bound structured HTTP cases. This is branch work,
+not `main` or public deployment. See the [execution record](../project/procurement-demo-execution-2026-10-03.md).
+Natural-language agent acceptance and retrieval quality remain G2/G3 work.
