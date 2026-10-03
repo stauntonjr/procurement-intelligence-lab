@@ -72,3 +72,17 @@ make demo is equivalent to uv run python -m procurement_intelligence_lab. Pass -
 ## Public-data disclaimer
 
 This repository contains no confidential, proprietary, export-controlled, or operational procurement data. Examples and future fixtures must be synthetic or demonstrably public. This is an architectural lab, not a production procurement or decision authority.
+
+### Local review-agent run foundation
+
+The G2 foundation branch exposes a fixture-only run ledger. Create a run, then resume its ID
+from a second process using the same database and project:
+
+```bash
+uv run python -m procurement_intelligence_lab.interfaces.agent_runs --database /tmp/procurement-agent-runs.db create --project atlas
+uv run python -m procurement_intelligence_lab.interfaces.agent_runs --database /tmp/procurement-agent-runs.db resume --project atlas --run-id <returned-run-id>
+```
+
+Run/thread IDs and version metadata remain bound to the configured synthetic owner scope.
+The [run contract](docs/product/review-agent-run-contract-v1.md) defines audit-event completeness
+and later exact-brief review/save boundaries. This CLI performs no model inference or brief save.

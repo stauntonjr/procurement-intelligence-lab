@@ -97,6 +97,13 @@ def main() -> int:
                 capture_output=True,
                 text=True,
             )
+            subprocess.run(
+                [str(python), str(ROOT / "tools/agent_run_package_probe.py")],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
             probe_outputs.append(probe_run.stdout.strip() + corpus_probe.stdout.strip())
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")

@@ -39,6 +39,9 @@ def test_failure_categories_are_a_closed_stable_vocabulary() -> None:
 
 def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
     assert {code.value for code in ErrorCode} == {
+        "pil.input.agent_run_not_found",
+        "pil.policy.agent_run_conflict",
+        "pil.infrastructure.agent_run_store_unavailable",
         "pil.input.semantic_contract_violation",
         "pil.input.semantic_type_contract_violation",
         "pil.input.scope_contract_violation",

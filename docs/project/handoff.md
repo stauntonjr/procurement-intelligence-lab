@@ -145,3 +145,17 @@ See [ADR-027](../adr/027-synthetic-corpus-admission.md) for the admitted-input b
 
 First-increment execution, restored public-release identity, and acceptance boundaries are recorded
 in [the execution note](procurement-demo-execution-2026-10-03.md).
+
+## G2 run/event foundation — 2026-10-03
+
+`codex/review-agent-run-contracts` is stacked on PR #175's four-project corpus commit.
+The foundation implements application-issued run/thread identities, immutable reproducibility
+metadata, a scoped SQLite audit ledger and trajectory completeness checks under #70/#68/#72.
+The local CLI demonstrates owned resume across process lifetimes. Read the
+[run contract](../product/review-agent-run-contract-v1.md),
+[ADR-028](../adr/028-application-owned-review-agent-runs.md) and
+[foundation plan](../superpowers/plans/2026-10-03-review-agent-run-foundation.md).
+
+This is branch work. Typed corpus tools, model/graph orchestration, exact-brief approval,
+idempotent brief saving and live walkthrough acceptance remain subsequent G2 work. Existing
+ADR-014 review previews remain non-persistent and do not confer new save authority.

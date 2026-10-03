@@ -69,3 +69,10 @@ PR #175 (`codex/demo-corpus-pilot`, part of #29/#12/#27/#71) expands to 24 workb
 960 source-row occurrences and 48 oracle-bound structured HTTP cases. This is branch work,
 not `main` or public deployment. See the [execution record](../project/procurement-demo-execution-2026-10-03.md).
 Natural-language agent acceptance and retrieval quality remain G2/G3 work.
+
+### G2 run/event foundation branch — 2026-10-03
+
+#70 (M8) is the primary issue for the `codex/review-agent-run-contracts` continuation,
+part of #68/#72. Run/event persistence and completeness scoring precede graph construction;
+see [the contract](../product/review-agent-run-contract-v1.md). This branch is stacked on
+PR175; neither branch is described as merged or live acceptance.

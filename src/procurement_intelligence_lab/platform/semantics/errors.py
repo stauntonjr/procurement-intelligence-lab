@@ -19,6 +19,9 @@ class ErrorCategory(StrEnum):
 class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
+    AGENT_RUN_NOT_FOUND = "pil.input.agent_run_not_found"
+    AGENT_RUN_CONFLICT = "pil.policy.agent_run_conflict"
+    AGENT_RUN_STORE_UNAVAILABLE = "pil.infrastructure.agent_run_store_unavailable"
     SEMANTIC_CONTRACT_VIOLATION = "pil.input.semantic_contract_violation"
     SEMANTIC_TYPE_CONTRACT_VIOLATION = "pil.input.semantic_type_contract_violation"
     SCOPE_CONTRACT_VIOLATION = "pil.input.scope_contract_violation"
