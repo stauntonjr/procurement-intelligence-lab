@@ -46,7 +46,7 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) was reopened after post-merge counterexamples showed assertion/line identity aliasing, lifecycle identity reuse across changed assessment context, and obsolete required schedules driving findings. Branch `codex/issue-60-correctness` carries the bounded correction and C014-C016 evidence; it is not merged acceptance yet.
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) are complete. [PR #174](https://github.com/stauntonjr/procurement-intelligence-lab/pull/174) merged the bounded assertion/line identity, lifecycle identity, and schedule-supersession corrections with C014-C016 evidence; `main` includes them at `b0cc77e`.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) remains open despite the delivered lexical lifecycle foundation and unsupported-kind rejection; reconcile its full acceptance evidence before closure. Follow-on M6 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - Identity, source-viewer, and review-context slices are complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -69,6 +69,11 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - Which runtime registry, capability-validation, and logical-to-physical planning slice should follow the completed DomainPackage compiler without introducing domain-name branching? Create a scoped issue before scheduling it; use [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and the [architecture contract](../architecture/domain-package-and-stage-planning.md) as its constraints.
 
 ## Recommended next work
+
+The [LangChain Academy reference notes](../langchain-ref/README.md) capture selected official
+course-code patterns for the planned evidence-review agent, with pinned source revisions,
+current-API caveats, an offline evaluator example, and Issue-specific acceptance checks.
+They are reference material, not implemented agent capability or live evaluation evidence.
 
 The owner prioritizes independent employer-facing showcases for Procurement Intelligence Lab and
 SciFact RAG, with explicit integration planning. See the [parallel product development plan](parallel-product-development.md).
@@ -99,7 +104,7 @@ Treat this page as a concise index, not a second source of truth. On each meanin
 5. Use the roadmap stewardship audit to flag drift, but record material chat decisions deliberately in durable artifacts.
 6. Recheck links and run the lightweight documentation check before opening or updating a PR.
 
-## Bounded Issue #60 order comparison
+## Historical bounded Issue #60 order comparison
 
 The inspector's synthetic order scenarios compare a governed requirement with a fixture-pinned
 order quantity using the existing deterministic quantity-mismatch detector. A 4-versus-2 case
@@ -122,7 +127,17 @@ lifecycle fixture, original order scenarios, new examples, and source drill-down
 
 The original acceptance evidence is retained in
 [`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json) with
-its post-merge findings and `not_ready` disposition. Completion requires merged assertion-first
+its post-merge findings and historical `not_ready` disposition. The merged correction is recorded in
+[`artifacts/issue-60-correctness-semantic-evidence.json`](../../artifacts/issue-60-correctness-semantic-evidence.json): assertion-first
 line reconciliation, assessment-context-bound anomaly identity, symmetric schedule supersession,
 and C014-C016 known-bad rejection. Adjacent review, relationships, forecasting, costing, and
 decision support remain under #41, #44, #61, #52, and #65.
+
+## Demo corpus execution — 2026-10-03
+
+The owner approved the [corpus design](../superpowers/specs/2026-10-03-procurement-demo-corpus-design.md)
+and [execution plan](../superpowers/plans/2026-10-03-procurement-demo-corpus.md). Work began on
+`codex/demo-corpus-pilot`, primarily #29 (part of #12/#27/#71). First deliver one project with six
+40-row source workbooks and a generic scoped item/date investigation, then expand to four projects.
+This is branch work, not acceptance on `main`; agent and retrieval milestones remain open.
+See [ADR-027](../adr/027-synthetic-corpus-admission.md) for the admitted-input boundary.

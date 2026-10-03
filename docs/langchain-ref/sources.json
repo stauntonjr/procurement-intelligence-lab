@@ -1,0 +1,221 @@
+{
+  "studied_on": "2026-10-03",
+  "lesson_player_access": "sign-in required; videos and private lessons not reviewed",
+  "repositories": [
+    {
+      "repository": "https://github.com/langchain-ai/lca-reliable-agents",
+      "revision": "8fe1c139767fa6efc32e9b21230cff8f45932356",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "b48a09da2a9411f12a02155be9e528d4feb815e6bde790cb6644f6f226e241e6",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/README.md",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/README.md",
+          "sha256": "9d4e23d4101a29fdd0fe707a16a1d06388f843f3cc1a73f128bef85fb032b2ad",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/README.md",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "893e6e30275896912c21c77f9f7c112aba85fd985d05b26a29424cf7e511d177",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/LICENSE",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/pyproject.toml",
+          "sha256": "726da1b0598a8505dd502979ac993f180391d2972535f80e4197d8f93414f0ca",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/pyproject.toml",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/officeflow-agent/agent_v0.py",
+          "sha256": "cffd54dcbb23db9b20f6597b405bbf1f10bf418362e0f21ee24032622842d580",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/officeflow-agent/agent_v0.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/officeflow-agent/agent_v1.py",
+          "sha256": "e2c85058afa2124959e8882fcc2c99fd2210782520ec82f3b75a992684f3a8c3",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/officeflow-agent/agent_v1.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/officeflow-agent/agent_v3.py",
+          "sha256": "ed07541b0524d557577180ec10d4c0043ffd71c211075f851de7ee1e131cc9e7",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/officeflow-agent/agent_v3.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/officeflow-agent/agent_v4.py",
+          "sha256": "61a3a54e9871815bfd4783e2cdab8e5c02534338e26a1eddc458555b5b3ca5d0",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/officeflow-agent/agent_v4.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-1/lesson-2/thread_agent.py",
+          "sha256": "6917b52ad0de85a39fa54c86a5a965052fc2e92a06ca19a28aca47e4165c2535",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-1/lesson-2/thread_agent.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-1/lesson-2/third_party_agent.py",
+          "sha256": "2b2138326190b437ee0d576f4fe3cade35996e9d1f3b6063ca775add28b14337",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-1/lesson-2/third_party_agent.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-2/lesson-3/run_experiment.py",
+          "sha256": "4c2a227a68ce63c6583b37b5dfc7a557989031e733ef7f299bf9d82b95887499",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-2/lesson-3/run_experiment.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-2/lesson-4/eval_schema_check.py",
+          "sha256": "f60f2026ea88124f9eaf29149fbe14c26d79509ac6b7c03b2b2e26072cc55287",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-2/lesson-4/eval_schema_check.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-2/lesson-4/run_eval.py",
+          "sha256": "40bc2b6cd04f7f9226e661330d5514fd949eb05005972d19a9ead2914d198f7a",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-2/lesson-4/run_eval.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-2/lesson-5/run_experiment.py",
+          "sha256": "d2a6eade73202a51062a94fd987dd7d163c78557caaa46a4f4ea9743a506597e",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-2/lesson-5/run_experiment.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-2/lesson-6/eval_conciseness_pairwise.py",
+          "sha256": "afcdd93b74cfe32bff5937c6cc4b00d7c1d53bb5fce449a5f61011fc9ad6f37b",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-2/lesson-6/eval_conciseness_pairwise.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-2/lesson-6/run_pairwise_experiment.py",
+          "sha256": "9b611909d30e300914d050fde9e707fab6ae19e2a25c6517acbfa4b562511de7",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-2/lesson-6/run_pairwise_experiment.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-3/lesson-2/generate_traces.py",
+          "sha256": "5029ef1d42e7cdb6115aa9470fb07742cbf94526a57b962cf2b136eb09c441f0",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-3/lesson-2/generate_traces.py",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "python/module-3/lesson-2/upload_traces.py",
+          "sha256": "63f13ec91b0d70d1b25b9e333095fa2658a34d8aa93ab8299859c5d1ac176b1f",
+          "url": "https://github.com/langchain-ai/lca-reliable-agents/blob/8fe1c139767fa6efc32e9b21230cff8f45932356/python/module-3/lesson-2/upload_traces.py",
+          "inspection": "selected source sections; not executed"
+        }
+      ]
+    },
+    {
+      "repository": "https://github.com/langchain-ai/langchain-academy",
+      "revision": "fa15bec4a51c541c40c261586b037c9d134977b1",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "893e6e30275896912c21c77f9f7c112aba85fd985d05b26a29424cf7e511d177",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/LICENSE",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "requirements.txt",
+          "sha256": "5f1de88d187152128dfea9a4f70e280d1f418cfc5ce8e505669b27bc52ab80ed",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/requirements.txt",
+          "inspection": "selected source sections; not executed"
+        },
+        {
+          "path": "module-1/agent.ipynb",
+          "sha256": "dcc200eabd3af6bf2eb6cbd3d33a62fc3db191041c4a1a7a6fe4c5035d7c3495",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-1/agent.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-2/state-reducers.ipynb",
+          "sha256": "8da687c32ca4b4367cb727d44afbf799c16b6d199e169b20a72c5a5347b9005a",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-2/state-reducers.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-2/multiple-schemas.ipynb",
+          "sha256": "1f2e7e4bbb21fb6333d58262ef1bf375be25865b3003f87ff86232e8c6e41b79",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-2/multiple-schemas.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-2/trim-filter-messages.ipynb",
+          "sha256": "b10eeab7502fe4ce17c31b25ecfc77e2880800cb25a880b9ba6bb7654dd8ab81",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-2/trim-filter-messages.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-2/chatbot-external-memory.ipynb",
+          "sha256": "b39e69583d4676b77919c36fa651e05f4e886fc5fcf6a160b01ea19faac0b4be",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-2/chatbot-external-memory.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-3/dynamic-breakpoints.ipynb",
+          "sha256": "f85af0926a1720718ecf52db92c62f36184cce713f84a898e42f52d3ffb401b5",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-3/dynamic-breakpoints.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-3/time-travel.ipynb",
+          "sha256": "244d745554ece7f562f994f058957f2b6a3a51fb31b2ffde51b901629ad8577c",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-3/time-travel.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-4/parallelization.ipynb",
+          "sha256": "b5ae4e5c090fd58e19b5189755863e807175e5ac107ac416de414e952879101b",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-4/parallelization.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-4/sub-graph.ipynb",
+          "sha256": "cc658b811b30837ee864a74176d550d139a511caf3386d61ce1c89c2b0c5da53",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-4/sub-graph.ipynb",
+          "inspection": "selected code cells"
+        },
+        {
+          "path": "module-5/memory_store.ipynb",
+          "sha256": "31de4f6ce831648f2091f73789830a4fa7692cf90b37cb4408226f4afc03c6be",
+          "url": "https://github.com/langchain-ai/langchain-academy/blob/fa15bec4a51c541c40c261586b037c9d134977b1/module-5/memory_store.ipynb",
+          "inspection": "selected code cells"
+        }
+      ]
+    }
+  ],
+  "current_documentation": [
+    {
+      "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+      "checked_on": "2026-10-03"
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+      "checked_on": "2026-10-03"
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+      "checked_on": "2026-10-03"
+    },
+    {
+      "url": "https://docs.langchain.com/langsmith/evaluation-concepts",
+      "checked_on": "2026-10-03"
+    },
+    {
+      "url": "https://docs.langchain.com/langsmith/observability-concepts",
+      "checked_on": "2026-10-03"
+    }
+  ],
+  "execution": "Upstream examples not executed. Local original stdlib example checked separately."
+}
