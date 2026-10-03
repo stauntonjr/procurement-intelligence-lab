@@ -2,7 +2,6 @@
 
 import json
 from datetime import datetime
-from urllib.parse import urlencode
 
 from procurement_intelligence_lab.adapters.synthetic_corpus import (
     DEFAULT_SCOPES,
@@ -12,6 +11,7 @@ from procurement_intelligence_lab.application.corpus_investigation import (
     CorpusInvestigationService,
     InvestigationRequest,
 )
+from procurement_intelligence_lab.interfaces.corpus_dto import investigation_dto, source_dto
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
     RequestContext,
@@ -20,7 +20,6 @@ from procurement_intelligence_lab.platform.semantics.scope import (
 from procurement_intelligence_lab.ports.corpus import (
     CorpusAdmissionError,
     CorpusNotFoundError,
-    CorpusSourceRecord,
 )
 
 _HTML = """<!doctype html><html lang="en"><meta charset="utf-8"><title>Corpus investigation</title>
@@ -71,56 +70,11 @@ def corpus_response(path: str, query: dict[str, list[str]]) -> tuple[int, str, b
                 InvestigationRequest(query["item"][0], datetime.fromisoformat(query["as_of"][0])),
                 context=context,
             )
-            decision = result.governed.decision
-            data: dict[str, object] = {
-                "project": context.project_id,
-                "item": decision.canonical_key,
-                "as_of": decision.as_of.isoformat(),
-                "snapshot_id": result.snapshot_id,
-                "ordered_quantity": str(result.ordered_quantity)
-                if result.ordered_quantity is not None
-                else None,
-                "governance_policy_id": decision.policy_id,
-                "governance_decision_id": decision.decision_id,
-                "evidence_by_role": {
-                    role: [ref.evidence_id for ref in refs]
-                    for role, refs in result.assessment.evidence_by_role
-                },
-                "assessment_id": result.assessment.assessment_id,
-                "status": result.assessment.status.value,
-                "reason": result.assessment.reason.value if result.assessment.reason else None,
-                "required_quantity": str(result.governed.expected.required_quantity)
-                if result.governed.expected
-                else None,
-                "unit": decision.unit,
-                "governance_status": decision.status.value,
-                "governance_dispositions": dict(decision.dispositions),
-                "input_dispositions": dict(result.assessment.input_dispositions),
-                "policy_id": result.assessment.policy_id,
-                "policy_digest": result.assessment.policy_digest,
-                "evidence": [
-                    ref.as_dict()
-                    | {
-                        "url": "/api/corpus/source?"
-                        + urlencode({"project": context.project_id, "evidence_id": ref.evidence_id})
-                    }
-                    for ref in result.evidence
-                ],
-            }
+            data = investigation_dto(result, context)
         else:
             identifier = query["evidence_id"][0]
             source = reader.source_by_id(identifier, context=context)
-            data = {"evidence": source.evidence.as_dict()}
-            if isinstance(source, CorpusSourceRecord):
-                data["authority"] = json.loads(source.record_json)
-            else:
-                data.update(
-                    {
-                        "headers": source.headers,
-                        "cells": source.cells,
-                        "highlighted_columns": source.highlighted_columns,
-                    }
-                )
+            data = source_dto(source)
         return 200, "application/json", json.dumps(data).encode()
     except ScopeAuthorizationError:
         status = 403

@@ -159,3 +159,13 @@ The local CLI demonstrates owned resume across process lifetimes. Read the
 This is branch work. Typed corpus tools, model/graph orchestration, exact-brief approval,
 idempotent brief saving and live walkthrough acceptance remain subsequent G2 work. Existing
 ADR-014 review previews remain non-persistent and do not confer new save authority.
+
+## G2 audited corpus tools — 2026-10-03
+
+`codex/audited-corpus-agent-tools` is stacked on PR #176. Two tools call the existing scoped
+investigation/source services and record actual starts, result snapshots or closed typed failures.
+Their DTOs share the HTTP serializers. Model arguments cannot supply identity or permissions.
+The fixture CLI demonstrates create/investigate/source/finish across processes; these traces
+remain excluded from live inference counts. Read the [tool contract](../product/corpus-agent-tools-v1.md)
+and [acceptance record](corpus-agent-tools-evidence.md). #66 remains open/In Progress; serial
+model orchestration, exact-brief approval/save and live acceptance remain subsequent G2 work.

@@ -143,7 +143,12 @@ class AgentEvent:
         if (self.kind == AgentEventKind.TOOL_SUCCEEDED) != bool(self.snapshot_id):
             raise SemanticContractError("successful tool event requires snapshot identity only")
         if self.kind == AgentEventKind.TOOL_FAILED:
-            if self.error_code not in ("tool_timeout", "tool_unavailable", "invalid_tool_result"):
+            if self.error_code not in (
+                "tool_timeout",
+                "tool_unavailable",
+                "invalid_tool_result",
+                "corpus_admission_failed",
+            ):
                 raise SemanticContractError("unsupported tool failure code")
         elif self.error_code is not None:
             raise SemanticContractError("error code is only valid on tool failure")

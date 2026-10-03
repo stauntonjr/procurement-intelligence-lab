@@ -19,6 +19,10 @@ class ErrorCategory(StrEnum):
 class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
+    AGENT_TOOL_ADMISSION_FAILED = "pil.infrastructure.agent_tool_admission_failed"
+    AGENT_TOOL_TIMEOUT = "pil.transient.agent_tool_timeout"
+    AGENT_TOOL_UNAVAILABLE = "pil.infrastructure.agent_tool_unavailable"
+    AGENT_TOOL_INVALID_RESULT = "pil.input.agent_tool_invalid_result"
     AGENT_RUN_NOT_FOUND = "pil.input.agent_run_not_found"
     AGENT_RUN_CONFLICT = "pil.policy.agent_run_conflict"
     AGENT_RUN_STORE_UNAVAILABLE = "pil.infrastructure.agent_run_store_unavailable"

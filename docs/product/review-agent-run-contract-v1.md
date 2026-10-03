@@ -60,3 +60,5 @@ Foundation failures use the repository typed categories/codes:
 `pil.infrastructure.agent_run_store_unavailable`. The CLI preserves these stable codes and their categories in explicit JSON failure envelopes. Every identity field is a
 bounded nonempty string, timestamp is aware, and event/execution kinds must be supported enums.
 Arbitrary objects fail before any event append or DTO export.
+The corpus tools extend the closed failure-event catalog with `corpus_admission_failed` for
+non-retryable authoritative-source integrity failures. This retains infrastructure semantics.

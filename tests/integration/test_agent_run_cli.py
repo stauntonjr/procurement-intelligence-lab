@@ -53,3 +53,51 @@ def test_storage_failure_remains_infrastructure(tmp_path: Path) -> None:
         failed.returncode != 0
         and json.loads(failed.stdout)["code"] == "pil.infrastructure.agent_run_store_unavailable"
     )
+
+
+def test_actual_tools_then_finish_in_separate_processes(tmp_path: Path) -> None:
+    db = tmp_path / "runs.db"
+    run = json.loads(invoke(db, "create", "--project", "atlas").stdout)
+    arguments = ("--project", "atlas", "--run-id", run["run_id"])
+    investigated = invoke(
+        db, "investigate", *arguments, "--item", "GPU-A", "--as-of", "2026-10-01T00:00:00+00:00"
+    )
+    assert investigated.returncode == 0, investigated.stderr
+    result = json.loads(investigated.stdout)["result"]
+    assert result["required_quantity"] == "8" and result["ordered_quantity"] == "6"
+    assert result["status"] == "anomaly" and result["snapshot_id"]
+    inspected = invoke(
+        db, "source", *arguments, "--evidence-id", result["evidence"][0]["evidence_id"]
+    )
+    assert inspected.returncode == 0, inspected.stderr
+    source = json.loads(inspected.stdout)["result"]
+    assert source["cells"][0] == "GPU-A" and source["evidence"] == {
+        k: v for k, v in result["evidence"][0].items() if k != "url"
+    }
+    finished = invoke(db, "finish", *arguments)
+    assert finished.returncode == 0, finished.stderr
+    report = json.loads(finished.stdout)
+    assert report["trajectory"]["outcome"] == "pass" and report["trajectory"]["tool_calls"] == 2
+    assert report["summary"]["live_counts"]["pass"] == 0
+    repeated = invoke(db, "finish", *arguments)
+    assert repeated.returncode == 0 and json.loads(repeated.stdout) == report
+
+
+def test_missing_and_failed_tools_cannot_finish_successfully(tmp_path: Path) -> None:
+    db = tmp_path / "runs.db"
+    run = json.loads(invoke(db, "create", "--project", "atlas").stdout)
+    args = ("--project", "atlas", "--run-id", run["run_id"])
+    source = invoke(db, "source", *args, "--evidence-id", "unknown")
+    assert (
+        source.returncode != 0
+        and json.loads(source.stdout)["code"] == "pil.input.agent_tool_invalid_result"
+    )
+    finished = invoke(db, "finish", *args)
+    assert (
+        finished.returncode != 0 and json.loads(finished.stdout)["trajectory"]["outcome"] == "fail"
+    )
+    empty = json.loads(invoke(db, "create", "--project", "atlas").stdout)
+    missing = invoke(db, "finish", "--project", "atlas", "--run-id", empty["run_id"])
+    assert (
+        missing.returncode != 0 and json.loads(missing.stdout)["trajectory"]["outcome"] == "unknown"
+    )

@@ -70,3 +70,11 @@ class CorpusReader(Protocol):
     def source(
         self, evidence: EvidenceRef, *, context: RequestContext
     ) -> CorpusSourceRow | CorpusSourceRecord: ...
+
+
+class CorpusSourceLookup(Protocol):
+    """Resolve a scoped opaque source ID with one fresh admission."""
+
+    def source_by_id(
+        self, evidence_id: str, *, context: RequestContext
+    ) -> CorpusSourceRow | CorpusSourceRecord: ...

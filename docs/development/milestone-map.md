@@ -76,3 +76,11 @@ Natural-language agent acceptance and retrieval quality remain G2/G3 work.
 part of #68/#72. Run/event persistence and completeness scoring precede graph construction;
 see [the contract](../product/review-agent-run-contract-v1.md). This branch is stacked on
 PR175; neither branch is described as merged or live acceptance.
+
+### G2 audited corpus tools branch — 2026-10-03
+
+#66 (M8), part of #53/#70/#72: two actual corpus-service tools with strict arguments, scoped
+source lookup, positive invocation/snapshot evidence and typed admission failures. Stacked
+on PR176; branch acceptance includes real CLI processes, clean wheels and unchanged structured
+HTTP outcomes. See [the acceptance record](../project/corpus-agent-tools-evidence.md).
+This does not complete model orchestration, exact-brief approval/save or live-agent evaluation.
