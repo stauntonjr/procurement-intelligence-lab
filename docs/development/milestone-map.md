@@ -84,3 +84,10 @@ source lookup, positive invocation/snapshot evidence and typed admission failure
 on PR176; branch acceptance includes real CLI processes, clean wheels and unchanged structured
 HTTP outcomes. See [the acceptance record](../project/corpus-agent-tools-evidence.md).
 This does not complete model orchestration, exact-brief approval/save or live-agent evaluation.
+
+### G2 exact-brief review/save branch — 2026-10-03
+
+#67 (M8), part of #68/#53/#72: immutable deterministic briefs, exact receipts, active-version
+invalidation, expiry and transactional idempotent saving under ADR-029. The local human CLI
+is separate from runtime permissions. Graph recovery, browser review and live-model acceptance
+remain open; no broader Issue or milestone completion is inferred.

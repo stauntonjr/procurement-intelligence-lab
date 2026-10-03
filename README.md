@@ -91,3 +91,21 @@ strict arguments, existing-service results and actual invocation audit.
 Run/thread IDs and version metadata remain bound to the configured synthetic owner scope.
 The [run contract](docs/product/review-agent-run-contract-v1.md) defines audit-event completeness
 and later exact-brief review/save boundaries. This CLI performs no model inference or brief save.
+
+### Local human brief review
+
+The separate human CLI has fixed local demo review/save permissions. First create a run with
+the run CLI, then draft a deterministic brief:
+
+```bash
+uv run python -m procurement_intelligence_lab.interfaces.briefs --database /tmp/procurement-agent-runs.db draft --project atlas --run-id <run-id> --item GPU-A --as-of 2026-10-01T00:00:00+00:00
+uv run python -m procurement_intelligence_lab.interfaces.briefs --database /tmp/procurement-agent-runs.db review --project atlas --run-id <run-id> --brief-id <brief-id> --digest <digest> --decision approve
+uv run python -m procurement_intelligence_lab.interfaces.briefs --database /tmp/procurement-agent-runs.db save --project atlas --run-id <run-id> --brief-id <brief-id> --digest <digest> --idempotency-key <idempotency-key>
+```
+
+Use the exact returned brief ID, digest and key. `show` retrieves that immutable packet;
+`--decision reject` prevents saving it. A new draft invalidates the old receipt. The local
+configuration uses a one-hour approval expiry; repeating review cannot renew it. Repeated saves
+acknowledge one durable result. This shell boundary demonstrates local human review mechanics,
+not production authentication, graph recovery or live inference. See the
+[approval contract](docs/product/exact-brief-review-v1.md).

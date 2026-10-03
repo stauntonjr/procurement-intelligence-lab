@@ -169,3 +169,14 @@ The fixture CLI demonstrates create/investigate/source/finish across processes; 
 remain excluded from live inference counts. Read the [tool contract](../product/corpus-agent-tools-v1.md)
 and [acceptance record](corpus-agent-tools-evidence.md). #66 remains open/In Progress; serial
 model orchestration, exact-brief approval/save and live acceptance remain subsequent G2 work.
+
+## G2 exact-brief review/save branch — 2026-10-03
+
+`codex/exact-brief-approval` continues PR #177 for #67/#68. Application-owned immutable
+core-fact briefs, exact approval/rejection receipts and atomic single-result saves remain
+independent of graph checkpoints. See [ADR-029](../adr/029-exact-brief-review-and-idempotent-save.md),
+[the contract](../product/exact-brief-review-v1.md) and
+[the execution plan](../superpowers/plans/2026-10-03-exact-brief-approval.md). A separate fixed
+human CLI exercises process restart; runtime agent permissions cannot review/save.
+Model drafting, graph interrupts, authenticated browser controls and live acceptance remain
+subsequent work; this branch does not change main or the public release.

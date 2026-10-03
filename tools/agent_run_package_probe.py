@@ -81,3 +81,57 @@ with tempfile.TemporaryDirectory() as directory:
     print(
         "installed corpus tools: authoritative quantities, original source and audited fixture trajectory passed"
     )
+
+with tempfile.TemporaryDirectory() as directory:
+    database = str(Path(directory) / "briefs.db")
+    root = [
+        sys.executable,
+        "-m",
+        "procurement_intelligence_lab.interfaces.agent_runs",
+        "--database",
+        database,
+    ]
+    run = json.loads(
+        subprocess.run(
+            root + ["create", "--project", "atlas"], check=True, capture_output=True, text=True
+        ).stdout
+    )
+    human = [
+        sys.executable,
+        "-m",
+        "procurement_intelligence_lab.interfaces.briefs",
+        "--database",
+        database,
+    ]
+    scope = ["--project", "atlas", "--run-id", run["run_id"]]
+    brief = json.loads(
+        subprocess.run(
+            human + ["draft", *scope, "--item", "GPU-A", "--as-of", "2026-10-01T00:00:00Z"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+    )
+    assert json.loads(brief["content_json"])["required_quantity"] == "8"
+    exact = [*scope, "--brief-id", brief["brief_id"], "--digest", brief["digest"]]
+    denied = subprocess.run(
+        human + ["save", *exact, "--idempotency-key", brief["idempotency_key"]],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert denied.returncode == 1 and json.loads(denied.stdout)["category"] == "policy"
+    receipt = json.loads(
+        subprocess.run(
+            human + ["review", *exact, "--decision", "approve"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+    )
+    assert receipt["digest"] == brief["digest"] and receipt["decision"] == "approve"
+    save = human + ["save", *exact, "--idempotency-key", brief["idempotency_key"]]
+    first = json.loads(subprocess.run(save, check=True, capture_output=True, text=True).stdout)
+    replay = json.loads(subprocess.run(save, check=True, capture_output=True, text=True).stdout)
+    assert first == replay and first["brief_id"] == brief["brief_id"]
+    print("installed human brief CLI: exact approval and durable single-save replay passed")

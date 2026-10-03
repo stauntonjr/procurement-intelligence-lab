@@ -62,3 +62,8 @@ bounded nonempty string, timestamp is aware, and event/execution kinds must be s
 Arbitrary objects fail before any event append or DTO export.
 The corpus tools extend the closed failure-event catalog with `corpus_admission_failed` for
 non-retryable authoritative-source integrity failures. This retains infrastructure semantics.
+
+The `codex/exact-brief-approval` continuation implements the bounded application review/save
+contract through a separate local human CLI; see [exact-brief review v1](exact-brief-review-v1.md)
+and ADR-029. Graph checkpoints, browser authentication and live model behavior remain subsequent
+work. The foundation branch alone does not expose these added capabilities.

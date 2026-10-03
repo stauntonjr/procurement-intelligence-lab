@@ -52,3 +52,7 @@ demo direction. These notes do not make LangGraph or LangSmith a core dependency
 against passing and adversarial records. Graph snippets are syntax-checked reference sketches;
 they have not been imported or executed against a pinned LangGraph environment. No restart,
 live-inference, telemetry-export, or procurement-quality claim follows from these checks.
+
+The [2026-10-03 approval integration refresh](approval-integration-2026-10-03.md) connects the
+current official interrupt/checkpointer APIs to the new application-owned exact-brief contract.
+It is design input; graph/live execution acceptance remains uncompleted.

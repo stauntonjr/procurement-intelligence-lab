@@ -45,7 +45,7 @@ def _optional(data: dict[str, Any], key: str) -> str | None:
     return None if data[key] is None else _text(data, key)
 
 
-def _run(raw: str) -> AgentRun:
+def decode_run(raw: str) -> AgentRun:
     try:
         data: dict[str, Any] = json.loads(raw)
         versions: dict[str, Any] = data["versions"]
@@ -130,7 +130,7 @@ class SqliteRunStore:
         ).fetchone()
         if row is None:
             raise RunNotFound("run not found in authorized owner scope")
-        return _run(cast(str, row[0]))
+        return decode_run(cast(str, row[0]))
 
     @staticmethod
     def _events(db: sqlite3.Connection, run_id: str) -> tuple[AgentEvent, ...]:
