@@ -1,5 +1,10 @@
 # Procurement Intelligence Lab
 
+The current implementation branch also contains a **fixture-only durable review workflow**:
+typed corpus request -> exact brief -> human pause -> idempotent save, with optional pinned
+LangGraph dependencies. See [the CLI contract](docs/product/serial-review-workflow-v1.md).
+This prototype is separate from live-model and deployed-browser acceptance.
+
 Procurement Intelligence Lab is a public, synthetic-data reference architecture for trustworthy BOM and procurement intelligence. It turns semi-structured documents into provenance-preserving knowledge, keeps source assertions distinct from truth, reconciles them into operational state, and exposes deterministic and AI-assisted investigation tools.
 
 Reusable semantic contracts and DomainPackage compilation live under `platform/`; procurement-owned

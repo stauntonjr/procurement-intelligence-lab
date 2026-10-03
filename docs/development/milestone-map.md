@@ -91,3 +91,11 @@ This does not complete model orchestration, exact-brief approval/save or live-ag
 invalidation, expiry and transactional idempotent saving under ADR-029. The local human CLI
 is separate from runtime permissions. Graph recovery, browser review and live-model acceptance
 remain open; no broader Issue or milestone completion is inferred.
+
+### G2 fixture serial checkpoint branch — 2026-10-03
+
+#53 (M5), part of #68/#70: optional LangGraph runtime behind an owned port, serial exact
+review interrupt, durable receipt/result authority and process-recovery tests. Stacked on
+PR178. See [the contract](../product/serial-review-workflow-v1.md). Typed fixture input is
+an intermediate gate; model interpretation, browser controls/streams, live evaluation and
+broader routing/retry acceptance remain open.

@@ -1,5 +1,14 @@
 # Project handoff
 
+## Active fixture checkpoint continuation — 2026-10-03
+
+`codex/serial-review-workflow` builds on open PR #178, adding the optional serial LangGraph
+prototype behind a repository-owned runtime port. See [ADR-030](../adr/030-optional-serial-review-workflow.md),
+[contract and CLI](../product/serial-review-workflow-v1.md) and
+[execution evidence](serial-review-workflow-evidence.md). Typed fixture inputs, persisted
+exact review and crash recovery precede natural-language/model and browser work. This is
+branch work; it does not update `main`, deployment or live acceptance.
+
 ## Purpose and use
 
 This page is a concise orientation index for a fresh human or development agent. It explains where the current state is recorded and what to read first; it is not a transcript, decision log, or duplicate architecture specification.

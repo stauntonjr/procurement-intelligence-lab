@@ -22,6 +22,8 @@ class ErrorCode(StrEnum):
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
     BRIEF_REVIEW_CONFLICT = "pil.policy.brief_review_conflict"
     BRIEF_STORE_UNAVAILABLE = "pil.infrastructure.brief_store_unavailable"
+    WORKFLOW_UNAVAILABLE = "pil.infrastructure.workflow_unavailable"
+    WORKFLOW_BUDGET_EXCEEDED = "pil.policy.workflow_budget_exceeded"
     AGENT_TOOL_ADMISSION_FAILED = "pil.infrastructure.agent_tool_admission_failed"
     AGENT_TOOL_TIMEOUT = "pil.transient.agent_tool_timeout"
     AGENT_TOOL_UNAVAILABLE = "pil.infrastructure.agent_tool_unavailable"

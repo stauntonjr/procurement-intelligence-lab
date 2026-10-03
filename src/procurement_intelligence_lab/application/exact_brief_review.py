@@ -131,6 +131,15 @@ class BriefReviewService:
             context=context,
         )
 
+    def saved(self, run_id: str, brief_id: str, *, context: RequestContext) -> SavedBrief | None:
+        """Read authoritative save evidence without granting action permission."""
+        return self.store.saved(self.get(run_id, brief_id, context=context), context=context)
+
+    def receipt(
+        self, run_id: str, brief_id: str, *, context: RequestContext
+    ) -> ReviewReceipt | None:
+        return self.store.receipt(self.get(run_id, brief_id, context=context), context=context)
+
     def save(
         self,
         run_id: str,

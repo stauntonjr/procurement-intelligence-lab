@@ -129,6 +129,70 @@ def main() -> int:
         if "--host" not in web_help.stdout or "--port" not in web_help.stdout:
             raise RuntimeError("installed web server does not document host and port options")
 
+        unavailable = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "procurement_intelligence_lab.interfaces.workflow",
+                "--database",
+                str(temporary / "base-workflow.db"),
+                "start",
+                "--project",
+                "atlas",
+                "--item",
+                "GPU-A",
+                "--as-of",
+                "2026-10-01T00:00:00Z",
+            ],
+            cwd=temporary,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if unavailable.returncode != 1 or json.loads(unavailable.stdout) != {
+            "code": "pil.infrastructure.workflow_unavailable",
+            "category": "infrastructure",
+        }:
+            raise RuntimeError("base install does not fail clearly without optional workflow extra")
+        requirements = temporary / "workflow-requirements.txt"
+        subprocess.run(
+            [
+                uv,
+                "export",
+                "--frozen",
+                "--no-dev",
+                "--extra",
+                "workflow",
+                "--no-emit-project",
+                "--output-file",
+                str(requirements),
+            ],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            [
+                uv,
+                "pip",
+                "install",
+                "--python",
+                str(python),
+                "--require-hashes",
+                "-r",
+                str(requirements),
+            ],
+            cwd=temporary,
+            check=True,
+        )
+        subprocess.run(
+            [str(python), str(ROOT / "tools/workflow_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
     print("package smoke test passed")
     return 0
 

@@ -315,3 +315,60 @@ class SqliteBriefStore:
                 (brief.brief_id, brief.idempotency_key, _payload(saved)),
             )
             return saved
+
+    def saved(self, brief: ReviewBrief, *, context: RequestContext) -> SavedBrief | None:
+        """Read the result ledger, validating bindings rather than trusting checkpoints."""
+        with self._connection() as db:
+            stored = self._get(db, brief.run.run_id, brief.brief_id, context)
+            if stored != brief:
+                raise BriefStoreError("saved lookup differs from immutable brief")
+            row = db.execute(
+                "SELECT payload,idempotency_key FROM saved_briefs WHERE brief_id=?",
+                (brief.brief_id,),
+            ).fetchone()
+            if row is None:
+                return None
+            saved = _saved(row[0])
+            approval = db.execute(
+                "SELECT payload FROM brief_receipts WHERE brief_id=?", (brief.brief_id,)
+            ).fetchone()
+            if approval is None:
+                raise BriefStoreError("saved result has no approval record")
+            receipt = _receipt(approval[0])
+            if (
+                (saved.brief_id, saved.run_id, saved.digest, saved.idempotency_key)
+                != (brief.brief_id, brief.run.run_id, brief.digest, brief.idempotency_key)
+                or row[1] != saved.idempotency_key
+                or (
+                    receipt.brief_id,
+                    receipt.run_id,
+                    receipt.digest,
+                    receipt.reviewer_id,
+                    receipt.decision,
+                )
+                != (brief.brief_id, brief.run.run_id, brief.digest, context.principal_id, "approve")
+                or receipt.reviewed_at < brief.created_at
+                or not receipt.reviewed_at <= saved.saved_at < receipt.expires_at
+            ):
+                raise BriefStoreError("saved result or receipt differs from exact brief binding")
+            return saved
+
+    def receipt(self, brief: ReviewBrief, *, context: RequestContext) -> ReviewReceipt | None:
+        with self._connection() as db:
+            stored = self._get(db, brief.run.run_id, brief.brief_id, context)
+            if stored != brief:
+                raise BriefStoreError("receipt lookup differs from immutable brief")
+            row = db.execute(
+                "SELECT payload FROM brief_receipts WHERE brief_id=?", (brief.brief_id,)
+            ).fetchone()
+            if row is None:
+                return None
+            receipt = _receipt(row[0])
+            if (receipt.brief_id, receipt.run_id, receipt.digest, receipt.reviewer_id) != (
+                brief.brief_id,
+                brief.run.run_id,
+                brief.digest,
+                context.principal_id,
+            ) or receipt.reviewed_at < brief.created_at:
+                raise BriefStoreError("receipt differs from exact brief binding")
+            return receipt
