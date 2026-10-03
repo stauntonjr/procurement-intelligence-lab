@@ -23,6 +23,8 @@ The human boundary first records the exact decision; an invocation-local receipt
 resume. Context/permissions never enter the checkpoint. A crash after save repeats the
 idempotent application save and returns its original result. Status reads the application
 result/receipt ledger, so checkpoint completion cannot fabricate success or rejection.
+Status is a historical read. Every repeated approval acknowledgment, including after graph
+completion, revalidates current evidence through the application save service.
 
 At most eight graph steps per invocation, one read attempt and a 30-second cooperative
 deadline checked between nodes. Local invocations serialize with a five-second maximum

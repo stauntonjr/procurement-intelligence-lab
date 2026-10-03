@@ -127,3 +127,36 @@ def test_real_parser_in_process_preserves_unknown_and_rejection(
         call("start", "--item", "unobserved-item", "--as-of", "2026-10-01T00:00:00Z")[1]["category"]
         == "input"
     )
+
+
+@pytest.mark.parametrize("corruption", ["bytes", "serializer"])
+def test_public_checkpoint_corruption_is_typed_infrastructure(
+    tmp_path: Path, corruption: str
+) -> None:
+    path = tmp_path / "runs.db"
+    view = start(path)
+    checkpoint_path = path.with_name(path.name + ".checkpoints.sqlite")
+    with sqlite3.connect(checkpoint_path) as db:
+        if corruption == "bytes":
+            db.execute("UPDATE checkpoints SET checkpoint=?", (b"PRIVATE_CORRUPT_PAYLOAD",))
+        else:
+            db.execute("UPDATE checkpoints SET type='invalid-serializer'")
+    for operation in ("status", "recover", "review"):
+        arguments = ["--run-id", view["run_id"]]
+        if operation == "review":
+            arguments += [
+                "--brief-id",
+                view["brief"]["brief_id"],
+                "--digest",
+                view["brief"]["digest"],
+                "--decision",
+                "approve",
+            ]
+        failed = invoke(path, operation, *arguments)
+        assert failed.returncode == 1
+        assert failed.stderr == ""
+        assert json.loads(failed.stdout) == {
+            "code": "pil.infrastructure.workflow_unavailable",
+            "category": "infrastructure",
+        }
+        assert "PRIVATE" not in failed.stdout

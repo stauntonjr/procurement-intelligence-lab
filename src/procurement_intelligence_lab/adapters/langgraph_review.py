@@ -136,6 +136,15 @@ class LangGraphReviewRuntime:
         except GraphRecursionError as error:
             raise WorkflowBudgetExceeded("workflow step ceiling exceeded") from error
 
+    @staticmethod
+    def _snapshot(graph: Graph, config: RunnableConfig) -> StateSnapshot:
+        # Only the framework storage read is inside this boundary. Application policy calls
+        # remain outside, preserving their typed authorization/conflict failures.
+        try:
+            return graph.get_state(config)
+        except Exception as error:
+            raise WorkflowError("checkpoint decoding/schema integrity failed") from error
+
     def _draft(self, state: _State, runtime: Runtime[_Invocation]) -> dict[str, object]:
         invocation = runtime.context
         invocation.check()
@@ -284,18 +293,18 @@ class LangGraphReviewRuntime:
                 config,
                 context=_Invocation(operational, time.monotonic() + self.timeout_seconds),
             )
-            return self._view(run.run_id, graph.get_state(config), operational)
+            return self._view(run.run_id, self._snapshot(graph, config), operational)
 
     def status(self, run_id: str, *, context: RequestContext) -> WorkflowView:
         config = self._config(run_id, context)
         with self._graph() as graph:
-            return self._view(run_id, graph.get_state(config), context)
+            return self._view(run_id, self._snapshot(graph, config), context)
 
     def recover(self, run_id: str, *, context: RequestContext) -> WorkflowView:
         operational = self._operational(context)
         config = self._config(run_id, operational)
         with self._graph() as graph:
-            snapshot = graph.get_state(config)
+            snapshot = self._snapshot(graph, config)
             if not snapshot.values or snapshot.values.get("run_id") != run_id:
                 raise WorkflowError("run has no matching recovery checkpoint")
             if snapshot.next == ("draft",):
@@ -304,7 +313,7 @@ class LangGraphReviewRuntime:
                     config,
                     context=_Invocation(operational, time.monotonic() + self.timeout_seconds),
                 )
-            return self._view(run_id, graph.get_state(config), operational)
+            return self._view(run_id, self._snapshot(graph, config), operational)
 
     def review(
         self, run_id: str, brief_id: str, digest: str, decision: str, *, context: RequestContext
@@ -314,7 +323,7 @@ class LangGraphReviewRuntime:
             context.require(Permission.ACT)
         config = self._config(run_id, context)
         with self._graph() as graph:
-            snapshot = graph.get_state(config)
+            snapshot = self._snapshot(graph, config)
             view = self._view(run_id, snapshot, context)
             if (brief_id, digest) != (view.brief.brief_id, view.brief.digest):
                 raise BriefConflict("review differs from checkpoint exact brief")
@@ -326,4 +335,10 @@ class LangGraphReviewRuntime:
                     config,
                     context=_Invocation(context, time.monotonic() + self.timeout_seconds, receipt),
                 )
-            return self._view(run_id, graph.get_state(config), context)
+            elif decision == "approve":
+                # Completed checkpoint replay is still an action acknowledgment. Preserve
+                # the same current-evidence checks as an idempotent save during recovery.
+                self.service.save(
+                    run_id, brief_id, digest, view.brief.idempotency_key, context=context
+                )
+            return self._view(run_id, self._snapshot(graph, config), context)

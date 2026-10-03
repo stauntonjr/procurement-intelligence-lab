@@ -276,3 +276,19 @@ def test_authoritative_status_rejects_corrupt_result_or_receipt(
 
     with pytest.raises(BriefIntegrityError):
         graph.status(view.run_id, context=HUMAN)
+
+
+def test_completed_approval_acknowledgment_revalidates_current_evidence(tmp_path: Path) -> None:
+    graph = runtime(tmp_path / "runs.db")
+    view = graph.start(REQUEST, context=HUMAN)
+    graph.review(view.run_id, view.brief.brief_id, view.brief.digest, "approve", context=HUMAN)
+    original = graph.service.tools.investigator.investigate(ARGS.request, context=HUMAN)
+    changed = Mock()
+    changed.investigate.return_value = replace(original, snapshot_id="changed-after-completion")
+    graph.service.tools = replace(graph.service.tools, investigator=changed)
+    assert graph.status(view.run_id, context=HUMAN).status == "completed"
+    with pytest.raises(BriefConflict):
+        graph.review(view.run_id, view.brief.brief_id, view.brief.digest, "approve", context=HUMAN)
+    assert changed.investigate.call_count == 1
+    with sqlite3.connect(graph.database) as db:
+        assert db.execute("SELECT COUNT(*) FROM saved_briefs").fetchone()[0] == 1
