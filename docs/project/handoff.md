@@ -1,6 +1,17 @@
 # Project handoff
 
-## Active fixture checkpoint continuation — 2026-10-03
+## Active local browser review continuation — 2026-10-03
+
+`codex/browser-review-workflow` is stacked on open PR #179. It adds a loopback-only
+synthetic human reviewer, owned run discovery, exact approve/reject and recovery controls,
+scoped source cells and an application audit snapshot timeline. See
+[ADR-031](../adr/031-local-browser-review-transport.md),
+[public command and contract](../product/local-browser-review-v1.md) and
+[verification boundary](local-browser-review-evidence.md). Actual browser interaction,
+accessibility, deployment, streaming and live-model acceptance remain open; this slice is
+a draft continuation of #74, not a complete demo release.
+
+## Fixture checkpoint foundation — 2026-10-03
 
 `codex/serial-review-workflow` builds on open PR #178, adding the optional serial LangGraph
 prototype behind a repository-owned runtime port. See [ADR-030](../adr/030-optional-serial-review-workflow.md),

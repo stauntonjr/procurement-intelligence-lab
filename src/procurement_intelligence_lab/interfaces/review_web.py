@@ -218,7 +218,13 @@ class ReviewHandler(BaseHTTPRequestHandler):
     def _dispatch(self, write: bool) -> None:
         if not self._boundary():
             return
-        url = urlsplit(self.path)
+        try:
+            url = urlsplit(self.path)
+            if url.scheme or url.netloc or url.fragment:
+                raise ValueError("only local origin-form targets are supported")
+        except ValueError:
+            self._error(422, "invalid_request_target", "input")
+            return
         if not write and url.path == "/" and not url.query:
             self._send(200, HTML, page=True)
             return

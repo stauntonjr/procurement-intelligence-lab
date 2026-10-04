@@ -33,3 +33,38 @@ installation and installed authenticated HTTP process restart/review/repeated sa
 `make challenges` rejected C001-C016 known-bad implementations. JavaScript syntax and a
 small renderer unit probe verified column-coordinate highlighting, null quantities and exact
 digest/focus request; this unit probe is not browser accessibility or interaction evidence.
+
+One independent review of cf277d374394de774bd812f16ae132ade46670ee found one Important
+recovery defect: selecting a discovered run whose status had no displayable brief hid and
+disabled recovery. A unit simulation executing the shipped JavaScript event wiring failed
+before the fix and passed after. Selection now retains the run ID independently of the brief;
+recovery stays visible, while approval still requires loaded exact content. A real HTTP
+failure-injection test confirms failed start -> owned discovery -> failed status -> recovery.
+The Node wiring probe is optional when Node is absent and does not claim browser acceptance.
+
+The author's malformed-target counterexample also failed: an invalid absolute URI escaped
+URL parsing and closed the connection. It now returns a closed 422 input response. Both fixes
+are in one author pass; no independent re-review or deferred minors. Final verification and
+latest author fresh-pass revision are in the PR semantic JSON.
+
+Rulings: the isolated feature checkout was reused (coordination cost if concurrent work);
+typed fixtures precede model interpretation (later model integration still required); the
+local bearer capability is not production identity (separate production adapter required);
+application event snapshots precede streaming (stream redaction gate remains); the actual
+run-store contract test path superseded the plan's nonexistent unit path (test-selection
+correction); unavailable browser verification remains open (visual/accessibility defects may
+remain). Review's declined production/public hosting, live inference/NL/streaming/external
+actions and broader #74 completion remain outside this bounded draft (separate integration
+and acceptance work remains). Actual browser interaction remains an explicit required gate.
+
+The same final author pass reproduced a credential fallback defect: the HTML sign-in form
+would default to GET if its JavaScript did not execute, placing the token in a URL. The
+public form parser regression failed, then passed after an explicit POST-only unsupported
+auth fallback was added. That fallback cannot authenticate or create work without the
+bearer header. This is a local form contract check, not a browser execution claim.
+
+Final author verification after the entire fix pass: 530 tests passed,89.04% combined
+coverage and ratchet; all required deterministic checks passed. Final clean-wheel HTTP
+process restart/recover/exact review/repeated save passed after the credential fallback fix.
+No unresolved code findings or deferred minors. Actual browser interaction remains open.
+Primary #74 Project item is verified In Progress (107 total items); no Issue is closed.

@@ -302,3 +302,90 @@ def test_public_expiry_changed_evidence_and_historical_version_discovery(tmp_pat
         web.shutdown()
         web.server_close()
         thread.join()
+
+
+def test_discover_and_recover_when_failed_start_has_no_displayable_brief(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from procurement_intelligence_lab.application.corpus_agent_tools import InvestigateToolArgs
+    from procurement_intelligence_lab.application.exact_brief_review import BriefReviewService
+    from procurement_intelligence_lab.platform.semantics.briefs import ReviewBrief
+    from procurement_intelligence_lab.platform.semantics.scope import RequestContext
+    from procurement_intelligence_lab.platform.semantics.workflows import WorkflowError
+
+    original = BriefReviewService.draft
+    failed = False
+
+    def fail_once(
+        self: BriefReviewService, run_id: str, args: InvestigateToolArgs, *, context: RequestContext
+    ) -> ReviewBrief:
+        nonlocal failed
+        if not failed:
+            failed = True
+            raise WorkflowError("transient draft failure")
+        return original(self, run_id, args, context=context)
+
+    monkeypatch.setattr(BriefReviewService, "draft", fail_once)
+    with server(tmp_path / "runs.db") as address:
+        assert (
+            request(address, "/api/start", {"item": "GPU-A", "as_of": "2026-10-01T00:00:00Z"})[0]
+            == 503
+        )
+        history = request(address, "/api/runs")[1]["runs"]
+        assert len(history) == 1
+        run_id = history[0]["run_id"]
+        assert request(address, f"/api/run?run_id={run_id}")[0] == 503
+        status, recovered, _ = request(address, "/api/recover", {"run_id": run_id})
+        assert status == 200 and recovered["status"] == "awaiting_review"
+        assert recovered["run_id"] == run_id
+
+
+def test_malformed_request_target_returns_closed_error(tmp_path: Path) -> None:
+    import socket
+
+    with (
+        server(tmp_path / "runs.db") as address,
+        socket.create_connection(address, timeout=5) as connection,
+    ):
+        connection.sendall(
+            (
+                f"GET http://[ HTTP/1.1\r\nHost: 127.0.0.1:{address[1]}\r\nAuthorization: Bearer {TOKEN}\r\n\r\n"
+            ).encode()
+        )
+        response = http.client.HTTPResponse(connection)
+        response.begin()
+        assert response.status == 422
+        assert json.loads(response.read())["code"] == "invalid_request_target"
+
+
+def test_token_form_cannot_put_credentials_in_url_without_javascript(tmp_path: Path) -> None:
+    from html.parser import HTMLParser
+
+    class Forms(HTMLParser):
+        def __init__(self) -> None:
+            super().__init__()
+            self.auth: dict[str, str | None] = {}
+
+        def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+            fields = dict(attrs)
+            if tag == "form" and fields.get("id") == "auth":
+                self.auth = fields
+
+    with server(tmp_path / "runs.db") as address:
+        _, page, _ = request(address, "/", token=None)
+        form = Forms()
+        form.feed(page)
+        assert (form.auth.get("method") or "get").lower() == "post"
+        target = form.auth.get("action")
+        assert target == "/auth-unavailable"
+        # Standard form fallback has no bearer header; it cannot authenticate or create work.
+        assert (
+            request(
+                address,
+                target,
+                raw=("token=" + TOKEN).encode(),
+                token=None,
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+            )[0]
+            == 401
+        )
