@@ -94,5 +94,22 @@ The roadmap steward run37176028034 failed daily Gemini429 quota; no advisory rep
 A deliberate live Project review found #53/#70/#72 In Progress and #71 Todo, with107items/25fields/
 11views and zero configured missing fields/labels/milestones/views. No Issue closure or merge.
 
+Final local validation: `UV_CACHE_DIR=/tmp/pil-uv-cache make check` passed612tests with one
+explicit live opt-in skip,88.28% line/branch coverage and ratchet, strict types/static/architecture.
+Final clean package smoke and C001-C017 current-code/known-bad rejection passed. The final static
+check was repeated after the report-label clarification. An earlier full suite was invalidated by
+a prompt edit while it ran; the final frozen-runtime suite above was rerun completely and passed.
+The20-case live controls and48-case live regression intentionally return failure for their retained
+target misses; do not confuse green deterministic checks with live acceptance.
+
 Full G2, actual browser/accessibility, deployment, original tiny-fixture routing, remaining release
 adversarial checks and fresh held-out evaluation stay open. B2 corpus expansion remains gated.
+
+
+Independent whole-branch read-only review of8afd6de..88f3b86 found zero Critical, Important or Minor
+findings and no declined behavior within scope. It independently reconciled all108terminal calls,
+raw report hashes, installed source bytes, unchanged original pilot evidence and final check logs.
+The two calendar-boundary misses remain a known reliability limit; the reviewer accepted draft
+publication with `not_ready`, subject to latest-revision semantic evidence and CI verification.
+No corrective pass or deferred minors. Final author fresh pass covers the subsequent evidence-only
+closeout; the PR carries schema-valid evidence for its exact head.
