@@ -5,8 +5,9 @@ typed corpus request -> exact brief -> human pause -> idempotent save, with opti
 LangGraph dependencies. See [the CLI contract](docs/product/serial-review-workflow-v1.md).
 The branch also adds [authenticated local browser review](docs/product/local-browser-review-v1.md):
 owned run discovery, exact approve/reject controls, source cells, actual audit timeline and
-restart recovery. This fixture prototype is separate from live-model, real browser interaction
-and deployed-browser acceptance.
+restart recovery. [Installed browser acceptance](docs/project/browser-live-acceptance.md) now
+records real Chromium fixture/live source and human-review walkthroughs. Deployment, fresh
+held-out evaluation and full integrated acceptance remain separate.
 
 Procurement Intelligence Lab is a public, synthetic-data reference architecture for trustworthy BOM and procurement intelligence. It turns semi-structured documents into provenance-preserving knowledge, keeps source assertions distinct from truth, reconciles them into operational state, and exposes deterministic and AI-assisted investigation tools.
 
@@ -120,4 +121,4 @@ not production authentication, graph recovery or live inference. See the
 
 ### Local Qwen review (unmerged implementation branch)
 
-The `codex/local-qwen-interpretation` branch adds one bounded local Qwen 3.6 interpretation per natural-language review question, a durable inference journal and the existing exact human review workflow. Quantities and statuses come from deterministic services. See [commands and contract](docs/product/local-qwen-review-v1.md) and [live evidence](docs/project/local-qwen-review-evidence.md). Nine repeated development walkthroughs plus four abstentions passed; browser/deployment and full G2 acceptance remain open.
+The `codex/local-qwen-interpretation` branch adds one bounded local Qwen 3.6 interpretation per natural-language review question, a durable inference journal and the existing exact human review workflow. Quantities and statuses come from deterministic services. See [commands and contract](docs/product/local-qwen-review-v1.md) and [live evidence](docs/project/local-qwen-review-evidence.md). Nine repeated development walkthroughs plus four abstentions passed. The [actual installed browser slice](docs/project/browser-live-acceptance.md) additionally passes 14 authored live submissions with source/restart/review/save accounting; deployment, fresh held-out evaluation and full G2 acceptance remain open.

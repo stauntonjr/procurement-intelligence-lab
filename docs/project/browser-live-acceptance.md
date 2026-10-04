@@ -37,7 +37,7 @@ the owned servers exit.
   unresolved requirement is rejected and stays unsaved.
 - Live: nine investigations (GPU-A/GPU-C/GPU-D, three repetitions each), four abstentions,
   one read request with injected automatic approval/save instructions; all 14 pass their
-  authored interaction expectations. Ten investigations produce 20 tool starts and eight
+  authored interaction expectations. 108 source/authority checks pass. Ten investigations produce 20 tool starts and eight
   saved briefs. Human rejection leaves unresolved-r1 and the injected-command run unsaved;
   the model never approves or saves. All four abstentions invoke zero tools.
 - All displayed source cells and highlighted columns match their authenticated response;
@@ -104,3 +104,26 @@ gated. The roadmap advisory run
 [37178219019](https://github.com/stauntonjr/procurement-intelligence-lab/actions/runs/37178219019)
 failed Gemini daily quota (429); no usable advisory report is claimed. Live Project audit is
 recorded separately; #74/#72 remain open with broader acceptance incomplete.
+
+## Deterministic verification
+
+`make check`: 612 passed, six explicit opt-in skips, 88.28% coverage and ratchet; strict
+format/lint/types, architecture and harness/supply-chain checks passed. The five new opt-in
+browser cases were separately executed against the installed wheel (three focus checks and
+fixture/live walkthroughs); the inherited live intent-development case remains opt-in.
+`make package-smoke` passed isolated base/optional installs and advertised commands.
+`make challenges` passed C001-C017 with every known-bad mutation rejected; no agent performance
+claim. Final reviewed revision, review disposition and CI are bound in the draft PR evidence.
+
+## Independent review
+
+One independent read-only review of `7197b58fafb91c195ad28b54d8794046b8f53567` found no
+Critical or Important issue and reconciled compact/source/SQLite/screenshot/wheel evidence.
+One optional Minor is deferred: the three focus-only tests leave private generated token files
+in pytest temporary directories after their owned servers stop. Walkthrough token files are
+removed. This is test credential cleanup; no active capability leak was observed. Full device,
+screen-reader and WCAG coverage, production authentication, held-out language quality,
+tiny-fixture live routing and exhaustive asynchronous/draft-failure browser recovery remain
+open. Existing HTTP/Node failure/race tests are not substituted for those browser claims.
+Final documentation-only updates and exact-head evidence receive an author fresh pass; no
+second independent review or extra inference is performed.

@@ -506,5 +506,13 @@
       "inference_calls": 0
     }
   ],
-  "limits": "14 live calls total, one frozen configuration, no hidden retry. Repeated authored Atlas scenarios are development demonstration evidence, not held-out accuracy. Prior pilot and intent experiments unchanged. No tiny-fixture live routing, deployment, real device or screen-reader acceptance."
+  "limits": "14 live calls total, one frozen configuration, no hidden retry. Repeated authored Atlas scenarios are development demonstration evidence, not held-out accuracy. Prior pilot and intent experiments unchanged. No tiny-fixture live routing, deployment, real device or screen-reader acceptance.",
+  "installed_artifact": {
+    "wheel": "procurement_intelligence_lab-0.1.0-py3-none-any.whl",
+    "sha256": "7794745c72cb0b6f75d927f3f3b9c9e78a6cc0525181f5c2738e3c16c972f5b9",
+    "playwright": "1.63.0",
+    "python": "Python 3.12.3",
+    "server_working_directory": "/tmp",
+    "workflow_dependencies": "uv.lock frozen optional-workflow export; wheel installed separately without runtime dependency resolution"
+  }
 }
