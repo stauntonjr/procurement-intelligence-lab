@@ -17,11 +17,11 @@ from procurement_intelligence_lab.platform.semantics.interpretation import (
 )
 from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 from procurement_intelligence_lab.platform.semantics.workflows import WorkflowRequest, WorkflowView
-from procurement_intelligence_lab.ports.corpus import CorpusReader
 from procurement_intelligence_lab.ports.interpretation import (
     InterpretationStore,
     QuestionInterpreter,
 )
+from procurement_intelligence_lab.ports.review_sources import ReviewSources
 from procurement_intelligence_lab.ports.workflows import AgentWorkflowRuntime
 
 
@@ -29,7 +29,7 @@ class QuestionComposition(Protocol):
     @property
     def runs(self) -> AgentRunService: ...
     @property
-    def reader(self) -> CorpusReader: ...
+    def reader(self) -> ReviewSources: ...
     @property
     def runtime(self) -> AgentWorkflowRuntime: ...
 
@@ -55,8 +55,7 @@ class QuestionReviewService:
             raise ValueError("question must contain 1..1000 characters")
         WorkflowRequest("validate", as_of)
         # Admit scoped catalog before creating a call; no gold/case labels enter the prompt.
-        inventory = self.composition.reader.inventory(context=context)
-        items = tuple(sorted({fact.canonical_key for fact in inventory.facts}))
+        items = tuple(sorted(set(self.composition.reader.items(context=context))))
         run = self.composition.runs.start(context=context)
         call = InterpretationCall(run.run_id, sha256(question.encode()).hexdigest(), as_of)
         self.store.create(call)

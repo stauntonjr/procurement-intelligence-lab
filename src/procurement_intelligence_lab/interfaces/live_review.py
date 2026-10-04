@@ -18,7 +18,11 @@ from procurement_intelligence_lab.application.question_review import (
     QuestionOutcome,
     QuestionReviewService,
 )
-from procurement_intelligence_lab.interfaces.agent_runs import PROJECTS
+from procurement_intelligence_lab.interfaces.review_sources import (
+    REVIEW_PROJECTS,
+    SOURCE_OPTIONS,
+    compose_sources,
+)
 from procurement_intelligence_lab.interfaces.workflow import (
     WorkflowComposition,
     compose_services,
@@ -28,7 +32,9 @@ from procurement_intelligence_lab.platform.semantics.interpretation import Model
 from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 
 
-def compose_live(database: Path, endpoint: str = "http://127.0.0.1:8000/v1") -> WorkflowComposition:
+def compose_live(
+    database: Path, endpoint: str = "http://127.0.0.1:8000/v1", *, sources: str = "corpus"
+) -> WorkflowComposition:
     config = {
         "prompt": PROMPT,
         "schema": SCHEMA,
@@ -41,17 +47,20 @@ def compose_live(database: Path, endpoint: str = "http://127.0.0.1:8000/v1") -> 
     }
     return compose_services(
         database,
+        sources=sources,
         live_prompt="question-review/v1:"
         + sha256(json.dumps(config, sort_keys=True).encode()).hexdigest(),
     )
 
 
 def compose_question(
-    database: Path, endpoint: str = "http://127.0.0.1:8000/v1"
+    database: Path, endpoint: str = "http://127.0.0.1:8000/v1", *, sources: str = "corpus"
 ) -> QuestionReviewService:
     model = LocalQwenInterpreter(endpoint=endpoint)
     return QuestionReviewService(
-        compose_live(database, endpoint), model, SqliteInterpretationStore(database)
+        compose_live(database, endpoint, sources=sources),
+        model,
+        SqliteInterpretationStore(database),
     )
 
 
@@ -65,8 +74,9 @@ def outcome_dto(outcome: QuestionOutcome) -> dict[str, object]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", type=Path, required=True)
+    parser.add_argument("--sources", choices=SOURCE_OPTIONS, default="corpus")
     parser.add_argument("--endpoint", default="http://127.0.0.1:8000/v1")
-    parser.add_argument("--project", required=True, choices=PROJECTS)
+    parser.add_argument("--project", required=True, choices=REVIEW_PROJECTS)
     parser.add_argument("operation", choices=("ask", "recover", "review", "events"))
     for field in ("question", "as-of", "run-id", "brief-id", "digest", "decision"):
         parser.add_argument("--" + field)
@@ -81,15 +91,18 @@ def main() -> int:
         }[args.operation]
         if {f for f in fields if getattr(args, f) is not None} != required:
             raise ValueError("provide exactly the operation fields")
+        source_config = compose_sources(args.sources)
+        if args.project not in source_config.projects:
+            raise ValueError("project is not configured for sources")
         context = RequestContext(
             "local-demo",
             "synthetic-tenant",
             args.project,
-            "lab",
+            source_config.site,
             frozenset(Permission),
             "human-live-cli",
         )
-        service = compose_question(args.database, args.endpoint)
+        service = compose_question(args.database, args.endpoint, sources=args.sources)
         if args.operation == "ask":
             result = outcome_dto(
                 service.ask(args.question, datetime.fromisoformat(args.as_of), context=context)

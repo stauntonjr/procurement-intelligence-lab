@@ -31,7 +31,12 @@ class InstalledReviewer:
 
 @contextmanager
 def installed_reviewer(
-    directory: Path, *, live: bool = False, port: int = 0
+    directory: Path,
+    *,
+    live: bool = False,
+    port: int = 0,
+    sources: str = "corpus",
+    project: str = "atlas",
 ) -> Generator[InstalledReviewer]:
     directory.mkdir(parents=True, exist_ok=True)
     token_file = directory / "token"
@@ -45,7 +50,9 @@ def installed_reviewer(
         "--database",
         str(directory / "review.db"),
         "--project",
-        "atlas",
+        project,
+        "--sources",
+        sources,
         "--token-file",
         str(token_file),
         "--port",
@@ -460,3 +467,31 @@ def test_installed_browser_walkthrough(tmp_path: Path, live: bool) -> None:
         report["source_checks"] = source_checks
         retain()
         (output / "token").unlink(missing_ok=True)
+
+
+@pytest.mark.parametrize("sources", ["showcase-a-order", "showcase-a-b-order", "showcase-a-only"])
+def test_browser_original_source_labels_and_reflow(tmp_path: Path, sources: str) -> None:
+    try:
+        with (
+            installed_reviewer(tmp_path, sources=sources, project="synthetic-project") as reviewer,
+            chromium_page() as page,
+        ):
+            sign_in(page, reviewer)
+            expect(page.get_by_label("Canonical item", exact=True)).to_be_focused()
+            expect(page.get_by_label("As of (ISO 8601 with timezone)")).to_have_value(
+                "2026-01-15T00:00:00Z"
+            )
+            with page.expect_response("**/api/start") as response:
+                page.get_by_label("Canonical item", exact=True).press("Enter")
+            assert response.value.status == 200
+            expect(page.locator("#outcome")).to_contain_text("Order observation: ")
+            expect(page.get_by_role("button", name="Investigate and draft")).to_be_enabled()
+            page.set_viewport_size({"width": 375, "height": 1000})
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+            with page.expect_response("**/api/source?*") as response:
+                page.locator("#evidence button").first.click()
+            assert response.value.status == 200
+            expect(page.locator("#source td")).to_have_text(response.value.json()["cells"])
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    finally:
+        (tmp_path / "token").unlink(missing_ok=True)

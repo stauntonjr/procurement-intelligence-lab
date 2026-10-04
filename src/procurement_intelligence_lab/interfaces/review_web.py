@@ -18,10 +18,14 @@ from procurement_intelligence_lab.application.corpus_agent_tools import (
     ToolExecutionError,
 )
 from procurement_intelligence_lab.application.question_review import QuestionReviewService
-from procurement_intelligence_lab.interfaces.agent_runs import PROJECTS
 from procurement_intelligence_lab.interfaces.corpus_dto import source_dto
 from procurement_intelligence_lab.interfaces.live_review import compose_question, outcome_dto
-from procurement_intelligence_lab.interfaces.review_page import HTML, live_html
+from procurement_intelligence_lab.interfaces.review_page import HTML, live_html, original_html
+from procurement_intelligence_lab.interfaces.review_sources import (
+    REVIEW_PROJECTS,
+    SOURCE_OPTIONS,
+    compose_sources,
+)
 from procurement_intelligence_lab.interfaces.workflow import (
     WorkflowComposition,
     compose_services,
@@ -100,27 +104,37 @@ class ReviewServer(ThreadingHTTPServer):
     daemon_threads = True
 
     def __init__(
-        self, database: Path, project: str, token: str, port: int, model_endpoint: str | None = None
+        self,
+        database: Path,
+        project: str,
+        token: str,
+        port: int,
+        model_endpoint: str | None = None,
+        sources: str = "corpus",
     ) -> None:
         _validate_token(token)
-        if project not in PROJECTS:
-            raise ValueError("project is not admitted")
+        source_config = compose_sources(sources)
+        if project not in source_config.projects:
+            raise ValueError("project is not admitted for sources")
+        self.sources = sources
         self.token = token
         self.context = RequestContext(
             "local-demo",
             "synthetic-tenant",
             project,
-            "lab",
+            source_config.site,
             frozenset(
                 {Permission.READ_STATE, Permission.READ_EVIDENCE, Permission.REVIEW, Permission.ACT}
             ),
             "human-browser-review",
         )
         self.questions: QuestionReviewService | None = (
-            compose_question(database, model_endpoint) if model_endpoint is not None else None
+            compose_question(database, model_endpoint, sources=sources)
+            if model_endpoint is not None
+            else None
         )
         self.composition: WorkflowComposition = (
-            compose_services(database)
+            compose_services(database, sources=sources)
             if self.questions is None
             else cast(WorkflowComposition, self.questions.composition)
         )
@@ -129,9 +143,15 @@ class ReviewServer(ThreadingHTTPServer):
 
 
 def create_server(
-    database: Path, *, project: str, token: str, port: int = 8001, model_endpoint: str | None = None
+    database: Path,
+    *,
+    project: str,
+    token: str,
+    port: int = 8001,
+    model_endpoint: str | None = None,
+    sources: str = "corpus",
 ) -> ReviewServer:
-    return ReviewServer(database, project, token, port, model_endpoint)
+    return ReviewServer(database, project, token, port, model_endpoint, sources)
 
 
 class ReviewHandler(BaseHTTPRequestHandler):
@@ -240,9 +260,10 @@ class ReviewHandler(BaseHTTPRequestHandler):
             self._error(422, "invalid_request_target", "input")
             return
         if not write and url.path == "/" and not url.query:
-            self._send(
-                200, live_html() if self.review_server.questions is not None else HTML, page=True
-            )
+            page = live_html() if self.review_server.questions is not None else HTML
+            if self.review_server.sources != "corpus":
+                page = original_html(page, self.review_server.sources)
+            self._send(200, page, page=True)
             return
         if not self._authenticated():
             return
@@ -384,7 +405,8 @@ class ReviewHandler(BaseHTTPRequestHandler):
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", type=Path, required=True)
-    parser.add_argument("--project", choices=PROJECTS, required=True)
+    parser.add_argument("--sources", choices=SOURCE_OPTIONS, default="corpus")
+    parser.add_argument("--project", choices=REVIEW_PROJECTS, required=True)
     parser.add_argument("--token-file", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8001)
     parser.add_argument(
@@ -398,6 +420,7 @@ def main() -> int:
             token=read_token(args.token_file),
             port=args.port,
             model_endpoint=args.model_endpoint,
+            sources=args.sources,
         ) as server:
             print(
                 f"{server.composition.runs.execution_kind.value.capitalize()} review at {server.origin}",

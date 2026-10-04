@@ -89,3 +89,28 @@ def live_html() -> str:
         "$('events').replaceChildren();$('interpretation').textContent='';enabled();}",
     )
     return page
+
+
+def original_html(page: str, sources: str) -> str:
+    """Server-configured original source context; never derive it from model output."""
+    if sources not in ("showcase-a-order", "showcase-a-b-order", "showcase-a-only"):
+        raise ValueError("unsupported original sources")
+    import re
+
+    page = re.sub(
+        r"Atlas examples:.*?</p>",
+        "Original GPU-A XLSX sources: " + sources + ". Fixed January 15 cutoff. "
+        "Order observation is recorded source data; not_assessed does not mean reconciled.</p>",
+        page,
+        count=1,
+    )
+    return (
+        page.replace(
+            "</style>",
+            "#evidence button{max-width:100%;overflow-wrap:anywhere}</style>",
+            1,
+        )
+        .replace("2026-10-01T00:00:00Z", "2026-01-15T00:00:00Z")
+        .replace("Assessed ordered: ", "Order observation: ")
+        .replace("synthetic development corpus", "original synthetic XLSX snapshot")
+    )

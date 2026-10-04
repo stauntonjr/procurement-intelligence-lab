@@ -11,7 +11,6 @@ from pathlib import Path
 
 from procurement_intelligence_lab.adapters.sqlite_agent_runs import RunStoreError, SqliteRunStore
 from procurement_intelligence_lab.adapters.sqlite_briefs import SqliteBriefStore
-from procurement_intelligence_lab.adapters.synthetic_corpus import SyntheticCorpusReader
 from procurement_intelligence_lab.application.agent_runs import AgentRunService
 from procurement_intelligence_lab.application.corpus_agent_tools import (
     TOOL_SCHEMA_VERSION,
@@ -19,9 +18,8 @@ from procurement_intelligence_lab.application.corpus_agent_tools import (
     InvestigateToolArgs,
     ToolExecutionError,
 )
-from procurement_intelligence_lab.application.corpus_investigation import CorpusInvestigationService
 from procurement_intelligence_lab.application.exact_brief_review import BriefReviewService
-from procurement_intelligence_lab.interfaces.agent_runs import PROJECTS
+from procurement_intelligence_lab.interfaces.review_sources import SOURCE_OPTIONS, compose_sources
 from procurement_intelligence_lab.platform.semantics.agent_runs import (
     ExecutionKind,
     RunConflict,
@@ -45,6 +43,7 @@ from procurement_intelligence_lab.platform.semantics.workflows import (
     WorkflowRequest,
     WorkflowView,
 )
+from procurement_intelligence_lab.ports.review_sources import ReviewSources
 from procurement_intelligence_lab.ports.workflows import AgentWorkflowRuntime
 
 
@@ -53,14 +52,16 @@ class WorkflowComposition:
     runtime: AgentWorkflowRuntime
     runs: AgentRunService
     service: BriefReviewService
-    reader: SyntheticCorpusReader
+    reader: ReviewSources
 
 
-def compose(database: Path) -> AgentWorkflowRuntime:
-    return compose_services(database).runtime
+def compose(database: Path, *, sources: str = "corpus") -> AgentWorkflowRuntime:
+    return compose_services(database, sources=sources).runtime
 
 
-def compose_services(database: Path, *, live_prompt: str | None = None) -> WorkflowComposition:
+def compose_services(
+    database: Path, *, live_prompt: str | None = None, sources: str = "corpus"
+) -> WorkflowComposition:
     # Base install remains dependency-free. Missing optional extra is a typed runtime failure.
     try:
         from procurement_intelligence_lab.adapters.langgraph_review import LangGraphReviewRuntime
@@ -73,11 +74,7 @@ def compose_services(database: Path, *, live_prompt: str | None = None) -> Workf
         digest.update(b"\0")
         digest.update(path.read_bytes())
         digest.update(b"\0")
-    manifest = (
-        files("procurement_intelligence_lab.examples")
-        .joinpath("corpus_v1/manifest.json")
-        .read_bytes()
-    )
+    source_config = compose_sources(sources)
     runs = AgentRunService(
         SqliteRunStore(database),
         versions=RunVersions(
@@ -88,14 +85,14 @@ def compose_services(database: Path, *, live_prompt: str | None = None) -> Workf
             + ":"
             + version("langgraph-checkpoint-sqlite"),
             TOOL_SCHEMA_VERSION,
-            sha256(manifest).hexdigest(),
+            source_config.fixture_version,
             "sha256:" + digest.hexdigest(),
         ),
         execution_kind=ExecutionKind.LIVE if live_prompt else ExecutionKind.FIXTURE,
     )
-    reader = SyntheticCorpusReader()
+    reader = source_config.reader
     service = BriefReviewService(
-        CorpusAgentTools(CorpusInvestigationService(reader), reader, runs),
+        CorpusAgentTools(source_config.investigator, reader, runs),
         SqliteBriefStore(database),
     )
     return WorkflowComposition(LangGraphReviewRuntime(service, database), runs, service, reader)
@@ -123,12 +120,14 @@ def main() -> int:
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("operation", choices=("start", "status", "recover", "review"))
     parser.add_argument("--project", required=True)
+    parser.add_argument("--sources", choices=SOURCE_OPTIONS, default="corpus")
     for name in ("run-id", "brief-id", "digest", "decision", "item", "as-of"):
         parser.add_argument("--" + name)
     args = parser.parse_args()
     try:
-        if args.project not in PROJECTS:
-            raise ScopeAuthorizationError("project is not configured")
+        source_config = compose_sources(args.sources)
+        if args.project not in source_config.projects:
+            raise ScopeAuthorizationError("project is not configured for sources")
         fields = {"run_id", "brief_id", "digest", "decision", "item", "as_of"}
         required = {
             "start": {"item", "as_of"},
@@ -142,13 +141,13 @@ def main() -> int:
             "local-demo",
             "synthetic-tenant",
             args.project,
-            "lab",
+            source_config.site,
             frozenset(
                 {Permission.READ_STATE, Permission.READ_EVIDENCE, Permission.REVIEW, Permission.ACT}
             ),
             "human-workflow-cli",
         )
-        runtime = compose(args.database)
+        runtime = compose(args.database, sources=args.sources)
         if args.operation == "start":
             request = InvestigateToolArgs.from_mapping(
                 {"item": args.item, "as_of": args.as_of}

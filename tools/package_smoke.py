@@ -14,6 +14,7 @@ from zipfile import ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = (
     "procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+    "procurement_intelligence_lab/examples/showcase_review_sources_v1.json",
     "procurement_intelligence_lab/examples/showcase_order_short.xlsx",
     "procurement_intelligence_lab/examples/showcase_order_matched.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
@@ -203,6 +204,14 @@ def main() -> int:
 
         subprocess.run(
             [str(python), str(ROOT / "tools/live_review_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        subprocess.run(
+            [str(python), str(ROOT / "tools/original_showcase_package_probe.py")],
             cwd=temporary,
             check=True,
             capture_output=True,
