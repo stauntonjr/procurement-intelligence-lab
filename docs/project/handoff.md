@@ -1,5 +1,15 @@
 # Project handoff
 
+## Fresh language evaluation continuation — 2026-10-04
+
+`codex/fresh-language-evaluation` is stacked on draft PR #185. Unchanged runtime/source
+scenarios with new independently authored validation/test wording: 23/24 pass, one safe unsupported
+miss on a valid explicit-cutoff Cinder query. Root development 24/24; total 47/48. Installed gold
+48/48 plus 464 source checks, 48 actual calls, 54 tool starts, 27 exact saves. See
+[provenance/results/limits](fresh-language-evaluation.md). This new language cohort is now
+inspected; retire it before tuning. Unmerged, not_ready for bounded live acceptance/full G2;
+no new source-data independence or corpus expansion.
+
 ## Original showcase live continuation — 2026-10-04
 
 `codex/original-showcase-live` is stacked on draft PR #184. Three original January source

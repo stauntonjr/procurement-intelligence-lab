@@ -143,3 +143,11 @@ January GPU-A policy/evidence identities through live intent and exact review. N
 installed browser trials pass with nine calls, eighteen source/tool checks, three restarts and
 eight saves. [Evidence and limits](../project/original-showcase-live.md). Stacked on draft PR184,
 unmerged; no new data. Held-out quality, full G2 and deployment remain open before expansion.
+
+### Fresh language evaluation branch — 2026-10-04
+
+#72 (M9), part of #53/#70/#71; stacked on draft PR #185. New independent language23/24:
+validation 11/12, test 12/12; root development 24/24. Total 47/48 with one valid Cinder cutoff
+query safely unsupported. Installed gold48/48 / 464 source checks;48 calls, 54 tool starts, 27 saves.
+[Evidence and limits](../project/fresh-language-evaluation.md). Runtime/source facts unchanged.
+Now inspected language data; no tuning/retry or full G2/deployment/expansion acceptance.

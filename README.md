@@ -127,3 +127,8 @@ The [original January showcase review](docs/product/original-showcase-review-v1.
 uses three server-configured source sets with original policy/evidence identities. Nine authored
 installed live browser trials pass; unresolved requirements retain observed order 2 as
 `not_assessed`. This unmerged continuation does not expand the corpus or establish held-out quality.
+
+The [fresh language evaluation](docs/project/fresh-language-evaluation.md) keeps the runtime and
+source facts frozen:23/24 independently authored validation/test questions pass, with one valid
+cutoff request safely unsupported. Overall47/48 includes 24 root development questions. This
+unmerged evaluation remains not_ready; inspected questions cannot stay held-out during tuning.
