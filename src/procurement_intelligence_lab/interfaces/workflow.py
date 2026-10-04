@@ -60,7 +60,7 @@ def compose(database: Path) -> AgentWorkflowRuntime:
     return compose_services(database).runtime
 
 
-def compose_services(database: Path) -> WorkflowComposition:
+def compose_services(database: Path, *, live_prompt: str | None = None) -> WorkflowComposition:
     # Base install remains dependency-free. Missing optional extra is a typed runtime failure.
     try:
         from procurement_intelligence_lab.adapters.langgraph_review import LangGraphReviewRuntime
@@ -81,9 +81,9 @@ def compose_services(database: Path) -> WorkflowComposition:
     runs = AgentRunService(
         SqliteRunStore(database),
         versions=RunVersions(
-            "fixture",
-            "none",
-            "serial-review/v1:"
+            "local-vllm" if live_prompt else "fixture",
+            "nvidia/Qwen3.6-35B-A3B-NVFP4" if live_prompt else "none",
+            (live_prompt + ":" if live_prompt else "serial-review/v1:")
             + version("langgraph")
             + ":"
             + version("langgraph-checkpoint-sqlite"),
@@ -91,7 +91,7 @@ def compose_services(database: Path) -> WorkflowComposition:
             sha256(manifest).hexdigest(),
             "sha256:" + digest.hexdigest(),
         ),
-        execution_kind=ExecutionKind.FIXTURE,
+        execution_kind=ExecutionKind.LIVE if live_prompt else ExecutionKind.FIXTURE,
     )
     reader = SyntheticCorpusReader()
     service = BriefReviewService(

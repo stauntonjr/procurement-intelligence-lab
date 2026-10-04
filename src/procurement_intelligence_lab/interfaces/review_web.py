@@ -17,9 +17,11 @@ from procurement_intelligence_lab.application.corpus_agent_tools import (
     InvestigateToolArgs,
     ToolExecutionError,
 )
+from procurement_intelligence_lab.application.question_review import QuestionReviewService
 from procurement_intelligence_lab.interfaces.agent_runs import PROJECTS
 from procurement_intelligence_lab.interfaces.corpus_dto import source_dto
-from procurement_intelligence_lab.interfaces.review_page import HTML
+from procurement_intelligence_lab.interfaces.live_review import compose_question, outcome_dto
+from procurement_intelligence_lab.interfaces.review_page import HTML, live_html
 from procurement_intelligence_lab.interfaces.workflow import (
     WorkflowComposition,
     compose_services,
@@ -35,6 +37,7 @@ from procurement_intelligence_lab.platform.semantics.briefs import (
     BriefIntegrityError,
     BriefNotFound,
 )
+from procurement_intelligence_lab.platform.semantics.interpretation import ModelFailure
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
     RequestContext,
@@ -96,7 +99,9 @@ def _serialize(value: object) -> str:
 class ReviewServer(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, database: Path, project: str, token: str, port: int) -> None:
+    def __init__(
+        self, database: Path, project: str, token: str, port: int, model_endpoint: str | None = None
+    ) -> None:
         _validate_token(token)
         if project not in PROJECTS:
             raise ValueError("project is not admitted")
@@ -111,13 +116,22 @@ class ReviewServer(ThreadingHTTPServer):
             ),
             "human-browser-review",
         )
-        self.composition: WorkflowComposition = compose_services(database)
+        self.questions: QuestionReviewService | None = (
+            compose_question(database, model_endpoint) if model_endpoint is not None else None
+        )
+        self.composition: WorkflowComposition = (
+            compose_services(database)
+            if self.questions is None
+            else cast(WorkflowComposition, self.questions.composition)
+        )
         super().__init__(("127.0.0.1", port), ReviewHandler)
         self.origin = f"http://127.0.0.1:{self.server_port}"
 
 
-def create_server(database: Path, *, project: str, token: str, port: int = 8001) -> ReviewServer:
-    return ReviewServer(database, project, token, port)
+def create_server(
+    database: Path, *, project: str, token: str, port: int = 8001, model_endpoint: str | None = None
+) -> ReviewServer:
+    return ReviewServer(database, project, token, port, model_endpoint)
 
 
 class ReviewHandler(BaseHTTPRequestHandler):
@@ -226,7 +240,9 @@ class ReviewHandler(BaseHTTPRequestHandler):
             self._error(422, "invalid_request_target", "input")
             return
         if not write and url.path == "/" and not url.query:
-            self._send(200, HTML, page=True)
+            self._send(
+                200, live_html() if self.review_server.questions is not None else HTML, page=True
+            )
             return
         if not self._authenticated():
             return
@@ -234,9 +250,9 @@ class ReviewHandler(BaseHTTPRequestHandler):
             context = self.review_server.context
             app = self.review_server.composition
             routes = (
-                {"/api/start", "/api/recover", "/api/review"}
+                {"/api/start", "/api/ask", "/api/recover", "/api/review"}
                 if write
-                else {"/api/runs", "/api/run", "/api/events", "/api/source"}
+                else {"/api/runs", "/api/run", "/api/events", "/api/source", "/api/interpretation"}
             )
             if url.path not in routes:
                 raise CorpusNotFoundError("route not found")
@@ -245,7 +261,18 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 if query:
                     raise ValueError("unexpected query")
                 data = self._body()
+                if url.path == "/api/ask":
+                    if self.review_server.questions is None:
+                        raise ValueError("live mode is not configured")
+                    fields = _fields(data, {"question", "as_of"})
+                    outcome = self.review_server.questions.ask(
+                        fields["question"], datetime.fromisoformat(fields["as_of"]), context=context
+                    )
+                    self._send(200, outcome_dto(outcome))
+                    return
                 if url.path == "/api/start":
+                    if self.review_server.questions is not None:
+                        raise ValueError("live mode requires a question")
                     args = InvestigateToolArgs.from_mapping(
                         _fields(data, {"item", "as_of"})
                     ).request
@@ -253,6 +280,12 @@ class ReviewHandler(BaseHTTPRequestHandler):
                         WorkflowRequest(args.canonical_key, args.as_of), context=context
                     )
                 elif url.path == "/api/recover":
+                    if self.review_server.questions is not None:
+                        outcome = self.review_server.questions.recover(
+                            _fields(data, {"run_id"})["run_id"], context=context
+                        )
+                        self._send(200, outcome_dto(outcome))
+                        return
                     result = app.runtime.recover(
                         _fields(data, {"run_id"})["run_id"], context=context
                     )
@@ -278,7 +311,8 @@ class ReviewHandler(BaseHTTPRequestHandler):
                     200,
                     {
                         "project": context.project_id,
-                        "execution_kind": "fixture",
+                        "execution_kind": app.runs.execution_kind.value,
+                        "model": app.runs.versions.model,
                         "runs": [
                             {
                                 "run_id": run.run_id,
@@ -297,6 +331,13 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 raise ValueError("duplicate query field")
             fields = _fields({k: v[0] for k, v in query.items()}, keys)
             run_id = fields["run_id"]
+            if url.path == "/api/interpretation":
+                if self.review_server.questions is None:
+                    raise ValueError("live mode is not configured")
+                self._send(
+                    200, outcome_dto(self.review_server.questions.status(run_id, context=context))
+                )
+                return
             if url.path == "/api/run":
                 payload = view_dto(app.runtime.status(run_id, context=context))
             elif url.path == "/api/events":
@@ -330,6 +371,8 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 else 422
             )
             self._error(status, error.code.value, error.category.value)
+        except ModelFailure as error:
+            self._error(503, error.code.value, error.category.value)
         except CorpusAdmissionError:
             self._error(503, "corpus_admission_failed", "infrastructure")
         except (ValueError, TypeError, UnicodeError, RecursionError):
@@ -344,14 +387,24 @@ def main() -> int:
     parser.add_argument("--project", choices=PROJECTS, required=True)
     parser.add_argument("--token-file", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8001)
+    parser.add_argument(
+        "--model-endpoint", help="Enable loaded local Qwen; numeric loopback /v1 endpoint"
+    )
     args = parser.parse_args()
     try:
         with create_server(
-            args.database, project=args.project, token=read_token(args.token_file), port=args.port
+            args.database,
+            project=args.project,
+            token=read_token(args.token_file),
+            port=args.port,
+            model_endpoint=args.model_endpoint,
         ) as server:
-            print(f"Fixture review at {server.origin}", flush=True)
+            print(
+                f"{server.composition.runs.execution_kind.value.capitalize()} review at {server.origin}",
+                flush=True,
+            )
             server.serve_forever()
-    except (ValueError, OSError, WorkflowError, RunStoreError, BriefIntegrityError):
+    except (ValueError, OSError, WorkflowError, RunStoreError, BriefIntegrityError, ModelFailure):
         print(json.dumps({"code": "local_review_unavailable", "category": "infrastructure"}))
         return 1
     return 0

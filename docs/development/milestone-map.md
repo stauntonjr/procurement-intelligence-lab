@@ -108,3 +108,7 @@ timeline. Stacked on PR179. See [the public contract](../product/local-browser-r
 and [acceptance boundary](../project/local-browser-review-evidence.md). HTTP and installed
 process evidence are distinct from real browser accessibility/interaction, deployment and live
 model acceptance; these broader gates remain open. Main and public deployment unchanged.
+
+## Local Qwen intent increment (unmerged branch)
+
+M5/#53 now has bounded natural-language routing on `codex/local-qwen-interpretation`, stacked on PR #180. The local loaded model proposes intent; application-owned journals and existing tools/checkpoints/receipts own evidence and save authority. Nine repeated development CLI walkthroughs and four abstentions passed; see [execution evidence](../project/local-qwen-review-evidence.md). M9/#72 is being evaluated, not completed on main. Full G2 pilot, browser/deployment and held-out quality remain open; expansion continues to depend on G2.

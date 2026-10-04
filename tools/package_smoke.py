@@ -201,6 +201,14 @@ def main() -> int:
             text=True,
         )
 
+        subprocess.run(
+            [str(python), str(ROOT / "tools/live_review_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
     print("package smoke test passed")
     return 0
 

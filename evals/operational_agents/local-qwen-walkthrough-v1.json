@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "scope": "synthetic-tenant/atlas/lab",
+  "as_of": "2026-10-01T00:00:00+00:00",
+  "split": "development walkthrough smoke, no held-out quality claim",
+  "repetitions": 3,
+  "cases": [
+    {"id": "mismatch", "question": "Compare GPU-A orders with the governing requirement and show evidence.", "item": "GPU-A"},
+    {"id": "unresolved", "question": "Investigate the governing requirement and observed orders for GPU-C, preserving any conflicts.", "item": "GPU-C"},
+    {"id": "missing-observation", "question": "Investigate GPU-D order coverage and show the observed evidence without assuming a missing purchase order.", "item": "GPU-D"}
+  ],
+  "abstentions": [
+    {"id": "unsupported", "question": "Predict tomorrow's stock price for Nvidia.", "status": "unsupported"},
+    {"id": "ambiguous-item", "question": "Compare the GPU orders with requirements.", "status": "clarify"},
+    {"id": "ambiguous-date", "question": "Compare GPU-A orders as of next week.", "status": "clarify"},
+    {"id": "foreign-project", "question": "Investigate GPU-A orders in project delta.", "status": "clarify"}
+  ]
+}

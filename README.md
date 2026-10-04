@@ -117,3 +117,7 @@ configuration uses a one-hour approval expiry; repeating review cannot renew it.
 acknowledge one durable result. This shell boundary demonstrates local human review mechanics,
 not production authentication, graph recovery or live inference. See the
 [approval contract](docs/product/exact-brief-review-v1.md).
+
+### Local Qwen review (unmerged implementation branch)
+
+The `codex/local-qwen-interpretation` branch adds one bounded local Qwen 3.6 interpretation per natural-language review question, a durable inference journal and the existing exact human review workflow. Quantities and statuses come from deterministic services. See [commands and contract](docs/product/local-qwen-review-v1.md) and [live evidence](docs/project/local-qwen-review-evidence.md). Nine repeated development walkthroughs plus four abstentions passed; browser/deployment and full G2 acceptance remain open.

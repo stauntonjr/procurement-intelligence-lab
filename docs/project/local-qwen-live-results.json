@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "label": "development walkthrough smoke, no held-out quality claim",
+  "acceptance": "bounded_cli_walkthrough_passed",
+  "server": {
+    "version": "0.23.1rc1.dev1353+g81f51a780.d20260721"
+  },
+  "versions": {
+    "provider": "local-vllm",
+    "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+    "prompt": "question-review/v1:99039fc654f091f8c6c0d7e807e5e6eabdeb78bae7072cce557c37dd30f13dbc:1.2.12:3.1.1",
+    "tool_schema": "corpus-tools/v1",
+    "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+    "application": "sha256:9f52702d2c81be4095b55cb86a5f876371b7acfd835e7f6d339639e2a471b33d"
+  },
+  "manifest_sha256": "9484209f5a7bd8faad170e871add2321f7316f027a7006081eba045d7968a61d",
+  "full_bundle_sha256": "0754be3563d3dbba9b9aa45ce94f19e08c7d5f8404c1f0da576343e44a41e72a",
+  "walkthroughs": [
+    {
+      "case": "mismatch",
+      "repetition": 1,
+      "passed": true,
+      "interpretation": {
+        "run_id": "28fa81f9-18cf-42a2-b4f9-612ba397dc9f",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1100497390143573,
+        "prompt_tokens": 760,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "39cd81a7-3aa0-4e3c-b683-1b6a0da44015",
+      "public_roundtrip_seconds": 6.155606674961746,
+      "facts_sha256": "ca45394177585d617ed90fe521a723a2628440ab547137cbb7eea6316e8b9083",
+      "status": "anomaly",
+      "reason": null,
+      "required_quantity": "8",
+      "ordered_quantity": "6",
+      "source_references": 12
+    },
+    {
+      "case": "mismatch",
+      "repetition": 2,
+      "passed": true,
+      "interpretation": {
+        "run_id": "a0460581-7767-46ad-84c3-a56be79d31b0",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.0774581108707935,
+        "prompt_tokens": 760,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "1df5229d-e0f3-402c-b582-c5f790cbac39",
+      "public_roundtrip_seconds": 5.949955542106181,
+      "facts_sha256": "ca45394177585d617ed90fe521a723a2628440ab547137cbb7eea6316e8b9083",
+      "status": "anomaly",
+      "reason": null,
+      "required_quantity": "8",
+      "ordered_quantity": "6",
+      "source_references": 12
+    },
+    {
+      "case": "mismatch",
+      "repetition": 3,
+      "passed": true,
+      "interpretation": {
+        "run_id": "eccf3ccc-0d05-4605-8c62-f8fea40a3343",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.0980368689633906,
+        "prompt_tokens": 760,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "7b122d7e-0bf6-4d82-abbc-a5812cc1e193",
+      "public_roundtrip_seconds": 6.099724956788123,
+      "facts_sha256": "ca45394177585d617ed90fe521a723a2628440ab547137cbb7eea6316e8b9083",
+      "status": "anomaly",
+      "reason": null,
+      "required_quantity": "8",
+      "ordered_quantity": "6",
+      "source_references": 12
+    },
+    {
+      "case": "unresolved",
+      "repetition": 1,
+      "passed": true,
+      "interpretation": {
+        "run_id": "208fa66b-03a9-477b-8e7c-56f2383b333c",
+        "question_hash": "097035a6696989549294b00ffd2d1ed52c5f3dc269f5e9f8fdea06124cebde4c",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-C",
+        "reason": "none",
+        "elapsed_seconds": 1.1092200079001486,
+        "prompt_tokens": 764,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "8154f305-463d-4896-ba5a-7283084be208",
+      "public_roundtrip_seconds": 6.147672764956951,
+      "facts_sha256": "4a56852021db41069a164311a29a515aab256c573180390b1c4c2a4cb750180c",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "required_quantity": null,
+      "ordered_quantity": null,
+      "source_references": 12
+    },
+    {
+      "case": "unresolved",
+      "repetition": 2,
+      "passed": true,
+      "interpretation": {
+        "run_id": "ab3201c7-5efa-4f8f-b4e0-ce7113dd59a7",
+        "question_hash": "097035a6696989549294b00ffd2d1ed52c5f3dc269f5e9f8fdea06124cebde4c",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-C",
+        "reason": "none",
+        "elapsed_seconds": 1.070037076016888,
+        "prompt_tokens": 764,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "03e99113-b7a5-4bd1-a47f-f6c9474e3435",
+      "public_roundtrip_seconds": 6.0498080449178815,
+      "facts_sha256": "4a56852021db41069a164311a29a515aab256c573180390b1c4c2a4cb750180c",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "required_quantity": null,
+      "ordered_quantity": null,
+      "source_references": 12
+    },
+    {
+      "case": "unresolved",
+      "repetition": 3,
+      "passed": true,
+      "interpretation": {
+        "run_id": "e7d853dd-50c7-4b0a-bc00-91e23bb35eca",
+        "question_hash": "097035a6696989549294b00ffd2d1ed52c5f3dc269f5e9f8fdea06124cebde4c",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-C",
+        "reason": "none",
+        "elapsed_seconds": 1.0699904640205204,
+        "prompt_tokens": 764,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "3c966390-f6e7-401a-ad37-1fd345c53917",
+      "public_roundtrip_seconds": 6.085232147015631,
+      "facts_sha256": "4a56852021db41069a164311a29a515aab256c573180390b1c4c2a4cb750180c",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "required_quantity": null,
+      "ordered_quantity": null,
+      "source_references": 12
+    },
+    {
+      "case": "missing-observation",
+      "repetition": 1,
+      "passed": true,
+      "interpretation": {
+        "run_id": "3e282d54-064c-46b1-ad45-308befe2bbab",
+        "question_hash": "ec68f5cf18277ad736aa7faac43ff70672b7309f1e9322e019a27381669156af",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-D",
+        "reason": "none",
+        "elapsed_seconds": 1.1165163868572563,
+        "prompt_tokens": 766,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "d777d2d0-d28e-43da-bdb3-7a819bd73f14",
+      "public_roundtrip_seconds": 5.390266575152054,
+      "facts_sha256": "d997ac469a623dd328d5aab4b35048868ae8dc9e6ce946da06f4ee13471ccb5b",
+      "status": "not_assessed",
+      "reason": "missing_observation",
+      "required_quantity": "4",
+      "ordered_quantity": null,
+      "source_references": 8
+    },
+    {
+      "case": "missing-observation",
+      "repetition": 2,
+      "passed": true,
+      "interpretation": {
+        "run_id": "99e10d6f-f506-449b-8a35-3c9bab0bbaef",
+        "question_hash": "ec68f5cf18277ad736aa7faac43ff70672b7309f1e9322e019a27381669156af",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-D",
+        "reason": "none",
+        "elapsed_seconds": 1.0707348240539432,
+        "prompt_tokens": 766,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "1275111d-cb06-4af5-bc36-5bbe94bc8adc",
+      "public_roundtrip_seconds": 5.360724893864244,
+      "facts_sha256": "d997ac469a623dd328d5aab4b35048868ae8dc9e6ce946da06f4ee13471ccb5b",
+      "status": "not_assessed",
+      "reason": "missing_observation",
+      "required_quantity": "4",
+      "ordered_quantity": null,
+      "source_references": 8
+    },
+    {
+      "case": "missing-observation",
+      "repetition": 3,
+      "passed": true,
+      "interpretation": {
+        "run_id": "b5dc4f62-c6a3-46f5-ad6e-78f3698b0945",
+        "question_hash": "ec68f5cf18277ad736aa7faac43ff70672b7309f1e9322e019a27381669156af",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-D",
+        "reason": "none",
+        "elapsed_seconds": 1.0682971319183707,
+        "prompt_tokens": 766,
+        "completion_tokens": 72
+      },
+      "model_calls": 1,
+      "tool_calls": 2,
+      "saved_result_id": "ecbf85a5-5103-4d73-b436-1427c8206f4d",
+      "public_roundtrip_seconds": 5.318677650066093,
+      "facts_sha256": "d997ac469a623dd328d5aab4b35048868ae8dc9e6ce946da06f4ee13471ccb5b",
+      "status": "not_assessed",
+      "reason": "missing_observation",
+      "required_quantity": "4",
+      "ordered_quantity": null,
+      "source_references": 8
+    }
+  ],
+  "abstentions": [
+    {
+      "case": "unsupported",
+      "passed": true,
+      "interpretation": {
+        "run_id": "33506284-83bc-4cd3-baa7-f1a53d7fc566",
+        "question_hash": "d26c259d7d25ca3561674726bc8c9a2a657b3263bc1fefcf5f147aaac9ade3fa",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "unsupported",
+        "item": null,
+        "reason": "unsupported",
+        "elapsed_seconds": 0.7638453380204737,
+        "prompt_tokens": 756,
+        "completion_tokens": 44
+      }
+    },
+    {
+      "case": "ambiguous-item",
+      "passed": true,
+      "interpretation": {
+        "run_id": "e87642f2-ed36-4dd7-a784-71c2c324206b",
+        "question_hash": "c935457ee2b081934e50930ac36801508e6eb3a68612fc13019ba4d4f9c6eb88",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "clarify",
+        "item": null,
+        "reason": "item_ambiguous",
+        "elapsed_seconds": 0.752795249922201,
+        "prompt_tokens": 755,
+        "completion_tokens": 47
+      }
+    },
+    {
+      "case": "ambiguous-date",
+      "passed": true,
+      "interpretation": {
+        "run_id": "f3eec2f0-38a4-49e5-b651-262460f0f4c7",
+        "question_hash": "2d80c2d7da226bee883542c8c5f9ea308bf93c364325cc08fa4d3112ef10fbc7",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "clarify",
+        "item": null,
+        "reason": "date_ambiguous",
+        "elapsed_seconds": 0.7511235310230404,
+        "prompt_tokens": 757,
+        "completion_tokens": 47
+      }
+    },
+    {
+      "case": "foreign-project",
+      "passed": true,
+      "interpretation": {
+        "run_id": "4d57654c-9155-4de7-8cf1-594f4b56d3e5",
+        "question_hash": "c8b05831c3d7b0461a09f0907b44a9a0fa5113b7eae528ee5a1e1becbf44f57e",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "clarify",
+        "item": null,
+        "reason": "item_ambiguous",
+        "elapsed_seconds": 0.7521982539910823,
+        "prompt_tokens": 757,
+        "completion_tokens": 47
+      }
+    }
+  ],
+  "http": {
+    "passed": true,
+    "execution_kind": "live",
+    "interpretation": {
+      "run_id": "56bf0fef-3682-4e12-95e1-4cdb7604eb49",
+      "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "investigate",
+      "item": "GPU-A",
+      "reason": "none",
+      "elapsed_seconds": 1.0830015239771456,
+      "prompt_tokens": 760,
+      "completion_tokens": 72
+    },
+    "run_id": "56bf0fef-3682-4e12-95e1-4cdb7604eb49",
+    "saved": {
+      "saved_id": "a098114a-1b55-4495-ae16-3a9464d2a820",
+      "brief_id": "b10d432e-2122-40b8-b1fa-0c334c095a71",
+      "run_id": "56bf0fef-3682-4e12-95e1-4cdb7604eb49",
+      "digest": "1f0e3e35ab006abc2d4876cfa6bd07ddb4d094bb62d245c3b4a0a7ad590ea9ef",
+      "idempotency_key": "brief-save:1f0e3e35ab006abc2d4876cfa6bd07ddb4d094bb62d245c3b4a0a7ad590ea9ef",
+      "saved_at": "2026-10-04T02:05:37.250027+00:00"
+    },
+    "model_calls": 1,
+    "versions": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:99039fc654f091f8c6c0d7e807e5e6eabdeb78bae7072cce557c37dd30f13dbc:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:9f52702d2c81be4095b55cb86a5f876371b7acfd835e7f6d339639e2a471b33d"
+    },
+    "source_references_checked": 12,
+    "limits": "HTTP and restart only; no real-browser acceptance"
+  },
+  "limits": "Development corpus walkthroughs only; no broad accuracy, original fixture live routing, browser/deployment, hard cancellation or G2 held-out acceptance. Source resolution uses the installed application's matching admitted inventory; authenticated source HTTP has separate contract coverage.",
+  "retained_development_failures": [
+    "preflight interpreter invocation failed before inference",
+    "first prompt failed three abstention expectations; evaluator saved-id field failed",
+    "HTTP paraphrase produced no workflow; exact manifest question subsequently passed; failed attempt outcome metrics unknown and excluded from final aggregates"
+  ]
+}

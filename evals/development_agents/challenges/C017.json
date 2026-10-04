@@ -1,0 +1,14 @@
+{
+  "id": "C017",
+  "title": "Browser review displays the durable saved brief identity",
+  "introducing_commit": "cf277d374394de774bd812f16ae132ade46670ee",
+  "oracle": "The shipped live reviewer JavaScript displays saved_id after completed recovery and preserves exact review and clarification gates.",
+  "known_bad": "Read result_id from SavedBrief and display undefined in the human saved acknowledgment.",
+  "known_bad_mutation": [
+    {"path":"src/procurement_intelligence_lab/interfaces/review_page.py", "find":"view.saved.saved_id", "replace":"view.saved.result_id"}
+  ],
+  "known_bad_failure_pattern": "show durable saved identity",
+  "test_command": ["uv","run","pytest","-q","tests/unit/test_live_review_page.py::test_live_page_exact_review_and_clarification_wiring"],
+  "surfaces": ["human review saved acknowledgment", "public saved brief DTO identity"],
+  "prevention": ["execute shipped JavaScript with a completed SavedBrief DTO", "assert durable identifier is visible after recovery"]
+}

@@ -81,8 +81,8 @@ class LangGraphReviewRuntime:
             raise ValueError("step ceiling must be an integer in [4,32]")
         if type(timeout_seconds) not in (int, float) or not 0 < timeout_seconds <= 120:
             raise ValueError("deadline must be finite and in (0,120]")
-        if service.tools.runs.execution_kind != ExecutionKind.FIXTURE:
-            raise ValueError("this prototype supports fixture execution only")
+        if service.tools.runs.execution_kind not in (ExecutionKind.FIXTURE, ExecutionKind.LIVE):
+            raise ValueError("review runtime supports fixture or live execution only")
         self.service = service
         self.database = database
         self.checkpoint_path = database.with_name(database.name + ".checkpoints.sqlite")
@@ -277,8 +277,30 @@ class LangGraphReviewRuntime:
     def start(self, request: WorkflowRequest, *, context: RequestContext) -> WorkflowView:
         operational = self._operational(context)
         run = self.service.tools.runs.start(context=operational)
+        return self.begin(run.run_id, request, context=operational)
+
+    def begin(
+        self, run_id: str, request: WorkflowRequest, *, context: RequestContext
+    ) -> WorkflowView:
+        operational = self._operational(context)
+        run = self.service.tools.runs.resume(run_id, context=operational)
         config = self._config(run.run_id, operational)
         with self._graph() as graph:
+            snapshot = self._snapshot(graph, config)
+            if snapshot.values:
+                state = snapshot.values
+                if (
+                    state.get("item") != request.item
+                    or state.get("as_of") != request.as_of.isoformat()
+                ):
+                    raise BriefConflict("existing workflow request differs")
+                if snapshot.next == ("draft",):
+                    graph.invoke(
+                        None,
+                        config,
+                        context=_Invocation(operational, time.monotonic() + self.timeout_seconds),
+                    )
+                return self._view(run_id, self._snapshot(graph, config), operational)
             graph.invoke(
                 {
                     "run_id": run.run_id,
