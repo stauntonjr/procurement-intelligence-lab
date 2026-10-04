@@ -3,7 +3,10 @@
 The current implementation branch also contains a **fixture-only durable review workflow**:
 typed corpus request -> exact brief -> human pause -> idempotent save, with optional pinned
 LangGraph dependencies. See [the CLI contract](docs/product/serial-review-workflow-v1.md).
-This prototype is separate from live-model and deployed-browser acceptance.
+The branch also adds [authenticated local browser review](docs/product/local-browser-review-v1.md):
+owned run discovery, exact approve/reject controls, source cells, actual audit timeline and
+restart recovery. This fixture prototype is separate from live-model, real browser interaction
+and deployed-browser acceptance.
 
 Procurement Intelligence Lab is a public, synthetic-data reference architecture for trustworthy BOM and procurement intelligence. It turns semi-structured documents into provenance-preserving knowledge, keeps source assertions distinct from truth, reconciles them into operational state, and exposes deterministic and AI-assisted investigation tools.
 

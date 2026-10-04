@@ -273,3 +273,21 @@ def test_unsupported_event_enum_is_rejected(tmp_path: Path) -> None:
     root = app.events(run.run_id, context=CONTEXT)[0]
     with pytest.raises((ValueError, TypeError)):
         replace(root, kind=cast(AgentEventKind, Unsupported.PAYLOAD))
+
+
+def test_recent_owned_runs_are_bounded_stable_and_authorized(tmp_path: Path) -> None:
+    app = service(tmp_path / "runs.db")
+    assert app.recent(context=CONTEXT) == ()
+    first = app.start(context=CONTEXT)
+    second = app.start(context=CONTEXT)
+    foreign = replace(CONTEXT, principal_id="other")
+    app.start(context=foreign)
+    assert app.recent(context=CONTEXT) == (second, first)
+    assert app.recent(context=CONTEXT, limit=1) == (second,)
+    assert service(tmp_path / "runs.db").recent(context=CONTEXT) == (second, first)
+    assert app.recent(context=replace(CONTEXT, project_id="delta")) == ()
+    with pytest.raises(ScopeAuthorizationError):
+        app.recent(context=replace(CONTEXT, permissions=frozenset()))
+    for limit in (0, -1, 51, True, 1.5):
+        with pytest.raises(ValueError):
+            app.recent(context=CONTEXT, limit=limit)  # type: ignore[arg-type]

@@ -2,7 +2,7 @@
 
 import argparse
 import json
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from hashlib import sha256
 from importlib.metadata import version
@@ -48,7 +48,19 @@ from procurement_intelligence_lab.platform.semantics.workflows import (
 from procurement_intelligence_lab.ports.workflows import AgentWorkflowRuntime
 
 
+@dataclass(frozen=True)
+class WorkflowComposition:
+    runtime: AgentWorkflowRuntime
+    runs: AgentRunService
+    service: BriefReviewService
+    reader: SyntheticCorpusReader
+
+
 def compose(database: Path) -> AgentWorkflowRuntime:
+    return compose_services(database).runtime
+
+
+def compose_services(database: Path) -> WorkflowComposition:
     # Base install remains dependency-free. Missing optional extra is a typed runtime failure.
     try:
         from procurement_intelligence_lab.adapters.langgraph_review import LangGraphReviewRuntime
@@ -86,7 +98,7 @@ def compose(database: Path) -> AgentWorkflowRuntime:
         CorpusAgentTools(CorpusInvestigationService(reader), reader, runs),
         SqliteBriefStore(database),
     )
-    return LangGraphReviewRuntime(service, database)
+    return WorkflowComposition(LangGraphReviewRuntime(service, database), runs, service, reader)
 
 
 def view_dto(view: WorkflowView) -> dict[str, object]:

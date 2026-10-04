@@ -99,3 +99,12 @@ review interrupt, durable receipt/result authority and process-recovery tests. S
 PR178. See [the contract](../product/serial-review-workflow-v1.md). Typed fixture input is
 an intermediate gate; model interpretation, browser controls/streams, live evaluation and
 broader routing/retry acceptance remain open.
+
+### G2 local fixture browser review branch — 2026-10-03
+
+#74 (M9), part of #53/#67/#68/#70: authenticated loopback transport over the existing exact
+review workflow, bounded owned run discovery, scoped source cells and persisted application
+timeline. Stacked on PR179. See [the public contract](../product/local-browser-review-v1.md)
+and [acceptance boundary](../project/local-browser-review-evidence.md). HTTP and installed
+process evidence are distinct from real browser accessibility/interaction, deployment and live
+model acceptance; these broader gates remain open. Main and public deployment unchanged.

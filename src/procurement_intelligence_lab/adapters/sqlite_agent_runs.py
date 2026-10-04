@@ -181,6 +181,26 @@ class SqliteRunStore:
         with self._connection() as db:
             return self._get(db, run_id, context)
 
+    def recent(self, *, context: RequestContext, limit: int = 50) -> tuple[AgentRun, ...]:
+        context.require(Permission.READ_STATE)
+        if type(limit) is not int or not 1 <= limit <= 50:
+            raise ValueError("recent run limit must be an integer from 1 to 50")
+        with self._connection() as db:
+            return tuple(
+                decode_run(cast(str, row[0]))
+                for row in db.execute(
+                    "SELECT payload FROM agent_runs WHERE principal_id=? AND tenant_id=? "
+                    "AND project_id=? AND site_id=? ORDER BY rowid DESC LIMIT ?",
+                    (
+                        context.principal_id,
+                        context.tenant_id,
+                        context.project_id,
+                        context.site_id,
+                        limit,
+                    ),
+                )
+            )
+
     def events(self, run_id: str, *, context: RequestContext) -> tuple[AgentEvent, ...]:
         context.require(Permission.READ_STATE)
         with self._connection() as db:

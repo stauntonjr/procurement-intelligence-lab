@@ -189,3 +189,12 @@ independent of graph checkpoints. See [ADR-029](../adr/029-exact-brief-review-an
 human CLI exercises process restart; runtime agent permissions cannot review/save.
 Model drafting, graph interrupts, authenticated browser controls and live acceptance remain
 subsequent work; this branch does not change main or the public release.
+
+### G2 local fixture browser review branch — 2026-10-03
+
+#74 (M9), part of #53/#67/#68/#70: authenticated loopback transport over the existing exact
+review workflow, bounded owned run discovery, scoped source cells and persisted application
+timeline. Stacked on PR179. See [the public contract](../product/local-browser-review-v1.md)
+and [acceptance boundary](../project/local-browser-review-evidence.md). HTTP and installed
+process evidence are distinct from real browser accessibility/interaction, deployment and live
+model acceptance; these broader gates remain open. Main and public deployment unchanged.

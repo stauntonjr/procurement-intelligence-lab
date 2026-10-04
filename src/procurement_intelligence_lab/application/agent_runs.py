@@ -73,6 +73,13 @@ class AgentRunService:
         self.resume(run_id, context=context)
         return self.store.events(run_id, context=context)
 
+    def recent(self, *, context: RequestContext, limit: int = 50) -> tuple[AgentRun, ...]:
+        """Owned historical discovery; resume separately enforces current versions."""
+        context.require(Permission.READ_STATE)
+        if type(limit) is not int or not 1 <= limit <= 50:
+            raise ValueError("recent run limit must be an integer from 1 to 50")
+        return self.store.recent(context=context, limit=limit)
+
     def record(
         self,
         run_id: str,
