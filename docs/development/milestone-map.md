@@ -171,3 +171,12 @@ and 464 source checks;48 terminal calls, 56 tools, 28 saves; one attempt each, n
 question lineage preserves historical version2. Source/gold/runtime unchanged; known correlation
 prevents source/statistical/causal claims. Full G2 adversarial/release, comprehensive accessibility,
 deployment and B2 expansion remain open; four projects/24 workbooks/960 source rows unchanged.
+
+## Installed G2 adversarial acceptance branch — 2026-10-04
+
+Primary #72/M9, part of #53/#66/#67/#68/#70/#71/#74. `codex/g2-adversarial-acceptance` stacks
+on draft #188, unmerged. Nine installed HTTP/process failure guards pass with five real and three
+controlled terminal attempts, seven tools/one expected failure, three receipts and one exact crash-
+recovered save. Missing causal/ownership evidence blocks acceptance. [Evidence and limits](../project/g2-adversarial-acceptance.md).
+No runtime/source/prompt/package changes. Full G2/release consolidation, comprehensive accessibility,
+deployment and B2 source expansion remain open; four projects/24workbooks/960rows unchanged.

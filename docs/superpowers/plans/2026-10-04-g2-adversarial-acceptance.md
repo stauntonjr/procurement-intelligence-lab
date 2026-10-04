@@ -31,24 +31,24 @@ tests/unit/test_g2_adversarial_scoring.py, tests/integration/test_g2_adversarial
 Interfaces: server child announces port and actual versions; running(...) owns process cleanup;
 run_case(id, python, directory, endpoint, kind) returns one retained observation;
 summarize(records, protocol_only=False) preserves nine closed denominators and distinct call kinds.
-- [ ] RED: omitted/duplicate/unknown records cannot pass; controlled calls never count as real;
+- [x] RED: omitted/duplicate/unknown records cannot pass; controlled calls never count as real;
   injected workflow failure can pass the guard while retaining its actual failed status.
-- [ ] Implement protocol-only CLI (four controls, five explicit N/A, no live acceptance claim).
+- [x] Implement protocol-only CLI (four controls, five explicit N/A, no live acceptance claim).
   Public integration runs real HTTP/child processes against controlled protocol responses;
   exercise timeout/expiry/snapshot/crash cases with valid controlled interpretation as well.
-- [ ] Run focused tests and make check; commit evaluator. Single fresh independent evaluator
+- [x] Run focused tests and make check; commit evaluator. Single fresh independent evaluator
   review before live calls; one RED/GREEN fix pass for Critical/Important, defer minors.
 
 ## Task 2: frozen installed execution
 
 Consumes Task1 runner; produces immutable report/freeze/parity/observations consumed by Task3.
-- [ ] Verify reused cutoff wheel100Python byte parity and normal runtime versions equal current
+- [x] Verify reused cutoff wheel100Python byte parity and normal runtime versions equal current
   checkout; record wheel/hash and actual per-case injected versions/launcher hashes.
-- [ ] Execute actual CLI once with clean installed Python, fresh workspace/output. Require all
+- [x] Execute actual CLI once with clean installed Python, fresh workspace/output. Require all
   nine case observations, actual terminal journals, expected tool failures, no unauthorized
   reads/briefs/saves, stale approvals rejected and exact crash-save identity preserved.
   Independently reread run/receipt ownership, one approval binding and all durable saved records.
-- [ ] Author fresh pass on later data/results, not a second independent review. Report bounded
+- [x] Author fresh pass on later data/results, not a second independent review. Report bounded
   adversarial gate separately from historical model-control misses and global G2/release status.
 
 ## Task 3: durable evidence and publication

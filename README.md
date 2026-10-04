@@ -144,3 +144,9 @@ questions, including 24 independently authored questions, on the unchanged cutof
 Installed 48 gold/464 source checks and 48 model calls/56 tools/28 exact saves reconcile. This unmerged
 language-only result keeps full G2/release, comprehensive accessibility, deployment and source
 expansion separate; the source corpus remains four known projects.
+
+The [installed adversarial probes](docs/project/g2-adversarial-acceptance.md) pass nine failure
+guards, including a real process death after durable save and exact recovery. Five real Qwen and
+three controlled protocol attempts are counted separately; actual tool failure remains visible.
+This unmerged result requires complete causal/approval evidence and keeps full G2/release,
+comprehensive accessibility, deployment and corpus expansion as separate gates.

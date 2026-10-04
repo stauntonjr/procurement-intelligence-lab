@@ -1,5 +1,17 @@
 # Project handoff
 
+## Installed G2 adversarial acceptance — 2026-10-04
+
+`codex/g2-adversarial-acceptance` is stacked on draft #188, unmerged. Nine installed HTTP/process
+guards pass: five real Qwen attempts plus three controlled protocol attempts; seven tool starts,
+one expected failed tool, three original approval receipts and one exact save preserved through
+actual post-save exit86/restart/repeated approval. Complete causal/run/receipt evidence is required;
+one independent evaluator Important finding fixed by six RED/GREEN regressions, 695 full tests.
+[Contract, compact outcomes and remaining gates](g2-adversarial-acceptance.md). This is bounded
+failure acceptance; full G2/release consolidation, comprehensive accessibility, deployment and B2
+expansion remain separate open gates. Source corpus remains four projects/24workbooks/960rows;
+historical language/control misses remain immutable. No runtime/model/prompt/source/package change.
+
 ## Fresh language v3 candidate evaluation — 2026-10-04
 
 `codex/fresh-language-v3-evaluation` is stacked on draft #187, unmerged. Frozen cutoff candidate

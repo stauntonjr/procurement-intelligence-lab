@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "execution_revision": "efe717571a0bd82cdc5aac0c2d1c6ea7c214f23a",
+  "runtime_git_revision": "840d522c1ce207de78c73184a40ab532176c3986",
+  "runtime_versions": {
+    "provider": "local-vllm",
+    "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+    "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+    "tool_schema": "corpus-tools/v1",
+    "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+    "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+  },
+  "harness_hashes": {
+    "run_g2_adversarial.py": "d089d5cb4445d368e2f81738f45c4c011752dd15d65d653c803be2eda8fd31f3",
+    "g2_adversarial_server.py": "b8bbc6166fc43b2603ac9712f094c216eabb3d37afaf11886f51b4636a439770"
+  },
+  "first_report_sha256": "9d40ef4ae2dff93bc5276f53929d972f7dec829a4b17b20ef8949863666233dc",
+  "acceptance": "bounded_adversarial_passed",
+  "summary": {
+    "counts": {
+      "pass": 9,
+      "fail": 0,
+      "unknown": 0,
+      "not_applicable": 0
+    },
+    "ready": true,
+    "invalid_records": false,
+    "real_qwen_calls": 5,
+    "controlled_protocol_calls": 3
+  },
+  "author_audit": {
+    "schema_version": 1,
+    "report_sha256": "9d40ef4ae2dff93bc5276f53929d972f7dec829a4b17b20ef8949863666233dc",
+    "application_git_revision": "efe717571a0bd82cdc5aac0c2d1c6ea7c214f23a",
+    "harness_hashes": {
+      "run_g2_adversarial.py": "d089d5cb4445d368e2f81738f45c4c011752dd15d65d653c803be2eda8fd31f3",
+      "g2_adversarial_server.py": "b8bbc6166fc43b2603ac9712f094c216eabb3d37afaf11886f51b4636a439770"
+    },
+    "counts": {
+      "pass": 9,
+      "fail": 0,
+      "unknown": 0,
+      "not_applicable": 0
+    },
+    "real_qwen_attempts": 5,
+    "controlled_protocol_attempts": 3,
+    "terminal_attempts": 8,
+    "tool_starts": 7,
+    "tool_failed": 1,
+    "saves": 1,
+    "guard_acceptance": "bounded_adversarial_passed",
+    "receipts": [
+      {
+        "case": "expired_approval",
+        "receipt": {
+          "brief_id": "15662653-ba1f-4e0c-9957-1780d43e9942",
+          "decision": "approve",
+          "digest": "03a5134fdc258017099d42d4c4cd4f3e0aeaa2923ed33e9e191b9a5bc38065e5",
+          "expires_at": "2026-10-04T18:24:08.058485+00:00",
+          "reviewed_at": "2026-10-04T17:24:08.058485+00:00",
+          "reviewer_id": "local-demo",
+          "run_id": "9db5fe66-57ef-44d5-87f4-3021c561037c"
+        }
+      },
+      {
+        "case": "changed_snapshot",
+        "receipt": {
+          "brief_id": "39dfb378-3d6f-4efc-981f-cd99f63063db",
+          "decision": "approve",
+          "digest": "70fba7e1a28b1edede6075088b33e360b0dcfe15bb90e859c7b7141fef09b62d",
+          "expires_at": "2026-10-04T18:24:12.848789+00:00",
+          "reviewed_at": "2026-10-04T17:24:12.848789+00:00",
+          "reviewer_id": "local-demo",
+          "run_id": "ac54f1c6-8a14-41da-8597-816f200bcefe"
+        }
+      },
+      {
+        "case": "review_crash_scope",
+        "receipt": {
+          "brief_id": "12480703-45b5-486d-a405-a89b196de5cd",
+          "decision": "approve",
+          "digest": "8062b04e8ad41f24c3d27fbc19d84b27e51659f3d8a71acad0a47b9e7e2c25f5",
+          "expires_at": "2026-10-04T18:24:18.365886+00:00",
+          "reviewed_at": "2026-10-04T17:24:18.365886+00:00",
+          "reviewer_id": "local-demo",
+          "run_id": "f0ee315f-ec13-42d2-b61c-1ebb6080fe96"
+        }
+      }
+    ],
+    "runtime_and_owner_bindings_verified": true,
+    "tokens_removed": true,
+    "limits": "Author fresh pass of all actual SQLite records and report, not independent final-results review or general model quality."
+  },
+  "installed_parity": {
+    "schema_version": 1,
+    "wheel_sha256": "c6abc43be4f5d0e5fbe4113bb07914ee9d57c152d0998d5777ad844db7a7051e",
+    "wheel": "/tmp/pil-cutoff-dist/procurement_intelligence_lab-0.1.0-py3-none-any.whl",
+    "installed_python": "/tmp/pil-cutoff-env/bin/python",
+    "source_python_files": 100,
+    "runtime_versions": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+    },
+    "limits": "Reused clean wheel from cutoff-development; evaluator/data-only changes, no runtime/package change. Exact source/wheel/installed Python byte parity and composition versions checked; not a new package release."
+  },
+  "records": [
+    {
+      "id": "request_guards",
+      "kind": "controlled_protocol",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 0,
+      "real_qwen_calls": 0,
+      "controlled_protocol_calls": 0,
+      "tool_starts": 0,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:c6bcdfdd9f093f8fc5838c03d979a1d74d7a97b1ead52c0621839aa4b3a91c54:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": 0,
+      "public_probe_seconds": 0.412954619852826,
+      "observations": {
+        "guard_statuses": [
+          401,
+          403,
+          422,
+          422,
+          422
+        ]
+      },
+      "interpretation": null,
+      "event_kinds": []
+    },
+    {
+      "id": "malformed_model",
+      "kind": "controlled_protocol",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 0,
+      "controlled_protocol_calls": 1,
+      "tool_starts": 0,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:91bceeb9d6e4565c640efcc08656467300885f00f34ccddf4f5f2ef9c047d19b:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": 1,
+      "public_probe_seconds": 0.6205538217909634,
+      "observations": {
+        "ask_status": 200
+      },
+      "interpretation": {
+        "run_id": "c9a97012-d66c-4ea1-bb45-87d06ce3d37a",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "failed",
+        "item": null,
+        "reason": "invalid_model_output",
+        "elapsed_seconds": 0.015317601151764393,
+        "prompt_tokens": 13,
+        "completion_tokens": 7
+      },
+      "event_kinds": [
+        "run_started"
+      ]
+    },
+    {
+      "id": "foreign_model_scope",
+      "kind": "controlled_protocol",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 0,
+      "controlled_protocol_calls": 1,
+      "tool_starts": 0,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:aed4676523150bdaf6c70c18d2da1209149c9be33a97fa7ed840786ae2dd71ff:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": 1,
+      "public_probe_seconds": 0.6193352749105543,
+      "observations": {
+        "ask_status": 200
+      },
+      "interpretation": {
+        "run_id": "64001f43-9313-4e68-8bf8-03f3e256250b",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "failed",
+        "item": null,
+        "reason": "invalid_model_output",
+        "elapsed_seconds": 0.015594848897308111,
+        "prompt_tokens": 13,
+        "completion_tokens": 7
+      },
+      "event_kinds": [
+        "run_started"
+      ]
+    },
+    {
+      "id": "transport_failure",
+      "kind": "controlled_protocol",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 0,
+      "controlled_protocol_calls": 1,
+      "tool_starts": 0,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:3a9e300a9a0f63e60238f30b950c19318be9e9a0af348ebceae46b6fe372fe31:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": 1,
+      "public_probe_seconds": 0.6063666411209852,
+      "observations": {
+        "ask_status": 200
+      },
+      "interpretation": {
+        "run_id": "f4f89352-a769-413a-b5e0-23146bbcc5c3",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "failed",
+        "item": null,
+        "reason": "model_unavailable",
+        "elapsed_seconds": 0.015029615024104714,
+        "prompt_tokens": null,
+        "completion_tokens": null
+      },
+      "event_kinds": [
+        "run_started"
+      ]
+    },
+    {
+      "id": "unsupported",
+      "kind": "real_qwen",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 1,
+      "controlled_protocol_calls": 0,
+      "tool_starts": 0,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": null,
+      "public_probe_seconds": 1.3939044009894133,
+      "observations": {
+        "ask_status": 200
+      },
+      "interpretation": {
+        "run_id": "da68ae52-26d8-49a3-a4e8-70dd67fabc46",
+        "question_hash": "2307de2d585663662d8921835854d09f28223d62f8e79060ab9c2436ec1c9736",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "unsupported",
+        "item": null,
+        "reason": "unsupported",
+        "elapsed_seconds": 0.7985568980220705,
+        "prompt_tokens": 1434,
+        "completion_tokens": 44
+      },
+      "event_kinds": [
+        "run_started"
+      ]
+    },
+    {
+      "id": "tool_timeout",
+      "kind": "real_qwen",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 1,
+      "controlled_protocol_calls": 0,
+      "tool_starts": 1,
+      "tool_failures": 1,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": null,
+      "public_probe_seconds": 1.8179653289262205,
+      "observations": {
+        "ask_status": 503
+      },
+      "interpretation": null,
+      "event_kinds": [
+        "run_started",
+        "tool_started",
+        "tool_failed"
+      ]
+    },
+    {
+      "id": "expired_approval",
+      "kind": "real_qwen",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 1,
+      "controlled_protocol_calls": 0,
+      "tool_starts": 2,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": null,
+      "public_probe_seconds": 4.816697920905426,
+      "observations": {
+        "ask_status": 200,
+        "baseline_exact": true,
+        "source_ids_checked": 12,
+        "review": {
+          "code": "pil.policy.brief_review_conflict",
+          "category": "policy",
+          "error": "Review conflicts with the exact brief, current evidence or run configuration."
+        }
+      },
+      "interpretation": {
+        "run_id": "9db5fe66-57ef-44d5-87f4-3021c561037c",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1524976999498904,
+        "prompt_tokens": 1434,
+        "completion_tokens": 72
+      },
+      "event_kinds": [
+        "run_started",
+        "tool_started",
+        "tool_succeeded",
+        "tool_started",
+        "tool_succeeded"
+      ]
+    },
+    {
+      "id": "changed_snapshot",
+      "kind": "real_qwen",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 1,
+      "controlled_protocol_calls": 0,
+      "tool_starts": 2,
+      "tool_failures": 0,
+      "saved_count": 0,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": null,
+      "public_probe_seconds": 4.767380342120305,
+      "observations": {
+        "ask_status": 200,
+        "baseline_exact": true,
+        "source_ids_checked": 12,
+        "review": {
+          "code": "pil.policy.brief_review_conflict",
+          "category": "policy",
+          "error": "Review conflicts with the exact brief, current evidence or run configuration."
+        }
+      },
+      "interpretation": {
+        "run_id": "ac54f1c6-8a14-41da-8597-816f200bcefe",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1548769411165267,
+        "prompt_tokens": 1434,
+        "completion_tokens": 72
+      },
+      "event_kinds": [
+        "run_started",
+        "tool_started",
+        "tool_succeeded",
+        "tool_started",
+        "tool_succeeded"
+      ]
+    },
+    {
+      "id": "review_crash_scope",
+      "kind": "real_qwen",
+      "outcome": "pass",
+      "attempt_complete": true,
+      "evidence_outcome": "pass",
+      "evidence_errors": [],
+      "errors": [],
+      "terminal_calls": 1,
+      "real_qwen_calls": 1,
+      "controlled_protocol_calls": 0,
+      "tool_starts": 2,
+      "tool_failures": 0,
+      "saved_count": 1,
+      "versions": {
+        "provider": "local-vllm",
+        "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+        "tool_schema": "corpus-tools/v1",
+        "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+        "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+      },
+      "protocol_server_posts": null,
+      "public_probe_seconds": 6.261941337957978,
+      "observations": {
+        "ask_status": 200,
+        "baseline_exact": true,
+        "source_ids_checked": 12,
+        "foreign_scope_statuses": [
+          404,
+          404,
+          404,
+          404,
+          404
+        ],
+        "crash_exit": 86,
+        "saved_identity_preserved": true,
+        "saved": {
+          "saved_id": "40e6342c-b040-4915-afa6-0eaba17cd8f6",
+          "brief_id": "12480703-45b5-486d-a405-a89b196de5cd",
+          "run_id": "f0ee315f-ec13-42d2-b61c-1ebb6080fe96",
+          "digest": "8062b04e8ad41f24c3d27fbc19d84b27e51659f3d8a71acad0a47b9e7e2c25f5",
+          "idempotency_key": "brief-save:8062b04e8ad41f24c3d27fbc19d84b27e51659f3d8a71acad0a47b9e7e2c25f5",
+          "saved_at": "2026-10-04T17:24:18.552275+00:00"
+        }
+      },
+      "interpretation": {
+        "run_id": "f0ee315f-ec13-42d2-b61c-1ebb6080fe96",
+        "question_hash": "ed08623d3162cc3866b725406222c758ae4c68dcb409deba3c4c87cd7edeb025",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1497231640387326,
+        "prompt_tokens": 1434,
+        "completion_tokens": 72
+      },
+      "event_kinds": [
+        "run_started",
+        "tool_started",
+        "tool_succeeded",
+        "tool_started",
+        "tool_succeeded",
+        "run_completed"
+      ]
+    }
+  ],
+  "independent_evaluator_review": {
+    "revision": "bdb36d0a2fde98dd948518775a108d6167412642",
+    "sha256": "9e8b23626f4ea73fd0dd7776cc12a38253bf33f8bb9eaef66a941011f9af7db7",
+    "critical": 0,
+    "important": 1,
+    "minor": 0,
+    "disposition": "I1 fixed in one author pass: six regression RED observations,20focused GREEN,695full passed. No second independent review. Later results author fresh pass."
+  },
+  "global_completion": "not_ready",
+  "limits": "Public HTTP/process acceptance. Controlled protocol replies are not real Qwen quality, latency or measured usage. Mechanical tool/clock/save faults are explicit. No tuning/retry, trace export, corpus expansion, merge or deployment; broader G2/release gates remain separate.",
+  "remaining_gates": [
+    "Full G2/release acceptance consolidation",
+    "Comprehensive browser accessibility",
+    "Deployment and deployed walkthrough",
+    "B2 corpus expansion gate; four projects/24workbooks/960rows unchanged",
+    "Historical cutoff controls retain two safe supported-request abstentions"
+  ]
+}
