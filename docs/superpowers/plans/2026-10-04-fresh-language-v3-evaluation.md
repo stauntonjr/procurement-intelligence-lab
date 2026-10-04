@@ -28,22 +28,22 @@ pass. Costs/limits are recorded, not concealed as independent final-results revi
 
 ## Task 2: independent authoring/review and one frozen live run
 
-- [ ] Single fresh-context read-only review seat first authors24heldout questions using only
+- [x] Single fresh-context read-only review seat first authors24heldout questions using only
   abstract contract and inherited query metadata. Save/hash immutable author record before any
   exposure to old questions/model outcomes/runtime prompt. Then whole-branch code review. One
   author RED/GREEN fix pass for Critical/Important; minor findings deferred, no second reviewer.
-- [ ] Root authors24development questions; materialize fresh-language-v3 with unchanged gold/qrels
+- [x] Root authors24development questions; materialize fresh-language-v3 with unchanged gold/qrels
   and all non-text query metadata. Freeze hashes/runtime/author/seven-file lineage before calls.
   Reject normalized replay/duplicate wording; retain advisory lexical overlap/shared-source ancestry.
-- [ ] Current clean installed cutoff wheel/runtime versions must equal frozen checkout. Run installed
+- [x] Current clean installed cutoff wheel/runtime versions must equal frozen checkout. Run installed
   HTTP48gold baseline plus48Qwen CLI interpretations/recovery/altered digest/exact repeat-save once.
   Retain all outcomes; report root24/independent validation12/test12 separately. Never tune/retry.
 
 ## Task 3: durable closeout
 
-- [ ] Publish compact versions/results and exact-head semantic evidence with author fresh pass for
+- Publish compact versions/results and exact-head semantic evidence with author fresh pass for
   data/results; update handoff/milestone/README/Issue72/Project as needed without Issue closure.
-- [ ] Publish stacked draft, verify exact-head CI and planning audit. Keep broader fullG2/release,
+- Publish stacked draft, verify exact-head CI and planning audit. Keep broader fullG2/release,
   comprehensive accessibility/deployment and expansion separate; archive only this plan workspace.
 
 ## Review Focus
@@ -52,3 +52,6 @@ Version3 includes retired cohorts/controls, version2 historical lineage unchange
 and complete author/query/hash/non-text/runtime bindings; all v3caller branches validate before model;
 report labels/counts/unknowns/journal/save reconciliation; no gold/labels in model/runtime authority;
 only language freshness, known correlated source families, no blind/statistical quality claim.
+
+Execution completion is recorded in the archived plan ledger and exact-head PR semantic evidence;
+publication/CI verification occurs after the final repository commit. See docs/project/fresh-language-v3-evaluation.md.

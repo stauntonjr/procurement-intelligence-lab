@@ -1,5 +1,17 @@
 # Project handoff
 
+## Fresh language v3 candidate evaluation — 2026-10-04
+
+`codex/fresh-language-v3-evaluation` is stacked on draft #187, unmerged. Frozen cutoff candidate
+and new question wording pass 48/48: root 24, independent validation 12/test 12. Installed gold 48/48
+and 464 source checks; 48 actual terminal calls, 56 tool starts, 28 exact saves. See
+[provenance/results/remaining gates](fresh-language-v3-evaluation.md). Version3 includes retired
+language/control lineage; historical version2 remains unchanged. Independent evaluator review and
+explicit author data/results audit passed. This is language-only evidence over known correlated
+sources, not source expansion or broad accuracy. Full G2 adversarial/release, comprehensive browser
+accessibility, deployment and B2 expansion remain separate open gates. Historical control misses
+remain retained.
+
 ## Cutoff intent development continuation — 2026-10-04
 
 `codex/cutoff-intent-development` is stacked on draft #186. Matching review-cutoff wording is

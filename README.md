@@ -137,3 +137,10 @@ The [cutoff intent development continuation](docs/project/cutoff-intent-developm
 26/28 candidate controls,48/48 inspected-language regression and9/9 original browser trials on the
 unmerged draft stack. Two valid-request abstentions remain. The prior language cohort is retired
 for tuning; these are development observations, not fresh quality or full G2 readiness.
+
+
+The [fresh v3 candidate evaluation](docs/project/fresh-language-v3-evaluation.md) passes 48/48 new
+questions, including 24 independently authored questions, on the unchanged cutoff candidate.
+Installed 48 gold/464 source checks and 48 model calls/56 tools/28 exact saves reconcile. This unmerged
+language-only result keeps full G2/release, comprehensive accessibility, deployment and source
+expansion separate; the source corpus remains four known projects.

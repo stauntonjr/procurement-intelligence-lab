@@ -160,3 +160,14 @@ Baseline25/28 and candidate26/28 controls retain all failures; candidate inspect
 regression48/48 and original browser9/9 pass.113 calls/124 tool starts/36 saves, unchanged numeric
 policy/sources; old cohort retired. [Evidence/limits](../project/cutoff-intent-development.md).
 Global not_ready, broader Issues open, fresh evaluation/release/deployment/expansion gated.
+
+
+## Fresh language v3 candidate evaluation branch — 2026-10-04
+
+Primary #72/M9, part of #53/#70/#71; stacked on draft #187, unmerged. Frozen cutoff candidate
+passes new wording 48/48 (root 24, independently authored validation 12/test 12). Installed 48 gold
+and 464 source checks;48 terminal calls, 56 tools, 28 saves; one attempt each, no tuning/retry.
+[Evidence and remaining gates](../project/fresh-language-v3-evaluation.md). Expanded seven-file
+question lineage preserves historical version2. Source/gold/runtime unchanged; known correlation
+prevents source/statistical/causal claims. Full G2 adversarial/release, comprehensive accessibility,
+deployment and B2 expansion remain open; four projects/24 workbooks/960 source rows unchanged.
