@@ -127,3 +127,11 @@ abstentions retained and rejected unsafe candidate preserved. All original split
 inspected development data. See [durable experiment](../project/intent-contract-development.md).
 Fresh independently authored evaluation, full G2/browser/accessibility/deployment and tiny-fixture
 live acceptance stay open. Four projects/24workbooks/960source rows remain; no B2 expansion.
+
+### Real browser review acceptance branch — 2026-10-04
+
+#74 (M9), part of #53/#67/#68/#72/#73: actual clean installed browser source/review/restart
+walkthrough, credential-free wide/narrow screenshots and application ledger reconciliation.
+Three fixture and 14 authored live submissions pass; selected focus/reflow defects corrected.
+Stacked on PR183, unmerged. See [acceptance and remaining gates](../project/browser-live-acceptance.md).
+Held-out evaluation, tiny-fixture live routing, full G2 and deployment remain open; no expansion.

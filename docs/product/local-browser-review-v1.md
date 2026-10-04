@@ -54,3 +54,11 @@ Suggested fixture walkthrough: Atlas GPU-A mismatch (8 required, 6 observed); GP
 requirement; GPU-D missing observation. Stop/restart the server while awaiting review, sign in,
 select the owned run, recover and approve twice. Verify the same saved-result ID. These are
 synthetic deterministic examples, not real-model quality or production procurement evidence.
+
+## Actual installed browser evidence
+
+The stacked [2026-10-04 acceptance slice](../project/browser-live-acceptance.md) adds real
+headless Chromium keyboard/source/review/restart and representative narrow/wide checks.
+Successful sign-in focuses the request field; a darker focus ring and wrapped review identifiers
+correct observed browser defects. This supersedes the earlier absence of browser evidence for
+these selected interactions, while deployment and comprehensive accessibility remain separate.

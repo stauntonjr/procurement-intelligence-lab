@@ -1,5 +1,16 @@
 # Project handoff
 
+## Active real-browser acceptance continuation — 2026-10-04
+
+`codex/browser-live-acceptance`, stacked on draft PR #183, verifies a clean installed
+reviewer in actual local headless Chromium. Keyboard sign-in/focus contrast and narrow
+identifier wrapping are fixed. Three fixture and 14 authored live Qwen browser submissions
+pass source/review/restart/save accounting; eight live saves, four tool-free abstentions,
+and two rejected investigations. See [walkthrough, artifacts and remaining gates](browser-live-acceptance.md)
+and [compact versions/results](browser-live-results.json). This is branch work, not main,
+held-out quality, comprehensive accessibility or deployment. Fresh evaluation, tiny-fixture
+live routing and full G2/release acceptance remain open; corpus expansion stays gated.
+
 ## Active local browser review continuation — 2026-10-03
 
 `codex/browser-review-workflow` is stacked on open PR #179. It adds a loopback-only
