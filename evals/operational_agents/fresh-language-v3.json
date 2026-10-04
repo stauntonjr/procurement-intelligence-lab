@@ -1,0 +1,245 @@
+{
+  "schema_version": 3,
+  "queries_sha256": "cd95be7f781236c10619f5f1c9727abedff45e1b38450531330ed7891f1cfdb4",
+  "contract": "ADR-032 literal item and explicit caller date; evaluator-only expectations",
+  "cases": [
+    {
+      "id": "atlas-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "atlas-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "borealis-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "delta-ambiguous",
+      "expected": "clarify"
+    }
+  ],
+  "evaluation_use": "fresh_language_holdout",
+  "limits": "New language only over known inspected synthetic source scenarios. Root development24; independent fresh-context validation12/test12 authored before old questions/model outputs/runtime prompt exposure. Candidate runtime frozen before authoring, one attempt each; no tuning or retry. Known source/schema/scenario ancestry and vocabularies remain correlated, not new-source/project/blind/statistical quality. No browser/deployment/fullG2/expansion acceptance.",
+  "freshness": {
+    "runtime_git_revision": "f583e97d566d2e0d86b531afae6991fa27796386",
+    "runtime_versions": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+    },
+    "source_reuse": "previously_inspected_source_scenarios",
+    "heldout_author_file": "independent-language-author.json",
+    "heldout_author_sha256": "d8565e15de68c55311aab21255e59186371ae30ad4239b3cbb4e7f0dec7b9339",
+    "prior_question_files": [
+      {
+        "path": "evals/procurement_corpus/v1/queries.json",
+        "sha256": "fa97639cf0d7481aa77519a49630b947352aef95f23d1a57204a3415294335d5"
+      },
+      {
+        "path": "evals/operational_agents/intent-development-v1.json",
+        "sha256": "5f7877a83a8f18b2563637dccef087161b859c6b52204dd10cf46558583df4dd"
+      },
+      {
+        "path": "evals/operational_agents/local-qwen-walkthrough-v1.json",
+        "sha256": "9484209f5a7bd8faad170e871add2321f7316f027a7006081eba045d7968a61d"
+      },
+      {
+        "path": "evals/operational_agents/browser-walkthrough-v1.json",
+        "sha256": "c28a5d284d7bf3c1b47e56990bd31e26f202892fc28e48ae09562bc1b0880c08"
+      },
+      {
+        "path": "evals/operational_agents/original-showcase-browser-v1.json",
+        "sha256": "a177eef1c022327c99e9272ca99c2e32ed1c8816be565f1e3f1ba6b34f3744cb"
+      },
+      {
+        "path": "evals/procurement_corpus/fresh-language-v2/queries.json",
+        "sha256": "6e86c26c8357397960c1667666a1eea0804089ddef1ee1db47797a24d802cdff"
+      },
+      {
+        "path": "evals/operational_agents/cutoff-development-v1.json",
+        "sha256": "3f1537103b9d3746320d58c14f364b0493a1f63238c9c5f3ffa1dfad48e41077"
+      }
+    ]
+  }
+}

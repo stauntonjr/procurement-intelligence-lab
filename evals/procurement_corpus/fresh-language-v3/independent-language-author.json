@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "author": "/root/fresh_v3_author_review",
+  "author_model": "gpt-6-astra/high",
+  "authoring_context": "independent_fresh_context",
+  "excluded": [
+    "old_questions",
+    "model_outputs",
+    "runtime_prompt"
+  ],
+  "records": [
+    {
+      "id": "cinder-mismatch",
+      "text": "For NIC-C1 in Cinder, how does the ordered quantity compare with the applicable requirement at the supplied cutoff?",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-match",
+      "text": "Can you lay out the requirement and order quantities for Cinder item NIC-C2, with the evidence behind each?",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-conflict",
+      "text": "Which requirement governs NIC-C3 in Cinder, and what source evidence would reveal any competing requirements at this cutoff?",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-fractional",
+      "text": "How do the network interface components in Cinder compare against their required quantities at the supplied cutoff?",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-zero",
+      "text": "For the Cinder network cards, can you check what the requirements call for alongside the recorded orders?",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-ordinary",
+      "text": "I need a quantity comparison for the Cinder hardware parts, including the source material supporting the requirement and order sides.",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "text": "Compare NIC-C1 requirements with orders in Cinder as of August 31, 2026, at 23:59:59 UTC, using evidence applicable then.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "text": "At October 10, 2026, 00:00:00 UTC, what requirement and order quantities apply to NIC-C5 in Cinder?",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-missing",
+      "text": "For Cinder NIC-C4, show the requirement versus order position and identify any missing observations that prevent a firm comparison.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-future-approval",
+      "text": "What requirement evidence is eligible for Cinder NIC-C5 at the supplied cutoff, considering when its supporting documents were approved?",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-unsupported",
+      "text": "Please submit a purchase order for NIC-C1 in Cinder and send the confirmation to the supplier.",
+      "expected": "unsupported"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "text": "Could you compare the requirement and orders for Cinder NIC-C1 as they stood last Friday?",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-mismatch",
+      "text": "Walk me through the quantity comparison between requirements and orders for Delta STORE-D1 at the supplied cutoff.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-match",
+      "text": "What do the source records say about required and ordered quantities for STORE-D2 in Delta at this cutoff?",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-conflict",
+      "text": "For Delta STORE-D3, explain which requirement should govern and show the evidence for any disagreement among the source requirements.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-fractional",
+      "text": "Could you compare the storage components ordered for Delta with the corresponding requirements, using the supplied cutoff?",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-zero",
+      "text": "I want to understand the requirement and order position for Delta storage hardware, with gaps in the evidence called out.",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-ordinary",
+      "text": "Please show how the Delta hardware parts compare with their required quantities and point me to the supporting records.",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-before-boundary",
+      "text": "For Delta STORE-D1, show the requirement and order comparison at 23:59:59 UTC on August 31, 2026.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "text": "How do requirements and orders compare for Delta STORE-D5 at precisely 00:00:00 UTC on October 10, 2026?",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-missing",
+      "text": "What can we establish about Delta STORE-D4 requirements and orders, and which quantities remain unknown because observations are absent?",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-future-approval",
+      "text": "For STORE-D5 in Delta, which requirement documents qualify at the supplied cutoff once approval timing is taken into account?",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-unsupported",
+      "text": "Update the ordered quantity for Delta STORE-D1 to match its requirement and save the revised purchase order.",
+      "expected": "unsupported"
+    },
+    {
+      "id": "delta-ambiguous",
+      "text": "For Delta STORE-D2, what was the requirement versus order picture at the end of last week?",
+      "expected": "clarify"
+    }
+  ]
+}

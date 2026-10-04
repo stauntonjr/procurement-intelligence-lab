@@ -17,14 +17,14 @@ pass. Costs/limits are recorded, not concealed as independent final-results revi
 
 ## Task 1: versioned lineage and actual caller
 
-- [ ] RED validator/scorer tests: v3 with expanded seven-file lineage accepted; retired v2 wording
+- [x] RED validator/scorer tests: v3 with expanded seven-file lineage accepted; retired v2 wording
   and cutoff-control replay rejected; omitted/changed lineage refused; old v1/v2 behavior unchanged.
-- [ ] Add PRIOR_FILES_V3 over the historical five plus fresh-language-v2/queries.json and
+- [x] Add PRIOR_FILES_V3 over the historical five plus fresh-language-v2/queries.json and
   cutoff-development-v1.json. validate_fresh accepts strict integer2/3 and selects exact lineage by
   version. load_pilot and actual main apply validation/bindings/fresh reporting for both2/3.
-- [ ] RED/GREEN actual evaluator main tests: v3startup48unknown/freshness/hash retention, runtime
+- [x] RED/GREEN actual evaluator main tests: v3startup48unknown/freshness/hash retention, runtime
   drift before model discovery, omitted retired lineage before composition. Existing legacy tests pass.
-- [ ] Commit evaluator code, run make check. No runtime/package/challenge implementation changes.
+- [x] Commit evaluator code, run make check. No runtime/package/challenge implementation changes.
 
 ## Task 2: independent authoring/review and one frozen live run
 

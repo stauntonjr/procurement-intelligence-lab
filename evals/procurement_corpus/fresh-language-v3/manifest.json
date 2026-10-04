@@ -1,0 +1,18 @@
+{
+  "schema_version": "procurement-corpus-eval/v1",
+  "project_splits": {
+    "atlas": "development",
+    "borealis": "development",
+    "cinder": "validation",
+    "delta": "test"
+  },
+  "gold_path": "pilot-gold.json",
+  "shared_ancestry": "All projects use the same source schema and renderer; quantities, vocabularies, and row ordering vary. This is a public development holdout, not a blind or contamination-proof benchmark.",
+  "interpretation_limit": "Natural-language text is authored for G2. G1 executes oracle-bound structured requests; it does not evaluate language interpretation or retrieval.",
+  "hashes": {
+    "queries.json": "cd95be7f781236c10619f5f1c9727abedff45e1b38450531330ed7891f1cfdb4",
+    "pilot-gold.json": "51fe047333e022fc670e2fb0bf982e9b6cf37cdad741442b8d193dec245c35af",
+    "qrels.json": "59c3c0372335ec8bb7bf03f5280ab1b4b8cab638a96cc26ffd5b21c301205866"
+  },
+  "runtime_manifest_sha256": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64"
+}
