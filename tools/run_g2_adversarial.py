@@ -10,6 +10,7 @@ import subprocess
 import time
 from collections import Counter
 from contextlib import contextmanager
+from datetime import datetime
 from hashlib import sha256
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -18,6 +19,12 @@ from typing import Any
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
+from procurement_intelligence_lab.adapters.sqlite_agent_runs import decode_run
+from procurement_intelligence_lab.platform.semantics.agent_runs import (
+    AgentEvent,
+    AgentEventKind,
+    validate_event,
+)
 from tools.run_g2_pilot import baseline_facts, installed_inspector
 
 CASES = {
@@ -64,6 +71,7 @@ def summarize(records: list[dict[str, Any]], protocol_only: bool = False) -> dic
         valid = (
             counts_known
             and row.get("attempt_complete") is True
+            and row.get("evidence_outcome") == "pass"
             and calls == (0 if name == "request_guards" else 1)
         )
         status = row.get("outcome", "unknown")
@@ -210,10 +218,148 @@ def journal(directory: Path) -> dict[str, Any]:
         calls = [
             json.loads(row[0]) for row in db.execute("SELECT payload FROM interpretation_calls")
         ]
-        events = [json.loads(row[0]) for row in db.execute("SELECT payload FROM agent_events")]
+        runs = [json.loads(row[0]) for row in db.execute("SELECT payload FROM agent_runs")]
+        events = [
+            json.loads(row[0])
+            for row in db.execute("SELECT payload FROM agent_events ORDER BY sequence")
+        ]
         saved = [json.loads(row[0]) for row in db.execute("SELECT payload FROM saved_briefs")]
-        briefs = db.execute("SELECT COUNT(*) FROM review_briefs").fetchone()[0]
-    return {"calls": calls, "events": events, "saved": saved, "brief_count": briefs}
+        briefs = [json.loads(row[0]) for row in db.execute("SELECT payload FROM review_briefs")]
+        receipts = [json.loads(row[0]) for row in db.execute("SELECT payload FROM brief_receipts")]
+    return {
+        "calls": calls,
+        "runs": runs,
+        "events": events,
+        "saved": saved,
+        "briefs": briefs,
+        "receipts": receipts,
+        "brief_count": len(briefs),
+    }
+
+
+def audit_evidence(
+    name: str, audit: dict[str, Any], observations: dict[str, Any], versions: dict[str, Any]
+) -> dict[str, Any]:
+    """Require positive case-specific evidence, preserving omissions as unknown."""
+    missing: list[str] = []
+    conflicts: list[str] = []
+    accepted = name in ("expired_approval", "changed_snapshot", "review_crash_scope")
+    expected_runs = int(name != "request_guards")
+    for key, expected in (
+        ("runs", expected_runs),
+        ("calls", expected_runs),
+        ("briefs", int(accepted)),
+        ("receipts", int(accepted)),
+        ("saved", int(name == "review_crash_scope")),
+    ):
+        actual = len(audit[key])
+        if actual < expected:
+            missing.append("missing_" + key)
+        elif actual > expected:
+            conflicts.append("extra_" + key)
+    if not expected_runs:
+        if audit["events"]:
+            conflicts.append("unauthorized_events")
+    elif len(audit["runs"]) == len(audit["calls"]) == 1:
+        raw_run, call_row = audit["runs"][0], audit["calls"][0]
+        run = decode_run(json.dumps(raw_run))
+        if (
+            (run.principal_id, run.tenant_id, run.project_id, run.site_id)
+            != ("local-demo", "synthetic-tenant", "atlas", "lab")
+            or raw_run["versions"] != versions
+            or run.execution_kind.value != "live"
+        ):
+            conflicts.append("foreign_run_binding")
+        ask = observations.get("ask", {})
+        observed_id = ask.get("interpretation", {}).get("run_id")
+        if call_row["run_id"] != run.run_id or (observed_id and observed_id != run.run_id):
+            conflicts.append("foreign_call_or_observation")
+        expected_events: list[tuple[str, str | None]] = [("run_started", None)]
+        if name == "tool_timeout":
+            expected_events += [
+                ("tool_started", "investigate_quantity"),
+                ("tool_failed", "investigate_quantity"),
+            ]
+        elif accepted:
+            expected_events += [
+                ("tool_started", "investigate_quantity"),
+                ("tool_succeeded", "investigate_quantity"),
+                ("tool_started", "inspect_source"),
+                ("tool_succeeded", "inspect_source"),
+            ]
+            if name == "review_crash_scope":
+                expected_events.append(("run_completed", None))
+        unique: dict[str, AgentEvent] = {}
+        for raw in audit["events"]:
+            event = AgentEvent(
+                **(
+                    raw
+                    | {
+                        "kind": AgentEventKind(raw["kind"]),
+                        "occurred_at": datetime.fromisoformat(raw["occurred_at"]),
+                    }
+                )
+            )
+            if event.event_id in unique:
+                if unique[event.event_id] != event:
+                    conflicts.append("conflicting_event_replay")
+                continue
+            if (event.run_id, event.query_id, event.attempt_id) != (
+                run.run_id,
+                run.query_id,
+                run.attempt_id,
+            ):
+                conflicts.append("foreign_event")
+            elif event.kind != AgentEventKind.RUN_STARTED and event.parent_id not in unique:
+                missing.append("missing_causal_parent")
+            else:
+                try:
+                    validate_event(run, tuple(unique.values()), event)
+                except ValueError:
+                    conflicts.append("invalid_lifecycle")
+            if event.tool_name and event.tool_version != versions["tool_schema"]:
+                conflicts.append("foreign_tool_version")
+            if event.kind == AgentEventKind.TOOL_FAILED and event.error_code != "tool_timeout":
+                conflicts.append("unexpected_tool_failure")
+            unique[event.event_id] = event
+        actual = Counter((event.kind.value, event.tool_name) for event in unique.values())
+        required = Counter(expected_events)
+        if required - actual:
+            missing.append("missing_required_events")
+        if actual - required:
+            conflicts.append("unexpected_events")
+        for brief in audit["briefs"]:
+            visible = ask.get("workflow", {}).get("brief", {})
+            if brief["run"] != raw_run or any(brief.get(k) != v for k, v in visible.items()):
+                conflicts.append("foreign_brief")
+            investigation = next(
+                (
+                    e
+                    for e in unique.values()
+                    if e.kind == AgentEventKind.TOOL_SUCCEEDED
+                    and e.tool_name == "investigate_quantity"
+                ),
+                None,
+            )
+            if investigation and investigation.snapshot_id != brief["snapshot_id"]:
+                conflicts.append("foreign_snapshot")
+            for receipt in audit["receipts"]:
+                if any(receipt[k] != brief[k] for k in ("brief_id", "digest")) or (
+                    receipt["run_id"],
+                    receipt["reviewer_id"],
+                    receipt["decision"],
+                ) != (run.run_id, run.principal_id, "approve"):
+                    conflicts.append("foreign_approval_binding")
+            for saved in audit["saved"]:
+                if (
+                    any(saved[k] != brief[k] for k in ("brief_id", "digest", "idempotency_key"))
+                    or saved["run_id"] != run.run_id
+                ):
+                    conflicts.append("foreign_saved_binding")
+    return {
+        "outcome": "fail" if conflicts else "unknown" if missing else "pass",
+        "errors": conflicts + missing,
+    }
 
 
 def require(condition: bool, reason: str) -> None:
@@ -534,6 +680,14 @@ def run_case(
                 tool_failures=sum(e["kind"] == "tool_failed" for e in audit["events"]),
                 saved_count=len(audit["saved"]),
             )
+            try:
+                evidence = audit_evidence(name, audit, observations, record.get("versions", {}))
+            except (ValueError, TypeError, KeyError, RuntimeError):
+                evidence = {"outcome": "fail", "errors": ["invalid_audit_record"]}
+            record["evidence_outcome"] = evidence["outcome"]
+            record["evidence_errors"] = evidence["errors"]
+            if record["outcome"] == "pass" and evidence["outcome"] != "pass":
+                record["outcome"] = evidence["outcome"]
         except (OSError, sqlite3.Error):
             record.update(
                 journal=None,

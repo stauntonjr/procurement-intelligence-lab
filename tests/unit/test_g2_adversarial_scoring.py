@@ -14,6 +14,7 @@ def observations() -> list[dict[str, Any]]:
             "outcome": "pass",
             "kind": kind,
             "attempt_complete": True,
+            "evidence_outcome": "pass",
             "terminal_calls": 0 if name == "request_guards" else 1,
             "real_qwen_calls": int(kind == "real_qwen"),
             "controlled_protocol_calls": int(
@@ -69,3 +70,12 @@ def test_failed_guard_keeps_actual_terminal_call_in_denominator() -> None:
 def test_missing_attempt_count_is_unknown_instead_of_zero():
     report = summarize(observations()[:-1])
     assert report["real_qwen_calls"] is None
+
+
+def test_complete_calls_without_required_audit_remain_unknown():
+    rows = observations()
+    rows[-1].pop("evidence_outcome")
+    report = summarize(rows)
+    assert report["counts"]["unknown"] == 1
+    assert report["real_qwen_calls"] == 5
+    assert not report["ready"]

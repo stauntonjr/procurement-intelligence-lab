@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from tools import run_g2_adversarial as evaluator
 from tools.run_g2_adversarial import protocol_endpoint, run_case
 
 
@@ -67,4 +68,45 @@ def test_failed_guard_still_reports_actual_call_and_tool_attempts(tmp_path: Path
     assert row["terminal_calls"] == row["controlled_protocol_calls"] == calls[0] == 1
     assert row["real_qwen_calls"] == 0
     assert row["tool_starts"] == 2
+    assert row["saved_count"] == 0
+
+
+@pytest.mark.parametrize(
+    ("damage", "expected"),
+    [
+        ("empty", "unknown"),
+        ("partial", "unknown"),
+        ("foreign", "fail"),
+        ("missing_run", "unknown"),
+        ("foreign_receipt", "fail"),
+    ],
+)
+def test_missing_or_foreign_audit_cannot_pass(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, damage: str, expected: str
+) -> None:
+    original = evaluator.journal
+
+    def damaged(directory: Path):
+        audit = original(directory)
+        if damage == "empty":
+            audit["events"] = []
+        elif damage == "partial":
+            audit["events"] = [e for e in audit["events"] if e["kind"] != "tool_succeeded"]
+        elif damage == "foreign" and audit["events"]:
+            audit["events"][-1]["run_id"] = "foreign"
+        elif damage == "missing_run":
+            audit["runs"] = []
+        elif damage == "foreign_receipt" and audit.get("receipts"):
+            audit["receipts"][0]["run_id"] = "foreign"
+        return audit
+
+    monkeypatch.setattr(evaluator, "journal", damaged)
+    with protocol_endpoint("valid") as (endpoint, calls):
+        row = run_case(
+            "expired_approval", sys.executable, tmp_path, endpoint, kind="controlled_protocol"
+        )
+    assert row["outcome"] == expected, row
+    assert row["evidence_outcome"] == expected
+    assert row["attempt_complete"] is True
+    assert row["controlled_protocol_calls"] == calls[0] == 1
     assert row["saved_count"] == 0

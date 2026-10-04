@@ -31,7 +31,7 @@ No model reload, paid provider, trace export, source/gold change, corpus expansi
 
 A guard passing does not turn the injected operational failure into success. The report retains
 actual HTTP/model status, error reason, tool-failed events and durable calls alongside the probe
-outcome. Missing records remain unknown; missing call counts remain null. Failed guards retain
+outcome. Missing records or required events remain unknown; missing call counts remain null. Case-specific causal events must agree with the owned run, brief snapshot and original approval/save bindings before acceptance; approval-awaiting and expected failed trajectories do not require a fabricated successful run completion. Failed guards retain
 actual calls/tools/saves instead of excluding them from totals. Protocol-only execution preserves
 five not-applicable live cases and cannot report live adversarial acceptance.
 
