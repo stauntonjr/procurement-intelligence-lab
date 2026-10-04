@@ -1,43 +1,45 @@
 {
-    "schema_version": 1,
-    "execution_use": "original_fixture_browser_compatibility_not_model_quality",
-    "project": "synthetic-project",
-    "site": "synthetic-site",
-    "as_of": "2026-01-15T00:00:00Z",
-    "question": "Compare GPU-A orders with its governing requirement and show evidence.",
-    "repetitions": 3,
-    "cases": [
-        {
-            "sources": "showcase-a-order",
-            "required_quantity": "4",
-            "ordered_quantity": "2",
-            "status": "anomaly",
-            "reason": null,
-            "evidence_ids": [
-                "evidence:71bdac429103510a5e6478dc",
-                "evidence:fd11c98ba675cb17e6a88032",
-            ],
-        },
-        {
-            "sources": "showcase-a-b-order",
-            "required_quantity": null,
-            "ordered_quantity": "2",
-            "status": "not_assessed",
-            "reason": "unresolved_requirement",
-            "evidence_ids": [
-                "evidence:71bdac429103510a5e6478dc",
-                "evidence:4062b7a560cd9c03821947a3",
-                "evidence:fd11c98ba675cb17e6a88032",
-            ],
-        },
-        {
-            "sources": "showcase-a-only",
-            "required_quantity": "4",
-            "ordered_quantity": null,
-            "status": "not_assessed",
-            "reason": "missing_observation",
-            "evidence_ids": ["evidence:71bdac429103510a5e6478dc"],
-        },
-    ],
-    "limits": "One authored question across three fixed original source sets, three repetitions each: nine actual local Qwen calls. No source/case/outcome labels or numerical expectations enter the model. Original observed order 2 remains unassessed for unresolved requirements. Not fresh held-out accuracy or deployment/full G2 acceptance. No prompt tuning or retry.",
+  "schema_version": 1,
+  "execution_use": "original_fixture_browser_compatibility_not_model_quality",
+  "project": "synthetic-project",
+  "site": "synthetic-site",
+  "as_of": "2026-01-15T00:00:00Z",
+  "question": "Compare GPU-A orders with its governing requirement and show evidence.",
+  "repetitions": 3,
+  "cases": [
+    {
+      "sources": "showcase-a-order",
+      "required_quantity": "4",
+      "ordered_quantity": "2",
+      "status": "anomaly",
+      "reason": null,
+      "evidence_ids": [
+        "evidence:71bdac429103510a5e6478dc",
+        "evidence:fd11c98ba675cb17e6a88032"
+      ]
+    },
+    {
+      "sources": "showcase-a-b-order",
+      "required_quantity": null,
+      "ordered_quantity": "2",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "evidence_ids": [
+        "evidence:71bdac429103510a5e6478dc",
+        "evidence:4062b7a560cd9c03821947a3",
+        "evidence:fd11c98ba675cb17e6a88032"
+      ]
+    },
+    {
+      "sources": "showcase-a-only",
+      "required_quantity": "4",
+      "ordered_quantity": null,
+      "status": "not_assessed",
+      "reason": "missing_observation",
+      "evidence_ids": [
+        "evidence:71bdac429103510a5e6478dc"
+      ]
+    }
+  ],
+  "limits": "One authored question across three fixed original source sets, three repetitions each: nine actual local Qwen calls. No source/case/outcome labels or numerical expectations enter the model. Original observed order 2 remains unassessed for unresolved requirements. Not fresh held-out accuracy or deployment/full G2 acceptance. No prompt tuning or retry."
 }
