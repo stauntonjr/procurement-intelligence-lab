@@ -37,6 +37,9 @@ def test_public_runner_finalizes_startup_timeout(
     assert run_g2_pilot.main() == 1
     report = json.loads(output.read_text())
     assert report["acceptance"] == "not_ready"
+    assert report["evaluation_use"] == "development_regression"
+    assert "inspected" in report["limits"]
+    assert "not held-out" in report["limits"]
     assert report["interpretation"]["counts"] == {
         "pass": 0,
         "fail": 0,

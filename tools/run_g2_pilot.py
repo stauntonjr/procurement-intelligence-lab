@@ -375,6 +375,7 @@ def main() -> int:
     report: dict[str, Any] = {
         "schema_version": 1,
         "execution_kind": "live",
+        "evaluation_use": "development_regression",
         "versions": versions,
         "interpretation_manifest_sha256": sha256(PILOT.read_bytes()).hexdigest(),
         "dataset_manifest_sha256": sha256((DATASET / "manifest.json").read_bytes()).hexdigest(),
@@ -383,7 +384,7 @@ def main() -> int:
         ).strip(),
         "runs": [],
         "acceptance": "not_ready",
-        "limits": "Synthetic public development-held-out project split with shared generator/query ancestry; no blind/general accuracy, browser/deployment, full adversarial G2 or expansion acceptance. One attempt per original question; no tuning.",
+        "limits": "Previously inspected public synthetic cases: development regression, not held-out. Historical project split labels are accounting only; shared generator/query ancestry. No blind/general accuracy, browser/deployment, full adversarial G2 or expansion acceptance. One attempt per question per configuration; prior results remain immutable.",
     }
 
     def retain() -> None:
