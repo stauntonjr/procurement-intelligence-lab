@@ -353,12 +353,19 @@ def main() -> int:
     parser.add_argument("--python", type=Path, required=True)
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--dataset", type=Path, default=DATASET)
+    parser.add_argument("--manifest", type=Path, default=PILOT)
     args = parser.parse_args()
     if args.database.exists() or args.output.exists():
         raise ValueError("fresh database/output required; never overwrite a prior pilot")
-    cases = load_pilot()
+    cases = load_pilot(args.dataset, args.manifest)
+    frozen = json.loads(args.manifest.read_bytes())
     composition = compose_live(args.database)
     versions = asdict(composition.runs.versions)
+    if frozen["schema_version"] == 2:
+        from tools.fresh_g2_cohort import validate_fresh
+
+        validate_fresh(args.dataset, args.manifest, versions)
     # Verify the clean artifact rather than relying on its directory name.
     script = (
         "import json,tempfile; from pathlib import Path; from dataclasses import asdict; "
@@ -375,10 +382,14 @@ def main() -> int:
     report: dict[str, Any] = {
         "schema_version": 1,
         "execution_kind": "live",
-        "evaluation_use": "development_regression",
+        "evaluation_use": frozen["evaluation_use"]
+        if frozen["schema_version"] == 2
+        else "development_regression",
         "versions": versions,
-        "interpretation_manifest_sha256": sha256(PILOT.read_bytes()).hexdigest(),
-        "dataset_manifest_sha256": sha256((DATASET / "manifest.json").read_bytes()).hexdigest(),
+        "interpretation_manifest_sha256": sha256(args.manifest.read_bytes()).hexdigest(),
+        "dataset_manifest_sha256": sha256(
+            (args.dataset / "manifest.json").read_bytes()
+        ).hexdigest(),
         "application_git_revision": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], text=True
         ).strip(),
@@ -386,6 +397,10 @@ def main() -> int:
         "acceptance": "not_ready",
         "limits": "Previously inspected public synthetic cases: development regression, not held-out. Historical project split labels are accounting only; shared generator/query ancestry. No blind/general accuracy, browser/deployment, full adversarial G2 or expansion acceptance. One attempt per case in this run; overlapping development runs are reported separately. Prior results remain immutable.",
     }
+
+    if frozen["schema_version"] == 2:
+        report["limits"] = frozen["limits"]
+        report["freshness"] = frozen["freshness"]
 
     def retain() -> None:
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -420,7 +435,7 @@ def main() -> int:
         with urlopen("http://127.0.0.1:8000/version", timeout=5) as response:
             report["server"] = json.load(response)
         with installed_inspector(args.python) as base_url:
-            report["structured"] = evaluate(base_url)
+            report["structured"] = evaluate(base_url, args.dataset)
             retain()
             if not report["structured"]["ready"]:
                 return 1

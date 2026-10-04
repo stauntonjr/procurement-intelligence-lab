@@ -98,3 +98,18 @@ def test_malformed_public_brief_is_failure(brief: Any) -> None:
     outcome = accepted(case)
     outcome["workflow"]["brief"] = brief
     assert score_intent(case, outcome)
+
+
+@pytest.mark.parametrize("mutation", ["fresh_claim", "boolean_version"])
+def test_legacy_manifest_cannot_claim_freshness_without_provenance(
+    tmp_path: Path, mutation: str
+) -> None:
+    data = json.loads(MANIFEST.read_text())
+    if mutation == "fresh_claim":
+        data["evaluation_use"] = "fresh_language_holdout"
+    else:
+        data["schema_version"] = True
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps(data))
+    with pytest.raises(ValueError):
+        load_pilot(manifest=path)

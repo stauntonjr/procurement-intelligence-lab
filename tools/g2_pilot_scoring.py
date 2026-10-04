@@ -18,11 +18,19 @@ def load_pilot(dataset: Path = DATASET, manifest: Path = PILOT) -> list[dict[str
     frozen = json.loads(manifest.read_bytes())
     data = load_dataset(dataset)
     if (
-        frozen.get("schema_version") not in (1, 2)
+        type(frozen.get("schema_version")) is not int
+        or frozen.get("schema_version") not in (1, 2)
         or frozen.get("queries_sha256")
         != sha256((dataset / "queries.json").read_bytes()).hexdigest()
     ):
         raise ValueError("interpretation manifest differs from frozen queries")
+    if frozen["schema_version"] == 1 and set(frozen) != {
+        "schema_version",
+        "queries_sha256",
+        "contract",
+        "cases",
+    }:
+        raise ValueError("legacy manifest cannot claim fresh provenance")
     if frozen["schema_version"] == 2:
         from tools.fresh_g2_cohort import validate_fresh
 

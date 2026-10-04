@@ -3,9 +3,9 @@
 import json
 import shutil
 from copy import deepcopy
-from typing import Any
 from hashlib import sha256
 from pathlib import Path
+from typing import Any
 
 import pytest
 
