@@ -286,7 +286,7 @@ def main() -> int:
                     raise PublicFailure("baseline unavailable")
                 expected = baseline_facts(body)
 
-            def invoke(*fields):
+            def invoke(*fields, case=case):
                 result = subprocess.run(
                     [
                         str(args.python.absolute()),
@@ -309,7 +309,7 @@ def main() -> int:
                     raise PublicFailure(body.get("code", "public CLI failed"))
                 return body
 
-            def retain_case(record):
+            def retain_case(record, case=case):
                 if report["runs"] and report["runs"][-1]["id"] == case["id"]:
                     report["runs"][-1] = record
                 else:

@@ -1,8 +1,8 @@
 """Runner failure records must survive partial public calls."""
 
 import subprocess
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 import pytest
 
