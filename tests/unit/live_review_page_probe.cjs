@@ -12,7 +12,7 @@ const context={document,URLSearchParams,FormData,fetch};vm.createContext(context
 async function settle(){for(let i=0;i<20;i++)await Promise.resolve();}
 function visible(node){for(let p=node;p;p=p.parent)if(p.hidden)return false;return true;}
 (async()=>{
-const auth=ids.get('auth');auth.fields.token='test-only-capability-not-a-real-secret';auth.listeners.submit({preventDefault(){},target:auth});await settle();
+const auth=ids.get('auth');auth.fields.token='test-only-capability-not-a-real-secret';auth.listeners.submit({preventDefault(){},target:auth});await settle();assert(ids.get('request-input')?.focused,'sign-in must focus the first request field');
 const select=ids.get('runs').children[0].children[0];select.listeners.click();await settle();assert(!ids.get('error').hidden,'failed status should be shown');
 const recover=ids.get('recover');assert.equal(recover.disabled,false,'a selected persisted run must remain recoverable after failed status');assert(visible(recover),'recovery must be visible without a brief');assert.equal(ids.get('approve').disabled,true,'approval must require a loaded exact brief');
 recover.listeners.click();await settle();const call=calls.find(c=>c.path==='/api/recover');assert(call,'recovery should invoke the public endpoint');assert.deepEqual(JSON.parse(call.options.body),{run_id:'recoverable-run'});assert(!ids.get('review').hidden);assert(ids.get('digest').textContent.includes('exact-digest'));assert(ids.get('outcome').textContent.includes('Required: unresolved'));assert(ids.get('outcome').textContent.includes('Assessed ordered: not established'));assert.equal(ids.get('approve').disabled,false);assert(ids.get('review-title').focused);

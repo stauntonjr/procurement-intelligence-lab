@@ -20,6 +20,7 @@ dev = [
   "pytest-cov>=6.2",
   "ruff>=0.8",
   "pyright>=1.1",
+  "playwright==1.63.0",
 ]
 release = ["python-semantic-release>=10.0"]
 
