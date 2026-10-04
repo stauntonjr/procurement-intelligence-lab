@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "path": "showcase_bom_revision_a.xlsx",
+      "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8"
+    },
+    {
+      "path": "showcase_bom_revision_b.xlsx",
+      "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2"
+    },
+    {
+      "path": "showcase_order_short.xlsx",
+      "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337"
+    }
+  ]
+}

@@ -3,11 +3,10 @@
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import datetime
-from typing import TypeVar
+from typing import Protocol, TypeVar
 
 from procurement_intelligence_lab.application.agent_runs import AgentRunService
 from procurement_intelligence_lab.application.corpus_investigation import (
-    CorpusInvestigationService,
     InvestigationRequest,
     InvestigationResult,
 )
@@ -82,9 +81,15 @@ class ToolExecutionError(RuntimeError):
         return {"code": self.code.value, "category": self.category.value}
 
 
+class Investigator(Protocol):
+    def investigate(
+        self, request: InvestigationRequest, *, context: RequestContext
+    ) -> InvestigationResult: ...
+
+
 @dataclass(frozen=True)
 class CorpusAgentTools:
-    investigator: CorpusInvestigationService
+    investigator: Investigator
     lookup: CorpusSourceLookup
     runs: AgentRunService
 

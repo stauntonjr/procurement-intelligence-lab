@@ -254,3 +254,13 @@ class SyntheticCorpusReader:
         if source is None:
             raise CorpusNotFoundError("evidence not found in admitted scope")
         return source
+
+    def items(self, *, context: RequestContext) -> tuple[str, ...]:
+        return tuple(sorted({fact.canonical_key for fact in self.inventory(context=context).facts}))
+
+    def snapshot_id(self, *, context: RequestContext) -> str:
+        return self.inventory(context=context).snapshot_id
+
+    def source_ids(self, *, context: RequestContext) -> frozenset[str]:
+        self._authorize(context, Permission.READ_EVIDENCE)
+        return frozenset(self._admit(context)[1])
