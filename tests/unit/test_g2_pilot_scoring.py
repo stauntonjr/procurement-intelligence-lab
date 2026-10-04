@@ -90,3 +90,11 @@ def test_missing_duplicate_and_invalid_outcomes_fail_closed() -> None:
     ):
         with pytest.raises(ValueError):
             summarize(cases, results)
+
+
+@pytest.mark.parametrize("brief", [None, [], {"run": None}, {"run": []}])
+def test_malformed_public_brief_is_failure(brief: Any) -> None:
+    case = load_pilot()[0]
+    outcome = accepted(case)
+    outcome["workflow"]["brief"] = brief
+    assert score_intent(case, outcome)

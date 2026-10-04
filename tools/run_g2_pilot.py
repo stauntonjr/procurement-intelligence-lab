@@ -9,12 +9,14 @@ import time
 from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import asdict
+from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
+from procurement_intelligence_lab.adapters.sqlite_interpretation import SqliteInterpretationStore
 from procurement_intelligence_lab.application.agent_trajectory import evaluate_trajectory
 from procurement_intelligence_lab.interfaces.live_review import compose_live
 from procurement_intelligence_lab.platform.semantics.agent_runs import (
@@ -201,6 +203,60 @@ def score_ledger(
     }
 
 
+def audit_attempts(database: Path, cases: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    composition = compose_live(database)
+    journal = SqliteInterpretationStore(database)
+    rows = []
+    for case in cases:
+        context = RequestContext(
+            "local-demo",
+            "synthetic-tenant",
+            case["project"],
+            "lab",
+            frozenset(Permission),
+            "pilot-audit",
+        )
+        expected_hash = sha256(case["question"].encode()).hexdigest()
+        matches = []
+        for run in composition.runs.recent(context=context):
+            call = journal.get(run.run_id)
+            if call.question_hash == expected_hash and call.as_of == datetime.fromisoformat(
+                case["as_of"]
+            ):
+                matches.append((run, call))
+        if len(matches) != 1:
+            rows.append(
+                {"id": case["id"], "model_calls": None, "error": "missing_or_duplicate_attempt"}
+            )
+            continue
+        run, call = matches[0]
+        require_live_run(run_dto(run), case, call.run_id, asdict(composition.runs.versions))
+        events = composition.runs.events(run.run_id, context=context)
+        rows.append(
+            {
+                "id": case["id"],
+                "run_id": run.run_id,
+                "interpretation": asdict(call),
+                "model_calls": None if call.status == "pending" else 1,
+                "tool_calls": sum(e.kind == AgentEventKind.TOOL_STARTED for e in events),
+                "saved_result_count": len(saved_records(database, run.run_id)),
+            }
+        )
+    ids = [r["run_id"] for r in rows if "run_id" in r]
+    if len(ids) != len(set(ids)):
+        raise ValueError("independent examples reused a run")
+    return rows
+
+
+def attempts_complete(cases: list[dict[str, Any]], rows: list[dict[str, Any]]) -> bool:
+    return (
+        len(rows) == len(cases)
+        and {r["id"] for r in rows} == {c["id"] for c in cases}
+        and len({r.get("run_id") for r in rows}) == len(cases)
+        and all(r.get("model_calls") == 1 and r.get("run_id") for r in rows)
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-live", action="store_true", required=True)
@@ -319,6 +375,8 @@ def main() -> int:
             record = evaluate_case(case, expected, invoke, audit, retain_case)
             print(case["id"], record["outcome"], record["errors"], flush=True)
     report["interpretation"] = summarize(cases, report["runs"])
+    report["attempt_audit"] = audit_attempts(args.database, cases)
+    report["attempt_audit_complete"] = attempts_complete(cases, report["attempt_audit"])
     with sqlite3.connect(args.database) as db:
         report["durable_saved_results"] = db.execute(
             "SELECT COUNT(*) FROM saved_briefs"
@@ -327,7 +385,9 @@ def main() -> int:
     report["save_count_matches"] = report["durable_saved_results"] == expected_saved
     report["acceptance"] = (
         "bounded_pilot_passed"
-        if report["interpretation"]["ready"] and report["save_count_matches"]
+        if report["interpretation"]["ready"]
+        and report["save_count_matches"]
+        and report["attempt_audit_complete"]
         else "not_ready"
     )
     retain()

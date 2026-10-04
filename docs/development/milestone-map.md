@@ -112,3 +112,7 @@ model acceptance; these broader gates remain open. Main and public deployment un
 ## Local Qwen intent increment (unmerged branch)
 
 M5/#53 now has bounded natural-language routing on `codex/local-qwen-interpretation`, stacked on PR #180. The local loaded model proposes intent; application-owned journals and existing tools/checkpoints/receipts own evidence and save authority. Nine repeated development CLI walkthroughs and four abstentions passed; see [execution evidence](../project/local-qwen-review-evidence.md). M9/#72 is being evaluated, not completed on main. Full G2 pilot, browser/deployment and held-out quality remain open; expansion continues to depend on G2.
+
+### G2 frozen pilot evaluation branch — 2026-10-03
+
+M9/#72: `codex/g2-pilot-evaluation` evaluates PR181 runtime without model/prompt changes. Installed structured HTTP 48/48 and 464 source checks passed; live intent targets 41/48 with seven unexpected abstentions. Accepted21investigations matched facts/recovered/saved once; no false factual answers observed. See [retained evaluation](../project/g2-pilot-evaluation.md). Full G2 is not ready; development interpretation and new frozen evaluation precede expansion. Branch work, unmerged/undeployed; browser release acceptance remains open.

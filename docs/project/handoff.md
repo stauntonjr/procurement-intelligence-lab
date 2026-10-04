@@ -66,6 +66,8 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
+- Frozen G2 pilot evaluation on `codex/g2-pilot-evaluation`, stacked on draft PR #181: installed deterministic HTTP 48/48 and 464 original source checks passed; live intent/end-to-end target checks 41/48, with seven unexpected abstentions retained. Independent ledger: 48 inference attempts, 42 tool starts, 21 single saved results. See [evaluation and next work](g2-pilot-evaluation.md). Prioritize development-only interpretation improvements and fresh frozen evaluation; full G2/browser/deployment and expansion gates remain open.
+
 - Local Qwen live interpretation is implemented on `codex/local-qwen-interpretation`, stacked on the PR #180 browser draft: same owned run, strict scope/date/item proposal, durable redacted inference journal, existing deterministic brief and human review. Nine repeated development CLI walkthroughs and four live abstentions passed; installed authenticated live HTTP restart/save also passed. See [ADR-032](../adr/032-local-model-intent-and-journal.md), [caller contract](../product/local-qwen-review-v1.md), and [evidence and limits](local-qwen-review-evidence.md). Broader #53/#72 and full G2, actual browser/deployed acceptance remain open; no dataset expansion yet.
 
 - [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) are complete. [PR #174](https://github.com/stauntonjr/procurement-intelligence-lab/pull/174) merged the bounded assertion/line identity, lifecycle identity, and schedule-supersession corrections with C014-C016 evidence; `main` includes them at `b0cc77e`.

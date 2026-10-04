@@ -121,3 +121,46 @@ def test_partial_trajectory_is_unknown_not_pass_or_fail(tmp_path: Path) -> None:
     assert (
         score_ledger(run, app.events(run.run_id, context=context), [], saved)["outcome"] == "fail"
     )
+
+
+def test_ledger_audit_retains_pending_as_unknown(tmp_path: Path) -> None:
+    from datetime import datetime
+    from hashlib import sha256
+
+    from procurement_intelligence_lab.adapters.sqlite_interpretation import (
+        SqliteInterpretationStore,
+    )
+    from procurement_intelligence_lab.interfaces.live_review import compose_live
+    from procurement_intelligence_lab.platform.semantics.interpretation import InterpretationCall
+    from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
+    from tools.run_g2_pilot import audit_attempts
+
+    database = tmp_path / "audit.db"
+    composition = compose_live(database)
+    context = RequestContext(
+        "local-demo", "synthetic-tenant", "atlas", "lab", frozenset(Permission), "test"
+    )
+    run = composition.runs.start(context=context)
+    query = case()
+    SqliteInterpretationStore(database).create(
+        InterpretationCall(
+            run.run_id,
+            sha256(query["question"].encode()).hexdigest(),
+            datetime.fromisoformat(query["as_of"]),
+        )
+    )
+    result = audit_attempts(database, [query])
+    assert result[0]["model_calls"] is None
+    assert result[0]["interpretation"]["status"] == "pending"
+    assert result[0]["tool_calls"] == 0
+    assert result[0]["saved_result_count"] == 0
+
+
+def test_missing_or_pending_attempt_blocks_acceptance() -> None:
+    from tools.run_g2_pilot import attempts_complete
+
+    rows: list[dict[str, Any]] = [{"id": "q", "run_id": "r", "model_calls": 1}]
+    assert attempts_complete([case()], rows)
+    assert not attempts_complete([case()], [])
+    assert not attempts_complete([case()], rows * 2)
+    assert not attempts_complete([case()], [{"id": "q", "run_id": "r", "model_calls": None}])

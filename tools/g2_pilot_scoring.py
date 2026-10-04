@@ -73,7 +73,9 @@ def score_intent(case: dict[str, Any], outcome: dict[str, Any]) -> list[str]:
         errors.append("execution_kind")
     if not call.get("run_id") or view.get("run_id") != call["run_id"]:
         errors.append("run_binding")
-    if view.get("brief", {}).get("run", {}).get("project_id") != case["project"]:
+    brief = view.get("brief")
+    run = brief.get("run") if isinstance(brief, dict) else None
+    if not isinstance(run, dict) or run.get("project_id") != case["project"]:
         errors.append("scope")
     return errors
 
