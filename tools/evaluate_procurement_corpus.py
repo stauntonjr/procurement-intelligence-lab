@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from collections import Counter
+from collections.abc import Callable
 from decimal import Decimal, InvalidOperation
 from hashlib import sha256
 from pathlib import Path
@@ -228,14 +229,20 @@ def _fetch(url: str) -> tuple[int, dict[str, Any]]:
         return error.code, json.load(error)
 
 
-def evaluate(base_url: str, directory: Path = DATASET) -> dict[str, Any]:
+def evaluate(
+    base_url: str,
+    directory: Path = DATASET,
+    *,
+    fetch: Callable[[str], tuple[int, dict[str, Any]]] | None = None,
+) -> dict[str, Any]:
     dataset = load_dataset(directory)
+    retrieve = _fetch if fetch is None else fetch
     results = []
     resolved = 0
     for query in dataset["queries"]:
         case = dataset["gold"][query["id"]]
         try:
-            status, response = _fetch(
+            status, response = retrieve(
                 base_url.rstrip("/") + "/api/corpus/investigate?" + urlencode(query["request"])
             )
             errors = score_response(status, response, case)
@@ -251,7 +258,7 @@ def evaluate(base_url: str, directory: Path = DATASET) -> dict[str, Any]:
                     if ref.get("url") != expected_url:
                         errors.append("source_url")
                         continue
-                    source_status, source = _fetch(base_url.rstrip("/") + expected_url)
+                    source_status, source = retrieve(base_url.rstrip("/") + expected_url)
                     if source_status != 200:
                         errors.append("source_resolution")
                         continue
