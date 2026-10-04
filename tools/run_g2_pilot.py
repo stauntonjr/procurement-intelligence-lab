@@ -384,7 +384,7 @@ def main() -> int:
         ).strip(),
         "runs": [],
         "acceptance": "not_ready",
-        "limits": "Previously inspected public synthetic cases: development regression, not held-out. Historical project split labels are accounting only; shared generator/query ancestry. No blind/general accuracy, browser/deployment, full adversarial G2 or expansion acceptance. One attempt per question per configuration; prior results remain immutable.",
+        "limits": "Previously inspected public synthetic cases: development regression, not held-out. Historical project split labels are accounting only; shared generator/query ancestry. No blind/general accuracy, browser/deployment, full adversarial G2 or expansion acceptance. One attempt per case in this run; overlapping development runs are reported separately. Prior results remain immutable.",
     }
 
     def retain() -> None:

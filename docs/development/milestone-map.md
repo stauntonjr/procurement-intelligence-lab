@@ -116,3 +116,14 @@ M5/#53 now has bounded natural-language routing on `codex/local-qwen-interpretat
 ### G2 frozen pilot evaluation branch — 2026-10-03
 
 M9/#72: `codex/g2-pilot-evaluation` evaluates PR181 runtime without model/prompt changes. Installed structured HTTP 48/48 and 464 source checks passed; live intent targets 41/48 with seven unexpected abstentions. The 21 accepted investigations matched facts/recovered/saved once; no false factual answers observed. See [retained evaluation](../project/g2-pilot-evaluation.md). Full G2 is not ready; development interpretation and new frozen evaluation precede expansion. Branch work, unmerged/undeployed; browser release acceptance remains open.
+
+
+## Intent development continuation — 2026-10-04
+
+Primary M5/#53; Part of #72/#70, stacked on unmerged PR182. Read-only requirement governance and
+approval-applicability intents are explicit, with unchanged policy/quantities/human authority.
+Installed development regression46/48 versus historical41/48; controls18/20 with safe boundary
+abstentions retained and rejected unsafe candidate preserved. All original split cases are now
+inspected development data. See [durable experiment](../project/intent-contract-development.md).
+Fresh independently authored evaluation, full G2/browser/accessibility/deployment and tiny-fixture
+live acceptance stay open. Four projects/24workbooks/960source rows remain; no B2 expansion.

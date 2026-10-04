@@ -12,13 +12,13 @@ import subprocess
 from dataclasses import asdict
 from hashlib import sha256
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
 from procurement_intelligence_lab.interfaces.live_review import compose_live
 from tools.g2_pilot_scoring import score_intent
-from tools.run_g2_pilot import audit_attempts
+from tools.run_g2_pilot import audit_attempts, reconcile_attempts
 
 MANIFEST = (
     Path(__file__).resolve().parents[2] / "evals/operational_agents/intent-development-v1.json"
@@ -85,7 +85,10 @@ def test_installed_live_intent_development() -> None:
                 capture_output=True,
                 timeout=60,
             )
-            outcome = json.loads(result.stdout)
+            raw_outcome = json.loads(result.stdout)
+            if not isinstance(raw_outcome, dict):
+                raise TypeError("malformed public outcome")
+            outcome = cast(dict[str, Any], raw_outcome)
             errors = score_intent(case, outcome)
             if result.returncode:
                 errors.append("public_exit")
@@ -103,11 +106,15 @@ def test_installed_live_intent_development() -> None:
             record["error"] = type(error).__name__
         retain()
     report["attempt_audit"] = audit_attempts(database, cases)
+    report["runs"], report["attempt_audit_complete"] = reconcile_attempts(
+        cases, report["runs"], report["attempt_audit"]
+    )
     with sqlite3.connect(database) as connection:
         report["saved_results"] = connection.execute(
             "SELECT COUNT(*) FROM saved_briefs"
         ).fetchone()[0]
     retain()
+    assert report["attempt_audit_complete"]
     assert report["saved_results"] == 0
     assert len(report["runs"]) == len(cases) == 20
     assert all(row["model_calls"] == 1 for row in report["attempt_audit"])
