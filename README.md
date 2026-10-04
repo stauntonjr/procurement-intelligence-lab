@@ -132,3 +132,8 @@ The [fresh language evaluation](docs/project/fresh-language-evaluation.md) keeps
 source facts frozen:23/24 independently authored validation/test questions pass, with one valid
 cutoff request safely unsupported. Overall47/48 includes 24 root development questions. This
 unmerged evaluation remains not_ready; inspected questions cannot stay held-out during tuning.
+
+The [cutoff intent development continuation](docs/project/cutoff-intent-development.md) records
+26/28 candidate controls,48/48 inspected-language regression and9/9 original browser trials on the
+unmerged draft stack. Two valid-request abstentions remain. The prior language cohort is retired
+for tuning; these are development observations, not fresh quality or full G2 readiness.

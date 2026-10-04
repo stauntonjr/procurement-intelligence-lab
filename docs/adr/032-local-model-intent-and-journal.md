@@ -50,7 +50,11 @@ A document-relative predicate (for example, before document approval) describes 
 selected cutoff; it is not human approval to save or a request for an inferred instant. Calendar
 boundary wording can use the supplied cutoff only when consistent with it. Different explicit
 dates, inconsistent boundaries, unresolved relative query cutoffs and ambiguous items require
-clarification. The model never calculates a replacement cutoff; deterministic policies still decide
+clarification. Restating or selecting the same supplied review cutoff is read-only request metadata, not a source
+mutation or approval. A different explicit query date/instant still requires clarification; it may
+not be silently ignored in favor of the supplied cutoff. These are prompt targets, not a claim that
+LLM date classification is deterministic or universally correct. The model never calculates a
+replacement cutoff; deterministic policies still decide
 applicability and quantities. This clarifies the existing intent prompt, not governing policy. Broad natural-language quality, original tiny fixture routing, hard cancellation,
 remote providers, streaming, public deployment and browser accessibility remain separate acceptance.
 Nine repeated live corpus walkthroughs are bounded smoke evidence, not held-out accuracy.

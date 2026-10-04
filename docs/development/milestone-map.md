@@ -151,3 +151,12 @@ validation 11/12, test 12/12; root development 24/24. Total 47/48 with one valid
 query safely unsupported. Installed gold48/48 / 464 source checks;48 calls, 54 tool starts, 27 saves.
 [Evidence and limits](../project/fresh-language-evaluation.md). Runtime/source facts unchanged.
 Now inspected language data; no tuning/retry or full G2/deployment/expansion acceptance.
+
+## Cutoff intent development branch — 2026-10-04
+
+Primary #53/M5, part of #72 and existing authority/run Issues. Stack on #186; unmerged.
+A measured prompt clarification distinguishes matching review-cutoff metadata from writes.
+Baseline25/28 and candidate26/28 controls retain all failures; candidate inspected-language
+regression48/48 and original browser9/9 pass.113 calls/124 tool starts/36 saves, unchanged numeric
+policy/sources; old cohort retired. [Evidence/limits](../project/cutoff-intent-development.md).
+Global not_ready, broader Issues open, fresh evaluation/release/deployment/expansion gated.

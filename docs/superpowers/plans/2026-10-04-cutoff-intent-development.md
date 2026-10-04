@@ -2,7 +2,7 @@
 
 > Native execution of approved corpus Task5B/5C; use superpowers:executing-plans.
 
-Primary #53/M8, Part of #66/#67/#68/#70/#71/#72. Stack on draft #186, no merge/deploy.
+Primary #53/M5, Part of #66/#67/#68/#70/#71/#72. Stack on draft #186, no merge/deploy.
 Spec: docs/superpowers/specs/2026-10-03-procurement-demo-corpus-design.md and ADR-032.
 Bounded design approved by continuation: distinguish restating a matching human-selected review
 cutoff from procurement mutations. Different dates/projects, unresolved relative dates and ambiguous
