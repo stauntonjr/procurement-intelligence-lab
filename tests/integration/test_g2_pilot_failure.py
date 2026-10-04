@@ -176,3 +176,32 @@ def test_selected_dataset_reaches_real_main_baseline_gate(
     assert run_g2_pilot.main() == 1
     assert seen == [("http://test.invalid", manifest.parent)]
     assert json.loads(output.read_text())["interpretation"]["counts"]["unknown"] == 48
+
+
+def test_selected_query_metadata_drift_refused_before_model(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from hashlib import sha256
+
+    manifest, output = fresh_args(tmp_path, monkeypatch)
+    query_path = manifest.parent / "queries.json"
+    queries = json.loads(query_path.read_text())
+    target = next(q for q in queries["queries"] if q["id"] == "cinder-match")
+    target["request"]["as_of"] = "2026-10-02T00:00:00+00:00"
+    query_path.write_text(json.dumps(queries))
+    digest = sha256(query_path.read_bytes()).hexdigest()
+    data = json.loads(manifest.read_text())
+    data["queries_sha256"] = digest
+    manifest.write_text(json.dumps(data))
+    meta_path = manifest.parent / "manifest.json"
+    meta = json.loads(meta_path.read_text())
+    meta["hashes"]["queries.json"] = digest
+    meta_path.write_text(json.dumps(meta))
+
+    def prohibited(*_: Any, **__: Any) -> Any:
+        pytest.fail("model discovery must not run after query metadata drift")
+
+    monkeypatch.setattr(run_g2_pilot, "urlopen", prohibited)
+    with pytest.raises(ValueError, match="metadata"):
+        run_g2_pilot.main()
+    assert not output.exists() and not (tmp_path / "fresh-runs.db").exists()

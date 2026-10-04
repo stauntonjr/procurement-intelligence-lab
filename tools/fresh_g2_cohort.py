@@ -76,6 +76,14 @@ def _validate(dataset: Path, manifest: Path, versions: dict[str, str] | None) ->
     )
     data = load_dataset(dataset)
     old = load_dataset(ROOT / "evals/procurement_corpus/v1")
+    inherited = {q["id"]: q for q in old["queries"]}
+    for query in data["queries"]:
+        original = inherited.get(query["id"], {})
+        _require(
+            {k: v for k, v in query.items() if k != "text"}
+            == {k: v for k, v in original.items() if k != "text"},
+            "inherited query metadata changed; only wording may change",
+        )
     _require(
         data["manifest"]["project_splits"] == old["manifest"]["project_splits"],
         "source splits cannot be relabeled",

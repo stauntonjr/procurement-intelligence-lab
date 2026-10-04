@@ -1,0 +1,1965 @@
+{
+  "schema_version": 1,
+  "qrels": [
+    {
+      "query_id": "atlas-mismatch",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 2,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 2,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 2,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 2,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 2,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 2,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-match",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 3,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 3,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 3,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 3,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 3,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 3,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-conflict",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r1",
+          "row": 4,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a"
+        },
+        {
+          "artifact_id": "atlas-bom-r1",
+          "row": 4,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "d95b662db1c7d7dab4d66bf03af993bb2424d0e7dd5e784a72bfb0cbf54e3121"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 4,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 4,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-fractional",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 7,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 7,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 7,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 7,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 7,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 7,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-zero",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 8,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 8,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 8,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 8,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 8,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 8,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-ordinary",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 9,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 9,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 9,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 9,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 9,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 9,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-before-boundary",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r1",
+          "row": 2,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a"
+        },
+        {
+          "artifact_id": "atlas-bom-r1",
+          "row": 2,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "d95b662db1c7d7dab4d66bf03af993bb2424d0e7dd5e784a72bfb0cbf54e3121"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 2,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 2,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 2,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 2,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 2,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 2,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-approved-boundary",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 6,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 6,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 6,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-a",
+          "row": 6,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "ae3580146240a7d6233557664b11ee7fcf7e34efd7a74e2af86ff2ead457f8e6"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 6,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "cf47363401c013b3957025a5426fe4f8914f300fc443911711cfc915211b426d"
+        },
+        {
+          "artifact_id": "atlas-po-b",
+          "row": 6,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "3628728aafaef15c458ee6e9c14841b0a174aebb875c354d086d89fec5e5765d"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-missing",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 5,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 5,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-future-approval",
+      "relevance": [
+        {
+          "artifact_id": "atlas-bom-r1",
+          "row": 6,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a"
+        },
+        {
+          "artifact_id": "atlas-bom-r1",
+          "row": 6,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "d95b662db1c7d7dab4d66bf03af993bb2424d0e7dd5e784a72bfb0cbf54e3121"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 6,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a"
+        },
+        {
+          "artifact_id": "atlas-bom-r2",
+          "row": 6,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "9f81a686cbf96a1b175fb0b438b75f8feda636ebfe6fbab5e07440513cbefabc"
+        }
+      ]
+    },
+    {
+      "query_id": "atlas-unsupported",
+      "relevance": []
+    },
+    {
+      "query_id": "atlas-ambiguous",
+      "relevance": []
+    },
+    {
+      "query_id": "borealis-mismatch",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 41,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 41,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 13,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 13,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 4,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 4,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-match",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 20,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 20,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 22,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 22,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 21,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 21,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-conflict",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r1",
+          "row": 9,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2918749ebed01e8f3c5d5cad6d67813f64956a0e96ddde98ccbdd25b1dedc5db"
+        },
+        {
+          "artifact_id": "borealis-bom-r1",
+          "row": 9,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "acd86d88ce264f095e5b5c9fd1c8f7db0f1c3d8376facda01bffa6ced03776fe"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 27,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 27,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-fractional",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 5,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 5,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 11,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 11,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 15,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 15,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-zero",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 11,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 11,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 23,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 23,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 10,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 10,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-ordinary",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 7,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 7,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 26,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 26,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 41,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 41,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-before-boundary",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r1",
+          "row": 41,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2918749ebed01e8f3c5d5cad6d67813f64956a0e96ddde98ccbdd25b1dedc5db"
+        },
+        {
+          "artifact_id": "borealis-bom-r1",
+          "row": 41,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "acd86d88ce264f095e5b5c9fd1c8f7db0f1c3d8376facda01bffa6ced03776fe"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 41,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 41,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 13,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 13,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 4,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 4,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-approved-boundary",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 14,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 14,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 25,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "6adc944d86a42bfd206f10c70b710ef23b7a598620c457da0e843bf7955f0a47"
+        },
+        {
+          "artifact_id": "borealis-po-a",
+          "row": 25,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "f23a05dea740582be46ac081d030b423bfe49f3cfde9dd5a18d3338f73c9a7c8"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 16,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "dfd56c40c9770d100e9242264e62b1d06e49087874f10fa495314a2c62fc3aef"
+        },
+        {
+          "artifact_id": "borealis-po-b",
+          "row": 16,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "8d7ff8f6c586848098a857c35c5bd255649cd8b0012ec6ce3e62465447f58873"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-missing",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 22,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 22,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-future-approval",
+      "relevance": [
+        {
+          "artifact_id": "borealis-bom-r1",
+          "row": 4,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2918749ebed01e8f3c5d5cad6d67813f64956a0e96ddde98ccbdd25b1dedc5db"
+        },
+        {
+          "artifact_id": "borealis-bom-r1",
+          "row": 4,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "acd86d88ce264f095e5b5c9fd1c8f7db0f1c3d8376facda01bffa6ced03776fe"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 14,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b"
+        },
+        {
+          "artifact_id": "borealis-bom-r2",
+          "row": 14,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "dbdfb960d9b8895ede225de47afd8d4065b0568e8f24c82a7acf4e988fe31f25"
+        }
+      ]
+    },
+    {
+      "query_id": "borealis-unsupported",
+      "relevance": []
+    },
+    {
+      "query_id": "borealis-ambiguous",
+      "relevance": []
+    },
+    {
+      "query_id": "cinder-mismatch",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 5,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 5,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 27,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 27,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 3,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 3,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-match",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 41,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 41,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 30,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 30,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 2,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 2,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-conflict",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r1",
+          "row": 13,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "a2f624a9109df7512dfd7edd4992ae66a98f1ee50724d0ab552e7f2f8456dd58"
+        },
+        {
+          "artifact_id": "cinder-bom-r1",
+          "row": 13,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "e0c31fcea303926ad2290dd0b4a4eab970eea3c1aecd523a0e994b06f04e6597"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 25,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 25,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-fractional",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 10,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 10,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 37,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 37,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 18,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 18,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-zero",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 22,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 22,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 41,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 41,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 33,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 33,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-ordinary",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 19,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 19,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 34,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 34,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 8,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 8,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-before-boundary",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r1",
+          "row": 17,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "a2f624a9109df7512dfd7edd4992ae66a98f1ee50724d0ab552e7f2f8456dd58"
+        },
+        {
+          "artifact_id": "cinder-bom-r1",
+          "row": 17,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "e0c31fcea303926ad2290dd0b4a4eab970eea3c1aecd523a0e994b06f04e6597"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 5,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 5,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 27,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 27,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 3,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 3,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-approved-boundary",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 24,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 24,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 12,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "d06ff46addfbd5551c459f0cbb13fe8898faa371c3fe05151cfffb87d5fbfef5"
+        },
+        {
+          "artifact_id": "cinder-po-a",
+          "row": 12,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "49936201807bf464403cee8dab91207120aa39ff45518a64ae6eada518027b60"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 28,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "87be408dc4d5ede90aecba7a09bafcb6e11e487e420679a668ddec62e1a1eeb0"
+        },
+        {
+          "artifact_id": "cinder-po-b",
+          "row": 28,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "98dae287b730307763279802231bd450601d064780a03b177ee2d860111172a1"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-missing",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 36,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 36,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-future-approval",
+      "relevance": [
+        {
+          "artifact_id": "cinder-bom-r1",
+          "row": 16,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "a2f624a9109df7512dfd7edd4992ae66a98f1ee50724d0ab552e7f2f8456dd58"
+        },
+        {
+          "artifact_id": "cinder-bom-r1",
+          "row": 16,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "e0c31fcea303926ad2290dd0b4a4eab970eea3c1aecd523a0e994b06f04e6597"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 24,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd"
+        },
+        {
+          "artifact_id": "cinder-bom-r2",
+          "row": 24,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "c653ef0b27915447cbcea7edfbc5f43ce3ffbbc1822035e9fcf781ea8b8ff8e4"
+        }
+      ]
+    },
+    {
+      "query_id": "cinder-unsupported",
+      "relevance": []
+    },
+    {
+      "query_id": "cinder-ambiguous",
+      "relevance": []
+    },
+    {
+      "query_id": "delta-mismatch",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 37,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 37,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 16,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 16,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 15,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 15,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-match",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 20,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 20,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 12,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 12,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 25,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 25,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-conflict",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r1",
+          "row": 7,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "5f6d9d1ae75212ad712ffb8691d495444fd1a937412faff7b3a2d638c8605be0"
+        },
+        {
+          "artifact_id": "delta-bom-r1",
+          "row": 7,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "f08fcc852f53d3ce82a266150d77e5021e1c4b4e384d1d2cf578046b7b840aa0"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 14,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 14,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-fractional",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 22,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 22,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 26,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 26,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 9,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 9,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-zero",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 9,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 9,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 8,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 8,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 35,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 35,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-ordinary",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 38,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 38,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 39,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 39,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 3,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 3,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-before-boundary",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r1",
+          "row": 30,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "5f6d9d1ae75212ad712ffb8691d495444fd1a937412faff7b3a2d638c8605be0"
+        },
+        {
+          "artifact_id": "delta-bom-r1",
+          "row": 30,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "f08fcc852f53d3ce82a266150d77e5021e1c4b4e384d1d2cf578046b7b840aa0"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 37,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 37,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 16,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 16,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 15,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 15,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-approved-boundary",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 30,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 30,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 13,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "025d032e22e8321bc2559dccb641d953d08a4b495d4e23e0bbe7674ddf5e460c"
+        },
+        {
+          "artifact_id": "delta-po-a",
+          "row": 13,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a96f0ef68b203ee72c014a1c4c250f7a08c85da8533ec72a6210224587acdd7"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 4,
+          "location": "quantity",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "0a40c1e41cb52dbf7cb538da5174ef114f787b903cb8097ea538ba1b438b3a63"
+        },
+        {
+          "artifact_id": "delta-po-b",
+          "row": 4,
+          "location": "authority",
+          "role": "observation",
+          "grade": 3,
+          "content_hash": "7a70b4bb47e6d8cc390194c9427779153369dc84e38c94b19c3ddf34ba388f4f"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-missing",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 16,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 16,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-future-approval",
+      "relevance": [
+        {
+          "artifact_id": "delta-bom-r1",
+          "row": 32,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "5f6d9d1ae75212ad712ffb8691d495444fd1a937412faff7b3a2d638c8605be0"
+        },
+        {
+          "artifact_id": "delta-bom-r1",
+          "row": 32,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "f08fcc852f53d3ce82a266150d77e5021e1c4b4e384d1d2cf578046b7b840aa0"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 30,
+          "location": "quantity",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231"
+        },
+        {
+          "artifact_id": "delta-bom-r2",
+          "row": 30,
+          "location": "authority",
+          "role": "governance",
+          "grade": 3,
+          "content_hash": "bf06b00df9b2f55c7f13c118d768087fe51eed3439356f544e3225602107edfb"
+        }
+      ]
+    },
+    {
+      "query_id": "delta-unsupported",
+      "relevance": []
+    },
+    {
+      "query_id": "delta-ambiguous",
+      "relevance": []
+    }
+  ]
+}

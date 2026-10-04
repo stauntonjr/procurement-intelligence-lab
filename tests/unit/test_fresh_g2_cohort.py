@@ -139,3 +139,30 @@ def test_fresh_claim_rejects_drift_and_false_authorship(tmp_path: Path, mutation
     manifest.write_text(json.dumps(frozen))
     with pytest.raises(ValueError):
         validate_fresh(manifest.parent, manifest, VERSIONS)
+
+
+@pytest.mark.parametrize("mutation", ["category", "date", "item", "extra_request"])
+def test_freshness_cannot_change_inherited_query_metadata(tmp_path: Path, mutation: str) -> None:
+    manifest, frozen = fixture(tmp_path / "dataset")
+    path = manifest.parent / "queries.json"
+    data = json.loads(path.read_text())
+    target = next(q for q in data["queries"] if q["id"] == "cinder-match")
+    if mutation == "category":
+        other = next(q for q in data["queries"] if q["id"] == "cinder-before-boundary")
+        target["category"], other["category"] = other["category"], target["category"]
+    elif mutation == "date":
+        target["request"]["as_of"] = "2026-10-02T00:00:00+00:00"
+    elif mutation == "item":
+        target["request"]["item"] = "NIC-C1"
+    else:
+        target["request"]["operation"] = "approve"
+    path.write_text(json.dumps(data))
+    digest = sha256(path.read_bytes()).hexdigest()
+    frozen["queries_sha256"] = digest
+    meta_path = manifest.parent / "manifest.json"
+    meta = json.loads(meta_path.read_text())
+    meta["hashes"]["queries.json"] = digest
+    meta_path.write_text(json.dumps(meta))
+    manifest.write_text(json.dumps(frozen))
+    with pytest.raises(ValueError, match="metadata"):
+        load_pilot(manifest.parent, manifest)

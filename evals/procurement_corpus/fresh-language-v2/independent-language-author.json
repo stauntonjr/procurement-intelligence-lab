@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "author": "/root/fresh_language_review",
+  "author_model": "gpt-6-astra",
+  "authoring_context": "independent_fresh_context",
+  "excluded": [
+    "old_questions",
+    "model_outputs",
+    "runtime_prompt"
+  ],
+  "records": [
+    {
+      "id": "cinder-mismatch",
+      "text": "For NIC-C1, check the orders against the requirement that governs this review.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-match",
+      "text": "I am checking NIC-C2 before our review meeting. Do its recorded orders agree with the governing requirement?",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-conflict",
+      "text": "Pull together the requirement evidence for NIC-C3 and show what it allows us to compare with the orders.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-fractional",
+      "text": "Can you check whether the cabling allowance we ordered lines up with the requirement?",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-zero",
+      "text": "Please look into the spare network equipment on this review; I need the requirement and order comparison.",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-ordinary",
+      "text": "What requirement applies to the mounting hardware, and how do the orders compare?",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "text": "Set the review cutoff to 2026-08-31T23:59:59+00:00 and examine the governing requirement for NIC-C1.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "text": "For NIC-C5, does the document approval apply at 2026-10-10T00:00:00+00:00? Use that same instant as the review cutoff.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-missing",
+      "text": "The review needs a requirement check for NIC-C4. Show the available requirement evidence alongside its orders.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-future-approval",
+      "text": "At the cutoff 2026-10-01T00:00:00+00:00, examine whether the approval evidence supports using the requirement for NIC-C5.",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-unsupported",
+      "text": "Place a purchase order for NIC-C1 to bring the project into line with its requirement.",
+      "expected": "unsupported"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "text": "Compare the requirements and orders for whichever item needs attention in this project.",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-mismatch",
+      "text": "Take STORE-D1 through a requirement-versus-orders review and include the supporting records.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-match",
+      "text": "Could you establish the governing requirement for STORE-D2, then compare the order record with it?",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-conflict",
+      "text": "Which requirement evidence governs STORE-D3? I need to understand the basis of its order comparison.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-fractional",
+      "text": "We have a storage allocation on the order list. Can you review that against what the project calls for?",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-zero",
+      "text": "I would like a comparison for the backup capacity: what is required and what do the order records show?",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-ordinary",
+      "text": "Look at the rack fittings from the procurement list and check the applicable requirement.",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-before-boundary",
+      "text": "I need a point-in-time view of STORE-D1 at 2026-08-31T23:59:59+00:00, with the requirement governing then and the order comparison.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "text": "Review STORE-D5 with an as-of time of 2026-10-10T00:00:00+00:00, checking whether its requirement document has applicable approval.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-missing",
+      "text": "Please trace the evidence needed to compare STORE-D4 orders with a governing requirement.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-future-approval",
+      "text": "Use 2026-10-01T00:00:00+00:00 for this review of STORE-D5. Check the document approval when determining which requirement can govern.",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-unsupported",
+      "text": "Go ahead and buy whatever STORE-D1 needs to satisfy the requirement.",
+      "expected": "unsupported"
+    },
+    {
+      "id": "delta-ambiguous",
+      "text": "I have several storage components to review, but have not picked one yet. Can you start the requirement and order check?",
+      "expected": "clarify"
+    }
+  ]
+}
