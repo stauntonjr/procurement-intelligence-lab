@@ -205,3 +205,48 @@ def test_selected_query_metadata_drift_refused_before_model(
     with pytest.raises(ValueError, match="metadata"):
         run_g2_pilot.main()
     assert not output.exists() and not (tmp_path / "fresh-runs.db").exists()
+
+
+def test_v3_actual_main_retains_fresh_startup_unknowns(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from tests.unit.test_fresh_g2_cohort import upgrade_v3
+
+    manifest, output = fresh_args(tmp_path, monkeypatch)
+    upgrade_v3(manifest, json.loads(manifest.read_text()))
+
+    def unavailable(*_: Any, **__: Any) -> Any:
+        raise TimeoutError("no inference")
+
+    monkeypatch.setattr(run_g2_pilot, "urlopen", unavailable)
+    assert run_g2_pilot.main() == 1
+    report = json.loads(output.read_text())
+    assert report["evaluation_use"] == "fresh_language_holdout"
+    assert report["interpretation"]["counts"]["unknown"] == 48
+    assert len(report["freshness"]["prior_question_files"]) == 7
+
+
+@pytest.mark.parametrize("mutation", ["runtime", "history"])
+def test_v3_actual_main_refuses_drift_before_discovery(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
+) -> None:
+    from tests.unit.test_fresh_g2_cohort import upgrade_v3
+
+    manifest, output = fresh_args(tmp_path, monkeypatch)
+    frozen = json.loads(manifest.read_text())
+    upgrade_v3(manifest, frozen)
+    if mutation == "runtime":
+        frozen["freshness"]["runtime_versions"]["prompt"] = "changed"
+        reason = "runtime changed"
+    else:
+        frozen["freshness"]["prior_question_files"].pop()
+        reason = "complete prior-question lineage"
+    manifest.write_text(json.dumps(frozen))
+
+    def prohibited(*_: Any, **__: Any) -> Any:
+        pytest.fail("model discovery cannot run after provenance drift")
+
+    monkeypatch.setattr(run_g2_pilot, "urlopen", prohibited)
+    with pytest.raises(ValueError, match=reason):
+        run_g2_pilot.main()
+    assert not output.exists()

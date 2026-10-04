@@ -362,7 +362,7 @@ def main() -> int:
     frozen = json.loads(args.manifest.read_bytes())
     composition = compose_live(args.database)
     versions = asdict(composition.runs.versions)
-    if frozen["schema_version"] == 2:
+    if frozen["schema_version"] in (2, 3):
         from tools.fresh_g2_cohort import validate_fresh
 
         validate_fresh(args.dataset, args.manifest, versions)
@@ -383,7 +383,7 @@ def main() -> int:
         "schema_version": 1,
         "execution_kind": "live",
         "evaluation_use": frozen["evaluation_use"]
-        if frozen["schema_version"] == 2
+        if frozen["schema_version"] in (2, 3)
         else "development_regression",
         "versions": versions,
         "interpretation_manifest_sha256": sha256(args.manifest.read_bytes()).hexdigest(),
@@ -398,7 +398,7 @@ def main() -> int:
         "limits": "Previously inspected public synthetic cases: development regression, not held-out. Historical project split labels are accounting only; shared generator/query ancestry. No blind/general accuracy, browser/deployment, full adversarial G2 or expansion acceptance. One attempt per case in this run; overlapping development runs are reported separately. Prior results remain immutable.",
     }
 
-    if frozen["schema_version"] == 2:
+    if frozen["schema_version"] in (2, 3):
         report["limits"] = frozen["limits"]
         report["freshness"] = frozen["freshness"]
 

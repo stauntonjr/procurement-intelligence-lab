@@ -166,3 +166,78 @@ def test_freshness_cannot_change_inherited_query_metadata(tmp_path: Path, mutati
     manifest.write_text(json.dumps(frozen))
     with pytest.raises(ValueError, match="metadata"):
         load_pilot(manifest.parent, manifest)
+
+
+def upgrade_v3(manifest: Path, frozen: dict[str, Any]) -> None:
+    frozen["schema_version"] = 3
+    paths = PRIOR_FILES + (
+        "evals/procurement_corpus/fresh-language-v2/queries.json",
+        "evals/operational_agents/cutoff-development-v1.json",
+    )
+    frozen["freshness"]["prior_question_files"] = [
+        {"path": p, "sha256": sha256((ROOT / p).read_bytes()).hexdigest()} for p in paths
+    ]
+    manifest.write_text(json.dumps(frozen))
+
+
+def test_v3_lineage_preserves_historical_v2_and_accepts_fresh_wording(tmp_path: Path) -> None:
+    manifest, frozen = fixture(tmp_path / "dataset")
+    validate_fresh(manifest.parent, manifest, VERSIONS)
+    upgrade_v3(manifest, frozen)
+    validate_fresh(manifest.parent, manifest, VERSIONS)
+    assert len(load_pilot(manifest.parent, manifest)) == 48
+
+
+@pytest.mark.parametrize("mutation", ["omit_retired", "omit_controls", "changed_hash"])
+def test_v3_requires_complete_current_question_history(tmp_path: Path, mutation: str) -> None:
+    manifest, frozen = fixture(tmp_path / "dataset")
+    upgrade_v3(manifest, frozen)
+    history = frozen["freshness"]["prior_question_files"]
+    if mutation == "changed_hash":
+        history[-1]["sha256"] = "0" * 64
+        reason = "lineage changed"
+    else:
+        del history[-2 if mutation == "omit_retired" else -1]
+        reason = "complete prior-question lineage"
+    manifest.write_text(json.dumps(frozen))
+    with pytest.raises(ValueError, match=reason):
+        validate_fresh(manifest.parent, manifest, VERSIONS)
+
+
+@pytest.mark.parametrize("source", ["retired", "controls"])
+def test_v3_rejects_inspected_cohort_and_cutoff_control_replay(tmp_path: Path, source: str) -> None:
+    manifest, frozen = fixture(tmp_path / "dataset")
+    upgrade_v3(manifest, frozen)
+    if source == "retired":
+        retired = json.loads(
+            (ROOT / "evals/procurement_corpus/fresh-language-v2/queries.json").read_text()
+        )
+        prior = next(q for q in retired["queries"] if q["id"] == "cinder-before-boundary")
+        query_id, text = prior["id"], prior["text"]
+    else:
+        controls = json.loads(
+            (ROOT / "evals/operational_agents/cutoff-development-v1.json").read_text()
+        )
+        prior = next(q for q in controls["cases"] if q["id"] == "cutoff-matching")
+        query_id, text = "atlas-mismatch", prior["question"]
+    query_path = manifest.parent / "queries.json"
+    queries = json.loads(query_path.read_text())
+    query = next(q for q in queries["queries"] if q["id"] == query_id)
+    query["text"] = "  " + text.upper() + "  "
+    raw = json.dumps(queries).encode()
+    query_path.write_bytes(raw)
+    frozen["queries_sha256"] = sha256(raw).hexdigest()
+    meta_path = manifest.parent / "manifest.json"
+    meta = json.loads(meta_path.read_text())
+    meta["hashes"]["queries.json"] = sha256(raw).hexdigest()
+    meta_path.write_text(json.dumps(meta))
+    author_path = manifest.parent / "independent-language-author.json"
+    author = json.loads(author_path.read_text())
+    for row in author["records"]:
+        if row["id"] == query_id:
+            row["text"] = query["text"]
+    author_path.write_text(json.dumps(author))
+    frozen["freshness"]["heldout_author_sha256"] = sha256(author_path.read_bytes()).hexdigest()
+    manifest.write_text(json.dumps(frozen))
+    with pytest.raises(ValueError, match="old or duplicate wording"):
+        validate_fresh(manifest.parent, manifest, VERSIONS)

@@ -17,6 +17,11 @@ PRIOR_FILES = (
     "evals/operational_agents/original-showcase-browser-v1.json",
 )
 
+PRIOR_FILES_V3 = PRIOR_FILES + (
+    "evals/procurement_corpus/fresh-language-v2/queries.json",
+    "evals/operational_agents/cutoff-development-v1.json",
+)
+
 
 def normalized(text: str) -> str:
     return " ".join(unicodedata.normalize("NFKC", text).casefold().split())
@@ -65,7 +70,7 @@ def _validate(dataset: Path, manifest: Path, versions: dict[str, str] | None) ->
         "closed fresh manifest required",
     )
     _require(
-        type(frozen["schema_version"]) is int and frozen["schema_version"] == 2,
+        type(frozen["schema_version"]) is int and frozen["schema_version"] in (2, 3),
         "fresh manifest version required",
     )
     _require(
@@ -131,8 +136,9 @@ def _validate(dataset: Path, manifest: Path, versions: dict[str, str] | None) ->
         "cannot claim unseen source projects",
     )
     prior = fresh["prior_question_files"]
+    prior_files = PRIOR_FILES if frozen["schema_version"] == 2 else PRIOR_FILES_V3
     _require(
-        len(prior) == len(PRIOR_FILES) and {p["path"] for p in prior} == set(PRIOR_FILES),
+        len(prior) == len(prior_files) and {p["path"] for p in prior} == set(prior_files),
         "complete prior-question lineage required",
     )
     known: set[str] = set()
