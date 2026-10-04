@@ -2361,5 +2361,16 @@
     "unique_runs": 48,
     "tool_starts": 42,
     "saved_results": 21
+  },
+  "postreview_reconciliation": {
+    "all48_scored_outcomes_match_journal": true,
+    "counts_unchanged": {
+      "pass": 41,
+      "fail": 7,
+      "unknown": 0,
+      "not_applicable": 0
+    },
+    "additional_inference_calls": 0,
+    "evidence": "artifacts/g2-pilot/v1/postreview-reconciliation.json"
   }
 }

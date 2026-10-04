@@ -77,3 +77,20 @@ No general accuracy, model superiority, full G2 completion or corpus-expansion a
 The advisory [roadmap audit](https://github.com/stauntonjr/procurement-intelligence-lab/actions/runs/37172143348)
 failed with Gemini daily-quota HTTP429; it produced no usable review report. Project #6 was read
 fully (107 items); #72 is In Progress, with broader Issues open.
+
+## Independent review and correction
+
+Independent review at `f6bfd59a3ba707cb5531fe9c4c1c0b88aab36054` found two Important
+evaluator defects: terminal attempt counts did not reconcile scored outcomes with their journals,
+and malformed caller/prefetch/missing-journal paths could skip final denominators. Both were
+reproduced RED and corrected in one author pass. Scored and journal run/hash/date/status/item
+must now agree; missing terminal evidence remains unknown and blocks acceptance. Baseline and
+startup failures finalize all 48 denominators without retrying inference. Actual CLI parsing and
+installed-version preflight exercise discovery-timeout retention and prior-output protection.
+No Critical findings or deferred minors.
+
+The corrected reconciliation path was applied read-only to the original database and retained
+records: all 48 scored interpretations match their exact journal entries; 41 pass/seven fail is
+unchanged. `artifacts/g2-pilot/v1/postreview-reconciliation.json` retains this additional audit.
+No new model call, prompt change or tuned rerun occurred. Latest revision-bound verification and
+author fresh pass are recorded in the evaluation PR; the original first-run bundle stays intact.

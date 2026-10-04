@@ -17,6 +17,8 @@ def case() -> dict[str, Any]:
         "item": "GPU-A",
         "as_of": "2026-10-01T00:00:00+00:00",
         "expected": "investigate",
+        "category": "exact_identifier",
+        "split": "development",
     }
 
 
@@ -157,10 +159,86 @@ def test_ledger_audit_retains_pending_as_unknown(tmp_path: Path) -> None:
 
 
 def test_missing_or_pending_attempt_blocks_acceptance() -> None:
-    from tools.run_g2_pilot import attempts_complete
+    from hashlib import sha256
 
-    rows: list[dict[str, Any]] = [{"id": "q", "run_id": "r", "model_calls": 1}]
-    assert attempts_complete([case()], rows)
-    assert not attempts_complete([case()], [])
-    assert not attempts_complete([case()], rows * 2)
-    assert not attempts_complete([case()], [{"id": "q", "run_id": "r", "model_calls": None}])
+    from tools.run_g2_pilot import reconcile_attempts
+
+    call = {
+        "run_id": "r",
+        "question_hash": sha256(case()["question"].encode()).hexdigest(),
+        "as_of": case()["as_of"],
+        "status": "investigate",
+        "item": "GPU-A",
+    }
+    record: dict[str, Any] = {"id": "q", "outcome": "pass", "errors": [], "interpretation": call}
+    row: dict[str, Any] = {"id": "q", "run_id": "r", "model_calls": 1, "interpretation": call}
+    assert reconcile_attempts([case()], [record], [row])[1]
+    assert not reconcile_attempts([case()], [record], [row | {"model_calls": None}])[1]
+    assert reconcile_attempts([case()], [record], [])[0][0]["outcome"] == "unknown"
+    with pytest.raises(ValueError):
+        reconcile_attempts([case()], [record], [row, row])
+
+
+@pytest.mark.parametrize("body", [None, [], {"interpretation": {}, "workflow": []}])
+def test_non_object_public_outcome_retained(body: Any) -> None:
+    retained: list[dict[str, Any]] = []
+    result = evaluate_case(case(), {}, lambda *_: body, lambda *_: {}, retained.append)
+    assert result["outcome"] == "fail"
+    assert result["errors"] and retained[-1]["errors"]
+
+
+@pytest.mark.parametrize("mutation", ["run_id", "question_hash", "as_of", "status", "item"])
+def test_audit_disagreement_blocks_scored_pass(mutation: str) -> None:
+    from copy import deepcopy
+    from hashlib import sha256
+
+    from tools.run_g2_pilot import reconcile_attempts
+
+    query = case()
+    call = {
+        "run_id": "r",
+        "question_hash": sha256(query["question"].encode()).hexdigest(),
+        "as_of": query["as_of"],
+        "status": "investigate",
+        "item": query["item"],
+    }
+    record: dict[str, Any] = {"id": "q", "outcome": "pass", "errors": [], "interpretation": call}
+    row: dict[str, Any] = {
+        "id": "q",
+        "run_id": "r",
+        "model_calls": 1,
+        "interpretation": deepcopy(call),
+    }
+    row["interpretation"][mutation] = "wrong"
+    records, complete = reconcile_attempts([query], [record], [row])
+    assert not complete and records[0]["outcome"] == "fail"
+
+
+def test_missing_journal_and_baseline_timeout_are_unknown(tmp_path: Path) -> None:
+    from procurement_intelligence_lab.interfaces.live_review import compose_live
+    from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
+    from tools.run_g2_pilot import audit_attempts, evaluate_with_baseline, finalize_report
+
+    database = tmp_path / "missing.db"
+    context = RequestContext(
+        "local-demo", "synthetic-tenant", "atlas", "lab", frozenset(Permission), "test"
+    )
+    compose_live(database).runs.start(context=context)
+    rows = audit_attempts(database, [case()])
+    assert rows[0]["model_calls"] is None and rows[0]["error"]
+    retained: list[dict[str, Any]] = []
+    calls: list[str] = []
+
+    def fetch() -> dict[str, Any]:
+        raise TimeoutError("baseline timeout")
+
+    def invoke(*_: str) -> dict[str, Any]:
+        calls.append("called")
+        return {}
+
+    result = evaluate_with_baseline(case(), fetch, invoke, lambda *_: {}, retained.append)
+    assert result["outcome"] == "unknown" and not calls
+    report: dict[str, Any] = {"runs": []}
+    finalize_report(report, [case()], rows)
+    assert report["interpretation"]["counts"]["unknown"] == 1
+    assert report["acceptance"] == "not_ready"

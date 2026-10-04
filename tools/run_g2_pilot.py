@@ -75,6 +75,8 @@ def evaluate_case(
     retain(dict(record))
     try:
         outcome = invoke("ask", "--question", case["question"], "--as-of", case["as_of"])
+        if not isinstance(outcome, dict):
+            raise PublicFailure("malformed public outcome")
         record["interpretation"] = outcome.get("interpretation")
         record["phase"] = "interpreted"
         retain(dict(record))
@@ -219,7 +221,10 @@ def audit_attempts(database: Path, cases: list[dict[str, Any]]) -> list[dict[str
         expected_hash = sha256(case["question"].encode()).hexdigest()
         matches = []
         for run in composition.runs.recent(context=context):
-            call = journal.get(run.run_id)
+            try:
+                call = journal.get(run.run_id)
+            except RuntimeError:
+                continue  # Unknown journal is not a terminal inference attempt.
             if call.question_hash == expected_hash and call.as_of == datetime.fromisoformat(
                 case["as_of"]
             ):
@@ -248,13 +253,98 @@ def audit_attempts(database: Path, cases: list[dict[str, Any]]) -> list[dict[str
     return rows
 
 
-def attempts_complete(cases: list[dict[str, Any]], rows: list[dict[str, Any]]) -> bool:
-    return (
-        len(rows) == len(cases)
-        and {r["id"] for r in rows} == {c["id"] for c in cases}
-        and len({r.get("run_id") for r in rows}) == len(cases)
-        and all(r.get("model_calls") == 1 and r.get("run_id") for r in rows)
+def reconcile_attempts(
+    cases: list[dict[str, Any]], records: list[dict[str, Any]], rows: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], bool]:
+    if len({r["id"] for r in rows}) != len(rows):
+        raise ValueError("duplicate audited case")
+    by_id = {r["id"]: r for r in rows}
+    metadata = {c["id"]: c for c in cases}
+    reconciled = []
+    complete = len(rows) == len(cases) and len(records) == len(cases)
+    seen = set()
+    for original in records:
+        record = dict(original)
+        case = metadata[record["id"]]
+        row = by_id.get(record["id"], {})
+        call, actual = record.get("interpretation"), row.get("interpretation")
+        if (
+            row.get("model_calls") != 1
+            or not isinstance(call, dict)
+            or not isinstance(actual, dict)
+        ):
+            complete = False
+            if record["outcome"] == "pass":
+                record.update(outcome="unknown", errors=["missing_terminal_journal"])
+        else:
+            expected_hash = sha256(case["question"].encode()).hexdigest()
+            matches = (
+                call.get("run_id") == row.get("run_id") == actual.get("run_id")
+                and call.get("question_hash") == actual.get("question_hash") == expected_hash
+                and call.get("status") == actual.get("status")
+                and call.get("item") == actual.get("item")
+                and actual.get("status") != "pending"
+                and row.get("run_id") not in seen
+            )
+            try:
+                matches = matches and (
+                    datetime.fromisoformat(str(call.get("as_of")))
+                    == datetime.fromisoformat(str(actual.get("as_of")))
+                    == datetime.fromisoformat(case["as_of"])
+                )
+            except (ValueError, TypeError):
+                matches = False
+            seen.add(row.get("run_id"))
+            if not matches:
+                record.update(
+                    outcome="fail", errors=record.get("errors", []) + ["journal_outcome_mismatch"]
+                )
+                complete = False
+            else:
+                record["model_calls"] = row["model_calls"]
+        reconciled.append(record)
+    return reconciled, bool(complete)
+
+
+def finalize_report(
+    report: dict[str, Any], cases: list[dict[str, Any]], rows: list[dict[str, Any]]
+) -> None:
+    records, complete = reconcile_attempts(cases, report["runs"], rows)
+    report["runs"] = records
+    report["attempt_audit"] = rows
+    report["attempt_audit_complete"] = complete
+    report["interpretation"] = summarize(cases, records)
+    report["acceptance"] = (
+        "bounded_pilot_passed"
+        if report["interpretation"]["ready"]
+        and report.get("structured", {}).get("ready")
+        and complete
+        and report.get("save_count_matches")
+        and not report.get("operation_errors")
+        else "not_ready"
     )
+
+
+def evaluate_with_baseline(
+    case: dict[str, Any],
+    fetch: Callable[[], dict[str, Any]],
+    invoke: Callable[..., dict[str, Any]],
+    audit: Callable[..., dict[str, Any]],
+    retain: Callable[[dict[str, Any]], None],
+) -> dict[str, Any]:
+    try:
+        expected = fetch() if case["expected"] == "investigate" else {}
+    except (OSError, TimeoutError, ValueError, TypeError, RuntimeError) as error:
+        record = {
+            "id": case["id"],
+            "outcome": "unknown",
+            "errors": ["baseline_" + type(error).__name__],
+            "phase": "baseline",
+            "model_calls": 0,
+        }
+        retain(record)
+        return record
+    return evaluate_case(case, expected, invoke, audit, retain)
 
 
 def main() -> int:
@@ -301,8 +391,6 @@ def main() -> int:
         args.output.write_text(json.dumps(report, indent=2, default=str) + "\n")
 
     retain()
-    with urlopen("http://127.0.0.1:8000/version", timeout=5) as response:
-        report["server"] = json.load(response)
     seen: set[str] = set()
 
     def audit(case, outcome, saved):
@@ -327,70 +415,74 @@ def main() -> int:
             "model_elapsed_seconds": call["elapsed_seconds"]
         }
 
-    with installed_inspector(args.python) as base_url:
-        report["structured"] = evaluate(base_url)
+    try:
+        with urlopen("http://127.0.0.1:8000/version", timeout=5) as response:
+            report["server"] = json.load(response)
+        with installed_inspector(args.python) as base_url:
+            report["structured"] = evaluate(base_url)
+            retain()
+            if not report["structured"]["ready"]:
+                return 1
+            for case in cases:
+
+                def fetch(case=case):
+                    status, body = _fetch(
+                        base_url + "/api/corpus/investigate?" + urlencode(case["request"])
+                    )
+                    if status != 200:
+                        raise PublicFailure("baseline unavailable")
+                    return baseline_facts(body)
+
+                def invoke(*fields, case=case):
+                    result = subprocess.run(
+                        [
+                            str(args.python.absolute()),
+                            "-m",
+                            "procurement_intelligence_lab.interfaces.live_review",
+                            "--database",
+                            str(args.database.absolute()),
+                            "--project",
+                            case["project"],
+                            *fields,
+                        ],
+                        cwd="/tmp",
+                        capture_output=True,
+                        text=True,
+                        timeout=60,
+                        check=False,
+                    )
+                    body = json.loads(result.stdout)
+                    if not isinstance(body, dict):
+                        raise PublicFailure("malformed public outcome")
+                    if result.returncode:
+                        raise PublicFailure(body.get("code", "public CLI failed"))
+                    return body
+
+                def retain_case(record, case=case):
+                    if report["runs"] and report["runs"][-1]["id"] == case["id"]:
+                        report["runs"][-1] = record
+                    else:
+                        report["runs"].append(record)
+                    retain()
+
+                record = evaluate_with_baseline(case, fetch, invoke, audit, retain_case)
+                print(case["id"], record["outcome"], record["errors"], flush=True)
+    except (OSError, TimeoutError, ValueError, TypeError, RuntimeError, AttributeError) as error:
+        report["operation_errors"] = [type(error).__name__]
+    finally:
+        try:
+            rows = audit_attempts(args.database, cases)
+            with sqlite3.connect(args.database) as db:
+                report["durable_saved_results"] = db.execute(
+                    "SELECT COUNT(*) FROM saved_briefs"
+                ).fetchone()[0]
+            expected_saved = sum(r.get("saved_result_count", 0) for r in report["runs"])
+            report["save_count_matches"] = report["durable_saved_results"] == expected_saved
+        except (OSError, ValueError, TypeError, RuntimeError, sqlite3.Error) as error:
+            rows = []
+            report.setdefault("operation_errors", []).append("audit_" + type(error).__name__)
+        finalize_report(report, cases, rows)
         retain()
-        if not report["structured"]["ready"]:
-            return 1
-        for case in cases:
-            expected = {}
-            if case["expected"] == "investigate":
-                status, body = _fetch(
-                    base_url + "/api/corpus/investigate?" + urlencode(case["request"])
-                )
-                if status != 200:
-                    raise PublicFailure("baseline unavailable")
-                expected = baseline_facts(body)
-
-            def invoke(*fields, case=case):
-                result = subprocess.run(
-                    [
-                        str(args.python.absolute()),
-                        "-m",
-                        "procurement_intelligence_lab.interfaces.live_review",
-                        "--database",
-                        str(args.database.absolute()),
-                        "--project",
-                        case["project"],
-                        *fields,
-                    ],
-                    cwd="/tmp",
-                    capture_output=True,
-                    text=True,
-                    timeout=60,
-                    check=False,
-                )
-                body = json.loads(result.stdout)
-                if result.returncode:
-                    raise PublicFailure(body.get("code", "public CLI failed"))
-                return body
-
-            def retain_case(record, case=case):
-                if report["runs"] and report["runs"][-1]["id"] == case["id"]:
-                    report["runs"][-1] = record
-                else:
-                    report["runs"].append(record)
-                retain()
-
-            record = evaluate_case(case, expected, invoke, audit, retain_case)
-            print(case["id"], record["outcome"], record["errors"], flush=True)
-    report["interpretation"] = summarize(cases, report["runs"])
-    report["attempt_audit"] = audit_attempts(args.database, cases)
-    report["attempt_audit_complete"] = attempts_complete(cases, report["attempt_audit"])
-    with sqlite3.connect(args.database) as db:
-        report["durable_saved_results"] = db.execute(
-            "SELECT COUNT(*) FROM saved_briefs"
-        ).fetchone()[0]
-    expected_saved = sum(r.get("saved_result_count", 0) for r in report["runs"])
-    report["save_count_matches"] = report["durable_saved_results"] == expected_saved
-    report["acceptance"] = (
-        "bounded_pilot_passed"
-        if report["interpretation"]["ready"]
-        and report["save_count_matches"]
-        and report["attempt_audit_complete"]
-        else "not_ready"
-    )
-    retain()
     return int(report["acceptance"] == "not_ready")
 
 
