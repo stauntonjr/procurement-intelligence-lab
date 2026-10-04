@@ -16,14 +16,14 @@ Prompt/schema/endpoint/budgets/framework/tool/fixture/application versions are i
 - Installed wheel probes exercise the native fixture path and new live-intent CLI with a clearly
   labeled deterministic model transport double. Those calls are excluded from live metrics.
 - Explicit actual-inference runner `tools/run_live_review_acceptance.py --run-live --python
-  /tmp/pil-qwen-acceptance-env/bin/python --database /tmp/pil-qwen-final2-walkthrough.db
+  /tmp/pil-qwen-acceptance-env/bin/python --database /tmp/pil-qwen-latest-walkthrough.db
   --output artifacts/local-qwen/walkthrough.json` invokes a clean installed wheel from `/tmp`.
   Frozen development manifest: `evals/operational_agents/local-qwen-walkthrough-v1.json`.
 - Nine actual live walkthroughs (GPU-A mismatch, GPU-C unresolved requirement, GPU-D missing
   observation, three repetitions each) matched complete canonical facts from the deterministic
   service. Every run recovered through a new CLI process, rejected altered digest, approved and
   acknowledged the same save on repetition. Nine durable saved results; two actual tool calls/run.
-  Model elapsed times were 1.068–1.117 seconds (median 1.077). This measures inference transport,
+  Model elapsed times were 1.078–1.133 seconds (median 1.080). This measures inference transport,
   not complete CLI startup, graph, evidence loading or human review latency.
 - Four actual live abstentions passed: unrelated stock-price question, ambiguous item, relative
   date, foreign project. Each retained its inference outcome and invoked zero tools.
@@ -45,6 +45,8 @@ Retained `artifacts/local-qwen/development-prompt-v1-failed.json` includes these
 revision used only declared development smoke questions; no held-out quality claim or tuning on
 validation/test data. Transport diagnostic probes are separate from the acceptance denominator.
 
+The corrected review-boundary build then passed8/9walkthroughs: an explicit GPU-A request was falsely clarified on its third repetition. Retained `artifacts/local-qwen/postreview-development-failed.json` records that failure. The final development prompt receives application-derived literal item mentions, and core validation rejects investigation without unique literal support. Final frozen configuration passed9/9walkthroughs and4/4abstentions; prior failures remain part of the record and this is still not held-out quality evidence.
+
 An inherited unmerged reviewer-page defect also displayed `result_id`. The executed shipped-JS
 oracle failed on the missing saved identity, then passed with `saved_id`. C017 retains this defect
 and a known-bad mutation; no development-agent performance score is claimed. Node is needed to
@@ -63,3 +65,7 @@ verified separately; broader Issues stay open and branch delivery remains distin
 Latest revision-bound JSON, full deterministic/clean-package/challenge results and independent review
 are published with the implementation PR. Final evidence is tied to the PR head, not this narrative's
 historical timing numbers if implementation subsequently changes.
+
+## Independent review and author correction
+
+One independent fresh-context review of `21a5d4439ac7124caf39e629981e624e1e833a9a` found three Important defects: pending draft could execute a foreign checkpoint run before validation, a journal payload could differ from its SQLite row run, and a truncated chunked HTTP response escaped typed handling. All three were reproduced RED through actual public callers, then corrected in one author pass. Two foreign-run HTTP cases now return503 before any tool/brief work; a separate application port test fences mismatched store output. Truncated transport now persists failed/unknown usage. No Critical findings or deferred minors. Latest author fresh pass covers these fixes and literal item support; no second independent review was requested.

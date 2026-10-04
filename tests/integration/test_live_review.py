@@ -110,3 +110,55 @@ def test_public_cli_malformed_model_output_retains_usage_and_no_hidden_text(
             "DO NOT RETAIN"
             not in db.execute("SELECT payload FROM interpretation_calls").fetchone()[0]
         )
+
+
+def test_truncated_chunked_response_is_durable_typed_failure(tmp_path: Path) -> None:
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    class Broken(BaseHTTPRequestHandler):
+        def log_message(self, format: str, *args: object) -> None:
+            pass
+
+        def do_POST(self) -> None:
+            self.rfile.read(int(self.headers["Content-Length"]))
+            self.send_response(200)
+            self.send_header("Transfer-Encoding", "chunked")
+            self.end_headers()
+            self.wfile.write(b"10\r\n{}\r\n")
+            self.close_connection = True
+
+    model = ThreadingHTTPServer(("127.0.0.1", 0), Broken)
+    thread = Thread(target=model.serve_forever, daemon=True)
+    thread.start()
+    try:
+        p = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "procurement_intelligence_lab.interfaces.live_review",
+                "--database",
+                str(tmp_path / "runs.db"),
+                "--endpoint",
+                f"http://127.0.0.1:{model.server_port}/v1",
+                "--project",
+                "atlas",
+                "ask",
+                "--question",
+                "Compare GPU-A",
+                "--as-of",
+                "2026-10-01T00:00:00Z",
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert p.returncode == 0 and p.stdout, p.stderr
+        outcome = json.loads(p.stdout)
+        assert outcome["workflow"] is None and outcome["interpretation"]["status"] == "failed"
+        assert outcome["interpretation"]["reason"] == "model_unavailable"
+        assert outcome["interpretation"]["elapsed_seconds"] >= 0
+        assert outcome["interpretation"]["prompt_tokens"] is None
+    finally:
+        model.shutdown()
+        model.server_close()
+        thread.join()

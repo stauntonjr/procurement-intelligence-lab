@@ -15,6 +15,11 @@ requests a strict JSON schema, disables thinking, and limits output to 256 token
 0; transport socket timeout is 30 seconds; one attempt, no automatic inference retry. The socket
 inactivity timeout is not a hard wall-clock cancellation or proof that server-side GPU work stopped.
 
+An application-owned literal catalog matcher supplies exact item mentions to the model and validates
+that investigation has one matching canonical mention. It escapes identifiers, preserves multiple
+mentions and rejects prefix/alias guesses; it supplies no quantities, case IDs or gold. This feature
+was added after a retained development repetition falsely requested item clarification.
+
 Application validation binds the proposal to the explicit human-selected project, aware as-of and
 scoped admitted catalog. Clarification/unsupported/invalid proposals cannot invoke investigation.
 The model cannot supply quantities, evidence, permissions, reviewer receipts or SQL. The existing

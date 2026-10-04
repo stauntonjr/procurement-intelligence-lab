@@ -7,6 +7,7 @@ from hashlib import sha256
 from typing import Protocol
 
 from procurement_intelligence_lab.application.agent_runs import AgentRunService
+from procurement_intelligence_lab.application.question_intent import canonical_item_mentions
 from procurement_intelligence_lab.platform.semantics.agent_runs import ExecutionKind
 from procurement_intelligence_lab.platform.semantics.interpretation import (
     InterpretationCall,
@@ -66,7 +67,11 @@ class QuestionReviewService:
             proposal = QuestionProposal.parse(reply.text)
             if proposal.project != context.project_id or (
                 proposal.status == "investigate"
-                and (proposal.item not in items or proposal.as_of != as_of)
+                and (
+                    proposal.item not in items
+                    or canonical_item_mentions(question, items) != (proposal.item,)
+                    or proposal.as_of != as_of
+                )
             ):
                 raise ValueError("proposal differs from authorized scope/date/catalog")
             call = replace(
@@ -105,10 +110,16 @@ class QuestionReviewService:
         )
         return QuestionOutcome(call, view)
 
-    def status(self, run_id: str, *, context: RequestContext) -> QuestionOutcome:
+    def _call(self, run_id: str, context: RequestContext) -> InterpretationCall:
         context.require(Permission.READ_EVIDENCE)
         self.composition.runs.resume(run_id, context=context)
         call = self.store.get(run_id)
+        if call.run_id != run_id:
+            raise ModelFailure("interpretation_store_unavailable")
+        return call
+
+    def status(self, run_id: str, *, context: RequestContext) -> QuestionOutcome:
+        call = self._call(run_id, context)
         view = (
             self.composition.runtime.status(run_id, context=context)
             if call.status == "investigate"
@@ -117,8 +128,6 @@ class QuestionReviewService:
         return QuestionOutcome(call, view)
 
     def recover(self, run_id: str, *, context: RequestContext) -> QuestionOutcome:
-        context.require(Permission.READ_EVIDENCE)
-        self.composition.runs.resume(run_id, context=context)
-        call = self.store.get(run_id)
+        call = self._call(run_id, context)
         # Pending means interrupted/unknown: never replay inference automatically.
         return self._route(call, context)

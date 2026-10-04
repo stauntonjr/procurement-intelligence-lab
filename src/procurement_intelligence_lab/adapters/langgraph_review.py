@@ -289,6 +289,8 @@ class LangGraphReviewRuntime:
             snapshot = self._snapshot(graph, config)
             if snapshot.values:
                 state = snapshot.values
+                if state.get("run_id") != run_id:
+                    raise WorkflowError("checkpoint run differs from authorized run")
                 if (
                     state.get("item") != request.item
                     or state.get("as_of") != request.as_of.isoformat()

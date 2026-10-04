@@ -45,7 +45,7 @@ URL. Loading history shows execution kind and immutable-version compatibility.
 
 One exact catalog item and explicit aware cutoff are supported. Aliases, multi-item requests and
 relative dates ask for clarification; broader fuzzy retrieval is deferred. Scope/date proposals
-must match server-owned context. Strict JSON rejects extra/duplicate/missing fields and invented
+must match server-owned context, and an investigation must have exactly one literal catalog mention matching its proposed item. The model receives this deterministic mention list as additional evidence; it cannot select an unrelated admitted item. Strict JSON rejects extra/duplicate/missing fields and invented
 items. Quantities, unresolved conflicts and absent observations come from existing services.
 Model text cannot grant review/save authority. Approval records the exact immutable brief; only
 human review plus fresh policy/evidence can save one local demo result.

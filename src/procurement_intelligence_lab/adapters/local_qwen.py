@@ -2,11 +2,13 @@
 
 import json
 from dataclasses import dataclass
+from http.client import HTTPException
 from typing import Any, cast
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
+from procurement_intelligence_lab.application.question_intent import canonical_item_mentions
 from procurement_intelligence_lab.platform.semantics.interpretation import ModelFailure, ModelReply
 
 MODEL = "nvidia/Qwen3.6-35B-A3B-NVFP4"
@@ -18,7 +20,10 @@ Use this decision order:
 1. A question about required quantities, order coverage, order comparisons or their source evidence
    is a REVIEW task. Missing/ambiguous item, wrong project, or unclear date does NOT make it unsupported.
    Other tasks (stock prices, forecasting, arbitrary calculations, order submission) are unsupported.
-2. For a REVIEW task, the question must explicitly name ONE exact catalog item. Generic "the GPU",
+2. literal_item_mentions is deterministic evidence from the application, listing exact catalog names
+   in the question. For a REVIEW task with exactly ONE such name and clear scope/date, investigate
+   that item. Do not call that literal name ambiguous. Empty or multiple mentions require clarify.
+   The question must explicitly name ONE exact catalog item. Generic "the GPU",
    aliases, absent items or multiple catalog items require clarify with reason item_ambiguous.
 3. Any different project, different as-of date or relative time (next week/today/latest) requires
    clarify. Use date_ambiguous for time ambiguity; item_ambiguous for a different project.
@@ -102,7 +107,13 @@ class LocalQwenInterpreter:
                 {
                     "role": "user",
                     "content": json.dumps(
-                        {"question": question, "catalog": items, "project": project, "as_of": as_of}
+                        {
+                            "question": question,
+                            "catalog": items,
+                            "literal_item_mentions": canonical_item_mentions(question, items),
+                            "project": project,
+                            "as_of": as_of,
+                        }
                     ),
                 },
             ],
@@ -123,7 +134,7 @@ class LocalQwenInterpreter:
                     raise ModelFailure("invalid_model_response")
         except TimeoutError as error:
             raise ModelFailure("model_timeout") from error
-        except (HTTPError, URLError, OSError) as error:
+        except (HTTPError, URLError, OSError, HTTPException) as error:
             reason = (
                 "model_timeout"
                 if isinstance(getattr(error, "reason", None), TimeoutError)

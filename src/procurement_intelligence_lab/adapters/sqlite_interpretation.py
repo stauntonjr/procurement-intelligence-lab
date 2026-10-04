@@ -52,7 +52,10 @@ class SqliteInterpretationStore:
         try:
             data: dict[str, Any] = json.loads(cast(str, row[0]))
             data["as_of"] = datetime.fromisoformat(data["as_of"])
-            return InterpretationCall(**data)
+            call = InterpretationCall(**data)
+            if call.run_id != run_id:
+                raise ModelFailure("interpretation_store_unavailable")
+            return call
         except (ValueError, TypeError, KeyError, AttributeError) as error:
             raise ModelFailure("interpretation_store_unavailable") from error
 
