@@ -64,6 +64,12 @@ def _outcomes(rows: list[dict[str, Any]], ids: list[str]) -> dict[str, int]:
     return {name: counts[name] for name in ("pass", "fail", "unknown", "not_applicable")}
 
 
+def unique_events(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    unique = {e["event_id"]: e for e in events}
+    require(all(unique[e["event_id"]] == e for e in events), "conflicting_event_replay")
+    return list(unique.values())
+
+
 def _calls(
     role: str, raw: dict[str, Any], ids: list[str]
 ) -> tuple[list[dict[str, Any]], int, int, int]:
@@ -74,7 +80,7 @@ def _calls(
         tools = sum(
             e["kind"] == "tool_started"
             for ledger in raw["ledgers"].values()
-            for e in ledger["events"]
+            for e in unique_events(ledger["events"])
         )
         saves = sum(len(ledger["saves"]) for ledger in raw["ledgers"].values())
     else:
@@ -165,7 +171,16 @@ def _fresh_or_control(role: str, raw: dict[str, Any], spec: dict[str, Any]) -> N
                 and row["trajectory"]["outcome"] == "not_applicable",
                 "abstention_did_work",
             )
-    if role == "fresh_language":
+    if role != "fresh_language":
+        if "saved_results" not in raw:
+            raise MissingEvidence("missing_control_save_total")
+        require(
+            type(raw["saved_results"]) is int
+            and raw["saved_results"] >= 0
+            and raw["saved_results"] == sum(a["saved_result_count"] for a in audits.values()),
+            "control_save_disagreement",
+        )
+    else:
         structured = inventory(raw["structured"]["results"], spec["ids"])
         require(
             all(r["outcome"] == "pass" for r in structured.values())
@@ -184,6 +199,20 @@ def _original(raw: dict[str, Any], spec: dict[str, Any]) -> None:
         raw["execution_kind"] == "live" and set(raw["ledgers"]) == set(spec["scenarios"]),
         "foreign_original_scope",
     )
+    require(len({r["run_id"] for r in rows.values()}) == len(rows), "reused_original_trial")
+    for source, ledger in raw["ledgers"].items():
+        owned = {r["run_id"] for r in rows.values() if r["sources"] == source}
+        for kind in ("runs", "calls"):
+            inventory([r | {"id": r["run_id"]} for r in ledger[kind]], list(owned))
+        require(
+            all(r["run_id"] in owned for kind in ("events", "saves") for r in ledger[kind]),
+            "unowned_original_record",
+        )
+        for field in ("saved_id", "idempotency_key"):
+            require(
+                len({r[field] for r in ledger["saves"]}) == len(ledger["saves"]),
+                "duplicate_saved_identity",
+            )
     for row in rows.values():
         source = row["sources"]
         expected = spec["scenarios"][source]
@@ -238,8 +267,12 @@ def _original(raw: dict[str, Any], spec: dict[str, Any]) -> None:
             ),
             "foreign_original_event",
         )
+        require(
+            all(e.tool_version == run.versions.tool_schema for e in events if e.tool_name),
+            "foreign_original_tool_version",
+        )
         actual = Counter((e.kind.value, e.tool_name) for e in unique.values())
-        required = Counter(
+        required: Counter[tuple[str, str | None]] = Counter(
             [
                 ("run_started", None),
                 ("tool_started", "investigate_quantity"),
@@ -330,8 +363,9 @@ def compile_report(role: str, raw: dict[str, Any], spec: dict[str, Any]) -> dict
                     )
                     controlled += len(calls)
                     controlled_calls.extend(calls)
-                tools += sum(e["kind"] == "tool_started" for e in journal["events"])
-                failed += sum(e["kind"] == "tool_failed" for e in journal["events"])
+                events = unique_events(journal["events"])
+                tools += sum(e["kind"] == "tool_started" for e in events)
+                failed += sum(e["kind"] == "tool_failed" for e in events)
                 saves += len(journal["saved"])
             result.update(
                 real_model_attempts=len(real_calls),
@@ -359,6 +393,15 @@ def compile_report(role: str, raw: dict[str, Any], spec: dict[str, Any]) -> dict
                 investigation_http_seconds=timing([r.get("seconds") for r in measured.values()]),
                 source_http_seconds=timing([r.get("seconds") for r in raw["source_requests"]]),
             )
+            require(set(spec["http_statuses"]) == set(spec["ids"]), "baseline_status_inventory")
+            for key, observation in measured.items():
+                if observation.get("status") is None:
+                    raise MissingEvidence("missing_primary_http_status")
+                require(
+                    type(observation["status"]) is int
+                    and observation["status"] == spec["http_statuses"][key],
+                    "baseline_primary_status_disagreement",
+                )
             require(
                 raw["structured"]["source_references_resolved"] == spec["source_checks"]
                 and len(raw["source_requests"]) == spec["source_checks"]

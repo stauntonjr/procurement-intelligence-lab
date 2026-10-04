@@ -72,7 +72,7 @@ Unobserved usage remains unknown; cost USD remains null rather than assumed free
 ## Reproduction and evidence boundaries
 
 The compiler only reads evaluator reports. It refuses hash/version/denominator/path drift, checks
-score-to-journal ownership and terminal counts, source/fact/save consistency and applicable causal
+score-to-journal ownership and terminal counts, closed original run/call/save ownership, compatible causal tool versions, primary HTTP status against pinned gold, control durable-save totals, source/fact/save consistency and applicable causal
 completion. Missing required records remain unknown, contradictions fail, and unknown calls are null.
 A small report cannot silently shrink the closed 48/9/9/28/28/48 role denominators. Empty/missing roles
 cannot pass. Exact output replay does not reissue any interpretation or authorize a save.
@@ -116,3 +116,20 @@ No raw provider reasoning, credentials, tracing/export, model reload or retry is
 5. Only after the release gates, execute approved B2 source diversity:20projects/120documents/4800rows,
    200queries and12/4/4project split with independent gold. Current corpus is still4projects,
    24workbooks and960rows. More wording is not source expansion.
+
+## Compiler review and correction
+
+The sole independent review of67faf61 found four Important validation defects: unowned/reused
+original records, foreign causal tool versions, contradictory control durable-save totals, and
+primary HTTP failures hidden by score flags. A replay-count finding was regraded from Minor to
+Important because repeated telemetry is not an actual invocation. One author fix pass observed
+18regression cases RED thenGREEN;40focused tests pass with the baseline test excluded from this
+focused command. Original/adversarial identical replays now retain18/7tool starts and1failed tool.
+The actual offline CLI blocks all five reproduced contradictory report mutations.
+
+The same frozen reports compile to the same compact outcomes after correction, without inference
+or baseline remeasurement. Expected HTTP statuses, including422rejections, are pinned from the
+unchanged hash-validated gold. Pre-review manifest and first dossier remain retained; the corrected
+compiler replay is a new output. Full current checks and exact-head publication verification are
+required before bounded slice completion; their revision-bound results live in the draft PR evidence.
+Full release/browser/deployment/B2 gates remain open.

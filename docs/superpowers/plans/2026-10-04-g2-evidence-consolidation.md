@@ -29,25 +29,25 @@ Files: tools/g2_evidence.py (pure report checks/metrics), tools/consolidate_g2_e
 (hash/path reader, baseline/public CLI), existing tools/evaluate_procurement_corpus.py
 (optional fetch callback; default behavior unchanged), tests/unit/test_g2_evidence.py,
 tests/integration/test_g2_evidence_cli.py. Manifest/report interfaces below feed Task2.
-- [ ] RED: missing/duplicate/foreign rows or causal evidence cannot pass; changed hashes and
+- [x] RED: missing/duplicate/foreign rows or causal evidence cannot pass; changed hashes and
   versions fail; controlled attempts cannot become real metrics; historical control failures
   remain visible; no reports cannot produce zero calls or readiness; negative/nonfinite timing
   fails, absent timing remains null. Exercise actual CLI, existing output refusal and no inference.
-- [ ] Implement closed source roles: fresh_language, original_browser, adversarial,
+- [x] Implement closed source roles: fresh_language, original_browser, adversarial,
   baseline_controls, candidate_controls, deterministic_baseline. Frozen manifest binds role,
   relative report path/SHA256, expected row IDs, versions and historical/gating use.
   compile_report(role, report, spec) returns evidence status, observed outcome counts,
   actual counts and separate timing/usage. consolidate(manifest, artifact_root) keeps every role.
   Original factual/source/run/save checks reference the already pinned original scenario manifest;
   adversarial causal evidence reuses current audit_evidence; fresh attempts reconcile audit rows.
-- [ ] Run focused public/unit/static/type checks; commit compiler. Whole make check runs at the
+- [x] Run focused public/unit/static/type checks; commit compiler. Whole make check runs at the
   final reviewed revision in Task2, before publication, so review fixes receive one current full check.
 
 ## Task 2: installed baseline, frozen dossier and whole-branch review
 
 Produces evals/operational_agents/g2-evidence-v1.json and docs/project/g2-acceptance-results.json;
 raw baseline/dossier/logs retained in artifacts/g2-evidence/v1/. Consumes Task1 compiler.
-- [ ] Verify reused clean wheel100Python byte/version parity; measure48 deterministic requests
+- [x] Verify reused clean wheel100Python byte/version parity; measure48 deterministic requests
   and464source checks once through installed HTTP, zero model calls. Freeze raw baseline/report
   hashes before consolidation. Invoke actual CLI with fresh output; inspect all denominators,
   costs/nulls/version/causal bindings and timing population labels. No inference retry or rerun.
@@ -72,3 +72,10 @@ of prior adversarial publication checklist. Consumes verified Task2 output, not 
 4. Original source fixture differences are bound explicitly; application/prompt drift cannot pass.
 5. Timing scopes are honest, unknown metrics/cost remain null, and global release is not inferred
    from local evidence. No source/raw reasoning/token credential export or operational authority.
+
+## Review disposition
+
+Sole review67faf61:4Important and1Minor. The author regraded telemetry overcount as Important
+and corrected all five in one18-case RED/GREEN pass,40focused passes. Frozen dossier outcomes
+unchanged; original inputs preserved. Final full/CI/publication gates remain explicit in Task2/3
+and the revision-bound PR evidence; no inference retry or second review.

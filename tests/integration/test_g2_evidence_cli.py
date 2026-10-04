@@ -95,3 +95,48 @@ def test_actual_baseline_cli_exercises_http_without_inference(tmp_path: Path):
     assert len(report["source_requests"]) == report["source_http_seconds"]["count"] == 464
     assert report["investigation_http_seconds"]["min"] >= 0
     assert "no natural-language interpretation, model calls" in report["condition"]
+
+
+def test_actual_cli_checks_primary_http_status_after_hash_verification(tmp_path: Path):
+    from hashlib import sha256
+
+    ids = [f"query-{i}" for i in range(48)]
+    versions = {"application": "fixed"}
+    for status, expected in ((500, "fail"), (None, "unknown")):
+        raw = {
+            "versions": versions,
+            "structured": {
+                "results": [{"id": i, "outcome": "pass"} for i in ids],
+                "source_references_resolved": 1,
+            },
+            "investigation_requests": [{"id": i, "status": status, "seconds": 0.1} for i in ids],
+            "source_requests": [{"status": 200, "seconds": 0.1}],
+        }
+        source = tmp_path / "raw.json"
+        source.write_text(json.dumps(raw))
+        manifest = tmp_path / "manifest.json"
+        manifest.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "target_versions": versions,
+                    "reports": {
+                        "deterministic_baseline": {
+                            "path": source.name,
+                            "sha256": sha256(source.read_bytes()).hexdigest(),
+                            "ids": ids,
+                            "versions": versions,
+                            "use": "gating",
+                            "source_checks": 1,
+                            "http_statuses": {i: 200 for i in ids},
+                        }
+                    },
+                }
+            )
+        )
+        output = tmp_path / f"{expected}.json"
+        done = run(manifest, tmp_path, output)
+        assert done.returncode == 1
+        group = json.loads(output.read_text())["groups"]["deterministic_baseline"]
+        assert group["evidence_status"] == expected, group
+        assert group["real_model_attempts"] == 0

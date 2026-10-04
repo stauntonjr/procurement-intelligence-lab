@@ -48,6 +48,7 @@ def control() -> tuple[dict[str, Any], dict[str, Any]]:
     return {
         "versions": {"application": "frozen"},
         "evaluation_use": "development",
+        "saved_results": 0,
         "runs": [row],
         "attempt_audit": [audited],
         "attempt_audit_complete": True,
@@ -261,7 +262,7 @@ def original() -> tuple[dict[str, Any], dict[str, Any]]:
                 "completion_tokens": 4,
             }
             reject = source == "showcase-a-b-order" and repetition == 1
-            row = {
+            row: dict[str, Any] = {
                 "sources": source,
                 "repetition": repetition,
                 "run_id": identity,
@@ -270,7 +271,7 @@ def original() -> tuple[dict[str, Any], dict[str, Any]]:
                 "source_count": 1,
                 "process_restart_recovered": repetition == 1,
                 "decision": "reject" if reject else "approve",
-                "digest": "digest",
+                "digest": "digest-" + identity,
                 "saved_id": None if reject else "saved-" + identity,
                 "facts": spec["scenarios"][source] | {"evidence": [{"evidence_id": source}]},
             }
@@ -281,7 +282,12 @@ def original() -> tuple[dict[str, Any], dict[str, Any]]:
             ledger["events"].extend(events)
             if not reject:
                 ledger["saves"].append(
-                    {"run_id": identity, "saved_id": row["saved_id"], "digest": "digest"}
+                    {
+                        "run_id": identity,
+                        "saved_id": row["saved_id"],
+                        "digest": row["digest"],
+                        "idempotency_key": "brief-save:" + row["digest"],
+                    }
                 )
         raw["ledgers"][source] = ledger
     return raw, spec
@@ -301,3 +307,95 @@ def test_missing_original_result_is_unknown_not_a_success():
     result = compile_report("original_browser", raw, spec)
     assert result["evidence_status"] == "unknown", result
     assert result["real_model_attempts"] == 9
+
+
+@pytest.mark.parametrize(
+    "damage", ["orphan_save", "reused_trial", "extra_run", "saved_identity", "idempotency"]
+)
+def test_original_ledger_is_a_closed_one_to_one_population(damage: str):
+    raw, spec = original()
+    ledger = raw["ledgers"]["showcase-a-order"]
+    if damage == "orphan_save":
+        ledger["saves"].append(ledger["saves"][0] | {"run_id": "foreign", "saved_id": "foreign"})
+    elif damage == "reused_trial":
+        raw["runs"][1] = deepcopy(raw["runs"][0]) | {
+            "repetition": 2,
+            "process_restart_recovered": False,
+        }
+    elif damage == "extra_run":
+        ledger["runs"].append(ledger["runs"][0] | {"run_id": "foreign"})
+    elif damage == "saved_identity":
+        ledger["saves"][1]["saved_id"] = ledger["saves"][0]["saved_id"]
+        raw["runs"][1]["saved_id"] = raw["runs"][0]["saved_id"]
+    else:
+        ledger["saves"][1]["idempotency_key"] = ledger["saves"][0]["idempotency_key"]
+    result = compile_report("original_browser", raw, spec)
+    assert result["evidence_status"] == "fail", result
+
+
+def test_original_foreign_tool_version_is_a_contradiction():
+    raw, spec = original()
+    for ledger in raw["ledgers"].values():
+        for event in ledger["events"]:
+            if event["tool_name"]:
+                event["tool_version"] = "foreign"
+    assert compile_report("original_browser", raw, spec)["evidence_status"] == "fail"
+
+
+@pytest.mark.parametrize("role", ["baseline_controls", "candidate_controls"])
+@pytest.mark.parametrize("damage", ["disagrees", "missing", "negative", "boolean"])
+def test_control_durable_save_total_must_agree(role: str, damage: str):
+    raw, spec = control()
+    if damage == "missing":
+        raw.pop("saved_results")
+    else:
+        raw["saved_results"] = {"disagrees": 2, "negative": -1, "boolean": False}[damage]
+    result = compile_report(role, raw, spec)
+    assert result["evidence_status"] == ("unknown" if damage == "missing" else "fail"), result
+    assert result["real_model_attempts"] == 1
+
+
+def deterministic() -> tuple[dict[str, Any], dict[str, Any]]:
+    ids = ["accepted", "expected-rejection"]
+    versions = {"application": "fixed"}
+    raw = {
+        "versions": versions,
+        "structured": {
+            "results": [{"id": i, "outcome": "pass"} for i in ids],
+            "source_references_resolved": 1,
+        },
+        "investigation_requests": [
+            {"id": ids[0], "status": 200, "seconds": 0.1},
+            {"id": ids[1], "status": 422, "seconds": 0.01},
+        ],
+        "source_requests": [{"status": 200, "seconds": 0.1}],
+    }
+    return raw, {
+        "ids": ids,
+        "versions": versions,
+        "source_checks": 1,
+        "http_statuses": {"accepted": 200, "expected-rejection": 422},
+    }
+
+
+@pytest.mark.parametrize("status", [500, 200, None])
+def test_baseline_observed_status_must_match_pinned_oracle(status: int | None):
+    raw, spec = deterministic()
+    raw["investigation_requests"][1]["status"] = status
+    result = compile_report("deterministic_baseline", raw, spec)
+    assert result["evidence_status"] == ("unknown" if status is None else "fail"), result
+
+
+def test_expected_http_rejection_is_a_valid_baseline_observation():
+    raw, spec = deterministic()
+    assert compile_report("deterministic_baseline", raw, spec)["evidence_status"] == "pass"
+
+
+def test_original_replayed_telemetry_is_not_another_tool_invocation():
+    raw, spec = original()
+    ledger = raw["ledgers"]["showcase-a-order"]
+    ledger["events"].append(deepcopy(ledger["events"][1]))
+    result = compile_report("original_browser", raw, spec)
+    assert result["evidence_status"] == "pass", result
+    assert result["tool_starts"] == 18
+    assert result["saves"] == 8
