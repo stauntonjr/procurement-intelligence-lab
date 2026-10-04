@@ -11,6 +11,7 @@ from procurement_intelligence_lab.application.corpus_investigation import Corpus
 from procurement_intelligence_lab.application.original_showcase import OriginalShowcaseInvestigator
 from procurement_intelligence_lab.application.showcase import ShowcaseScenario
 from procurement_intelligence_lab.interfaces.agent_runs import PROJECTS
+from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError
 from procurement_intelligence_lab.ports.review_sources import ReviewSources
 
 SOURCE_OPTIONS = ("corpus", "showcase-a-order", "showcase-a-b-order", "showcase-a-only")
@@ -49,7 +50,10 @@ def compose_sources(selection: str = "corpus") -> SourceComposition:
     if selection not in scenarios:
         raise ValueError("unsupported review sources")
     original = ShowcaseSources(selection)
-    manifest = files("procurement_intelligence_lab.examples").joinpath(MANIFEST).read_bytes()
+    try:
+        manifest = files("procurement_intelligence_lab.examples").joinpath(MANIFEST).read_bytes()
+    except OSError as error:
+        raise CorpusAdmissionError("original source manifest cannot be read") from error
     return SourceComposition(
         original,
         OriginalShowcaseInvestigator(original, scenarios[selection]),

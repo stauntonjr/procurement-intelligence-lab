@@ -195,3 +195,51 @@ def test_original_page_explains_observation_and_fixed_sources(tmp_path: Path) ->
         server.shutdown()
         server.server_close()
         thread.join()
+
+
+@pytest.mark.parametrize("module", ["workflow", "live_review"])
+@pytest.mark.parametrize("failure", ["FileNotFoundError", "PermissionError"])
+def test_original_missing_manifest_cli_is_typed(tmp_path: Path, module: str, failure: str) -> None:
+    database = tmp_path / "never-created.db"
+    fields = (
+        ["start", "--item", "GPU-A"]
+        if module == "workflow"
+        else ["ask", "--question", "Compare GPU-A"]
+    )
+    # Fault only the packaged-resource read, then run the real CLI entry point.
+    script = f"""
+import runpy
+from pathlib import Path
+original = Path.read_bytes
+def read(path):
+    if path.name == "showcase_review_sources_v1.json":
+        raise {failure}("injected unavailable packaged resource")
+    return original(path)
+Path.read_bytes = read
+runpy.run_module("procurement_intelligence_lab.interfaces.{module}", run_name="__main__")
+"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            script,
+            "--database",
+            str(database),
+            "--project",
+            "synthetic-project",
+            "--sources",
+            "showcase-a-order",
+            *fields,
+            "--as-of",
+            CUTOFF,
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 1 and result.stderr == ""
+    assert json.loads(result.stdout) == {
+        "code": "corpus_admission_failed",
+        "category": "infrastructure",
+    }
+    assert not database.exists()

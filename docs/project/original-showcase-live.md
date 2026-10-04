@@ -56,3 +56,19 @@ acceptance precede corpus expansion. Main remains separate from this draft stack
 Roadmap stewardship run [37181479778](https://github.com/stauntonjr/procurement-intelligence-lab/actions/runs/37181479778)
 failed with Gemini daily-quota 429; it produced no usable advisory. Deliberate live planning audit
 found no missing configured objects; no advisory completion is claimed.
+
+## Independent review correction
+
+The independent review at `696089d4b69863ea4c1db9a94c50ed2286086f8e` found one
+Important defect: missing/unreadable packaged source manifest escaped the fixture and live
+CLI composition boundary. Four actual-entrypoint subprocess regressions reproduced the
+traceback/wrong-category failures before persistence or inference. The author fix translates
+resource-read errors into a closed `corpus_admission_failed` infrastructure envelope; both CLIs
+return code1 without traceback or database creation. No other findings or declined cases.
+
+The nine live trials retain their original frozen application/wheel bindings in the compact
+results; they are not presented as new inference at the corrected head. The correction affects
+only resource-failure translation. Fresh clean-package, installed fixture/browser, public-error
+and full-suite checks verify the corrected code without repeating or tuning model calls. Changed
+application bindings correctly refuse recovery of old-version runs; never mix those databases
+with a new configuration. Fresh held-out/fullG2 acceptance remains open.

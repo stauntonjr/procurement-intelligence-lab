@@ -30,6 +30,7 @@ from procurement_intelligence_lab.interfaces.workflow import (
 )
 from procurement_intelligence_lab.platform.semantics.interpretation import ModelFailure
 from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
+from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError
 
 
 def compose_live(
@@ -130,6 +131,8 @@ def main() -> int:
             )
         )
         return 0
+    except CorpusAdmissionError as error:
+        result = {"code": error.code, "category": error.category}
     except ModelFailure as error:
         result = {
             "code": error.code.value,

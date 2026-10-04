@@ -43,6 +43,7 @@ from procurement_intelligence_lab.platform.semantics.workflows import (
     WorkflowRequest,
     WorkflowView,
 )
+from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError
 from procurement_intelligence_lab.ports.review_sources import ReviewSources
 from procurement_intelligence_lab.ports.workflows import AgentWorkflowRuntime
 
@@ -165,6 +166,8 @@ def main() -> int:
             )
         print(json.dumps(view_dto(view), default=_date))
         return 0
+    except CorpusAdmissionError as error:
+        code, category = error.code, error.category
     except (
         WorkflowError,
         BriefConflict,
