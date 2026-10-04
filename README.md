@@ -150,3 +150,8 @@ guards, including a real process death after durable save and exact recovery. Fi
 three controlled protocol attempts are counted separately; actual tool failure remains visible.
 This unmerged result requires complete causal/approval evidence and keeps full G2/release,
 comprehensive accessibility, deployment and corpus expansion as separate gates.
+
+The [G2 acceptance dossier](docs/project/g2-acceptance-dossier.md) consolidates original browser,
+fresh language, failure guards and a measured installed deterministic baseline with pinned artifacts.
+Historical misses and separate latency/cost scopes remain visible. It uses zero new model requests;
+full release/browser/deployment and source expansion remain gated.

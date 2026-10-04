@@ -1,5 +1,16 @@
 # Project handoff
 
+## G2 installed evidence consolidation — 2026-10-04
+
+`codex/g2-evidence-consolidation` stacks on draft #189, unmerged. Hash-bound compiler reconciles
+fresh language48/48, original three-scenario9/9, adversarial9/9 and a new installed deterministic
+48/48/464source timing run, with zero new inference. Prior controls25/28 and candidate26/28 remain
+visible as inspected development; populations are not pooled. [Dossier, latency scopes and ordered
+remaining work](g2-acceptance-dossier.md). Bounded installed suite passes; full G2/release, actual
+browser error/accessibility coverage, measured presentation, main integration and deployment remain
+open. B2 stays gated; source corpus unchanged. Unknown evidence/cost is notzero. Next bounded work:
+#74 actual browser async/error recovery, then reviewer rehearsal and separately authorized rollout.
+
 ## Installed G2 adversarial acceptance — 2026-10-04
 
 `codex/g2-adversarial-acceptance` is stacked on draft #188, unmerged. Nine installed HTTP/process

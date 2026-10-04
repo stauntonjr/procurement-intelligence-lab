@@ -55,7 +55,7 @@ Consumes Task1 runner; produces immutable report/freeze/parity/observations cons
 
 Consumes verified Task2 artifacts/counts; produces docs/project/g2-adversarial-acceptance.md and
 compact outcomes, handoff/milestone/README and exact-head semantic evidence.
-- [ ] Publish stacked draft, keep Issues open and Project status accurate; audit planning after
+- [x] Publish stacked draft, keep Issues open and Project status accurate; audit planning after
   writes. Verify all10required exact-head CI checks, then archive only this execution workspace.
 
 ## Review Focus
@@ -66,3 +66,7 @@ missing/partial/crash evidence cannot turn into success; tool/clock/save injecti
 and separately hash-bound; crash proof requires exit86 plus same one durable result after restart;
 no raw prompts/provider reasoning/token credentials in retained public payloads. Full deployment,
 comprehensive accessibility, broader release acceptance and B2 expansion remain separate gates.
+
+Publication verified in draft #189 at9f6f21fec9f944f58f3bdc08dc6ddba0c1ca6db8: all10required CI
+checks and final PR contract passed; planning107items/25fields/11views,zero configuredmissing;
+own execution ledger archived. This checklist correction records completed prior work, no new run.

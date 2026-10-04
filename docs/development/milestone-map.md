@@ -180,3 +180,12 @@ controlled terminal attempts, seven tools/one expected failure, three receipts a
 recovered save. Missing causal/ownership evidence blocks acceptance. [Evidence and limits](../project/g2-adversarial-acceptance.md).
 No runtime/source/prompt/package changes. Full G2/release consolidation, comprehensive accessibility,
 deployment and B2 source expansion remain open; four projects/24workbooks/960rows unchanged.
+
+## G2 installed evidence consolidation branch — 2026-10-04
+
+Primary #72/M9; stacked on #189, unmerged. Six hash-bound report populations remain separate:
+fresh48/48, original9/9, adversarial9/9, prior controls25/28, candidate26/28 and installed structured
+48/48/464source checks. New baseline median investigation HTTP0.168s; fresh interpretation1.158s
+is a different task/timing scope, not a speed comparison. [Dossier/remaining gates](../project/g2-acceptance-dossier.md).
+Zero new inference; current four-project source corpus unchanged. Full G2/release/browser/accessibility,
+measured presentation, main integration, deployment and B2 remain open; broader Issues InProgress.
