@@ -4610,5 +4610,13 @@
     "candidate": "artifacts/cutoff-development/v1/candidate.json",
     "regression": "artifacts/cutoff-development/v1/regression.json",
     "original_browser": "artifacts/cutoff-development/v1/original-browser-run/report.json"
+  },
+  "independent_review": {
+    "revision": "1b1c9516566fdade88370ffc8c6124395fcad5b9",
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "focused_tests_passed": 68,
+    "evidence": "Direct SQLite/report/question/wheel/installed100Python-file reconciliation; no inference; qualified draft closeout only. Latest-revision closeout is author fresh pass."
   }
 }

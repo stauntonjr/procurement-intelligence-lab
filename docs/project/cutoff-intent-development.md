@@ -101,3 +101,17 @@ language evaluation, remaining full G2/adversarial release gates, comprehensive 
 deployment are separate work. Corpus expansion remains gated. No paid provider/model reload/traces.
 The latest roadmap advisory remains the prior daily-quota429 failure37189328482; this bounded
 continuation deliberately reviewed live Project/planning state and does not claim a new advisory.
+
+## Independent review
+
+One fresh-context read-only review at `1b1c9516566fdade88370ffc8c6124395fcad5b9` found
+no Critical, Important or Minor findings. It independently reconciled all113terminal calls,
+124tool starts and36saves across six SQLite ledgers, report/question/wheel hashes and all100
+installed Python files with reviewed source/wheel bytes. Focused68checks passed; retained full
+666test/package/challenge logs were verified. No inference or checkout mutation was performed.
+The two safe control misses remain explicit acceptance limitations, not concealed defects.
+
+Subsequent exact-head semantic evidence, CI, PR and planning closeout receive an author fresh
+pass, not a second independent review. No corrective pass or deferred minors. Generalization,
+causal superiority, full G2, comprehensive accessibility, deployment and expansion were expressly
+set aside as unsupported or separate gates. This is qualified draft closeout, not merge/release.

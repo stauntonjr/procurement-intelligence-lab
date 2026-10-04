@@ -3,9 +3,10 @@
 ## Cutoff intent development continuation — 2026-10-04
 
 `codex/cutoff-intent-development` is stacked on draft #186. Matching review-cutoff wording is
-request metadata, with existing scope/date/item and human-save guards. Baseline25/28, candidate26/28
-controls retain variable safe misses; candidate inspected-language regression48/48 and original
-browser9/9 pass.113 actual calls,124 tool starts,36 saves. See [results/limits](cutoff-intent-development.md).
+request metadata, with existing scope/date/item and human-save guards. Baseline 25/28 includes
+a conflicting-date routing failure; candidate 26/28 retains two safe supported-request abstentions.
+Candidate inspected-language regression 48/48 and original browser 9/9 pass: 113 actual calls,
+124 tool starts and 36 saves. See [results/limits](cutoff-intent-development.md).
 The prior fresh-language cohort is retired as inspected development data before tuning. Full G2
 remains not_ready; new independent evaluation, release/deployment and expansion gates remain open.
 
@@ -16,7 +17,8 @@ scenarios with new independently authored validation/test wording: 23/24 pass, o
 miss on a valid explicit-cutoff Cinder query. Root development 24/24; total 47/48. Installed gold
 48/48 plus 464 source checks, 48 actual calls, 54 tool starts, 27 exact saves. See
 [provenance/results/limits](fresh-language-evaluation.md). This new language cohort is now
-retired as inspected development data; see the cutoff continuation above. Unmerged, not_ready for bounded live acceptance/full G2;
+retired as inspected development data; see the cutoff continuation above. Unmerged, not_ready
+for bounded live acceptance/full G2;
 no new source-data independence or corpus expansion.
 
 ## Original showcase live continuation — 2026-10-04
