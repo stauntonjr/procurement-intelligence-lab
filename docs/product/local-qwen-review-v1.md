@@ -43,8 +43,12 @@ URL. Loading history shows execution kind and immutable-version compatibility.
 
 ## Bounded semantics
 
-One exact catalog item and explicit aware cutoff are supported. Aliases, multi-item requests and
-relative dates ask for clarification; broader fuzzy retrieval is deferred. Scope/date proposals
+One exact catalog item and explicit aware cutoff are supported. Requirement governance, conflict
+and document approval applicability are review intents, including unresolved evidence. Document-relative
+predicates use the selected cutoff; they do not grant human approval/save authority. Calendar-boundary
+wording may use that cutoff only when consistent with it. Conflicting explicit dates, inconsistent
+boundaries, unresolved relative query dates, aliases and multi-item requests ask for clarification;
+broader fuzzy retrieval is deferred. Scope/date proposals
 must match server-owned context, and an investigation must have exactly one literal catalog mention matching its proposed item. The model receives this deterministic mention list as additional evidence; it cannot select an unrelated admitted item. Strict JSON rejects extra/duplicate/missing fields and invented
 items. Quantities, unresolved conflicts and absent observations come from existing services.
 Model text cannot grant review/save authority. Approval records the exact immutable brief; only

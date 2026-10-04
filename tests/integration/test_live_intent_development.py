@@ -80,6 +80,7 @@ def test_installed_live_intent_development() -> None:
                     case["as_of"],
                 ],
                 cwd="/tmp",
+                check=False,
                 text=True,
                 capture_output=True,
                 timeout=60,

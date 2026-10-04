@@ -44,8 +44,14 @@ The journal introduces a separate storage contract, while preserving tool-event 
 application-owned human authority. Prompt/schema/endpoint/budgets/framework versions, corpus and
 application bytes bind immutable run versions. Version mismatch refuses recovery.
 
-Explicit date/project remain user controls; relative/contradictory dates and ambiguous items require
-clarification. Broad natural-language quality, original tiny fixture routing, hard cancellation,
+Explicit date/project remain user controls. The 2026-10-04 development clarification defines
+requirement governance/conflict and document approval applicability as read-only review intents.
+A document-relative predicate (for example, before document approval) describes evidence at the
+selected cutoff; it is not human approval to save or a request for an inferred instant. Calendar
+boundary wording can use the supplied cutoff only when consistent with it. Different explicit
+dates, inconsistent boundaries, unresolved relative query cutoffs and ambiguous items require
+clarification. The model never calculates a replacement cutoff; deterministic policies still decide
+applicability and quantities. This clarifies the existing intent prompt, not governing policy. Broad natural-language quality, original tiny fixture routing, hard cancellation,
 remote providers, streaming, public deployment and browser accessibility remain separate acceptance.
 Nine repeated live corpus walkthroughs are bounded smoke evidence, not held-out accuracy.
 
