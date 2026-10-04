@@ -63,4 +63,5 @@ hidden reasoning are neither checkpoint authority nor retained telemetry.
 The 30-second socket inactivity timeout is not hard cancellation or proof that server compute stopped.
 Nine repeated development walkthroughs are not broad or held-out model accuracy. See the
 [execution evidence](../project/local-qwen-review-evidence.md); actual browser/deployment acceptance,
-original tiny-fixture live routing, streaming and the full G2 pilot remain open.
+streaming and the full G2 pilot remain open. Original tiny-fixture live routing is now verified
+on the [unmerged original-source continuation](../project/original-showcase-live.md).

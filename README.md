@@ -122,3 +122,8 @@ not production authentication, graph recovery or live inference. See the
 ### Local Qwen review (unmerged implementation branch)
 
 The `codex/local-qwen-interpretation` branch adds one bounded local Qwen 3.6 interpretation per natural-language review question, a durable inference journal and the existing exact human review workflow. Quantities and statuses come from deterministic services. See [commands and contract](docs/product/local-qwen-review-v1.md) and [live evidence](docs/project/local-qwen-review-evidence.md). Nine repeated development walkthroughs plus four abstentions passed. The [actual installed browser slice](docs/project/browser-live-acceptance.md) additionally passes 14 authored live submissions with source/restart/review/save accounting; deployment, fresh held-out evaluation and full G2 acceptance remain open.
+
+The [original January showcase review](docs/product/original-showcase-review-v1.md) additionally
+uses three server-configured source sets with original policy/evidence identities. Nine authored
+installed live browser trials pass; unresolved requirements retain observed order 2 as
+`not_assessed`. This unmerged continuation does not expand the corpus or establish held-out quality.

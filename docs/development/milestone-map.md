@@ -135,3 +135,11 @@ walkthrough, credential-free wide/narrow screenshots and application ledger reco
 Three fixture and 14 authored live submissions pass; selected focus/reflow defects corrected.
 Stacked on PR183, unmerged. See [acceptance and remaining gates](../project/browser-live-acceptance.md).
 Held-out evaluation, tiny-fixture live routing, full G2 and deployment remain open; no expansion.
+
+### Original source live review branch — 2026-10-04
+
+#71 (M9), part of #53/#66/#67/#68/#70/#72/#74: three original source sets preserve
+January GPU-A policy/evidence identities through live intent and exact review. Nine authored
+installed browser trials pass with nine calls, eighteen source/tool checks, three restarts and
+eight saves. [Evidence and limits](../project/original-showcase-live.md). Stacked on draft PR184,
+unmerged; no new data. Held-out quality, full G2 and deployment remain open before expansion.

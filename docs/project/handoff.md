@@ -1,5 +1,14 @@
 # Project handoff
 
+## Original showcase live continuation — 2026-10-04
+
+`codex/original-showcase-live` is stacked on draft PR #184. Three original January source
+snapshots now use the existing live review workflow with original policy/evidence identities.
+Nine authored browser trials pass: nine model calls, eighteen tool starts, eighteen source checks,
+three process recoveries and eight exact saves. Unresolved requirements retain observed order 2
+while remaining `not_assessed`. See [contract/results/limits](original-showcase-live.md).
+Unmerged; fresh held-out evaluation, full G2 and deployment remain open. No corpus expansion.
+
 ## Active real-browser acceptance continuation — 2026-10-04
 
 `codex/browser-live-acceptance`, stacked on draft PR #183, verifies a clean installed
@@ -8,8 +17,8 @@ identifier wrapping are fixed. Three fixture and 14 authored live Qwen browser s
 pass source/review/restart/save accounting; eight live saves, four tool-free abstentions,
 and two rejected investigations. See [walkthrough, artifacts and remaining gates](browser-live-acceptance.md)
 and [compact versions/results](browser-live-results.json). This is branch work, not main,
-held-out quality, comprehensive accessibility or deployment. Fresh evaluation, tiny-fixture
-live routing and full G2/release acceptance remain open; corpus expansion stays gated.
+held-out quality, comprehensive accessibility or deployment. Fresh evaluation and full G2/release acceptance remain open; original tiny-fixture
+live routing is documented above; corpus expansion stays gated.
 
 ## Active local browser review continuation — 2026-10-03
 
