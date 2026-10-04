@@ -33,7 +33,9 @@ def test_installed_live_intent_development() -> None:
     database = Path(os.environ["PIL_INTENT_DATABASE"]).absolute()
     output = Path(os.environ["PIL_INTENT_OUTPUT"]).absolute()
     assert not database.exists() and not output.exists(), "never overwrite prior evidence"
-    cases = json.loads(MANIFEST.read_text())["cases"]
+    manifest = Path(os.environ.get("PIL_INTENT_MANIFEST", str(MANIFEST)))
+    cases = json.loads(manifest.read_text())["cases"]
+    assert cases and len({case["id"] for case in cases}) == len(cases)
     versions = asdict(compose_live(database).runs.versions)
     probe = (
         "import json,tempfile; from pathlib import Path; from dataclasses import asdict; "
@@ -46,7 +48,7 @@ def test_installed_live_intent_development() -> None:
     assert installed == versions, "installed bytes must match frozen checkout"
     report: dict[str, Any] = {
         "evaluation_use": "development",
-        "manifest_sha256": sha256(MANIFEST.read_bytes()).hexdigest(),
+        "manifest_sha256": sha256(manifest.read_bytes()).hexdigest(),
         "versions": versions,
         "application_git_revision": subprocess.check_output(
             ["git", "rev-parse", "HEAD"], text=True
@@ -116,7 +118,7 @@ def test_installed_live_intent_development() -> None:
     retain()
     assert report["attempt_audit_complete"]
     assert report["saved_results"] == 0
-    assert len(report["runs"]) == len(cases) == 20
+    assert len(report["runs"]) == len(cases)
     assert all(row["model_calls"] == 1 for row in report["attempt_audit"])
     failures = [row for row in report["runs"] if row["outcome"] != "pass"]
     assert not failures, json.dumps(failures)
