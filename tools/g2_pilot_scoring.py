@@ -18,11 +18,15 @@ def load_pilot(dataset: Path = DATASET, manifest: Path = PILOT) -> list[dict[str
     frozen = json.loads(manifest.read_bytes())
     data = load_dataset(dataset)
     if (
-        frozen.get("schema_version") != 1
+        frozen.get("schema_version") not in (1, 2)
         or frozen.get("queries_sha256")
         != sha256((dataset / "queries.json").read_bytes()).hexdigest()
     ):
         raise ValueError("interpretation manifest differs from frozen queries")
+    if frozen["schema_version"] == 2:
+        from tools.fresh_g2_cohort import validate_fresh
+
+        validate_fresh(dataset, manifest)
     rows = frozen["cases"]
     ids = [r["id"] for r in rows]
     by_id = {q["id"]: q for q in data["queries"]}
