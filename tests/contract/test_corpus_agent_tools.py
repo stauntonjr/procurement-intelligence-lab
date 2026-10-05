@@ -242,3 +242,24 @@ def test_invalid_port_output_records_failure_not_success(tmp_path: Path) -> None
     events = runs.events(run_id, context=CONTEXT)
     assert sum(e.kind == AgentEventKind.TOOL_FAILED for e in events) == 2
     assert not any(e.kind == AgentEventKind.TOOL_SUCCEEDED for e in events)
+
+
+@pytest.mark.parametrize("field", ["evidence", "governed"])
+def test_malformed_nested_investigation_never_records_success(tmp_path: Path, field: str) -> None:
+    from typing import Any, cast
+
+    tools, runs, run_id = setup(tmp_path / "r.db")
+    args = InvestigateToolArgs.from_mapping({"item": "GPU-A", "as_of": "2026-10-01T00:00:00Z"})
+    actual = tools.investigator.investigate(args.request, context=CONTEXT)
+    invalid = (
+        replace(actual, evidence=cast(Any, (None,)))
+        if field == "evidence"
+        else replace(actual, governed=cast(Any, None))
+    )
+    investigator = Mock()
+    investigator.investigate.return_value = invalid
+    with pytest.raises(ToolExecutionError, match="agent_tool_invalid_result"):
+        replace(tools, investigator=investigator).investigate(run_id, args, context=CONTEXT)
+    events = runs.events(run_id, context=CONTEXT)
+    assert events[-1].kind == AgentEventKind.TOOL_FAILED
+    assert not any(e.kind == AgentEventKind.TOOL_SUCCEEDED for e in events)

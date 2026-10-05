@@ -38,3 +38,11 @@ owner/project/as-of/expiry boundaries; negative/zero TTL rejected (no quantity p
 malformed/corrupt records; real CLI processes and clean wheels; source changes and non-reviewer
 permissions block save. Graph interrupts, model draft validation, browser review controls and
 live inference remain separate acceptance gates.
+
+## Supersession and stale-item correction
+
+An intact owned active pointer remains required for completed-save acknowledgment. It may name
+a newer brief: supersession prevents a new write from old approval, while replay of an already
+completed write returns its same saved result after the unchanged current-evidence/authority
+checks. Missing, dangling or foreign active pointers fail as stored-state corruption. A previously
+reviewed item absent from newly admitted sources yields typed brief conflict and no save.

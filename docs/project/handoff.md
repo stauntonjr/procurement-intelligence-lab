@@ -1,5 +1,20 @@
 # Project handoff
 
+## Demo integration review corrections — 2026-10-04
+
+`codex/demo-integration-review-fixes` is based on draft #192. Eighteen demo PR heads form a
+linear chain and all ten required checks passed at each inspected head, but six automated review
+threads on #176–#178 remained unresolved. This candidate fixes failure/non-applicability accounting,
+terminal chronology, run/brief CLI build fingerprints, tool payload validation, completed-save
+replay after replacement and vanished-item error mapping. [Contract, audit and verification](demo-integration-review-fixes.md).
+Independent review found two further gaps; the root corrective pass adds active-ledger integrity
+and complete shared payload validation ([ADR-033](../adr/033-validated-application-payloads.md)).
+
+No merge, deployment, inference or corpus change. Prior live walkthroughs retain their original
+application identity; changed runtime requires a separate current-version live check. Integration
+must include these corrections; older branches remain unsafe to release independently. Human timed
+rehearsal, full G2/release and deployed acceptance remain open; B2 stays gated.
+
 ## Current-version demo rehearsal artifacts — 2026-10-04
 
 `codex/demo-rehearsal-recording` stacks on draft #191. The unchanged installed current app passes

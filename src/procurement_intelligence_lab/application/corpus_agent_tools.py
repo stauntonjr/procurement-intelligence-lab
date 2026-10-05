@@ -11,6 +11,10 @@ from procurement_intelligence_lab.application.corpus_investigation import (
     InvestigationRequest,
     InvestigationResult,
 )
+from procurement_intelligence_lab.application.corpus_payloads import (
+    investigation_payload,
+    source_payload,
+)
 from procurement_intelligence_lab.platform.semantics.agent_runs import AgentEventKind, RunConflict
 from procurement_intelligence_lab.platform.semantics.errors import ErrorCategory, ErrorCode
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
@@ -167,6 +171,7 @@ class CorpusAgentTools:
 
         def call() -> tuple[InvestigationResult, str]:
             result = self.investigator.investigate(arguments.request, context=context)
+            json.dumps(investigation_payload(result, context), allow_nan=False)
             return result, result.snapshot_id
 
         return self._invoke(run_id, "investigate_quantity", call, context=context)
@@ -178,13 +183,7 @@ class CorpusAgentTools:
 
         def call() -> tuple[CorpusSourceRow | CorpusSourceRecord, str]:
             result = self.lookup.source_by_id(arguments.evidence_id, context=context)
-            if isinstance(result, CorpusSourceRecord):
-                if not isinstance(json.loads(result.record_json), dict):
-                    raise TypeError("authority record must be a JSON object")
-            else:
-                json.dumps(
-                    (result.headers, result.cells, result.highlighted_columns), allow_nan=False
-                )
+            json.dumps(source_payload(result), allow_nan=False)
             return result, stable_id(
                 "source-inspection",
                 context.tenant_id,

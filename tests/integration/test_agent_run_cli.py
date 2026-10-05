@@ -4,6 +4,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any, cast
 
 
 def invoke(path: Path, *args: str) -> subprocess.CompletedProcess[str]:
@@ -109,3 +110,52 @@ def test_cli_run_build_identity_is_code_digest(tmp_path: Path) -> None:
     assert json.loads(created.stdout)["versions"]["application"].startswith("sha256:"), (
         "CLI build identity is only a package version"
     )
+
+
+def test_public_invalid_nested_tool_result_is_failed_event(
+    tmp_path: Path, monkeypatch: Any, capsys: Any
+) -> None:
+    import sqlite3
+    from dataclasses import replace
+
+    from procurement_intelligence_lab.application.corpus_investigation import (
+        CorpusInvestigationService,
+    )
+    from procurement_intelligence_lab.interfaces.agent_runs import main
+
+    path = tmp_path / "r.db"
+    run = json.loads(invoke(path, "create", "--project", "atlas").stdout)
+    original = CorpusInvestigationService.investigate
+
+    def malformed(self: Any, *args: Any, **kwargs: Any) -> Any:
+        actual = original(self, *args, **kwargs)
+        return replace(actual, evidence=cast(Any, (None,)))
+
+    monkeypatch.setattr(CorpusInvestigationService, "investigate", malformed)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "agent-runs",
+            "--database",
+            str(path),
+            "investigate",
+            "--project",
+            "atlas",
+            "--run-id",
+            run["run_id"],
+            "--item",
+            "GPU-A",
+            "--as-of",
+            "2026-10-01T00:00:00Z",
+        ],
+    )
+    assert main() == 1
+    assert json.loads(capsys.readouterr().out)["code"] == "pil.input.agent_tool_invalid_result"
+    with sqlite3.connect(path) as db:
+        events = [
+            json.loads(row[0])
+            for row in db.execute("SELECT payload FROM agent_events ORDER BY sequence")
+        ]
+    assert events[-1]["kind"] == "tool_failed"
+    assert not any(event["kind"] == "tool_succeeded" for event in events)

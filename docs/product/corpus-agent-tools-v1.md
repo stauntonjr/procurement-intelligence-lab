@@ -27,3 +27,11 @@ It retains server-configured synthetic identity and returns run metadata beside 
 Finish closes execution and scores the recorded trajectory; missing/error events block pass.
 Fixture traces remain excluded from live inference aggregates. Natural-language routing and
 approval/save remain separate G2 gates. Source text and workbook instructions remain untrusted data.
+
+## Complete result validation
+
+Before recording success, the protected invocation constructs and serializes the complete shared
+application payload, including nested evidence and authority JSON. Malformed output or missing/
+unbounded snapshot identity records typed `invalid_tool_result`; the public caller cannot turn
+a recorded success into an output-parser error. [ADR-033](../adr/033-validated-application-payloads.md)
+keeps HTTP links at the interface boundary without importing interfaces into application code.

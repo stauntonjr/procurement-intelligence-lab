@@ -67,3 +67,10 @@ The `codex/exact-brief-approval` continuation implements the bounded application
 contract through a separate local human CLI; see [exact-brief review v1](exact-brief-review-v1.md)
 and ADR-029. Graph checkpoints, browser authentication and live model behavior remain subsequent
 work. The foundation branch alone does not expose these added capabilities.
+
+## Integration review correction
+
+The run, brief and workflow composition roots identify installed application Python paths/bytes
+with a shared SHA-256 fingerprint; package version alone cannot authorize resume. Completion
+must follow every recorded timestamp and close the recorded causal path. A non-applicability
+rationale cannot erase recorded failures or partial tool execution. See the [integration correction](../project/demo-integration-review-fixes.md).

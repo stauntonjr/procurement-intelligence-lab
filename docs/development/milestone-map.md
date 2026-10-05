@@ -204,3 +204,11 @@ M9/#72: `codex/demo-rehearsal-recording`, stacked on #191, records 14 current-ve
 browser submissions and a five-minute captioned fixture screenshot replay. Human timed rehearsal
 and main/deployed acceptance remain open. [Runbook and limits](../project/demo-rehearsal.md).
 No runtime/model/prompt/source change; B2 expansion remains gated.
+
+## Demo integration review corrections — 2026-10-04
+
+M9/#72, part of #66/#67/#68/#70: `codex/demo-integration-review-fixes` follows #192 and addresses
+six confirmed review defects across run accounting, immutable configuration, audited tool output
+and exact-save replay. ADR-033 keeps shared output validation in application code and HTTP link
+decoration in interfaces. [Audit and evidence](../project/demo-integration-review-fixes.md).
+Runtime hash changes; previous live results remain historical. No merge/deploy/inference or B2 expansion.

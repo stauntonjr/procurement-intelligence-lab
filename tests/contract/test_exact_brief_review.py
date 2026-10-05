@@ -441,3 +441,27 @@ def test_vanished_item_during_save_is_typed_conflict(tmp_path: Path) -> None:
     with pytest.raises(BriefConflict):
         service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)
     assert service.store.saved(brief, context=HUMAN) is None
+
+
+@pytest.mark.parametrize("mutation", ["missing", "dangling", "foreign"])
+def test_saved_replay_requires_intact_owned_active_ledger(tmp_path: Path, mutation: str) -> None:
+    import sqlite3
+
+    from procurement_intelligence_lab.adapters.sqlite_briefs import BriefStoreError
+
+    service, run_id = setup(tmp_path / "r.db")
+    brief = service.draft(run_id, ARGS, context=HUMAN)
+    service.review(run_id, brief.brief_id, brief.digest, "approve", context=HUMAN)
+    service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)
+    other = service.tools.runs.start(context=HUMAN)
+    foreign = service.draft(other.run_id, ARGS, context=HUMAN)
+    with sqlite3.connect(tmp_path / "r.db") as db:
+        if mutation == "missing":
+            db.execute("DELETE FROM active_briefs WHERE run_id=?", (run_id,))
+        else:
+            db.execute(
+                "UPDATE active_briefs SET brief_id=? WHERE run_id=?",
+                (foreign.brief_id if mutation == "foreign" else "absent", run_id),
+            )
+    with pytest.raises(BriefStoreError):
+        service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)

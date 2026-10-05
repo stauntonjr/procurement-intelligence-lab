@@ -7,8 +7,13 @@
   "known_bad_mutation": [
     {
       "path": "src/procurement_intelligence_lab/application/corpus_agent_tools.py",
-      "find": "                if not isinstance(json.loads(result.record_json), dict):",
-      "replace": "                if False:"
+      "find": "            json.dumps(source_payload(result), allow_nan=False)",
+      "replace": "            pass"
+    },
+    {
+      "path": "src/procurement_intelligence_lab/application/corpus_agent_tools.py",
+      "find": "            json.dumps(investigation_payload(result, context), allow_nan=False)",
+      "replace": "            pass"
     }
   ],
   "known_bad_failure_pattern": "DID NOT RAISE",
@@ -19,7 +24,7 @@
     "-q",
     "tests/contract/test_corpus_agent_tools.py",
     "-k",
-    "invalid_port_output"
+    "invalid_port_output or malformed_nested"
   ],
   "surfaces": [
     "src/procurement_intelligence_lab/application/corpus_agent_tools.py"
