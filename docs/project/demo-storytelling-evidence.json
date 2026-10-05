@@ -91,7 +91,7 @@
     {
       "argv": ["browser-playback", "docs/assets/rehearsal-v2/index.html"],
       "outcome": "passed",
-      "evidence": "Chromium reported duration 42.92s, 1440x900 video and one caption track; GStreamer reported VP8 WebM and seekable playback."
+      "evidence": "Recorder reported duration 42.92s, 1440x900 VP8 WebM and seekable playback; the report preserved the exact governed facts and selected-source highlight."
     },
     {
       "argv": ["live-recording", "one-new-request", "http://127.0.0.1:8001"],

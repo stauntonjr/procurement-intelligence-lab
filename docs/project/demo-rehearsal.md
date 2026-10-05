@@ -3,12 +3,12 @@
 ## Evidence-focused explanatory recording — 2026-10-05
 
 [Open the 42.92-second captioned recording](../assets/rehearsal-v2/index.html) ·
-[native editable deck](https://docs.google.com/presentation/d/1mzGR8CixHQPEn3h4bj_aPSZ_H_ec_Rm8MvLUyxE4uw0/edit) ·
+[native editable deck](https://docs.google.com/presentation/d/17LFjSGQs1q3rIvuqdRKdNqvBFXXYjKWctcDvqlLjxoQ/edit) ·
 [deck manifest](demo-storytelling-deck.md) ·
 [compact results](demo-storytelling-results.json).
 
 Eight uncropped slides now precede the browser: value proposition; who/what/why/how;
-three-plane architecture; a hypothetical two-revision conflict; processing flow; procurement
+the full evidence-to-action architecture with gold-data and human-governance rails; a hypothetical two-revision conflict; processing flow; procurement
 scenarios; explicitly unimplemented candidate verticals; and the live-transition frame. The
 browser portion uses visible paced typing and a fixed italic Who/What/Why/How/When banner, then
 opens all three cited sources with supporting cells highlighted before rejecting the unresolved
@@ -20,7 +20,7 @@ offline; it was retained locally and not retried. A previous successful live run
 recovered into the changed build because immutable application-version compatibility correctly
 failed closed. Human timing, current-build live inference, merge and deployment remain unverified.
 
-Branch `codex/demo-rehearsal-recording` stacks on draft #191; primary #72/M9, part of #74/#73.
+Branch `codex/demo-integration-review-fixes` is proposed in PR #193; primary #72/M9, part of #74/#73.
 Runtime, model, prompt, policies and source data are unchanged. Application hash is
 `sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a`.
 

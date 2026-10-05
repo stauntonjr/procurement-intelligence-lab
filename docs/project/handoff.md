@@ -3,7 +3,9 @@
 ## Evidence-focused demo story and source highlighting — 2026-10-05
 
 `codex/demo-integration-review-fixes` now adds an evidence-focused reviewer, an eight-slide
-editable native deck, and a 42.92-second captioned current-build fixture recording. Findings open
+editable native deck, and a 42.92-second captioned current-build fixture recording. The deck now
+shows the complete source-to-action architecture vision, gold data at every boundary, human
+governance at controlled checkpoints, and the current implementation boundary. Findings open
 the first citation automatically; selectable evidence cards expose selection state; original row
 cells highlight supporting columns; governing-authority JSON remains fully inspectable. The
 recording shows paced typing and changing Who/What/Why/How/When explanation before a human rejects

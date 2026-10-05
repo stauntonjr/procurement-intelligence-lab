@@ -8,7 +8,7 @@
   "viewport": {"width": 1440, "height": 900},
   "banner_height": 96,
   "typing_delay_ms": 45,
-  "interaction_seconds": 43.598,
+  "interaction_seconds": 43.75,
   "media": {
     "container": "webm",
     "codec": "vp8",
@@ -16,7 +16,7 @@
     "width": 1440,
     "height": 900,
     "seekable": true,
-    "sha256": "9c7e2fc32debe9b854cb026adfbcff711260a02d0949224452323b1fe8368abe"
+    "sha256": "e9031f8b73f2e81f55d71690e0338ef2cbb13a7ae41e8278b9bca934b1fe7011"
   },
   "governed_facts": {
     "status": "not_assessed",
