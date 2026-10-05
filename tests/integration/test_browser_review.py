@@ -162,7 +162,7 @@ def submit(page: Page, value: str, *, live: bool) -> dict[str, object]:
 def review(page: Page, decision: str) -> dict[str, object]:
     from typing import cast
 
-    button = page.get_by_role("button", name=f"{decision.capitalize()} exact brief", exact=True)
+    button = page.get_by_role("button", name=f"{decision.capitalize()} this finding", exact=True)
     expect(button).to_be_enabled()
     button.focus()
     with page.expect_response("**/api/review") as response:
@@ -323,6 +323,10 @@ def test_installed_browser_walkthrough(tmp_path: Path, live: bool) -> None:
                     key: facts[key]
                     for key in ("status", "reason", "required_quantity", "ordered_quantity")
                 }
+                expect(page.locator("#evidence button").first).to_have_attribute(
+                    "aria-pressed", "true"
+                )
+                expect(page.locator("#source")).not_to_be_empty()
                 for index, ref in enumerate(facts["evidence"]):
                     with page.expect_response("**/api/source?*") as response:
                         button = page.locator("#evidence button").nth(index)
@@ -331,7 +335,12 @@ def test_installed_browser_walkthrough(tmp_path: Path, live: bool) -> None:
                     assert response.value.status == 200
                     source = response.value.json()
                     assert source["evidence"]["evidence_id"] == ref["evidence_id"]
+                    expect(button).to_have_attribute("aria-pressed", "true")
+                    assert page.locator('#evidence button[aria-pressed="true"]').count() == 1
                     if "cells" in source:
+                        expect(page.locator("#source .source-note")).to_have_text(
+                            "Highlighted cells support this finding."
+                        )
                         expect(page.locator("#source td")).to_have_text(source["cells"])
                         expected = [
                             source["cells"][ord(c) - ord("A")]
@@ -339,6 +348,9 @@ def test_installed_browser_walkthrough(tmp_path: Path, live: bool) -> None:
                         ]
                         expect(page.locator("#source td.highlight")).to_have_text(expected)
                     else:
+                        expect(
+                            page.get_by_role("heading", name="Governing authority record")
+                        ).to_be_visible()
                         expect(page.locator("#source pre")).to_have_text(
                             json.dumps(source["authority"], indent=2)
                         )
@@ -397,7 +409,7 @@ def test_installed_browser_walkthrough(tmp_path: Path, live: bool) -> None:
 
                     page.route("**/api/review", altered)
                     with page.expect_response("**/api/review") as response:
-                        page.get_by_role("button", name="Approve exact brief").click()
+                        page.get_by_role("button", name="Approve this finding").click()
                     assert response.value.status == 409
                     page.unroute("**/api/review", altered)
                     expect(page.locator("#error")).to_be_visible()

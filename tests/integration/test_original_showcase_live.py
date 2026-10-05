@@ -156,6 +156,9 @@ def test_original_showcase_installed_live_browser() -> None:
                         expect(
                             page.get_by_role("button", name="Investigate and draft")
                         ).to_be_enabled()
+                        expect(page.locator("#evidence button").first).to_have_attribute(
+                            "aria-pressed", "true"
+                        )
                         for i, ref in enumerate(facts["evidence"]):
                             with page.expect_response("**/api/source?*") as source_response:
                                 button = page.locator("#evidence button").nth(i)
@@ -163,6 +166,13 @@ def test_original_showcase_installed_live_browser() -> None:
                                 button.press("Enter")
                             source = source_response.value.json()
                             assert source_response.value.status == 200 and source["evidence"] == ref
+                            expect(button).to_have_attribute("aria-pressed", "true")
+                            assert (
+                                page.locator('#evidence button[aria-pressed="true"]').count() == 1
+                            )
+                            expect(page.locator("#source .source-note")).to_have_text(
+                                "Highlighted cells support this finding."
+                            )
                             expect(page.locator("#source td")).to_have_text(source["cells"])
                             expect(page.locator("#source td.highlight")).to_have_text(
                                 [

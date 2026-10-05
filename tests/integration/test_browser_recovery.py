@@ -107,7 +107,7 @@ def test_failed_replacement_keeps_exact_persisted_draft(case: tuple[Path, dict[s
         expect(page.locator("#identity")).to_contain_text(identity)
         expect(page.locator("#review")).to_be_visible()
         expect(page.get_by_role("button", name="Recover selected run")).to_be_enabled()
-        expect(page.get_by_role("button", name="Approve exact brief", exact=True)).to_be_enabled()
+        expect(page.get_by_role("button", name="Approve this finding", exact=True)).to_be_enabled()
         assert page.get_by_label("Canonical item", exact=True).input_value() == "GPU-C"
         colors = page.locator("#error").evaluate(
             "e=>({text:getComputedStyle(e).color,background:getComputedStyle(e).backgroundColor})"
@@ -210,7 +210,7 @@ def test_lost_save_acknowledgment_recovers_same_single_result(
 
         page.route("**/api/review", dropped)
         capture_actions(page)
-        page.get_by_role("button", name="Approve exact brief", exact=True).click()
+        page.get_by_role("button", name="Approve this finding", exact=True).click()
         complete_action(page)
         expect(page.locator("#error")).to_be_visible()
         assert len(committed) == 1
@@ -221,8 +221,8 @@ def test_lost_save_acknowledgment_recovers_same_single_result(
         page.get_by_role("button", name="Recover selected run").press("Enter")
         complete_action(page)
         expect(page.locator("#saved")).to_contain_text(saved)
-        page.get_by_role("button", name="Approve exact brief", exact=True).focus()
-        page.get_by_role("button", name="Approve exact brief", exact=True).press("Enter")
+        page.get_by_role("button", name="Approve this finding", exact=True).focus()
+        page.get_by_role("button", name="Approve this finding", exact=True).press("Enter")
         complete_action(page)
         retain_image(directory, report, page, "recovered-durable-save", 1280)
         report.update(
@@ -244,8 +244,7 @@ def test_source_failure_keeps_exact_review_and_prior_source(
         sign_in(page, reviewer)
         view = cast(dict[str, Any], submit(page, "GPU-A", live=False))
         capture_actions(page)
-        page.locator("#evidence button").first.click()
-        complete_action(page)
+        expect(page.locator("#evidence button").first).to_have_attribute("aria-pressed", "true")
         original = page.locator("#source").inner_text()
         assert original
         page.route("**/api/source?*", reject_transport)
@@ -255,6 +254,7 @@ def test_source_failure_keeps_exact_review_and_prior_source(
         expect(page.locator("#error")).to_be_visible()
         expect(page.locator("#identity")).to_contain_text(view["brief"]["brief_id"])
         expect(page.locator("#approve")).to_be_enabled()
+        expect(page.locator("#evidence button").first).to_have_attribute("aria-pressed", "true")
         assert page.locator("#source").inner_text() == original
         report.update(
             run_id=view["run_id"], injected="source503_before_backend", prior_source_retained=True
@@ -325,7 +325,7 @@ def test_malformed_success_retains_exact_prior_draft(
         assert page.locator("#selected-run").inner_text() == view["run_id"]
         assert page.locator("#identity").inner_text() == original_identity
         assert page.locator("#digest").inner_text() == original_digest
-        expect(page.get_by_role("button", name="Approve exact brief", exact=True)).to_be_enabled()
+        expect(page.get_by_role("button", name="Approve this finding", exact=True)).to_be_enabled()
         reviews: list[dict[str, Any]] = []
 
         def capture_review(route: Route) -> None:
@@ -333,7 +333,7 @@ def test_malformed_success_retains_exact_prior_draft(
             reject_transport(route)
 
         page.route("**/api/review", capture_review)
-        page.get_by_role("button", name="Approve exact brief", exact=True).click()
+        page.get_by_role("button", name="Approve this finding", exact=True).click()
         complete_action(page)
         assert reviews == [
             {
