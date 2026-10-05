@@ -189,3 +189,11 @@ fresh48/48, original9/9, adversarial9/9, prior controls25/28, candidate26/28 and
 is a different task/timing scope, not a speed comparison. [Dossier/remaining gates](../project/g2-acceptance-dossier.md).
 Zero new inference; current four-project source corpus unchanged. Full G2/release/browser/accessibility,
 measured presentation, main integration, deployment and B2 remain open; broader Issues InProgress.
+
+## Installed browser error recovery branch — 2026-10-04
+
+M9/#74: `codex/browser-error-recovery`, stacked on draft#190, corrects observed draft-loss,
+private-error and late-after-lock defects. Actual installed Chromium9/9; fixture5runs/10tools/1save,
+zero inference. C018-C020 reject known-bad changes. [Evidence](../project/browser-error-recovery.md).
+UI application hash changed; previous G2 reports stay historical. Current-version live acceptance,
+measured rehearsal, comprehensive accessibility, main/deploy and full release/B2 remain open.

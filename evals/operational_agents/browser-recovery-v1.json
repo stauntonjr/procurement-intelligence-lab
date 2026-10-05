@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "issue": "#74",
+  "cases": [
+    "test_failed_replacement_keeps_exact_persisted_draft",
+    "test_malformed_response_is_a_safe_visible_failure[text-fixture]",
+    "test_malformed_response_is_a_safe_visible_failure[text-live_page_no_inference]",
+    "test_malformed_response_is_a_safe_visible_failure[json-fixture]",
+    "test_malformed_response_is_a_safe_visible_failure[json-live_page_no_inference]",
+    "test_lock_during_delayed_timeline_has_no_late_follow_up",
+    "test_lost_save_acknowledgment_recovers_same_single_result",
+    "test_source_failure_keeps_exact_review_and_prior_source",
+    "test_failed_selected_run_read_is_keyboard_recoverable"
+  ],
+  "runtime_versions": {
+    "fixture": {
+      "provider": "fixture",
+      "model": "none",
+      "prompt": "serial-review/v1:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:54a3899b3fc79e02a51f59465529de28d375a58875ee260b8d60d69b7776bce5"
+    },
+    "live_page_no_inference": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:54a3899b3fc79e02a51f59465529de28d375a58875ee260b8d60d69b7776bce5"
+    }
+  },
+  "browser": "Chromium151.0.7922.34",
+  "wheel_sha256": "590b74ae1ddc4b9ca2b55dbbb195860c551dfa8effad7c0387a4dd656f18abe5",
+  "source_python_files": 100,
+  "harness_sha256": "0e9ee94b37539c332f9afa25681b0520cf24297d0d117caa8b854c8c1c757246",
+  "limits": "Actual installed fixture workflow plus labeled browser transport faults. Live page fault checks intercept ask before backend/inference. No real model quality/performance or comprehensive accessibility/deployment acceptance. Previous G2 versions are historical, not inherited by this changed application."
+}

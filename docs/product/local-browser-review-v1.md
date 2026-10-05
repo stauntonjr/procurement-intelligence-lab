@@ -62,3 +62,13 @@ headless Chromium keyboard/source/review/restart and representative narrow/wide 
 Successful sign-in focuses the request field; a darker focus ring and wrapped review identifiers
 correct observed browser defects. This supersedes the earlier absence of browser evidence for
 these selected interactions, while deployment and comprehensive accessibility remain separate.
+
+## Failure and asynchronous recovery continuation
+
+The [bounded installed error-recovery slice](../project/browser-error-recovery.md), stacked on
+#190, retains the selected exact brief after a failed replacement. New request inputs cannot
+supply review authority. Page-owned safe errors exclude raw transport/response details. Lock
+invalidates callbacks before follow-up requests; it does not cancel admitted server work.
+An unknown save acknowledgment requires explicit owned recovery; repeated human review returns
+the same durable result. No automatic retry is granted. Previous live acceptance has its original
+application version; this changed page requires separate current-version live verification.

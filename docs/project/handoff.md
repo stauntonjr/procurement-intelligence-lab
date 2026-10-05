@@ -1,5 +1,16 @@
 # Project handoff
 
+## Installed browser error recovery — 2026-10-04
+
+`codex/browser-error-recovery` stacks on draft #190, unmerged/undeployed. Nine actual clean-installed
+Chromium cases pass: failed replacement retains the prior exact brief, private failure fragments
+stay out of UI, locked callbacks issue no late history request, and lost save acknowledgment
+recovers the same single durable result. Five fixture runs/ten tool starts/one save/zero inference;
+live-page error checks intercept ask before backend. [Evidence and limits](browser-error-recovery.md).
+The changed page changes the application hash; prior G2 passes remain historical, not current
+live acceptance. Full G2/release/accessibility, measured rehearsal, main integration/deployment and
+B2 remain open. Next: bounded reviewer rehearsal and separately scoped current-version live check.
+
 ## G2 installed evidence consolidation — 2026-10-04
 
 `codex/g2-evidence-consolidation` stacks on draft #189, unmerged. Hash-bound compiler reconciles

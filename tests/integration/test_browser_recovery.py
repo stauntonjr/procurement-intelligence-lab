@@ -5,12 +5,13 @@ import os
 import re
 import time
 from collections.abc import Iterator
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, cast
 
 import pytest
 from playwright.sync_api import Page, Route, expect
-from test_browser_review import chromium_page, installed_reviewer, ledger, sign_in, submit
+from test_browser_review import chromium_page, contrast, installed_reviewer, ledger, sign_in, submit
 
 pytestmark = pytest.mark.skipif(
     not os.environ.get("PIL_BROWSER_PYTHON"), reason="explicit installed-browser opt-in required"
@@ -54,6 +55,23 @@ def finish(directory: Path, report: dict[str, Any], page: Page, *, live: bool = 
     assert not page.context.cookies()
 
 
+def retain_image(
+    directory: Path, report: dict[str, Any], page: Page, name: str, width: int
+) -> None:
+    if page.get_by_label("Local reviewer token").input_value():
+        raise AssertionError("Credential erasure required before screenshot")
+    page.set_viewport_size({"width": width, "height": 1000})
+    assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), (
+        "error-state reflow overflow"
+    )
+    output = directory / (name + ".png")
+    assert not output.exists(), "fresh screenshot required"
+    raw = page.screenshot(path=str(output), full_page=True)
+    report.setdefault("screenshots", []).append(
+        {"path": output.name, "sha256": sha256(raw).hexdigest(), "width": width}
+    )
+
+
 def capture_actions(page: Page) -> None:
     # Observe completion of the real shipped callback, without changing work or authority.
     page.evaluate("""() => { const original=action; action=work=>{
@@ -91,6 +109,12 @@ def test_failed_replacement_keeps_exact_persisted_draft(case: tuple[Path, dict[s
         expect(page.get_by_role("button", name="Recover selected run")).to_be_enabled()
         expect(page.get_by_role("button", name="Approve exact brief", exact=True)).to_be_enabled()
         assert page.get_by_label("Canonical item", exact=True).input_value() == "GPU-C"
+        colors = page.locator("#error").evaluate(
+            "e=>({text:getComputedStyle(e).color,background:getComputedStyle(e).backgroundColor})"
+        )
+        report["error_text_contrast"] = contrast(colors["text"], colors["background"])
+        assert report["error_text_contrast"] >= 4.5
+        retain_image(directory, report, page, "retained-draft-error", 375)
         report.update(brief_id=identity, run_id=view["run_id"], injected="start503_before_backend")
         finish(directory, report, page)
         assert len(report["ledger"]["runs"]) == 1 and len(report["ledger"]["saves"]) == 0
@@ -200,6 +224,7 @@ def test_lost_save_acknowledgment_recovers_same_single_result(
         page.get_by_role("button", name="Approve exact brief", exact=True).focus()
         page.get_by_role("button", name="Approve exact brief", exact=True).press("Enter")
         complete_action(page)
+        retain_image(directory, report, page, "recovered-durable-save", 1280)
         report.update(
             run_id=view["run_id"],
             saved_id=saved,
