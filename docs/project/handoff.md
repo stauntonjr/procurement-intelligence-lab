@@ -1,5 +1,15 @@
 # Project handoff
 
+## Current-version demo rehearsal artifacts — 2026-10-04
+
+`codex/demo-rehearsal-recording` stacks on draft#191. The unchanged installed current app passes
+one14submission local Qwen development walkthrough:14calls/20tools/108source checks/8saves.
+A [captioned five-minute fixture screenshot replay and operator script](demo-rehearsal.md) show
+mismatch, exact/repeated save, unresolved rejection and missing observation. It is not continuous
+screen recording or timed human rehearsal; fixture media and live evidence remain separate.
+Runtime/prompt/source/gold unchanged. Next: actual human timed rehearsal, deliberate stack integration
+and separately authorized deployment. Full release/B2remain open; prior held-out evidence is historical.
+
 ## Installed browser error recovery — 2026-10-04
 
 `codex/browser-error-recovery` stacks on draft #190, unmerged/undeployed. Twelve actual clean-installed

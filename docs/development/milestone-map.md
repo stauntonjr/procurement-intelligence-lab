@@ -197,3 +197,10 @@ private-error and late-after-lock defects. Actual installed Chromium12/12; fixtu
 zero inference. C018-C021 reject known-bad changes. [Evidence](../project/browser-error-recovery.md).
 UI application hash changed; previous G2 reports stay historical. Current-version live acceptance,
 measured rehearsal, comprehensive accessibility, main/deploy and full release/B2 remain open.
+
+## Current-version rehearsal artifacts — 2026-10-04
+
+M9/#72: `codex/demo-rehearsal-recording`, stacked on#191, records14current-version authored live
+browser submissions and a five-minute captioned fixture screenshot replay. Human timed rehearsal
+and main/deployed acceptance remain open. [Runbook and limits](../project/demo-rehearsal.md).
+No runtime/model/prompt/source change; B2expansion remains gated.
