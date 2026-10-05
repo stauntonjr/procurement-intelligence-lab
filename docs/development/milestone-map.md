@@ -1,5 +1,14 @@
 # Delivery milestone map
 
+## Integration status — 2026-10-05
+
+PR #193 merged the #175–#192 demo stack and corrective review work to `main` at
+`d3aea05c5e81890afc316ee4fc6f1a2c88b0544d`, with all current required checks passing.
+Branch descriptions below preserve historical acceptance boundaries. The prospective exact-scope
+review, highlighted sources, native slide deck, and replacement browser recording are delivered
+on main. Human timing, current-build live inference, deployment, full G2/release, and B2 remain
+open; this integration does not complete the broader M0–M9 milestones.
+
 GitHub milestones are the canonical delivery taxonomy. Historical vertical implementation sequence labels use `S` so they cannot be confused with milestone identifiers.
 
 ## Canonical GitHub milestones
