@@ -1,4 +1,4 @@
-"""Persistence port for human reconciliation decisions."""
+"""Persistence port for procurement-owned human reconciliation decisions."""
 
 from datetime import datetime
 from typing import Protocol
@@ -13,9 +13,11 @@ class ReconciliationReviewStore(Protocol):
     def record(
         self, decision: HumanReconciliationDecision, *, context: RequestContext
     ) -> HumanReconciliationDecision: ...
+
     def latest(
         self, subject_key: str, as_of: datetime, *, context: RequestContext
     ) -> HumanReconciliationDecision | None: ...
+
     def for_brief(
         self, brief_id: str, *, context: RequestContext
     ) -> HumanReconciliationDecision | None: ...

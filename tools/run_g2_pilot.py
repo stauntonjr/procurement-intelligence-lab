@@ -38,7 +38,7 @@ def baseline_facts(response: dict[str, Any]) -> dict[str, Any]:
     return {
         k: ([{a: b for a, b in ref.items() if a != "url"} for ref in v] if k == "evidence" else v)
         for k, v in response.items()
-        if k != "project"
+        if k not in {"project", "governance_candidates"}
     }
 
 

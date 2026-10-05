@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from importlib.metadata import version
 from pathlib import Path
+from typing import cast
 
 from procurement_intelligence_lab.adapters.runtime_identity import application_revision
 from procurement_intelligence_lab.adapters.sqlite_agent_runs import RunStoreError, SqliteRunStore
@@ -20,11 +21,11 @@ from procurement_intelligence_lab.application.corpus_agent_tools import (
     InvestigateToolArgs,
     ToolExecutionError,
 )
+from procurement_intelligence_lab.application.corpus_investigation import CorpusInvestigationService
 from procurement_intelligence_lab.application.exact_brief_review import BriefReviewService
 from procurement_intelligence_lab.application.reconciliation_review import (
     ReconciliationReviewService,
 )
-from procurement_intelligence_lab.application.corpus_investigation import CorpusInvestigationService
 from procurement_intelligence_lab.interfaces.review_sources import SOURCE_OPTIONS, compose_sources
 from procurement_intelligence_lab.platform.semantics.agent_runs import (
     ExecutionKind,
@@ -49,7 +50,7 @@ from procurement_intelligence_lab.platform.semantics.workflows import (
     WorkflowRequest,
     WorkflowView,
 )
-from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError
+from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError, CorpusReader
 from procurement_intelligence_lab.ports.review_sources import ReviewSources
 from procurement_intelligence_lab.ports.workflows import AgentWorkflowRuntime
 
@@ -95,7 +96,7 @@ def compose_services(
     )
     reader = source_config.reader
     investigator = (
-        CorpusInvestigationService(reader, reconciliation_store)
+        CorpusInvestigationService(cast(CorpusReader, reader), reconciliation_store)
         if isinstance(source_config.investigator, CorpusInvestigationService)
         else source_config.investigator
     )

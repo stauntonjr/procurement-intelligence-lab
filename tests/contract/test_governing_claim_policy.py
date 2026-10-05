@@ -1,4 +1,6 @@
 from dataclasses import replace
+
+# pyright: reportArgumentType=false
 from datetime import UTC, datetime
 from decimal import Decimal
 
@@ -99,22 +101,27 @@ def test_conflicting_competing_approved_revisions_abstain_and_retain_both() -> N
 @pytest.mark.contract
 def test_human_selection_is_prospective_and_retains_losing_claim() -> None:
     candidates = (_claim("A", "4"), _claim("B", "6"))
-    values = dict(
-        brief_id="brief",
-        brief_digest="b" * 64,
-        subject_key="GPU-A",
-        scope=SCOPE,
-        outcome=ReconciliationReviewOutcome.SELECT_GOVERNING_REVISION,
-        candidate_claim_ids=("claim:A", "claim:B"),
-        selected_claim_id="claim:B",
-        rationale="Revision B governs this item prospectively.",
-        reviewer_id="planner",
-        policy_id="human-required-quantity/v1",
-        recorded_at=AS_OF,
-        effective_at=AS_OF,
-        evidence=tuple(item.evidence for item in candidates),
+    values = {
+        "brief_id": "brief",
+        "brief_digest": "b" * 64,
+        "subject_key": "GPU-A",
+        "scope": SCOPE,
+        "outcome": ReconciliationReviewOutcome.SELECT_GOVERNING_REVISION,
+        "candidate_claim_ids": ("claim:A", "claim:B"),
+        "selected_claim_id": "claim:B",
+        "rationale": "Revision B governs this item prospectively.",
+        "reviewer_id": "planner",
+        "policy_id": "human-required-quantity/v1",
+        "recorded_at": AS_OF,
+        "effective_at": AS_OF,
+        "evidence": tuple(item.evidence for item in candidates),
+    }
+    human = HumanReconciliationDecision(  # pyright: ignore[reportArgumentType]
+        decision_id=prospective_decision_id(  # pyright: ignore[reportArgumentType]
+            **values
+        ),
+        **values,
     )
-    human = HumanReconciliationDecision(decision_id=prospective_decision_id(**values), **values)
     before = project_governed_required_quantity(
         candidates,
         canonical_key="GPU-A",

@@ -1,5 +1,6 @@
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 
 import pytest
 
@@ -51,7 +52,7 @@ def make_decision(**changes: object) -> HumanReconciliationDecision:
     return HumanReconciliationDecision(decision_id=prospective_decision_id(**values), **values)  # type: ignore[arg-type]
 
 
-def test_store_is_prospective_scoped_and_idempotent(tmp_path) -> None:
+def test_store_is_prospective_scoped_and_idempotent(tmp_path: Path) -> None:
     store = SqliteReconciliationReviewStore(tmp_path / "review.sqlite")
     item = make_decision()
     assert store.record(item, context=CONTEXT) == item
@@ -62,7 +63,7 @@ def test_store_is_prospective_scoped_and_idempotent(tmp_path) -> None:
     assert store.for_brief("brief-1", context=CONTEXT) == item
 
 
-def test_store_rejects_changed_replay_and_scope(tmp_path) -> None:
+def test_store_rejects_changed_replay_and_scope(tmp_path: Path) -> None:
     store = SqliteReconciliationReviewStore(tmp_path / "review.sqlite")
     store.record(make_decision(), context=CONTEXT)
     with pytest.raises(BriefConflict, match="replay"):
@@ -72,7 +73,7 @@ def test_store_rejects_changed_replay_and_scope(tmp_path) -> None:
         store.record(make_decision(), context=foreign)
 
 
-def test_corrupt_payload_fails_closed(tmp_path) -> None:
+def test_corrupt_payload_fails_closed(tmp_path: Path) -> None:
     path = tmp_path / "review.sqlite"
     store = SqliteReconciliationReviewStore(path)
     store.record(make_decision(), context=CONTEXT)

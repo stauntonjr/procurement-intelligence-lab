@@ -23,6 +23,9 @@ from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningSourceType,
 )
 from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
+from procurement_intelligence_lab.domains.procurement.reconciliation_reviews import (
+    ReconciliationReviewStore,
+)
 from procurement_intelligence_lab.domains.procurement.state import (
     GovernedRequiredQuantityState,
     project_governed_required_quantity,
@@ -43,7 +46,6 @@ from procurement_intelligence_lab.ports.corpus import (
     CorpusNotFoundError,
     CorpusReader,
 )
-from procurement_intelligence_lab.ports.reconciliation_reviews import ReconciliationReviewStore
 
 
 @dataclass(frozen=True)

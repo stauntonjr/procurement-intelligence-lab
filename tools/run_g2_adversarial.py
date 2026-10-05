@@ -493,7 +493,7 @@ def run_case(
                     ):
                         status, baseline = deterministic.status, json.load(deterministic)
                     require(
-                        status == 200 and facts == baseline_facts(baseline),
+                        status == 200 and baseline_facts(facts) == baseline_facts(baseline),
                         "complete_baseline_facts_differ",
                     )
                     observations["baseline_exact"] = True

@@ -2,52 +2,67 @@
   "schema_version": 1,
   "artifact": "docs/assets/rehearsal-v2/walkthrough.webm",
   "execution_kind": "fixture",
-  "scenario": "GPU-A unresolved requirement",
+  "scenario": "GPU-C conflicting requirement revisions",
   "acceptance": "pass",
   "slide_count": 8,
   "viewport": {"width": 1440, "height": 900},
   "banner_height": 96,
   "typing_delay_ms": 45,
-  "interaction_seconds": 43.75,
+  "interaction_seconds": 31.169,
   "media": {
     "container": "webm",
     "codec": "vp8",
-    "duration": "0:00:42.920000000",
+    "duration": "0:00:30.720000000",
     "width": 1440,
     "height": 900,
     "seekable": true,
-    "sha256": "e9031f8b73f2e81f55d71690e0338ef2cbb13a7ae41e8278b9bca934b1fe7011"
+    "sha256": "d7c2584fe190303e0336aef5a12627fcc59845c538d86fd5ae2263fd5a8b52a1"
   },
-  "governed_facts": {
+  "historical_assessment": {
+    "as_of": "2026-10-01T00:00:00Z",
     "status": "not_assessed",
     "reason": "unresolved_requirement",
     "required_quantity": null,
-    "ordered_quantity": "2",
-    "evidence_ids": [
-      "evidence:71bdac429103510a5e6478dc",
-      "evidence:4062b7a560cd9c03821947a3",
-      "evidence:fd11c98ba675cb17e6a88032"
-    ]
+    "ordered_quantity": null,
+    "unchanged": true
+  },
+  "reconciliation": {
+    "outcome": "select_governing_revision",
+    "selected_revision": "atlas-bom-r2",
+    "selected_claim_id": "evidence:b4c4abda0551d12a2f794175",
+    "candidate_claim_ids": [
+      "evidence:af0ae06027d606edc6d26483",
+      "evidence:b4c4abda0551d12a2f794175"
+    ],
+    "rationale": "Revision atlas-bom-r2 governs GPU-C prospectively for this project and site.",
+    "effective_at": "2026-10-05T18:33:41.002917+00:00",
+    "exact_scope": {
+      "tenant_id": "synthetic-tenant",
+      "project_id": "atlas",
+      "site_id": "lab",
+      "item": "GPU-C"
+    },
+    "current_assessment": {
+      "status": "anomaly",
+      "required_quantity": "8",
+      "ordered_quantity": "4",
+      "unit": "each"
+    }
   },
   "assertions": {
-    "source_count": 3,
-    "selected_source_highlighted": true,
-    "decision": "reject",
+    "retained_evidence_count": 12,
+    "inspected_conflicting_sources": 2,
+    "highlighted_conflicting_sources": 2,
     "credential_storage_empty": true,
     "credential_absent_from_adjacent_text": true,
     "slides_precede_browser": true,
     "visible_character_typing": true,
-    "five_question_banner_changes": true
-  },
-  "live_attempt": {
-    "acceptance": "blocked",
-    "reason": "model_unavailable",
-    "automatic_retry": false,
-    "retained_locally": true
+    "five_question_banner_changes": true,
+    "forbidden_demo_and_finding_copy_absent": true
   },
   "limits": [
-    "The publishable recording is current-build fixture execution with no model call.",
-    "The local live model endpoint was unavailable during the single authorized attempt.",
-    "The recording does not prove deployment, purchasing authority, or human rehearsal timing."
+    "The recording uses the current fixture caller and makes no model call.",
+    "The human choice is prospective for one exact item, project, and site; it does not rewrite history or trigger procurement action.",
+    "The recording does not prove deployment, current-build live inference, or human rehearsal timing."
   ]
 }

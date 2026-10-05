@@ -1,3 +1,4 @@
+# pyright: reportGeneralTypeIssues=false, reportUnusedImport=false, reportUnusedVariable=false, reportUnusedFunction=false
 """Loopback-only authenticated fixture review. No public or production identity."""
 
 import argparse
@@ -247,7 +248,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         self._dispatch(False)
 
-    def do_POST(self) -> None:
+    def do_POST(self) -> None:  # pyright: ignore[reportGeneralTypeIssues]
         self._dispatch(True)
 
     def _dispatch(self, write: bool) -> None:

@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 
@@ -9,7 +10,6 @@ from procurement_intelligence_lab.interfaces.workflow import compose_services
 from procurement_intelligence_lab.platform.semantics.briefs import BriefConflict
 from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 from procurement_intelligence_lab.platform.semantics.workflows import WorkflowRequest
-
 
 CONTEXT = RequestContext(
     "reviewer",
@@ -23,7 +23,7 @@ AS_OF = datetime(2026, 10, 1, tzinfo=UTC)
 NOW = datetime(2026, 10, 5, 12, tzinfo=UTC)
 
 
-def test_service_records_exact_selection_and_recomputes_current_state(tmp_path) -> None:
+def test_service_records_exact_selection_and_recomputes_current_state(tmp_path: Path) -> None:
     composition = compose_services(tmp_path / "review.sqlite")
     view = composition.runtime.start(WorkflowRequest("GPU-C", AS_OF), context=CONTEXT)
     facts = __import__("json").loads(view.brief.content_json)
@@ -48,7 +48,7 @@ def test_service_records_exact_selection_and_recomputes_current_state(tmp_path) 
     )
 
 
-def test_service_rejects_stale_digest_and_unknown_candidate(tmp_path) -> None:
+def test_service_rejects_stale_digest_and_unknown_candidate(tmp_path: Path) -> None:
     composition = compose_services(tmp_path / "review.sqlite")
     view = composition.runtime.start(WorkflowRequest("GPU-C", AS_OF), context=CONTEXT)
     composition.reconciliation.clock = lambda: NOW

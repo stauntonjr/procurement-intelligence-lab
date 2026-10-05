@@ -7,6 +7,7 @@ from tools.record_demo_story import (
     RecordingConfig,
     build_banner,
     build_typing_events,
+    extract_reconciliation_result,
     extract_unresolved_facts,
     ordered_slides,
     prepare_output,
@@ -112,3 +113,59 @@ def test_recording_requires_the_narrated_unresolved_requirement() -> None:
     )
     with pytest.raises(ValueError, match="unresolved_requirement"):
         extract_unresolved_facts(bad)
+
+
+def test_recording_requires_exact_prospective_reconciliation_result() -> None:
+    payload = {
+        "decision": {
+            "decision_id": "decision-1",
+            "outcome": "select_governing_revision",
+            "selected_claim_id": "claim-b",
+            "candidate_claim_ids": ["claim-a", "claim-b"],
+            "rationale": "Revision B governs this item prospectively.",
+            "subject_key": "GPU-C",
+            "scope": {"tenant_id": "local-review", "project_id": "atlas", "site_id": "default"},
+            "effective_at": "2026-10-05T12:00:00+00:00",
+            "evidence_ids": ["bom-a", "bom-b"],
+        },
+        "current_assessment": {
+            "status": "shortfall",
+            "required_quantity": "6",
+            "ordered_quantity": "2",
+        },
+    }
+    result = extract_reconciliation_result(
+        payload,
+        historical={
+            "status": "not_assessed",
+            "reason": "unresolved_requirement",
+            "required_quantity": None,
+            "ordered_quantity": "2",
+            "evidence_ids": ["bom-a", "bom-b", "order"],
+        },
+        original_cutoff="2026-10-01T00:00:00Z",
+    )
+    assert result["exact_scope"] == {
+        "tenant_id": "local-review",
+        "project_id": "atlas",
+        "site_id": "default",
+        "item": "GPU-C",
+    }
+    assert result["historical_assessment_unchanged"] is True
+    assert result["selected_claim_id"] == "claim-b"
+    assert result["retained_evidence_ids"] == ["bom-a", "bom-b", "order"]
+
+    invalid = json.loads(json.dumps(payload))
+    invalid["decision"]["effective_at"] = "2026-09-01T00:00:00+00:00"
+    with pytest.raises(ValueError, match="prospective"):
+        extract_reconciliation_result(
+            invalid,
+            historical={
+                "status": "not_assessed",
+                "reason": "unresolved_requirement",
+                "required_quantity": None,
+                "ordered_quantity": "2",
+                "evidence_ids": ["bom-a", "bom-b", "order"],
+            },
+            original_cutoff="2026-10-01T00:00:00Z",
+        )

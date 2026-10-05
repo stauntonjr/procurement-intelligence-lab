@@ -52,8 +52,8 @@ def live_html() -> str:
         "Local Qwen 3.6 inference · synthetic development corpus",
     )
     page = page.replace(
-        'Canonical item <input name="item" value="GPU-A" required maxlength="100"',
-        'Question <input name="question" value="Compare GPU-A with its governing requirement" required maxlength="1000" size="40"',
+        'Item to review <input name="item" value="GPU-A" required maxlength="100"',
+        'Procurement question <input name="question" value="Compare GPU-A with its governing requirement" required maxlength="1000" size="40"',
     )
     page = page.replace(
         "Compares governing requirements with recorded procurement activity using evidence available through this time.",
@@ -105,7 +105,7 @@ def original_html(page: str, sources: str) -> str:
     import re
 
     page = re.sub(
-        r"Atlas examples:.*?</p>",
+        r"Compares governing requirements with recorded procurement activity using evidence available through this time\.</p>",
         "Original GPU-A XLSX sources: " + sources + ". Fixed January 15 cutoff. "
         "Order observation is recorded source data; not_assessed does not mean reconciled.</p>",
         page,

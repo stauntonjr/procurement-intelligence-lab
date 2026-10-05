@@ -14,6 +14,9 @@ from procurement_intelligence_lab.application.exact_brief_review import (
     BriefReviewService,
     brief_facts,
 )
+from procurement_intelligence_lab.domains.procurement.reconciliation_reviews import (
+    ReconciliationReviewStore,
+)
 from procurement_intelligence_lab.domains.procurement.review_reconciliation import (
     HumanReconciliationDecision,
     ReconciliationReviewOutcome,
@@ -25,7 +28,6 @@ from procurement_intelligence_lab.platform.semantics.scope import (
     RequestContext,
     StateScope,
 )
-from procurement_intelligence_lab.ports.reconciliation_reviews import ReconciliationReviewStore
 
 
 @dataclass(frozen=True)
@@ -87,7 +89,23 @@ class ReconciliationReviewService:
         ):
             raise BriefConflict("assessment candidates do not share one exact scope")
         selected = selected_claim_id or None
-        values = dict(
+        evidence = tuple(item.evidence for item in candidates)
+        decision = HumanReconciliationDecision(
+            decision_id=prospective_decision_id(
+                brief_id=brief.brief_id,
+                brief_digest=brief.digest,
+                subject_key=brief.item,
+                scope=scope,
+                outcome=parsed,
+                candidate_claim_ids=candidate_ids,
+                selected_claim_id=selected,
+                rationale=rationale,
+                reviewer_id=context.principal_id,
+                policy_id="human-required-quantity/v1",
+                recorded_at=now,
+                effective_at=now,
+                evidence=evidence,
+            ),
             brief_id=brief.brief_id,
             brief_digest=brief.digest,
             subject_key=brief.item,
@@ -100,10 +118,7 @@ class ReconciliationReviewService:
             policy_id="human-required-quantity/v1",
             recorded_at=now,
             effective_at=now,
-            evidence=tuple(item.evidence for item in candidates),
-        )
-        decision = HumanReconciliationDecision(
-            decision_id=prospective_decision_id(**values), **values
+            evidence=evidence,
         )
         durable = self.store.record(decision, context=context)
         current = self.investigator.investigate(
@@ -121,6 +136,13 @@ def reconciliation_result_dto(result: ReconciliationReviewResult) -> dict[str, o
             "rationale": result.decision.rationale,
             "effective_at": result.decision.effective_at.isoformat(),
             "subject_key": result.decision.subject_key,
+            "scope": {
+                "tenant_id": result.decision.scope.tenant_id,
+                "project_id": result.decision.scope.project_id,
+                "site_id": result.decision.scope.site_id,
+            },
+            "candidate_claim_ids": list(result.decision.candidate_claim_ids),
+            "evidence_ids": [item.evidence_id for item in result.decision.evidence],
         },
         "current_assessment": json.loads(brief_facts(result.current)),
     }

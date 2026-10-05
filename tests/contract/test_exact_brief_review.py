@@ -1,7 +1,7 @@
 """Exact application authority survives process lifetime and rejects altered replay."""
 
-from concurrent.futures import ThreadPoolExecutor
 import json
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path

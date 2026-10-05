@@ -69,10 +69,18 @@ class HumanReconciliationDecision:
     evidence: tuple[EvidenceRef, ...]
 
     def __post_init__(self) -> None:
-        texts = (self.brief_id, self.brief_digest, self.subject_key, self.reviewer_id, self.policy_id)
+        texts = (
+            self.brief_id,
+            self.brief_digest,
+            self.subject_key,
+            self.reviewer_id,
+            self.policy_id,
+        )
         if any(type(value) is not str or not value.strip() or len(value) > 500 for value in texts):
             raise SemanticContractError("reconciliation identifiers require bounded text")
-        if len(self.brief_digest) != 64 or any(c not in "0123456789abcdef" for c in self.brief_digest):
+        if len(self.brief_digest) != 64 or any(
+            c not in "0123456789abcdef" for c in self.brief_digest
+        ):
             raise SemanticContractError("reconciliation requires a SHA256 brief digest")
         if not self.candidate_claim_ids:
             raise SemanticContractError("reconciliation requires candidate claims")

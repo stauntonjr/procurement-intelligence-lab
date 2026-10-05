@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import time
 from dataclasses import dataclass
+from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
 from typing import Any
@@ -26,8 +27,8 @@ class RecordingConfig:
     height: int = 900
     banner_height: int = 96
     typing_delay_ms: int = 45
-    slide_pause_ms: int = 3800
-    read_pause_ms: int = 1800
+    slide_pause_ms: int = 2400
+    read_pause_ms: int = 800
 
 
 def ordered_slides(directory: Path) -> list[Path]:
@@ -71,6 +72,55 @@ def extract_unresolved_facts(payload: dict[str, Any]) -> dict[str, Any]:
         "required_quantity": facts["required_quantity"],
         "ordered_quantity": facts.get("ordered_quantity"),
         "evidence_ids": evidence_ids,
+    }
+
+
+def extract_reconciliation_result(
+    payload: dict[str, Any], *, historical: dict[str, Any], original_cutoff: str
+) -> dict[str, Any]:
+    try:
+        decision = payload["decision"]
+        current = payload["current_assessment"]
+        scope = decision["scope"]
+        effective_at = datetime.fromisoformat(decision["effective_at"])
+        cutoff = datetime.fromisoformat(original_cutoff)
+        candidate_ids = list(decision["candidate_claim_ids"])
+        evidence_ids = list(decision["evidence_ids"])
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError("reviewer did not return a complete reconciliation result") from error
+    if decision.get("outcome") != "select_governing_revision":
+        raise ValueError("recording requires a governing revision selection")
+    if not str(decision.get("rationale", "")).strip():
+        raise ValueError("recording requires a reconciliation rationale")
+    if decision.get("selected_claim_id") not in candidate_ids or len(candidate_ids) != 2:
+        raise ValueError("recording requires one of exactly two retained candidates")
+    if effective_at <= cutoff:
+        raise ValueError("reconciliation must be prospective to the original cutoff")
+    historical_evidence = list(historical.get("evidence_ids", []))
+    if not evidence_ids or not set(evidence_ids).issubset(historical_evidence):
+        raise ValueError("reconciliation evidence must remain linked to the historical assessment")
+    if (
+        historical.get("status") != "not_assessed"
+        or historical.get("required_quantity") is not None
+    ):
+        raise ValueError("historical unresolved assessment was not retained")
+    return {
+        "decision_id": decision["decision_id"],
+        "selected_claim_id": decision["selected_claim_id"],
+        "candidate_claim_ids": candidate_ids,
+        "rationale": decision["rationale"],
+        "effective_at": decision["effective_at"],
+        "exact_scope": {
+            "tenant_id": scope["tenant_id"],
+            "project_id": scope["project_id"],
+            "site_id": scope["site_id"],
+            "item": decision["subject_key"],
+        },
+        "historical_assessment_unchanged": True,
+        "historical_assessment": historical,
+        "current_assessment": current,
+        "decision_evidence_ids": evidence_ids,
+        "retained_evidence_ids": historical_evidence,
     }
 
 
@@ -147,12 +197,12 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
         raise ValueError("private reviewer credential is unavailable")
     video_dir = config.output / "video"
     video_dir.mkdir()
-    item = "GPU-C" if config.live else "GPU-A"
-    question = f"Investigate the governing requirement and observed orders for {item}, preserving any conflicts."
-    request_label = "Question" if config.live else "Canonical item"
-    request_value = question if config.live else "GPU-A"
+    item = "GPU-C"
+    question = f"Compare the governing requirement revisions and recorded orders for {item}."
+    request_label = "Procurement question" if config.live else "Item to review"
+    request_value = question if config.live else item
     request_path = "**/api/ask" if config.live else "**/api/start"
-    cutoff = "2026-10-01T00:00:00Z" if config.live else "2026-01-15T00:00:00Z"
+    cutoff = "2026-10-01T00:00:00Z"
     banners = {
         "ask": build_banner(
             who="A buyer asks; the model only interprets intent",
@@ -166,14 +216,14 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
             what="Inspect each cited original source",
             why="The answer must be traceable to admitted evidence",
             how="Select citations and highlight supporting cells",
-            when="Before approving or rejecting the finding",
+            when="Before recording any reconciliation decision",
         ),
         "decision": build_banner(
             who="An authenticated human reviewer",
-            what="Reject this unresolved finding",
-            why="Two eligible requirements disagree",
-            how="Persist the disposition without rewriting sources",
-            when="After evidence and policy are visible",
+            what="Choose which displayed revision governs this item",
+            why="Two eligible requirements disagree and policy abstained",
+            how="Type a rationale and save an exact-scope prospective choice",
+            when="Effective now; the earlier assessment remains unchanged",
         ),
     }
     started = time.monotonic()
@@ -210,7 +260,7 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
             page.locator("#privacy-cover").evaluate("e=>e.remove()")
             _install_banner(page, banners["ask"], config.banner_height)
             _type_visible(page, request_label, request_value, config.typing_delay_ms)
-            _type_visible(page, "As of (ISO 8601 with timezone)", cutoff, config.typing_delay_ms)
+            _type_visible(page, "Evidence available through", cutoff, config.typing_delay_ms)
             if config.recover_run_prefix:
                 target = page.locator("#runs button").filter(has_text=config.recover_run_prefix)
                 expect(target).to_have_count(1)
@@ -230,6 +280,13 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
                     f"code={payload.get('code', 'unknown')}"
                 )
             governed_facts = extract_unresolved_facts(payload)
+            view = payload.get("workflow", payload)
+            facts = json.loads(view["brief"]["content_json"])
+            candidates = [
+                candidate for candidate in facts["governance_candidates"] if candidate["eligible"]
+            ]
+            if len(candidates) != 2:
+                raise AssertionError("recording requires exactly two eligible displayed revisions")
             expect(page.locator("#review-title")).to_be_visible()
             page.wait_for_timeout(config.read_pause_ms)
             _install_banner(page, banners["evidence"], config.banner_height)
@@ -237,38 +294,68 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
             count = buttons.count()
             if count != len(governed_facts["evidence_ids"]):
                 raise AssertionError("reviewer did not expose every governed evidence identity")
-            for index in range(count):
-                button = buttons.nth(index)
+            inspected = [
+                buttons.filter(has_text=candidate["revision_id"]).first for candidate in candidates
+            ]
+            highlighted_source_count = 0
+            for button in inspected:
                 with page.expect_response("**/api/source?*", timeout=30_000) as source_response:
                     button.focus()
                     button.press("Enter")
                 if source_response.value.status != 200:
                     raise AssertionError("cited source could not be opened")
                 expect(button).to_have_attribute("aria-pressed", "true")
-                expect(page.locator("#source .source-note")).to_have_text(
-                    "Highlighted cells support this finding."
-                )
+                source_payload = source_response.value.json()
+                if source_payload.get("cells"):
+                    expect(page.locator("#source .source-note")).to_have_text(
+                        "Highlighted cells support this assessment."
+                    )
+                    highlighted_source_count += 1
                 page.wait_for_timeout(config.read_pause_ms)
+            if highlighted_source_count < 2:
+                raise AssertionError(
+                    "both conflicting source documents must be shown with highlights"
+                )
             expect(page.locator("#outcome")).to_contain_text("not_assessed")
             _install_banner(page, banners["decision"], config.banner_height)
-            view = payload.get("workflow", payload)
-            reject = page.get_by_role("button", name="Reject this finding", exact=True)
-            if view["status"] == "rejected":
-                expect(reject).to_be_disabled()
-                result["decision"] = "recovered_rejection"
-            else:
-                reject.focus()
-                page.wait_for_timeout(config.read_pause_ms)
-                with page.expect_response("**/api/review", timeout=30_000) as reviewed:
-                    reject.press("Enter")
-                reviewed_payload = reviewed.value.json()
-                if reviewed.value.status != 200 or reviewed_payload.get("status") != "rejected":
-                    raise AssertionError("human rejection was not retained")
-                result["decision"] = "reject"
+            selected = candidates[1]
+            choice = page.get_by_label(
+                re.compile(f"Use revision {re.escape(selected['revision_id'])}")
+            )
+            choice.check()
+            rationale = f"Revision {selected['revision_id']} governs {item} prospectively for this project and site."
+            _type_visible(page, "Required rationale", rationale, config.typing_delay_ms)
+            save = page.get_by_role(
+                "button", name=f"Use revision {selected['revision_id']} prospectively", exact=True
+            )
+            expect(save).to_be_enabled()
             page.wait_for_timeout(config.read_pause_ms)
+            with page.expect_response("**/api/reconcile", timeout=30_000) as reconciled:
+                save.click()
+            reconciled_payload = reconciled.value.json()
+            if reconciled.value.status != 200:
+                raise AssertionError("prospective reconciliation was not retained")
+            reconciliation = extract_reconciliation_result(
+                reconciled_payload, historical=governed_facts, original_cutoff=cutoff
+            )
+            result["decision"] = "select_governing_revision"
+            result["reconciliation"] = reconciliation
+            page.wait_for_timeout(config.read_pause_ms)
+            body = page.locator("body").inner_text()
+            for forbidden in (
+                "Independent interview reference demo",
+                "demo brief",
+                "Investigate and draft",
+                "Approve this finding",
+                "Reject this finding",
+            ):
+                if forbidden in body:
+                    raise AssertionError(f"forbidden reviewer copy is visible: {forbidden}")
             result.update(
                 acceptance="pass",
                 source_count=count,
+                inspected_source_count=len(inspected),
+                highlighted_source_count=highlighted_source_count,
                 selected_source_highlighted=True,
                 workflow_status=view["status"],
                 governed_facts=governed_facts,

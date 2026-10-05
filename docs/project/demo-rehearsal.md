@@ -2,7 +2,7 @@
 
 ## Evidence-focused explanatory recording — 2026-10-05
 
-[Open the 42.92-second captioned recording](../assets/rehearsal-v2/index.html) ·
+[Open the 30.72-second captioned recording](../assets/rehearsal-v2/index.html) ·
 [native editable deck](https://docs.google.com/presentation/d/17LFjSGQs1q3rIvuqdRKdNqvBFXXYjKWctcDvqlLjxoQ/edit) ·
 [deck manifest](demo-storytelling-deck.md) ·
 [compact results](demo-storytelling-results.json).
@@ -10,9 +10,12 @@
 Eight uncropped slides now precede the browser: value proposition; who/what/why/how;
 the full evidence-to-action architecture with gold-data and human-governance rails; a hypothetical two-revision conflict; processing flow; procurement
 scenarios; explicitly unimplemented candidate verticals; and the live-transition frame. The
-browser portion uses visible paced typing and a fixed italic Who/What/Why/How/When banner, then
-opens all three cited sources with supporting cells highlighted before rejecting the unresolved
-finding. Short bounded pauses replace the earlier five-minute pacing.
+browser portion uses visible character-by-character typing and a fixed italic
+Who/What/Why/How/When banner. It opens and highlights the two conflicting BOM revisions, then the
+analyst selects revision `atlas-bom-r2` for the exact Atlas/lab/GPU-C scope and types a rationale.
+The choice becomes effective at the server save time. The October 1 unresolved assessment remains
+unchanged; the later current assessment uses required quantity 8 and observes 4. No purchase or
+external action is triggered. Short bounded pauses replace the earlier pacing.
 
 The publishable recording is current-build fixture execution with no model call. A single
 authorized current-version live submission returned `model_unavailable` because port 8000 was
@@ -21,8 +24,8 @@ recovered into the changed build because immutable application-version compatibi
 failed closed. Human timing, current-build live inference, merge and deployment remain unverified.
 
 Branch `codex/demo-integration-review-fixes` is proposed in PR #193; primary #72/M9, part of #74/#73.
-Runtime, model, prompt, policies and source data are unchanged. Application hash is
-`sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a`.
+The recording is current-branch fixture evidence, not a deployment claim. Its SHA-256 is
+`d7c2584fe190303e0336aef5a12627fcc59845c538d86fd5ae2263fd5a8b52a1`.
 
 [Open the five-minute captioned fixture replay](../assets/rehearsal/index.html) ·
 [WebM](../assets/rehearsal/walkthrough.webm) · [Captions](../assets/rehearsal/walkthrough.vtt).

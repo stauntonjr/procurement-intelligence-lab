@@ -1,3 +1,4 @@
+# pyright: reportArgumentType=false
 from datetime import UTC, datetime
 
 import pytest
@@ -7,10 +8,9 @@ from procurement_intelligence_lab.domains.procurement.review_reconciliation impo
     ReconciliationReviewOutcome,
     prospective_decision_id,
 )
-from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef, RecordLocation
 from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
+from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef, RecordLocation
 from procurement_intelligence_lab.platform.semantics.scope import StateScope
-
 
 NOW = datetime(2026, 10, 5, 12, tzinfo=UTC)
 SCOPE = StateScope("tenant", "project", "site", "v1")
@@ -35,17 +35,22 @@ def decision(**changes: object) -> HumanReconciliationDecision:
         "evidence": EVIDENCE,
     }
     values.update(changes)
-    values["decision_id"] = prospective_decision_id(**{k: v for k, v in values.items() if k != "decision_id"})
+    values["decision_id"] = prospective_decision_id(
+        **{k: v for k, v in values.items() if k != "decision_id"}  # pyright: ignore[reportArgumentType]
+    )
     return HumanReconciliationDecision(**values)  # type: ignore[arg-type]
 
 
 def test_all_review_outcomes_construct_with_compatible_fields() -> None:
     assert decision().selected_claim_id == "claim-a"
-    assert decision(
-        outcome=ReconciliationReviewOutcome.KEEP_UNRESOLVED,
-        selected_claim_id=None,
-        rationale="Neither revision has enough authority yet.",
-    ).outcome is ReconciliationReviewOutcome.KEEP_UNRESOLVED
+    assert (
+        decision(
+            outcome=ReconciliationReviewOutcome.KEEP_UNRESOLVED,
+            selected_claim_id=None,
+            rationale="Neither revision has enough authority yet.",
+        ).outcome
+        is ReconciliationReviewOutcome.KEEP_UNRESOLVED
+    )
     for outcome in (
         ReconciliationReviewOutcome.CONFIRM_ASSESSMENT,
         ReconciliationReviewOutcome.ASSESSMENT_NEEDS_CORRECTION,
@@ -84,4 +89,6 @@ def test_naive_times_and_incorrect_identity_fail() -> None:
     with pytest.raises(SemanticContractError, match="timezone-aware"):
         decision(recorded_at=NOW.replace(tzinfo=None), effective_at=NOW.replace(tzinfo=None))
     with pytest.raises(SemanticContractError, match="identity"):
-        HumanReconciliationDecision(**{**decision().__dict__, "decision_id": "wrong"})
+        HumanReconciliationDecision(  # pyright: ignore[reportArgumentType]
+            **{**decision().__dict__, "decision_id": "wrong"}
+        )

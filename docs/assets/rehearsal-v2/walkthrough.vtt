@@ -1,34 +1,34 @@
 WEBVTT
 
-00:00.000 --> 00:03.800
-Procurement Intelligence Lab turns conflicting documents into a reviewable, evidence-backed decision.
+00:00.000 --> 00:02.400
+Procurement Intelligence Lab turns conflicting documents into reviewable, evidence-backed operational state.
 
-00:03.800 --> 00:07.600
-Reviewers compare governed requirements with observed records while provenance remains visible.
+00:02.400 --> 00:04.800
+A procurement analyst needs a traceable answer before a requirement drives later decisions or action.
 
-00:07.600 --> 00:11.400
-Evidence, deterministic state, and human decision authority remain separate.
+00:04.800 --> 00:07.200
+The architecture preserves evidence through structured documents, assertions, reconciliation, derived facts, anomalies, predictions, decisions, actions, and human review.
 
-00:11.400 --> 00:15.200
-Two eligible approved requirements disagree; the correct value is unresolved, not zero.
+00:07.200 --> 00:09.600
+Gold data at every boundary tests meaning as information moves through the pipeline.
 
-00:15.200 --> 00:19.000
-The system captures, structures, compares, abstains, and presents one cited finding for review.
+00:09.600 --> 00:12.000
+Here, two eligible approved BOM revisions disagree, so deterministic policy abstains instead of inventing certainty.
 
-00:19.000 --> 00:22.800
+00:12.000 --> 00:14.400
+The processing flow retains both revisions and routes the conflict to a human with its source evidence.
+
+00:14.400 --> 00:16.800
 Procurement scenarios include quantity, missing-data, revision, price, timing, and recovery checks.
 
-00:22.800 --> 00:26.600
+00:16.800 --> 00:19.200
 Other domains are architecture candidates only; procurement is the implemented vertical.
 
-00:26.600 --> 00:30.400
-Now follow one conflict from question to original evidence and human disposition.
+00:19.200 --> 00:23.700
+The analyst types GPU-C and the evidence cutoff character by character, then checks for discrepancies.
 
-00:30.400 --> 00:35.500
-The operator types a bounded item and cutoff character by character. This is current-build fixture execution with no model call.
+00:23.700 --> 00:27.600
+Both conflicting BOM revisions open in context with their supporting cells highlighted.
 
-00:35.500 --> 00:40.500
-Each cited source opens in context and highlights the cells that support the finding.
-
-00:40.500 --> 00:43.000
-The unresolved finding is rejected. The disposition is retained without rewriting the source conflict or placing an order.
+00:27.600 --> 00:30.700
+The analyst selects revision R2 and types a rationale. It governs only this item, project, and site from the server save time; the earlier unresolved assessment remains unchanged.
