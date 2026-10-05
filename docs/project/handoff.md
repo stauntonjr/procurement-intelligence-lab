@@ -10,12 +10,12 @@ recording shows paced typing and changing Who/What/Why/How/When explanation befo
 an unresolved conflict. [Deck](demo-storytelling-deck.md), [recording and limits](demo-rehearsal.md),
 and [compact results](demo-storytelling-results.json).
 
-Latest local verification: focused 32 passed/12 installed-browser opt-in skips; full `make check`
-768 passed/22 opt-in skips with 88.83% coverage; package smoke passed; all 27 known-bad challenges
+Latest local verification: focused 34 passed/12 installed-browser opt-in skips; full `make check`
+770 passed/22 opt-in skips with 88.83% coverage; package smoke passed; all 27 known-bad challenges
 were rejected. Clean-wheel installed Chromium acceptance for this page revision passed 17 selected
 tests before recording. The prior PR #193 coverage failure was a 180-second timeout in the baseline
 CLI test at older head `b3afe828`; it was not a coverage-threshold failure. The same full local suite
-now completes in 408.78 seconds. One current live recording attempt returned `model_unavailable`
+now completes in 409.84 seconds. One current live recording attempt returned `model_unavailable`
 with port 8000 offline and was not retried; publishable media is explicitly fixture/no-model.
 No merge or deployment. Current-build live inference, human timing, full release and B2 remain open.
 

@@ -101,7 +101,7 @@
     {
       "argv": ["make", "check"],
       "outcome": "passed",
-      "evidence": "768 passed, 22 explicit opt-in skips in 408.78s; 88.83% branch coverage; formatting, lint, pyright, architecture, semantic preflight, dependency and supply-chain checks passed."
+      "evidence": "Final source revision: 770 passed, 22 explicit opt-in skips in 409.84s; 88.83% branch coverage; formatting, lint, pyright, architecture, semantic preflight, dependency and supply-chain checks passed."
     },
     {
       "argv": ["make", "package-smoke"],

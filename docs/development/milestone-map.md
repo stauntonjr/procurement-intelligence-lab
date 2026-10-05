@@ -220,5 +220,5 @@ sources the primary review interaction, highlights supporting original cells, an
 eight-slide editable architecture/use-case deck before a 42.92-second captioned browser recording.
 The publishable media is current-build fixture execution with no model call; one authorized live
 attempt failed `model_unavailable` with the local endpoint offline and was not retried. Full local
-checks pass (768 tests, 22 opt-in skips, 88.83% coverage), but current-build live inference, human
+checks pass (770 tests, 22 opt-in skips, 88.83% coverage), but current-build live inference, human
 timing, PR CI, merge, deployment, full release and second-vertical proof remain open.
