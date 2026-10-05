@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#74",
-  "revision": "ab62e6c713153e71ede6ffe55b24256ef7dc0652",
+  "revision": "95264c695ad513ad7ce5effcf028ee43fb9eee51",
   "surfaces": [
     "local reviewer HTML and HTTP boundary",
     "installed Chromium public caller",
@@ -91,7 +91,7 @@
     {
       "argv": ["browser-playback", "docs/assets/rehearsal-v2/index.html"],
       "outcome": "passed",
-      "evidence": "Chromium reported duration 42.96s, 1440x900 video and one caption track; GStreamer reported VP8 WebM and seekable playback."
+      "evidence": "Chromium reported duration 42.92s, 1440x900 video and one caption track; GStreamer reported VP8 WebM and seekable playback."
     },
     {
       "argv": ["live-recording", "one-new-request", "http://127.0.0.1:8001"],
@@ -117,13 +117,21 @@
       "argv": ["gh", "api", "repos/stauntonjr/procurement-intelligence-lab/actions/jobs/111600159663/logs"],
       "outcome": "passed",
       "evidence": "Diagnosed the older PR head: coverage failed because test_actual_baseline_cli_exercises_http_without_inference exceeded its 180s subprocess timeout; measured coverage still reached 88.83%, so this was not a coverage-threshold failure."
+    },
+    {
+      "argv": ["uv", "run", "--extra", "workflow", "pytest", "-q", "tests/unit/test_review_page.py", "tests/unit/test_live_review_page.py", "tests/unit/test_review_page_recovery.py", "tests/unit/test_record_demo_story.py", "tests/integration/test_review_web.py", "tests/integration/test_browser_recovery.py"],
+      "outcome": "passed",
+      "evidence": "34 passed and 12 explicit installed-browser opt-in skips after the independent-review fixes."
     }
   ],
   "review": {
-    "revision": "ab62e6c713153e71ede6ffe55b24256ef7dc0652",
-    "mode": "self_fresh_pass",
-    "findings": [],
-    "unresolved_findings": ["Repository-wide checks, latest-revision independent review and PR CI reconciliation are pending."]
+    "revision": "95264c695ad513ad7ce5effcf028ee43fb9eee51",
+    "mode": "independent_fresh_context",
+    "findings": [
+      "Recorder acceptance did not bind the unresolved-conflict narrative to the exact returned facts; corrected with parsed governed-fact validation, distinct evidence identities, retained report facts and a regression.",
+      "Failed source selection changed aria-pressed before source retrieval succeeded; corrected by committing selection only after a successful current-run response and a failure-preservation regression."
+    ],
+    "unresolved_findings": ["Required PR CI and current-build live inference remain unresolved; the local model endpoint was offline and no automatic retry was made."]
   },
   "completion": "not_ready"
 }
