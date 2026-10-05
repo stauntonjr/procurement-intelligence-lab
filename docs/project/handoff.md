@@ -2,13 +2,21 @@
 
 ## Evidence-focused demo story and source highlighting — 2026-10-05
 
-`codex/demo-integration-review-fixes` now adds an evidence-focused reviewer, an eight-slide
-editable native deck, and a 42.92-second captioned current-build fixture recording. The deck now
+`codex/demo-integration-review-fixes` now adds an analyst-first, exact-scope reconciliation review
+on top of the evidence-focused reviewer and eight-slide editable native deck. The review presents
+the discrepancy and highlighted admitted sources before technical run history. An authenticated
+analyst may choose one of exactly two eligible requirement revisions, keep the item unresolved,
+or flag the assessment for correction with a rationale. A governing choice applies only to the
+exact tenant/project/site/item scope from its server-owned effective time; it never rewrites an
+earlier assessment, discards the losing assertion, or triggers a purchase or external action.
+ADR-034, the public contract, and C028 record those boundaries. The existing 42.92-second recording
+predates this interaction and is being replaced; do not use it as evidence of the new resolution flow.
+The deck now
 shows the complete source-to-action architecture vision, gold data at every boundary, human
 governance at controlled checkpoints, and the current implementation boundary. Findings open
 the first citation automatically; selectable evidence cards expose selection state; original row
 cells highlight supporting columns; governing-authority JSON remains fully inspectable. The
-recording shows paced typing and changing Who/What/Why/How/When explanation before a human rejects
+The prior recording shows paced typing and changing Who/What/Why/How/When explanation before a human rejects
 an unresolved conflict. [Deck](demo-storytelling-deck.md), [recording and limits](demo-rehearsal.md),
 and [compact results](demo-storytelling-results.json).
 

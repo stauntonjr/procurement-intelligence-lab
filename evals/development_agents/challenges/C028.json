@@ -1,0 +1,32 @@
+{
+  "id": "C028",
+  "title": "Human reconciliation remains prospective and retains conflicting evidence",
+  "introducing_commit": "aeb7fe719e14ad73e1919c054c655270021fed58",
+  "oracle": "An exact-scope human revision choice cannot govern before its server-owned effective time, and the losing conflicting claim remains retained after it takes effect.",
+  "known_bad": "Apply the human selection at every as-of time, including historical evaluations.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/domains/procurement/state.py",
+      "find": "    if human_decision is not None and human_decision.effective_at <= as_of:\n",
+      "replace": "    if human_decision is not None:\n"
+    }
+  ],
+  "known_bad_failure_pattern": "assert before.expected is None",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/contract/test_governing_claim_policy.py",
+    "-k",
+    "human_selection_is_prospective_and_retains_losing_claim"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/domains/procurement/state.py",
+    "tests/contract/test_governing_claim_policy.py"
+  ],
+  "prevention": [
+    "Public temporal and evidence-retention contract oracle",
+    "Latest-revision semantic review"
+  ]
+}

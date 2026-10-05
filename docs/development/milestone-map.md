@@ -222,3 +222,14 @@ The publishable media is current-build fixture execution with no model call; one
 attempt failed `model_unavailable` with the local endpoint offline and was not retried. Full local
 checks pass (770 tests, 22 opt-in skips, 88.83% coverage), but current-build live inference, human
 timing, PR CI, merge, deployment, full release and second-vertical proof remain open.
+
+## Prospective exact-scope reconciliation review — 2026-10-05
+
+M9/#74, part of #67/#68/#72/#73: the current PR #193 continuation replaces ambiguous finding
+approval with explicit analyst outcomes for an exact tenant/project/site/item conflict. One of
+exactly two eligible displayed requirement claims may govern prospectively, or the analyst may keep
+the scope unresolved or flag the assessment for correction with a required rationale. Server-owned
+effective time preserves historical assessments; winning and losing assertions and evidence remain
+retained. ADR-034 and C028 define and guard the boundary. The replacement browser recording,
+latest-revision reviews, CI, merge, deployment, human timing, full release, and second-vertical proof
+remain open.
