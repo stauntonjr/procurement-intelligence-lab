@@ -22,6 +22,7 @@ from procurement_intelligence_lab.domains.procurement.review_reconciliation impo
 from procurement_intelligence_lab.domains.procurement.state import (
     project_governed_required_quantity,
 )
+from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
@@ -140,6 +141,14 @@ def test_human_selection_is_prospective_and_retains_losing_claim() -> None:
     assert after.expected and after.expected.required_quantity == Decimal(6)
     assert tuple(item.claim_id for item in after.decision.governing) == ("claim:B",)
     assert tuple(item.claim_id for item in after.decision.losing) == ("claim:A",)
+    with pytest.raises(SemanticContractError, match="exact candidates"):
+        project_governed_required_quantity(
+            candidates + (_claim("C", "7"),),
+            canonical_key="GPU-A",
+            request_context=CONTEXT,
+            as_of=AS_OF,
+            human_decision=human,
+        )
 
 
 @pytest.mark.contract

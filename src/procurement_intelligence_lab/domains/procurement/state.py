@@ -168,9 +168,15 @@ def project_governed_required_quantity(
     )
     if human_decision is not None and human_decision.effective_at <= as_of:
         candidate_ids = tuple(item.claim_id for item in candidates)
+        active_conflict_ids = {
+            claim_id
+            for claim_id, disposition in decision.dispositions
+            if disposition == "conflicting: no value established"
+        }
         if (
             human_decision.subject_key != canonical_key
-            or not set(human_decision.candidate_claim_ids).issubset(candidate_ids)
+            or set(human_decision.candidate_claim_ids) != active_conflict_ids
+            or not active_conflict_ids.issubset(candidate_ids)
             or any(
                 (item.scope.tenant_id, item.scope.project_id, item.scope.site_id)
                 != (
