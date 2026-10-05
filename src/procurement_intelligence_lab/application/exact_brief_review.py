@@ -61,6 +61,8 @@ def brief_facts(result: InvestigationResult) -> str:
                     "unit": claim.unit,
                     "evidence_ids": [claim.evidence.evidence_id],
                     "disposition": dict(decision.dispositions)[claim.claim_id],
+                    "eligible": dict(decision.dispositions)[claim.claim_id]
+                    in {"governing", "conflicting: no value established"},
                 }
                 for claim in decision.governing + decision.losing
             ],

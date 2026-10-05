@@ -10,6 +10,9 @@ from pathlib import Path
 from procurement_intelligence_lab.adapters.runtime_identity import application_revision
 from procurement_intelligence_lab.adapters.sqlite_agent_runs import RunStoreError, SqliteRunStore
 from procurement_intelligence_lab.adapters.sqlite_briefs import SqliteBriefStore
+from procurement_intelligence_lab.adapters.sqlite_reconciliation_reviews import (
+    SqliteReconciliationReviewStore,
+)
 from procurement_intelligence_lab.application.agent_runs import AgentRunService
 from procurement_intelligence_lab.application.corpus_agent_tools import (
     TOOL_SCHEMA_VERSION,
@@ -18,6 +21,10 @@ from procurement_intelligence_lab.application.corpus_agent_tools import (
     ToolExecutionError,
 )
 from procurement_intelligence_lab.application.exact_brief_review import BriefReviewService
+from procurement_intelligence_lab.application.reconciliation_review import (
+    ReconciliationReviewService,
+)
+from procurement_intelligence_lab.application.corpus_investigation import CorpusInvestigationService
 from procurement_intelligence_lab.interfaces.review_sources import SOURCE_OPTIONS, compose_sources
 from procurement_intelligence_lab.platform.semantics.agent_runs import (
     ExecutionKind,
@@ -53,6 +60,8 @@ class WorkflowComposition:
     runs: AgentRunService
     service: BriefReviewService
     reader: ReviewSources
+    reconciliation: ReconciliationReviewService
+    reconciliation_store: SqliteReconciliationReviewStore
 
 
 def compose(database: Path, *, sources: str = "corpus") -> AgentWorkflowRuntime:
@@ -68,6 +77,7 @@ def compose_services(
     except ImportError as error:
         raise WorkflowError("install the workflow extra") from error
     source_config = compose_sources(sources)
+    reconciliation_store = SqliteReconciliationReviewStore(database)
     runs = AgentRunService(
         SqliteRunStore(database),
         versions=RunVersions(
@@ -84,11 +94,24 @@ def compose_services(
         execution_kind=ExecutionKind.LIVE if live_prompt else ExecutionKind.FIXTURE,
     )
     reader = source_config.reader
+    investigator = (
+        CorpusInvestigationService(reader, reconciliation_store)
+        if isinstance(source_config.investigator, CorpusInvestigationService)
+        else source_config.investigator
+    )
     service = BriefReviewService(
-        CorpusAgentTools(source_config.investigator, reader, runs),
+        CorpusAgentTools(investigator, reader, runs),
         SqliteBriefStore(database),
     )
-    return WorkflowComposition(LangGraphReviewRuntime(service, database), runs, service, reader)
+    reconciliation = ReconciliationReviewService(service, investigator, reconciliation_store)
+    return WorkflowComposition(
+        LangGraphReviewRuntime(service, database),
+        runs,
+        service,
+        reader,
+        reconciliation,
+        reconciliation_store,
+    )
 
 
 def view_dto(view: WorkflowView) -> dict[str, object]:

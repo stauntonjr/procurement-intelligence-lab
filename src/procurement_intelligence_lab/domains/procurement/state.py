@@ -170,8 +170,16 @@ def project_governed_required_quantity(
         candidate_ids = tuple(item.claim_id for item in candidates)
         if (
             human_decision.subject_key != canonical_key
-            or human_decision.candidate_claim_ids != candidate_ids
-            or any(item.scope != human_decision.scope for item in candidates)
+            or not set(human_decision.candidate_claim_ids).issubset(candidate_ids)
+            or any(
+                (item.scope.tenant_id, item.scope.project_id, item.scope.site_id)
+                != (
+                    human_decision.scope.tenant_id,
+                    human_decision.scope.project_id,
+                    human_decision.scope.site_id,
+                )
+                for item in candidates
+            )
         ):
             raise SemanticContractError(
                 "human reconciliation differs from exact candidates or scope"
