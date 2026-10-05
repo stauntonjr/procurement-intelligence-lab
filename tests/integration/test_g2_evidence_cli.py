@@ -83,7 +83,10 @@ def test_actual_baseline_cli_exercises_http_without_inference(tmp_path: Path):
         ],
         capture_output=True,
         text=True,
-        timeout=180,
+        # This correctness check performs 512 sequential HTTP requests. Hosted CI
+        # can exceed three minutes; request timings remain in the report rather
+        # than making runner throughput an implicit product acceptance threshold.
+        timeout=600,
         check=False,
     )
     assert done.returncode == 0, done.stdout + done.stderr

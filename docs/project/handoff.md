@@ -10,7 +10,11 @@ acceptance and are historical where they describe this chain as unmerged.
 
 The remaining integration reconciles #172 host routing and #157/#159 dependency updates against
 that main revision. [ADR-035](../adr/035-development-agent-host-routing.md) records the host-role
-boundary and resolves #172's missing-decision-record finding. Human timing, current-build live
+boundary and resolves #172's missing-decision-record finding. The aggregate baseline CLI test
+now allows 600 seconds for its unchanged 48 investigations and 464 source lookups: GitHub's
+previous 180-second timeout killed the correctness run despite 88.94% measured coverage.
+The report still records every request's latency; no product performance threshold is changed.
+Human timing, current-build live
 inference, deployment, full G2/release, and B2 remain open; broader Issues remain in progress.
 
 ## Evidence-focused demo story and source highlighting — 2026-10-05
