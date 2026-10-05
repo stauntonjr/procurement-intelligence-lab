@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "issue": "#74",
+  "revision": "ab62e6c713153e71ede6ffe55b24256ef7dc0652",
+  "surfaces": [
+    "local reviewer HTML and HTTP boundary",
+    "installed Chromium public caller",
+    "native Google Slides deck and rendered slide inputs",
+    "captioned 1440x900 WebM rehearsal"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/project/handoff.md",
+    "docs/superpowers/specs/2026-10-05-demo-storytelling-evidence-focus-design.md",
+    "docs/superpowers/plans/2026-10-05-demo-storytelling-evidence-focus.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/test-public-interface/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md",
+    ".agents/skills/architecture-plan-sync/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "The authenticated request fields, admitted project corpus, immutable evidence references and original-source locations; the deck uses the repository architecture and product contracts named in its footers.",
+    "authoritative_output": "One exact review finding with explicit governed status, selectable cited evidence, highlighted original cells where available, and an authenticated human disposition; the media output is a captioned explanatory rehearsal, not procurement authority.",
+    "scope_as_of": "Existing project and as-of semantics are unchanged. The recorded fixture is synthetic-project GPU-A at 2026-01-15T00:00:00Z; installed live-browser acceptance used the existing Atlas scenarios and their declared cutoffs.",
+    "governing_policy": "Models may interpret questions; deterministic domain services and governing-claim policy own quantities, conflict, absence and assessment status; authenticated humans own review save or rejection.",
+    "evidence_retained": "Every cited reference remains selectable; row sources retain headers, cells and highlighted columns; authority sources retain complete structured detail; losing and conflicting assertions remain auditable. Recording attempts and credential-free reports are retained separately.",
+    "typed_failures": "Empty evidence renders an explicit message; source HTTP failures preserve the prior visible source; unavailable model execution returns model_unavailable without a brief; stale or incompatible revisions cannot be recovered or reviewed; authentication and scope failures remain distinct HTTP boundaries."
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": ["tests/unit/test_review_page.py", "tests/integration/test_browser_recovery.py"],
+      "rationale": "Empty evidence is explicit, and missing observations remain unknown rather than zero."
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": ["tests/integration/test_original_showcase_live.py", "docs/assets/rehearsal-v2/walkthrough.webm"],
+      "rationale": "The unresolved fixture retains both eligible requirements and the observed order evidence."
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": ["tests/integration/test_review_web.py"],
+      "rationale": "Project authorization and timezone-aware cutoffs remain enforced at the HTTP boundary."
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "not_applicable",
+      "evidence": [],
+      "rationale": "This slice changes evidence presentation and recording, not quantity arithmetic or numeric policy."
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": ["tests/integration/test_review_web.py", "tests/unit/test_record_demo_story.py"],
+      "rationale": "Malformed public requests remain typed failures, and recording refuses incomplete banners or existing evidence directories."
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": ["docs/assets/rehearsal-v2/index.html", "docs/project/demo-storytelling-results.json", "docs/project/demo-storytelling-deck.md"],
+      "rationale": "The browser caller, native deck structure, rendered slides, captions and WebM are directly verified public artifacts."
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": ["docs/project/demo-storytelling-results.json", "docs/project/demo-storytelling-deck.md"],
+      "rationale": "The artifacts explicitly deny live inference for the publishable fixture, purchasing authority, deployment and implemented non-procurement verticals."
+    }
+  ],
+  "commands": [
+    {
+      "argv": ["uv", "run", "--extra", "workflow", "pytest", "-q", "tests/unit/test_review_page.py", "tests/unit/test_live_review_page.py", "tests/unit/test_review_page_recovery.py"],
+      "outcome": "passed",
+      "evidence": "15 passed in 0.37s"
+    },
+    {
+      "argv": ["installed-wheel-browser", "fixture-recovery-original-source-live"],
+      "outcome": "passed",
+      "evidence": "17 installed Chromium integration tests passed across recovery, fixture, original-source reflow and one live Qwen call before the model endpoint later became unavailable."
+    },
+    {
+      "argv": ["uv", "run", "--extra", "workflow", "pytest", "-q", "tests/unit/test_record_demo_story.py"],
+      "outcome": "passed",
+      "evidence": "4 passed in 0.06s"
+    },
+    {
+      "argv": ["browser-playback", "docs/assets/rehearsal-v2/index.html"],
+      "outcome": "passed",
+      "evidence": "Chromium reported duration 42.96s, 1440x900 video and one caption track; GStreamer reported VP8 WebM and seekable playback."
+    },
+    {
+      "argv": ["live-recording", "one-new-request", "http://127.0.0.1:8001"],
+      "outcome": "failed",
+      "evidence": "The single authorized attempt returned model_unavailable because the local model endpoint was offline; no inference retry was made."
+    },
+    {
+      "argv": ["make", "check"],
+      "outcome": "passed",
+      "evidence": "768 passed, 22 explicit opt-in skips in 408.78s; 88.83% branch coverage; formatting, lint, pyright, architecture, semantic preflight, dependency and supply-chain checks passed."
+    },
+    {
+      "argv": ["make", "package-smoke"],
+      "outcome": "passed",
+      "evidence": "Clean sdist-to-wheel build and isolated base/workflow installations passed the advertised runtime probes."
+    },
+    {
+      "argv": ["make", "challenges"],
+      "outcome": "passed",
+      "evidence": "All 27 challenge manifests passed and each known-bad implementation was rejected."
+    },
+    {
+      "argv": ["gh", "api", "repos/stauntonjr/procurement-intelligence-lab/actions/jobs/111600159663/logs"],
+      "outcome": "passed",
+      "evidence": "Diagnosed the older PR head: coverage failed because test_actual_baseline_cli_exercises_http_without_inference exceeded its 180s subprocess timeout; measured coverage still reached 88.83%, so this was not a coverage-threshold failure."
+    }
+  ],
+  "review": {
+    "revision": "ab62e6c713153e71ede6ffe55b24256ef7dc0652",
+    "mode": "self_fresh_pass",
+    "findings": [],
+    "unresolved_findings": ["Repository-wide checks, latest-revision independent review and PR CI reconciliation are pending."]
+  },
+  "completion": "not_ready"
+}

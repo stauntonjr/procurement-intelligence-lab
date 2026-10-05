@@ -1,5 +1,24 @@
 # Project handoff
 
+## Evidence-focused demo story and source highlighting — 2026-10-05
+
+`codex/demo-integration-review-fixes` now adds an evidence-focused reviewer, an eight-slide
+editable native deck, and a 42.96-second captioned current-build fixture recording. Findings open
+the first citation automatically; selectable evidence cards expose selection state; original row
+cells highlight supporting columns; governing-authority JSON remains fully inspectable. The
+recording shows paced typing and changing Who/What/Why/How/When explanation before a human rejects
+an unresolved conflict. [Deck](demo-storytelling-deck.md), [recording and limits](demo-rehearsal.md),
+and [compact results](demo-storytelling-results.json).
+
+Latest local verification: focused 32 passed/12 installed-browser opt-in skips; full `make check`
+768 passed/22 opt-in skips with 88.83% coverage; package smoke passed; all 27 known-bad challenges
+were rejected. Clean-wheel installed Chromium acceptance for this page revision passed 17 selected
+tests before recording. The prior PR #193 coverage failure was a 180-second timeout in the baseline
+CLI test at older head `b3afe828`; it was not a coverage-threshold failure. The same full local suite
+now completes in 408.78 seconds. One current live recording attempt returned `model_unavailable`
+with port 8000 offline and was not retried; publishable media is explicitly fixture/no-model.
+No merge or deployment. Current-build live inference, human timing, full release and B2 remain open.
+
 ## Demo integration review corrections — 2026-10-04
 
 `codex/demo-integration-review-fixes` is based on draft #192. Eighteen demo PR heads form a

@@ -212,3 +212,13 @@ six confirmed review defects across run accounting, immutable configuration, aud
 and exact-save replay. ADR-033 keeps shared output validation in application code and HTTP link
 decoration in interfaces. [Audit and evidence](../project/demo-integration-review-fixes.md).
 Runtime hash changes; previous live results remain historical. No merge/deploy/inference or B2 expansion.
+
+## Evidence-focused explanatory rehearsal — 2026-10-05
+
+M9/#74, part of #72/#73: the current `codex/demo-integration-review-fixes` continuation makes cited
+sources the primary review interaction, highlights supporting original cells, and introduces an
+eight-slide editable architecture/use-case deck before a 42.96-second captioned browser recording.
+The publishable media is current-build fixture execution with no model call; one authorized live
+attempt failed `model_unavailable` with the local endpoint offline and was not retried. Full local
+checks pass (768 tests, 22 opt-in skips, 88.83% coverage), but current-build live inference, human
+timing, PR CI, merge, deployment, full release and second-vertical proof remain open.

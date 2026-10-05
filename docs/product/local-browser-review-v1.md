@@ -33,7 +33,11 @@ must match. No CORS, cookies, query tokens or client authority. JSON writes are 
 The page renders persisted canonical facts, scope/date, exact brief ID/version/digest and
 snapshot/runtime versions. Missing quantities remain unresolved/not established. Source
 lookup must belong to the persisted scoped brief and re-admits its original workbook or
-metadata. Highlighting uses spreadsheet column coordinates. Source content is text, never HTML.
+metadata. Each finding exposes its cited sources as selectable cards and automatically opens
+the first citation. The selected card is marked with `aria-pressed`; row sources render the
+original headers and cells with supporting columns highlighted, while non-tabular governing
+authority remains readable with complete structured detail available. Empty evidence is explicit.
+Highlighting uses spreadsheet column coordinates. Source content is text, never HTML.
 The timeline uses the application event allowlist and actual timestamps; it is a snapshot
 feed and is separate from domain policy/evidence provenance and model streaming.
 
@@ -72,3 +76,15 @@ invalidates callbacks before follow-up requests; it does not cancel admitted ser
 An unknown save acknowledgment requires explicit owned recovery; repeated human review returns
 the same durable result. No automatic retry is granted. Previous live acceptance has its original
 application version; this changed page requires separate current-version live verification.
+
+## Evidence-focused rehearsal continuation
+
+The [explanatory deck](../project/demo-storytelling-deck.md) and
+[captioned recording](../assets/rehearsal-v2/index.html) introduce the architecture and one
+unresolved evidence conflict before entering the reviewer. The 42.96-second recording uses the
+current browser UI, character-by-character input, changing Who/What/Why/How/When banners, three
+highlighted original sources and a human rejection. It is explicitly zero-inference fixture
+execution. One separately retained current-version live attempt returned `model_unavailable`
+because the local model endpoint was offline and was not retried. This evidence does not establish
+live-model acceptance, deployment, purchasing authority, human rehearsal timing or a second
+implemented vertical.
