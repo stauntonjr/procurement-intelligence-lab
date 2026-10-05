@@ -1,5 +1,18 @@
 # Project handoff
 
+## PR reconciliation — 2026-10-05
+
+PR #193 merged the complete #175–#192 demo chain and its corrective review pass to `main`
+at `d3aea05c5e81890afc316ee4fc6f1a2c88b0544d`. Every current required check passed, including
+coverage and the revision-bound PR contract. The ancestor PRs contain no remaining unique work;
+their historical evidence remains available. The sections below record the original branch-time
+acceptance and are historical where they describe this chain as unmerged.
+
+The remaining integration reconciles #172 host routing and #157/#159 dependency updates against
+that main revision. [ADR-035](../adr/035-development-agent-host-routing.md) records the host-role
+boundary and resolves #172's missing-decision-record finding. Human timing, current-build live
+inference, deployment, full G2/release, and B2 remain open; broader Issues remain in progress.
+
 ## Evidence-focused demo story and source highlighting — 2026-10-05
 
 `codex/demo-integration-review-fixes` now adds an analyst-first, exact-scope reconciliation review
@@ -172,8 +185,8 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 
 - **`mac-planning-agent`** — Mac-hosted planning and review role. It handles architecture review,
   cross-repository sequencing, issue decomposition, acceptance design, and evidence planning. It
-  is the preferred planning surface for work that benefits from GPT-6 while GPT-6 is unavailable
-  in the VS Code Codex extension and Linux desktop clients. It does not implement product code or
+  is the preferred planning surface when the needed model is available there. Verify current
+  model availability when choosing a host. It does not implement product code or
   run the implementation delivery loop.
 - **`dgx-implementation-agent`** — DGX-hosted implementation role. It owns all implementation
   changes, including source, tests, documentation, packaging, CI, benchmarks, deployment changes,
@@ -182,7 +195,8 @@ Start with [AGENTS.md](../../AGENTS.md), then read the relevant [GitHub Issue](h
 The Mac role hands off a bounded plan with its governing Issue, source revision, touched contracts,
 acceptance examples, evidence requirements, and unresolved decisions. The DGX role re-grounds that
 plan against the current checkout and authoritative artifacts before changing anything. The
-handoff is planning input, not implementation or release authorization.
+handoff is planning input, not implementation or release authorization. Explicit owner instructions
+may select another host or authorize integration/merge work; see [ADR-035](../adr/035-development-agent-host-routing.md).
 
 ## Current milestone and status
 
