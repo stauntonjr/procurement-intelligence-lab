@@ -200,7 +200,7 @@ measured rehearsal, comprehensive accessibility, main/deploy and full release/B2
 
 ## Current-version rehearsal artifacts — 2026-10-04
 
-M9/#72: `codex/demo-rehearsal-recording`, stacked on#191, records14current-version authored live
+M9/#72: `codex/demo-rehearsal-recording`, stacked on #191, records 14 current-version authored live
 browser submissions and a five-minute captioned fixture screenshot replay. Human timed rehearsal
 and main/deployed acceptance remain open. [Runbook and limits](../project/demo-rehearsal.md).
-No runtime/model/prompt/source change; B2expansion remains gated.
+No runtime/model/prompt/source change; B2 expansion remains gated.
