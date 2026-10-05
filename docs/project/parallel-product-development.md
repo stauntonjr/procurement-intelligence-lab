@@ -15,6 +15,22 @@ accepted ADRs remain authoritative for implementation. The SciFact-specific prop
 recorded in that repository's work items before implementation; this document does not replace
 its roadmap.
 
+## Agent host routing
+
+Use two named project roles with an explicit host boundary:
+
+| Role | Host and purpose | Authority boundary |
+|---|---|---|
+| `mac-planning-agent` | Mac desktop agent for architecture review, cross-repository planning, issue decomposition, acceptance design, and evidence planning. Use it for planning tasks that benefit from GPT-6 when that model is unavailable in the VS Code Codex extension and Linux desktop clients. | May inspect repositories and prepare reviewable plans or handoff packets. It does not implement product code, tests, packaging, CI, deployments, or merges. |
+| `dgx-implementation-agent` | DGX agent for implementation, experiments, verification, and delivery in an isolated checkout. | Owns all source, test, documentation, packaging, CI, benchmark, and deployment changes that turn an approved plan into a deliverable. It records commands and evidence and opens the PR. |
+
+The Mac agent hands off a bounded plan containing the governing Issue, source revision, touched
+contracts, acceptance examples, evidence requirements, and unresolved decisions. The DGX agent
+must re-read the current checkout and authoritative Issue before implementation, may narrow the
+plan when verification requires it, and returns the resulting revision and evidence to the Mac
+agent for review. A planning handoff does not authorize implementation, external effects, or a
+release by itself.
+
 ## First showcase milestones
 
 | Product | Demonstrate now from accepted capabilities | Evidence and limits to show | Separate follow-on |
@@ -41,7 +57,8 @@ Completion of every umbrella milestone is not required.
 1. Maintain one primary delivery slice per repository. Initially, prioritize each product's
    showcase packet and close only the concrete gaps that prevent its walkthrough from working.
    Keep ongoing research separate from the stable demonstration revision.
-2. Give each implementation task one repository and an isolated checkout. Record its governing
+2. Route planning and implementation through the named host roles above. Give each implementation
+   task one repository and an isolated checkout. Record its governing
    issue, acceptance examples, touched contracts, and evidence. Review against the final revision
    using the repository's existing process; avoid creating a second engineering harness.
 3. Keep a small cross-project integration queue in linked issues. Review it after a relevant
