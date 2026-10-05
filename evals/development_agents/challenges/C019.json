@@ -7,8 +7,13 @@
   "known_bad_mutation": [
     {
       "path": "src/procurement_intelligence_lab/interfaces/review_page.py",
-      "find": "async function api(path,data){let response;try{response=await fetch(path,{method:data?'POST':'GET',headers:{Authorization:'Bearer '+token,...(data?{'Content-Type':'application/json'}:{})},...(data?{body:JSON.stringify(data)}:{}),cache:'no-store',redirect:'error'});}catch{throw Error('The response was not received. Refresh history or recover the selected run before repeating an operation.');}const result=await safeResponse(response);if(!response.ok){const messages={401:'Authenticate with the local reviewer token.',403:'Request is outside the authorized local boundary.',404:'Run, item or evidence was not found in this review scope.',409:'Review conflicts with the exact brief, current evidence or run configuration.',422:'Supply exactly the documented fields and a timezone-aware cutoff.',503:'Workflow or admitted evidence is unavailable. Refresh or recover the run.'};throw Error(messages[response.status]??'The server response is unavailable. Refresh history or recover the selected run.');}return result;}",
+      "find": "async function api(path,data){let response;try{response=await fetch(path,{method:data?'POST':'GET',headers:{Authorization:'Bearer '+token,...(data?{'Content-Type':'application/json'}:{})},...(data?{body:JSON.stringify(data)}:{}),cache:'no-store',redirect:'error'});}catch{throw pageFailure('The response was not received. Refresh history or recover the selected run before repeating an operation.');}const result=await safeResponse(response);if(!response.ok){const messages={401:'Authenticate with the local reviewer token.',403:'Request is outside the authorized local boundary.',404:'Run, item or evidence was not found in this review scope.',409:'Review conflicts with the exact brief, current evidence or run configuration.',422:'Supply exactly the documented fields and a timezone-aware cutoff.',503:'Workflow or admitted evidence is unavailable. Refresh or recover the run.'};throw pageFailure(messages[response.status]??'The server response is unavailable. Refresh history or recover the selected run.');}return result;}",
       "replace": "async function api(path,data){const response=await fetch(path,{method:data?'POST':'GET',headers:{Authorization:'Bearer '+token,...(data?{'Content-Type':'application/json'}:{})},...(data?{body:JSON.stringify(data)}:{}),cache:'no-store',redirect:'error'});const result=await response.json();if(!response.ok)throw Error(result.error+' ['+result.code+']');return result;}"
+    },
+    {
+      "path": "src/procurement_intelligence_lab/interfaces/review_page.py",
+      "find": "message(error.pageSafe?error.message:'The server response could not be read. Refresh history or recover the selected run.',true);",
+      "replace": "message(error.message,true);"
     }
   ],
   "known_bad_failure_pattern": "private response fragment exposed",

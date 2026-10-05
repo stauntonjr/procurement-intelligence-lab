@@ -1,0 +1,32 @@
+{
+  "id": "C021",
+  "title": "Malformed successful replacement preserves exact review authority",
+  "introducing_commit": "cf277d374394de774bd812f16ae132ade46670ee",
+  "oracle": "Validate nested successful payload before mutating current exact browser brief/selected run; exclude private nested parser fragments.",
+  "known_bad": "Assign malformed replacement before nested validation.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/interfaces/review_page.py",
+      "find": "const {brief,facts}=preparedView(view);current=view;",
+      "replace": "current=view;selectRun(view.run_id);const {brief,facts}=preparedView(view);"
+    }
+  ],
+  "known_bad_failure_pattern": "malformed success replaced exact draft",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_review_page_recovery.py",
+    "-k",
+    "success"
+  ],
+  "surfaces": [
+    "browser exact review state",
+    "nested HTTP success boundary"
+  ],
+  "prevention": [
+    "Validate complete render payload before changing review state",
+    "Actual installed malformed-success browser acceptance"
+  ]
+}

@@ -289,3 +289,71 @@ def test_failed_selected_run_read_is_keyboard_recoverable(
         )
         finish(directory, report, page)
         assert len(report["ledger"]["saves"]) == 0
+
+
+@pytest.mark.parametrize("fault", ["missing_brief", "private_content", "invalid_evidence"])
+def test_malformed_success_retains_exact_prior_draft(
+    case: tuple[Path, dict[str, Any]], fault: str
+) -> None:
+    directory, report = case
+    with installed_reviewer(directory) as reviewer, chromium_page() as page:
+        sign_in(page, reviewer)
+        view = cast(dict[str, Any], submit(page, "GPU-A", live=False))
+        original_identity = page.locator("#identity").inner_text()
+        original_digest = page.locator("#digest").inner_text()
+        payload = json.loads(json.dumps(view))
+        payload["run_id"] = "malformed-new-run"
+        if fault == "missing_brief":
+            payload.pop("brief")
+        elif fault == "private_content":
+            payload["brief"]["content_json"] = "PRIVATE_RESPONSE_FRAGMENT"
+        else:
+            facts = json.loads(payload["brief"]["content_json"])
+            facts["evidence"] = None
+            payload["brief"]["content_json"] = json.dumps(facts)
+        page.route(
+            "**/api/start",
+            lambda route: route.fulfill(
+                status=200, content_type="application/json", body=json.dumps(payload)
+            ),
+        )
+        capture_actions(page)
+        page.get_by_role("button", name="Investigate and draft").click()
+        complete_action(page)
+        expect(page.locator("#error")).to_be_visible()
+        assert "PRIVATE_RESPONSE_FRAGMENT" not in page.locator("#error").inner_text()
+        assert page.locator("#selected-run").inner_text() == view["run_id"]
+        assert page.locator("#identity").inner_text() == original_identity
+        assert page.locator("#digest").inner_text() == original_digest
+        expect(page.get_by_role("button", name="Approve exact brief", exact=True)).to_be_enabled()
+        reviews: list[dict[str, Any]] = []
+
+        def capture_review(route: Route) -> None:
+            reviews.append(json.loads(route.request.post_data or "{}"))
+            reject_transport(route)
+
+        page.route("**/api/review", capture_review)
+        page.get_by_role("button", name="Approve exact brief", exact=True).click()
+        complete_action(page)
+        assert reviews == [
+            {
+                "run_id": view["run_id"],
+                "brief_id": view["brief"]["brief_id"],
+                "digest": view["brief"]["digest"],
+                "decision": "approve",
+            }
+        ]
+        page.get_by_role("button", name="Recover selected run").click()
+        complete_action(page)
+        assert page.locator("#identity").inner_text() == original_identity
+        assert page.locator("#digest").inner_text() == original_digest
+        expect(page.locator("#review-title")).to_be_focused()
+        report.update(
+            injected="malformed_200_and_review503_before_backend",
+            fault=fault,
+            run_id=view["run_id"],
+            review_request=reviews[0],
+            actual_owned_recovery=True,
+        )
+        finish(directory, report, page)
+        assert len(report["ledger"]["runs"]) == 1 and not report["ledger"]["saves"]

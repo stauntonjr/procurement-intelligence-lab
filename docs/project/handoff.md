@@ -2,10 +2,10 @@
 
 ## Installed browser error recovery — 2026-10-04
 
-`codex/browser-error-recovery` stacks on draft #190, unmerged/undeployed. Nine actual clean-installed
+`codex/browser-error-recovery` stacks on draft #190, unmerged/undeployed. Twelve actual clean-installed
 Chromium cases pass: failed replacement retains the prior exact brief, private failure fragments
 stay out of UI, locked callbacks issue no late history request, and lost save acknowledgment
-recovers the same single durable result. Five fixture runs/ten tool starts/one save/zero inference;
+recovers the same single durable result. Eight fixture runs/sixteen tool starts/one save/zero inference;
 live-page error checks intercept ask before backend. [Evidence and limits](browser-error-recovery.md).
 The changed page changes the application hash; prior G2 passes remain historical, not current
 live acceptance. Full G2/release/accessibility, measured rehearsal, main integration/deployment and

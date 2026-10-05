@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "issue": "#74",
+  "cases": [
+    "test_failed_replacement_keeps_exact_persisted_draft",
+    "test_malformed_response_is_a_safe_visible_failure[text-fixture]",
+    "test_malformed_response_is_a_safe_visible_failure[text-live_page_no_inference]",
+    "test_malformed_response_is_a_safe_visible_failure[json-fixture]",
+    "test_malformed_response_is_a_safe_visible_failure[json-live_page_no_inference]",
+    "test_lock_during_delayed_timeline_has_no_late_follow_up",
+    "test_lost_save_acknowledgment_recovers_same_single_result",
+    "test_source_failure_keeps_exact_review_and_prior_source",
+    "test_failed_selected_run_read_is_keyboard_recoverable",
+    "test_malformed_success_retains_exact_prior_draft[missing_brief]",
+    "test_malformed_success_retains_exact_prior_draft[private_content]",
+    "test_malformed_success_retains_exact_prior_draft[invalid_evidence]"
+  ],
+  "runtime_versions": {
+    "fixture": {
+      "provider": "fixture",
+      "model": "none",
+      "prompt": "serial-review/v1:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a"
+    },
+    "live_page_no_inference": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a"
+    }
+  },
+  "browser": "Chromium151.0.7922.34",
+  "wheel_sha256": "9e30d46a10e274639b9acb75eb9f320e9700ea2ebed196644753226497d39343",
+  "source_python_files": 100,
+  "harness_sha256": "6a1e63b52d3dad4816dae9c3ac741a0bd130f7fee1a98f5a9a9a992455f27c9c",
+  "limits": "Actual installed fixture workflow plus labeled browser transport faults. Live page fault checks intercept ask before backend/inference. No real model quality/performance or comprehensive accessibility/deployment acceptance. Previous G2 versions are historical, not inherited by this changed application."
+}

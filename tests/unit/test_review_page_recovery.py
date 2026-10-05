@@ -10,7 +10,7 @@ from procurement_intelligence_lab.interfaces.review_page import HTML, live_html
 
 
 @pytest.mark.parametrize("mode", ["fixture", "live"])
-@pytest.mark.parametrize("defect", ["retain", "malformed", "json", "lock"])
+@pytest.mark.parametrize("defect", ["retain", "malformed", "json", "lock", "success_shape", "success_content"])
 def test_shipped_page_recovery_oracle(tmp_path: Path, mode: str, defect: str) -> None:
     node = shutil.which("node")
     if node is None:

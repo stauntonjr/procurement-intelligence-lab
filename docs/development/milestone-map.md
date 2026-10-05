@@ -193,7 +193,7 @@ measured presentation, main integration, deployment and B2 remain open; broader 
 ## Installed browser error recovery branch — 2026-10-04
 
 M9/#74: `codex/browser-error-recovery`, stacked on draft#190, corrects observed draft-loss,
-private-error and late-after-lock defects. Actual installed Chromium9/9; fixture5runs/10tools/1save,
-zero inference. C018-C020 reject known-bad changes. [Evidence](../project/browser-error-recovery.md).
+private-error and late-after-lock defects. Actual installed Chromium12/12; fixture8runs/16tools/1save,
+zero inference. C018-C021 reject known-bad changes. [Evidence](../project/browser-error-recovery.md).
 UI application hash changed; previous G2 reports stay historical. Current-version live acceptance,
 measured rehearsal, comprehensive accessibility, main/deploy and full release/B2 remain open.

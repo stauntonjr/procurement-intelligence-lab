@@ -11,7 +11,7 @@ const defect=process.argv[3],live=process.argv[4]==='live',calls=[];let failed=f
 async function fetch(path){calls.push(path);let ok=true,data;
 if(path==='/api/runs')data={project:'atlas',execution_kind:'fixture',runs:[]};
 else if(path==='/api/start'||path==='/api/ask'){
- if(failed){ok=false;data={error:'Injected unavailable',code:'pil.transient.probe'};}
+ if(failed){ok=false;data={error:'Injected unavailable',code:'pil.transient.probe'};if(defect.startsWith('success_')){ok=true;const corrupt=defect==='success_shape'?{run_id:'foreign-run'}:{...view,run_id:'foreign-run',brief:{...view.brief,content_json:'PRIVATE_RESPONSE_FRAGMENT'}};data=live?{interpretation:{run_id:'foreign-run',status:'investigate'},workflow:corrupt}:corrupt;}}
  else data=live?{interpretation:{run_id:view.run_id,status:'investigate'},workflow:view}:view;
  if(defect==='json'){ok=false;data={error:'PRIVATE_RESPONSE_FRAGMENT',code:'untrusted_reply'};}
  if(defect==='malformed')return {ok:false,json:async()=>{throw Error('PRIVATE_RESPONSE_FRAGMENT');}};
@@ -23,10 +23,10 @@ async function settle(){for(let i=0;i<40;i++)await Promise.resolve();}
  const auth=ids.get('auth');auth.fields.token='public-test-only-capability';auth.listeners.submit({preventDefault(){},target:auth});await settle();
  const form=ids.get('investigate');form.fields=live?{question:'Compare GPU-A',as_of:'2026-10-01T00:00:00Z'}:{item:'GPU-A',as_of:'2026-10-01T00:00:00Z'};
  form.listeners.submit({preventDefault(){},target:form});await settle();
- if(defect==='retain'){
+ if(defect==='retain'||defect.startsWith('success_')){
   failed=true;form.fields=live?{question:'Compare GPU-C',as_of:'2026-10-01T00:00:00Z'}:{item:'GPU-C',as_of:'2026-10-01T00:00:00Z'};
   form.listeners.submit({preventDefault(){},target:form});await settle();
-  assert(!ids.get('error').hidden);assert(!ids.get('review').hidden,'failed replacement erased exact draft');
+  assert(!ids.get('error').hidden);assert(!ids.get('error').textContent.includes('PRIVATE_RESPONSE_FRAGMENT'),'private response fragment exposed');assert(!ids.get('review').hidden,'failed replacement erased exact draft');assert.equal(vm.runInContext('current.run_id',context),view.run_id,'malformed success replaced exact draft');assert.equal(vm.runInContext('selectedRun',context),view.run_id,'malformed success changed selected run');
   assert.equal(ids.get('recover').disabled,false,'failed replacement erased recovery');assert(ids.get('identity').textContent.includes('brief'));assert.equal(ids.get('approve').disabled,false);
  }else if(defect==='malformed'||defect==='json'){
   assert(!ids.get('error').hidden);assert(!ids.get('error').textContent.includes('PRIVATE_RESPONSE_FRAGMENT'),'private response fragment exposed');assert.equal(ids.get('approve').disabled,true);
