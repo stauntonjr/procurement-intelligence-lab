@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "artifact": "docs/assets/rehearsal-v2/walkthrough.webm",
+  "execution_kind": "fixture",
+  "scenario": "GPU-A unresolved requirement",
+  "acceptance": "pass",
+  "slide_count": 8,
+  "viewport": {"width": 1440, "height": 900},
+  "banner_height": 96,
+  "typing_delay_ms": 45,
+  "interaction_seconds": 43.672,
+  "media": {
+    "container": "webm",
+    "codec": "vp8",
+    "duration": "0:00:42.960000000",
+    "width": 1440,
+    "height": 900,
+    "seekable": true,
+    "sha256": "a52ee548c587c267090066f7f0ec1f94e7ad0a025258e6cdcaea1b3b7d7f55e1"
+  },
+  "assertions": {
+    "source_count": 3,
+    "selected_source_highlighted": true,
+    "decision": "reject",
+    "credential_storage_empty": true,
+    "credential_absent_from_adjacent_text": true,
+    "slides_precede_browser": true,
+    "visible_character_typing": true,
+    "five_question_banner_changes": true
+  },
+  "live_attempt": {
+    "acceptance": "blocked",
+    "reason": "model_unavailable",
+    "automatic_retry": false,
+    "retained_locally": true
+  },
+  "limits": [
+    "The publishable recording is current-build fixture execution with no model call.",
+    "The local live model endpoint was unavailable during the single authorized attempt.",
+    "The recording does not prove deployment, purchasing authority, or human rehearsal timing."
+  ]
+}

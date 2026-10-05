@@ -1,0 +1,34 @@
+WEBVTT
+
+00:00.000 --> 00:03.800
+Procurement Intelligence Lab turns conflicting documents into a reviewable, evidence-backed decision.
+
+00:03.800 --> 00:07.600
+Reviewers compare governed requirements with observed records while provenance remains visible.
+
+00:07.600 --> 00:11.400
+Evidence, deterministic state, and human decision authority remain separate.
+
+00:11.400 --> 00:15.200
+Two eligible approved requirements disagree; the correct value is unresolved, not zero.
+
+00:15.200 --> 00:19.000
+The system captures, structures, compares, abstains, and presents one cited finding for review.
+
+00:19.000 --> 00:22.800
+Procurement scenarios include quantity, missing-data, revision, price, timing, and recovery checks.
+
+00:22.800 --> 00:26.600
+Other domains are architecture candidates only; procurement is the implemented vertical.
+
+00:26.600 --> 00:30.400
+Now follow one conflict from question to original evidence and human disposition.
+
+00:30.400 --> 00:35.500
+The operator types a bounded item and cutoff character by character. This is current-build fixture execution with no model call.
+
+00:35.500 --> 00:40.500
+Each cited source opens in context and highlights the cells that support the finding.
+
+00:40.500 --> 00:43.000
+The unresolved finding is rejected. The disposition is retained without rewriting the source conflict or placing an order.
