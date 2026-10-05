@@ -18,6 +18,7 @@ from procurement_intelligence_lab.application.corpus_agent_tools import (
     ToolExecutionError,
 )
 from procurement_intelligence_lab.application.question_review import QuestionReviewService
+from procurement_intelligence_lab.application.reconciliation_review import reconciliation_result_dto
 from procurement_intelligence_lab.interfaces.corpus_dto import source_dto
 from procurement_intelligence_lab.interfaces.live_review import compose_question, outcome_dto
 from procurement_intelligence_lab.interfaces.review_page import HTML, live_html, original_html
@@ -271,7 +272,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
             context = self.review_server.context
             app = self.review_server.composition
             routes = (
-                {"/api/start", "/api/ask", "/api/recover", "/api/review"}
+                {"/api/start", "/api/ask", "/api/recover", "/api/review", "/api/reconcile"}
                 if write
                 else {"/api/runs", "/api/run", "/api/events", "/api/source", "/api/interpretation"}
             )
@@ -321,6 +322,33 @@ class ReviewHandler(BaseHTTPRequestHandler):
                         fields["decision"],
                         context=context,
                     )
+                elif url.path == "/api/reconcile":
+                    fields = _fields(
+                        data,
+                        {
+                            "run_id",
+                            "brief_id",
+                            "digest",
+                            "outcome",
+                            "selected_claim_id",
+                            "rationale",
+                        },
+                    )
+                    self._send(
+                        200,
+                        reconciliation_result_dto(
+                            app.reconciliation.reconcile(
+                                fields["run_id"],
+                                fields["brief_id"],
+                                fields["digest"],
+                                fields["outcome"],
+                                fields["selected_claim_id"],
+                                fields["rationale"],
+                                context=context,
+                            )
+                        ),
+                    )
+                    return
                 else:
                     raise CorpusNotFoundError("route not found")
                 self._send(200, view_dto(result))

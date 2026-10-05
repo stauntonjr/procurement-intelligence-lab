@@ -74,6 +74,29 @@ def review(view: dict[str, Any], decision: str = "approve") -> dict[str, str]:
     }
 
 
+def test_reconcile_exact_conflict_through_public_http(tmp_path: Path) -> None:
+    with server(tmp_path / "runs.db") as address:
+        view = start(address, "GPU-C")
+        facts = json.loads(view["brief"]["content_json"])
+        candidates = [item for item in facts["governance_candidates"] if item["eligible"]]
+        body = {
+            "run_id": view["run_id"],
+            "brief_id": view["brief"]["brief_id"],
+            "digest": view["brief"]["digest"],
+            "outcome": "select_governing_revision",
+            "selected_claim_id": candidates[1]["claim_id"],
+            "rationale": "Revision B governs this exact item scope prospectively.",
+        }
+        status, result, _ = request(address, "/api/reconcile", body)
+        assert status == 200
+        assert result["decision"]["selected_claim_id"] == candidates[1]["claim_id"]
+        assert result["current_assessment"]["required_quantity"] == candidates[1]["value"]
+        assert (
+            request(address, "/api/reconcile", body | {"effective_at": "2020-01-01T00:00:00Z"})[0]
+            == 422
+        )
+
+
 def test_auth_before_work_and_transport_guards(tmp_path: Path) -> None:
     with server(tmp_path / "runs.db") as address:
         for token in (None, "wrong"):
