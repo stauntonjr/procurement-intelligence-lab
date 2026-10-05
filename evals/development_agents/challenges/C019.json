@@ -1,0 +1,32 @@
+{
+  "id": "C019",
+  "title": "Browser failure messages do not expose private transport fragments",
+  "introducing_commit": "cf277d374394de774bd812f16ae132ade46670ee",
+  "oracle": "Browser failure messages do not expose private transport fragments in the actual shipped fixture and live page JavaScript; backend authority remains independent.",
+  "known_bad": "Surface raw response decode exceptions or untrusted error message/code fields.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/interfaces/review_page.py",
+      "find": "async function api(path,data){let response;try{response=await fetch(path,{method:data?'POST':'GET',headers:{Authorization:'Bearer '+token,...(data?{'Content-Type':'application/json'}:{})},...(data?{body:JSON.stringify(data)}:{}),cache:'no-store',redirect:'error'});}catch{throw Error('The response was not received. Refresh history or recover the selected run before repeating an operation.');}const result=await safeResponse(response);if(!response.ok){const messages={401:'Authenticate with the local reviewer token.',403:'Request is outside the authorized local boundary.',404:'Run, item or evidence was not found in this review scope.',409:'Review conflicts with the exact brief, current evidence or run configuration.',422:'Supply exactly the documented fields and a timezone-aware cutoff.',503:'Workflow or admitted evidence is unavailable. Refresh or recover the run.'};throw Error(messages[response.status]??'The server response is unavailable. Refresh history or recover the selected run.');}return result;}",
+      "replace": "async function api(path,data){const response=await fetch(path,{method:data?'POST':'GET',headers:{Authorization:'Bearer '+token,...(data?{'Content-Type':'application/json'}:{})},...(data?{body:JSON.stringify(data)}:{}),cache:'no-store',redirect:'error'});const result=await response.json();if(!response.ok)throw Error(result.error+' ['+result.code+']');return result;}"
+    }
+  ],
+  "known_bad_failure_pattern": "private response fragment exposed",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_review_page_recovery.py",
+    "-k",
+    "malformed or json"
+  ],
+  "surfaces": [
+    "browser exact review state",
+    "human error and lock/recovery boundary"
+  ],
+  "prevention": [
+    "execute shipped JavaScript with deferred/failing public transport",
+    "retain real installed Chromium counterpart evidence"
+  ]
+}
