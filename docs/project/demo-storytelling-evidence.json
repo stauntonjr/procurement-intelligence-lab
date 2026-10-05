@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#74",
-  "revision": "aeb7fe719e14ad73e1919c054c655270021fed58",
+  "revision": "48c79a45c62623b8715aac3538e3df99d1b4465b",
   "surfaces": [
     "local reviewer HTML and HTTP boundary",
     "installed Chromium public caller",
@@ -91,7 +91,7 @@
     {
       "argv": ["browser-playback", "docs/assets/rehearsal-v2/index.html"],
       "outcome": "passed",
-      "evidence": "Recorder reported duration 42.92s, 1440x900 VP8 WebM and seekable playback; the report preserved the exact governed facts and selected-source highlight."
+      "evidence": "Recorder reported duration 30.72s, 1440x900 VP8 WebM and seekable playback; dynamic typing, both highlighted conflicting revisions, the typed rationale, exact scope, prospective effective time, unchanged historical assessment, and recomputed current assessment are retained."
     },
     {
       "argv": ["live-recording", "one-new-request", "http://127.0.0.1:8001"],
@@ -101,7 +101,7 @@
     {
       "argv": ["make", "check"],
       "outcome": "passed",
-      "evidence": "Final source revision: 770 passed, 22 explicit opt-in skips in 409.84s; 88.83% branch coverage; formatting, lint, pyright, architecture, semantic preflight, dependency and supply-chain checks passed."
+      "evidence": "Revision 48c79a45: 790 passed, 22 explicit opt-in skips in 451.74s; 88.94% branch coverage; formatting, lint, pyright, architecture, semantic preflight, dependency, supply-chain, and coverage-ratchet checks passed."
     },
     {
       "argv": ["make", "package-smoke"],
@@ -130,13 +130,14 @@
     }
   ],
   "review": {
-    "revision": "aeb7fe719e14ad73e1919c054c655270021fed58",
+    "revision": "48c79a45c62623b8715aac3538e3df99d1b4465b",
     "mode": "self_fresh_pass",
     "findings": [
       "Recorder acceptance did not bind the unresolved-conflict narrative to the exact returned facts; corrected with parsed governed-fact validation, distinct evidence identities, retained report facts and a regression.",
-      "Failed source selection changed aria-pressed before source retrieval succeeded; corrected by committing selection only after a successful current-run response and a failure-preservation regression."
+      "Failed source selection changed aria-pressed before source retrieval succeeded; corrected by committing selection only after a successful current-run response and a failure-preservation regression.",
+      "An existing A/B choice could have remained active after a third eligible conflict appeared; corrected by requiring the decision candidate IDs to equal the active conflict set, with a three-candidate regression."
     ],
-    "unresolved_findings": ["The replacement installed-browser recording, latest-revision independent semantic and architecture reviews, PR CI, human timing, merge, and deployment remain open."]
+    "unresolved_findings": ["PR CI, current-build live inference, human timing, merge, and deployment remain open."]
   },
   "completion": "not_ready"
 }
