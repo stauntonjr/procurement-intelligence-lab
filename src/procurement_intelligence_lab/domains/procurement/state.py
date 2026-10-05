@@ -12,6 +12,11 @@ from procurement_intelligence_lab.domains.procurement.governance import (
     GoverningClaimStatus,
     reconcile_required_quantity,
 )
+from procurement_intelligence_lab.domains.procurement.review_reconciliation import (
+    HumanReconciliationDecision,
+    ReconciliationReviewOutcome,
+)
+from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.resolution import (
@@ -146,6 +151,7 @@ def project_governed_required_quantity(
     canonical_key: str,
     request_context: RequestContext,
     as_of: datetime,
+    human_decision: HumanReconciliationDecision | None = None,
 ) -> GovernedRequiredQuantityState:
     """Reconcile resolved claims before projecting a scoped expected requirement.
 
@@ -160,6 +166,50 @@ def project_governed_required_quantity(
         request_context=request_context,
         as_of=as_of,
     )
+    if human_decision is not None and human_decision.effective_at <= as_of:
+        candidate_ids = tuple(item.claim_id for item in candidates)
+        if (
+            human_decision.subject_key != canonical_key
+            or human_decision.candidate_claim_ids != candidate_ids
+            or any(item.scope != human_decision.scope for item in candidates)
+        ):
+            raise SemanticContractError(
+                "human reconciliation differs from exact candidates or scope"
+            )
+        if human_decision.outcome is ReconciliationReviewOutcome.SELECT_GOVERNING_REVISION:
+            selected = tuple(
+                item for item in candidates if item.claim_id == human_decision.selected_claim_id
+            )
+            eligible = reconcile_required_quantity(
+                selected,
+                canonical_key=canonical_key,
+                request_context=request_context,
+                as_of=as_of,
+            )
+            if len(selected) != 1 or not eligible.governing:
+                raise SemanticContractError("selected human reconciliation claim is not eligible")
+            winner = selected[0]
+            decision = GoverningClaimDecision(
+                canonical_key,
+                as_of,
+                GoverningClaimStatus.GOVERNED,
+                winner.value,
+                winner.unit,
+                (winner,),
+                tuple(item for item in candidates if item != winner),
+                human_decision.policy_id,
+            )
+        elif human_decision.outcome is ReconciliationReviewOutcome.KEEP_UNRESOLVED:
+            decision = GoverningClaimDecision(
+                canonical_key,
+                as_of,
+                GoverningClaimStatus.UNRESOLVED,
+                None,
+                None,
+                (),
+                candidates,
+                human_decision.policy_id,
+            )
     if decision.status is GoverningClaimStatus.UNRESOLVED:
         return GovernedRequiredQuantityState(decision, None)
     if not isinstance(decision.value, Decimal):

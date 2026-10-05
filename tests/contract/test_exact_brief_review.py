@@ -1,6 +1,7 @@
 """Exact application authority survives process lifetime and rejects altered replay."""
 
 from concurrent.futures import ThreadPoolExecutor
+import json
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -52,6 +53,7 @@ def test_exact_review_and_concurrent_save_one_result(tmp_path: Path) -> None:
     brief = service.draft(run_id, ARGS, context=HUMAN)
     assert '"required_quantity":"8"' in brief.content_json
     assert '"ordered_quantity":"6"' in brief.content_json
+    assert json.loads(brief.content_json)["governance_candidates"]
     with pytest.raises(BriefConflict):
         service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)
     receipt = service.review(run_id, brief.brief_id, brief.digest, "approve", context=HUMAN)

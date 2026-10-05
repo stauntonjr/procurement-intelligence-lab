@@ -53,6 +53,17 @@ def brief_facts(result: InvestigationResult) -> str:
             "policy_id": result.assessment.policy_id,
             "policy_digest": result.assessment.policy_digest,
             "governance_dispositions": dict(decision.dispositions),
+            "governance_candidates": [
+                {
+                    "claim_id": claim.claim_id,
+                    "revision_id": claim.revision_id,
+                    "value": str(claim.value),
+                    "unit": claim.unit,
+                    "evidence_ids": [claim.evidence.evidence_id],
+                    "disposition": dict(decision.dispositions)[claim.claim_id],
+                }
+                for claim in decision.governing + decision.losing
+            ],
             "input_dispositions": dict(result.assessment.input_dispositions),
             "evidence_by_role": {
                 role: [ref.evidence_id for ref in refs]

@@ -43,6 +43,7 @@ from procurement_intelligence_lab.ports.corpus import (
     CorpusNotFoundError,
     CorpusReader,
 )
+from procurement_intelligence_lab.ports.reconciliation_reviews import ReconciliationReviewStore
 
 
 @dataclass(frozen=True)
@@ -69,6 +70,7 @@ class InvestigationResult:
 @dataclass(frozen=True)
 class CorpusInvestigationService:
     reader: CorpusReader
+    reconciliation_reviews: ReconciliationReviewStore | None = None
 
     def investigate(
         self, request: InvestigationRequest, *, context: RequestContext
@@ -116,11 +118,19 @@ class CorpusInvestigationService:
             for f in facts
             if f.role != "approved_purchase_order_line"
         )
+        human_decision = (
+            self.reconciliation_reviews.latest(
+                request.canonical_key, request.as_of, context=context
+            )
+            if self.reconciliation_reviews is not None
+            else None
+        )
         governed = project_governed_required_quantity(
             claims,
             canonical_key=request.canonical_key,
             request_context=context,
             as_of=request.as_of,
+            human_decision=human_decision,
         )
         scope = (
             governed.expected.scope
