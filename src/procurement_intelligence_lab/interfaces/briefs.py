@@ -5,10 +5,10 @@ import json
 from dataclasses import asdict
 from datetime import datetime, timedelta
 from hashlib import sha256
-from importlib.metadata import version
 from importlib.resources import files
 from pathlib import Path
 
+from procurement_intelligence_lab.adapters.runtime_identity import application_revision
 from procurement_intelligence_lab.adapters.sqlite_agent_runs import RunStoreError, SqliteRunStore
 from procurement_intelligence_lab.adapters.sqlite_briefs import SqliteBriefStore
 from procurement_intelligence_lab.adapters.synthetic_corpus import SyntheticCorpusReader
@@ -92,7 +92,7 @@ def main() -> int:
                 "pending-agent/v1",
                 TOOL_SCHEMA_VERSION,
                 sha256(manifest).hexdigest(),
-                "package:" + version("procurement-intelligence-lab"),
+                application_revision(),
             ),
             execution_kind=ExecutionKind.FIXTURE,
         )

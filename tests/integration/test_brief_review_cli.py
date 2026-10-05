@@ -135,3 +135,57 @@ def test_public_parser_preserves_failure_envelopes_in_host_process(
         )
         assert main() == 1
         assert json.loads(capsys.readouterr().out)["code"] == code
+
+
+def test_public_save_acknowledges_replaced_saved_brief(tmp_path: Path) -> None:
+    path = tmp_path / "r.db"
+    run_id = create(path)
+    brief = draft(path, run_id, "GPU-A")
+    args = ["--run-id", run_id, "--brief-id", brief["brief_id"], "--digest", brief["digest"]]
+    assert invoke(path, "review", *args, "--decision", "approve").returncode == 0
+    first = invoke(path, "save", *args, "--idempotency-key", brief["idempotency_key"])
+    assert first.returncode == 0, first.stderr
+    draft(path, run_id, "GPU-A")
+    replay = invoke(path, "save", *args, "--idempotency-key", brief["idempotency_key"])
+    assert replay.returncode == 0, replay.stderr
+    assert json.loads(replay.stdout) == json.loads(first.stdout)
+
+
+def test_public_save_translates_vanished_item(
+    tmp_path: Path, monkeypatch: Any, capsys: Any
+) -> None:
+    from procurement_intelligence_lab.application.corpus_investigation import (
+        CorpusInvestigationService,
+    )
+    from procurement_intelligence_lab.interfaces.briefs import main
+    from procurement_intelligence_lab.ports.corpus import CorpusNotFoundError
+
+    path = tmp_path / "r.db"
+    run_id = create(path)
+    brief = draft(path, run_id, "GPU-A")
+    args = ["--run-id", run_id, "--brief-id", brief["brief_id"], "--digest", brief["digest"]]
+    assert invoke(path, "review", *args, "--decision", "approve").returncode == 0
+
+    def vanished(*args: Any, **kwargs: Any) -> Any:
+        raise CorpusNotFoundError("private vanished item")
+
+    monkeypatch.setattr(CorpusInvestigationService, "investigate", vanished)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "briefs",
+            "--database",
+            str(path),
+            "save",
+            "--project",
+            "atlas",
+            *args,
+            "--idempotency-key",
+            brief["idempotency_key"],
+        ],
+    )
+    assert main() == 1
+    output = capsys.readouterr().out
+    assert json.loads(output)["code"] == "pil.policy.brief_review_conflict"
+    assert "private" not in output

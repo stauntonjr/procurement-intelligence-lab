@@ -186,6 +186,10 @@ def validate_event(run: AgentRun, existing: tuple[AgentEvent, ...], event: Agent
         ):
             raise RunConflict("invocation already has a terminal result")
     if event.kind == AgentEventKind.RUN_COMPLETED:
+        if event.parent_id != existing[-1].event_id or any(
+            event.occurred_at < prior.occurred_at for prior in existing
+        ):
+            raise RunConflict("completion must close the recorded causal path")
         finished = {
             e.parent_id
             for e in existing

@@ -219,3 +219,26 @@ def test_actual_admission_failure_keeps_infrastructure_boundary(
     events = runs.events(run_id, context=CONTEXT)
     assert events[-1].error_code == "corpus_admission_failed"
     assert not any(e.kind == AgentEventKind.TOOL_SUCCEEDED for e in events)
+
+
+def test_invalid_port_output_records_failure_not_success(tmp_path: Path) -> None:
+    from procurement_intelligence_lab.ports.corpus import CorpusSourceRecord
+
+    tools, runs, run_id = setup(tmp_path / "r.db")
+    args = InvestigateToolArgs.from_mapping({"item": "GPU-A", "as_of": "2026-10-01T00:00:00Z"})
+    actual = tools.investigator.investigate(args.request, context=CONTEXT)
+    lookup = Mock()
+    lookup.source_by_id.return_value = CorpusSourceRecord(
+        actual.evidence[0], "private malformed JSON"
+    )
+    with pytest.raises(ToolExecutionError, match="agent_tool_invalid_result"):
+        replace(tools, lookup=lookup).source(
+            run_id, SourceToolArgs(actual.evidence[0].evidence_id), context=CONTEXT
+        )
+    investigator = Mock()
+    investigator.investigate.return_value = replace(actual, snapshot_id="")
+    with pytest.raises(ToolExecutionError, match="agent_tool_invalid_result"):
+        replace(tools, investigator=investigator).investigate(run_id, args, context=CONTEXT)
+    events = runs.events(run_id, context=CONTEXT)
+    assert sum(e.kind == AgentEventKind.TOOL_FAILED for e in events) == 2
+    assert not any(e.kind == AgentEventKind.TOOL_SUCCEEDED for e in events)

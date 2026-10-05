@@ -119,3 +119,103 @@ def test_tool_error_never_satisfies_inspection(tmp_path: Path) -> None:
         ).outcome
         == "fail"
     )
+
+
+def test_non_applicability_cannot_hide_failure_or_partial_execution(tmp_path: Path) -> None:
+    context = RequestContext(
+        "demo", "synthetic-tenant", "atlas", "lab", frozenset({Permission.READ_STATE}), "test"
+    )
+    app = AgentRunService(
+        SqliteRunStore(tmp_path / "r.db"),
+        versions=RunVersions("fixture", "none", "p", "t", "f", "a"),
+        execution_kind=ExecutionKind.FIXTURE,
+    )
+    run = app.start(context=context)
+    root = app.events(run.run_id, context=context)[0]
+    assert (
+        evaluate_trajectory(
+            run, (root,), required_tools=(), non_applicable_reason="not requested"
+        ).outcome
+        == "not_applicable"
+    )
+    start = app.record(
+        run.run_id,
+        AgentEventKind.TOOL_STARTED,
+        parent_id=root.event_id,
+        tool_name="investigate",
+        tool_version="v1",
+        context=context,
+    )
+    partial = evaluate_trajectory(
+        run,
+        app.events(run.run_id, context=context),
+        required_tools=("investigate",),
+        non_applicable_reason="not requested",
+    )
+    assert partial.outcome == "unknown", "partial execution erased by non-applicability"
+    app.record(
+        run.run_id,
+        AgentEventKind.TOOL_FAILED,
+        parent_id=start.event_id,
+        tool_name="investigate",
+        tool_version="v1",
+        error_code="tool_timeout",
+        context=context,
+    )
+    failed = evaluate_trajectory(
+        run,
+        app.events(run.run_id, context=context),
+        required_tools=("investigate",),
+        non_applicable_reason="not requested",
+    )
+    assert failed.outcome == "fail", "observed failure erased by non-applicability"
+    assert failed.tool_calls == 1
+
+
+def test_terminal_event_cannot_precede_or_bypass_recorded_result(tmp_path: Path) -> None:
+    from datetime import timedelta
+
+    from procurement_intelligence_lab.platform.semantics.agent_runs import AgentEvent
+
+    context = RequestContext(
+        "demo", "synthetic-tenant", "atlas", "lab", frozenset({Permission.READ_STATE}), "test"
+    )
+    app = AgentRunService(
+        SqliteRunStore(tmp_path / "r.db"),
+        versions=RunVersions("fixture", "none", "p", "t", "f", "a"),
+        execution_kind=ExecutionKind.FIXTURE,
+    )
+    run = app.start(context=context)
+    root = app.events(run.run_id, context=context)[0]
+    start = app.record(
+        run.run_id,
+        AgentEventKind.TOOL_STARTED,
+        parent_id=root.event_id,
+        tool_name="investigate",
+        tool_version="v1",
+        context=context,
+    )
+    done = app.record(
+        run.run_id,
+        AgentEventKind.TOOL_SUCCEEDED,
+        parent_id=start.event_id,
+        tool_name="investigate",
+        tool_version="v1",
+        snapshot_id="s",
+        context=context,
+    )
+    events = app.events(run.run_id, context=context)
+    for when in (root.occurred_at, done.occurred_at + timedelta(seconds=1)):
+        terminal = AgentEvent(
+            "terminal",
+            run.run_id,
+            run.query_id,
+            run.attempt_id,
+            when,
+            AgentEventKind.RUN_COMPLETED,
+            root.event_id,
+        )
+        assert (
+            evaluate_trajectory(run, events + (terminal,), required_tools=("investigate",)).outcome
+            == "fail"
+        ), "terminal bypassed completed causal path"

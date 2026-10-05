@@ -1,0 +1,31 @@
+{
+  "id": "C024",
+  "title": "CLI build identity binds code bytes",
+  "introducing_commit": "242c271448da920f53dc363bf5cd9393afc79b51",
+  "oracle": "CLI build identity binds code bytes. Required failures remain typed and retained; no false success or duplicate write.",
+  "known_bad": "Restore the reviewed defective branch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/interfaces/agent_runs.py",
+      "find": "            application_revision(),",
+      "replace": "            \"package:0.1.0\","
+    }
+  ],
+  "known_bad_failure_pattern": "CLI build identity is only a package version",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/integration/test_agent_run_cli.py",
+    "-k",
+    "build_identity"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/interfaces/agent_runs.py"
+  ],
+  "prevention": [
+    "Public regression oracle",
+    "Latest-revision semantic review"
+  ]
+}

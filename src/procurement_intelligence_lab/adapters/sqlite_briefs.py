@@ -260,7 +260,6 @@ class SqliteBriefStore:
         with self._connection() as db:
             db.execute("BEGIN IMMEDIATE")
             stored = self._get(db, brief.run.run_id, brief.brief_id, context)
-            self._active(db, stored)
             if stored != brief:
                 raise BriefConflict("save differs from immutable stored brief")
             row = db.execute(
@@ -297,6 +296,7 @@ class SqliteBriefStore:
                 if saved.saved_at < receipt.reviewed_at or saved.saved_at >= receipt.expires_at:
                     raise BriefStoreError("stored save time differs from approval validity")
                 return saved
+            self._active(db, stored)
             now = clock()
             if type(now) is not datetime or now.tzinfo is None or now.utcoffset() is None:
                 raise ValueError("save clock must be aware")

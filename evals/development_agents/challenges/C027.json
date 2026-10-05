@@ -1,0 +1,31 @@
+{
+  "id": "C027",
+  "title": "Vanished item maps to stale brief conflict",
+  "introducing_commit": "e7f437054596500c0886c6c79dcf79e57d00ead9",
+  "oracle": "Vanished item maps to stale brief conflict. Required failures remain typed and retained; no false success or duplicate write.",
+  "known_bad": "Restore the reviewed defective branch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/application/exact_brief_review.py",
+      "find": "            raise BriefConflict(\"reviewed item is no longer admitted\") from error",
+      "replace": "            raise error"
+    }
+  ],
+  "known_bad_failure_pattern": "CorpusNotFoundError: item removed",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/contract/test_exact_brief_review.py",
+    "-k",
+    "vanished_item"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/application/exact_brief_review.py"
+  ],
+  "prevention": [
+    "Public regression oracle",
+    "Latest-revision semantic review"
+  ]
+}

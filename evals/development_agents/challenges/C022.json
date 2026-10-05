@@ -1,0 +1,31 @@
+{
+  "id": "C022",
+  "title": "Non-applicability retains observed failures",
+  "introducing_commit": "242c271448da920f53dc363bf5cd9393afc79b51",
+  "oracle": "Non-applicability retains observed failures. Required failures remain typed and retained; no false success or duplicate write.",
+  "known_bad": "Restore the reviewed defective branch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/application/agent_trajectory.py",
+      "find": "    unique: dict[str, AgentEvent] = {}",
+      "replace": "    if non_applicable_reason is not None:\n        return TrajectoryResult(run.run_id, run.execution_kind, \"not_applicable\", (non_applicable_reason,), 0, None)\n    unique: dict[str, AgentEvent] = {}"
+    }
+  ],
+  "known_bad_failure_pattern": "partial execution erased by non-applicability",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_agent_trajectory.py",
+    "-k",
+    "non_applicability"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/application/agent_trajectory.py"
+  ],
+  "prevention": [
+    "Public regression oracle",
+    "Latest-revision semantic review"
+  ]
+}

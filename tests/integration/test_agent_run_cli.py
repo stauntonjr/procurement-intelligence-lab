@@ -101,3 +101,11 @@ def test_missing_and_failed_tools_cannot_finish_successfully(tmp_path: Path) -> 
     assert (
         missing.returncode != 0 and json.loads(missing.stdout)["trajectory"]["outcome"] == "unknown"
     )
+
+
+def test_cli_run_build_identity_is_code_digest(tmp_path: Path) -> None:
+    created = invoke(tmp_path / "r.db", "create", "--project", "atlas")
+    assert created.returncode == 0, created.stderr
+    assert json.loads(created.stdout)["versions"]["application"].startswith("sha256:"), (
+        "CLI build identity is only a package version"
+    )

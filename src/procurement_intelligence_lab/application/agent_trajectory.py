@@ -30,12 +30,8 @@ def evaluate_trajectory(
     required_tools: tuple[str, ...],
     non_applicable_reason: str | None = None,
 ) -> TrajectoryResult:
-    if non_applicable_reason is not None:
-        if not non_applicable_reason.strip():
-            raise ValueError("non-applicability requires rationale")
-        return TrajectoryResult(
-            run.run_id, run.execution_kind, "not_applicable", (non_applicable_reason,), 0, None
-        )
+    if non_applicable_reason is not None and not non_applicable_reason.strip():
+        raise ValueError("non-applicability requires rationale")
     unique: dict[str, AgentEvent] = {}
     errors: list[str] = []
     missing: list[str] = []
@@ -70,6 +66,26 @@ def evaluate_trajectory(
     successful = {e.tool_name for e in ordered if e.kind == AgentEventKind.TOOL_SUCCEEDED}
     if not required_tools or any(tool not in successful for tool in required_tools):
         missing.append("missing_successful_tool")
+    if (
+        non_applicable_reason is not None
+        and not errors
+        and not any(
+            e.kind
+            in (
+                AgentEventKind.TOOL_STARTED,
+                AgentEventKind.TOOL_SUCCEEDED,
+                AgentEventKind.TOOL_FAILED,
+            )
+            for e in ordered
+        )
+        and not any(
+            reason != "missing_run_completion" and reason != "missing_successful_tool"
+            for reason in missing
+        )
+    ):
+        return TrajectoryResult(
+            run.run_id, run.execution_kind, "not_applicable", (non_applicable_reason,), 0, None
+        )
     outcome = "fail" if errors else "unknown" if missing else "pass"
     elapsed = (ordered[-1].occurred_at - run.created_at).total_seconds() if ordered else None
     return TrajectoryResult(

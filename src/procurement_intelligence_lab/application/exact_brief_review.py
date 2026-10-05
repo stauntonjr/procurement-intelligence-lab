@@ -26,7 +26,7 @@ from procurement_intelligence_lab.platform.semantics.briefs import (
 )
 from procurement_intelligence_lab.platform.semantics.scope import Permission, RequestContext
 from procurement_intelligence_lab.ports.briefs import BriefStore
-from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError
+from procurement_intelligence_lab.ports.corpus import CorpusAdmissionError, CorpusNotFoundError
 
 
 def brief_facts(result: InvestigationResult) -> str:
@@ -159,6 +159,8 @@ class BriefReviewService:
             current = self.tools.investigator.investigate(
                 InvestigationRequest(brief.item, brief.as_of), context=context
             )
+        except CorpusNotFoundError as error:
+            raise BriefConflict("reviewed item is no longer admitted") from error
         except CorpusAdmissionError as error:
             raise ToolExecutionError("corpus_admission_failed") from error
         if current.snapshot_id != brief.snapshot_id or brief_facts(current) != brief.content_json:

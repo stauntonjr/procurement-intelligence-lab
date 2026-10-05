@@ -4,11 +4,10 @@ import argparse
 import json
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from hashlib import sha256
 from importlib.metadata import version
-from importlib.resources import files
 from pathlib import Path
 
+from procurement_intelligence_lab.adapters.runtime_identity import application_revision
 from procurement_intelligence_lab.adapters.sqlite_agent_runs import RunStoreError, SqliteRunStore
 from procurement_intelligence_lab.adapters.sqlite_briefs import SqliteBriefStore
 from procurement_intelligence_lab.application.agent_runs import AgentRunService
@@ -68,13 +67,6 @@ def compose_services(
         from procurement_intelligence_lab.adapters.langgraph_review import LangGraphReviewRuntime
     except ImportError as error:
         raise WorkflowError("install the workflow extra") from error
-    package = Path(str(files("procurement_intelligence_lab")))
-    digest = sha256()
-    for path in sorted(package.rglob("*.py")):
-        digest.update(path.relative_to(package).as_posix().encode())
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
     source_config = compose_sources(sources)
     runs = AgentRunService(
         SqliteRunStore(database),
@@ -87,7 +79,7 @@ def compose_services(
             + version("langgraph-checkpoint-sqlite"),
             TOOL_SCHEMA_VERSION,
             source_config.fixture_version,
-            "sha256:" + digest.hexdigest(),
+            application_revision(),
         ),
         execution_kind=ExecutionKind.LIVE if live_prompt else ExecutionKind.FIXTURE,
     )

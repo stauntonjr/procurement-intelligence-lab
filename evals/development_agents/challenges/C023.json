@@ -1,0 +1,31 @@
+{
+  "id": "C023",
+  "title": "Completion closes recorded causal path",
+  "introducing_commit": "242c271448da920f53dc363bf5cd9393afc79b51",
+  "oracle": "Completion closes recorded causal path. Required failures remain typed and retained; no false success or duplicate write.",
+  "known_bad": "Restore the reviewed defective branch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/platform/semantics/agent_runs.py",
+      "find": "            raise RunConflict(\"completion must close the recorded causal path\")",
+      "replace": "            pass"
+    }
+  ],
+  "known_bad_failure_pattern": "terminal bypassed completed causal path",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_agent_trajectory.py",
+    "-k",
+    "terminal_event"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/platform/semantics/agent_runs.py"
+  ],
+  "prevention": [
+    "Public regression oracle",
+    "Latest-revision semantic review"
+  ]
+}

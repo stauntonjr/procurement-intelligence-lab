@@ -1,5 +1,6 @@
 """Two scoped operational tools over the same deterministic corpus services."""
 
+import json
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import datetime
@@ -115,6 +116,8 @@ class CorpusAgentTools:
         )
         try:
             result, snapshot = call()
+            if type(snapshot) is not str or not snapshot.strip() or len(snapshot) > 200:
+                raise ValueError("tool result requires a snapshot")
         except Exception as error:
             if isinstance(error, CorpusAdmissionError):
                 code = "corpus_admission_failed"
@@ -175,6 +178,13 @@ class CorpusAgentTools:
 
         def call() -> tuple[CorpusSourceRow | CorpusSourceRecord, str]:
             result = self.lookup.source_by_id(arguments.evidence_id, context=context)
+            if isinstance(result, CorpusSourceRecord):
+                if not isinstance(json.loads(result.record_json), dict):
+                    raise TypeError("authority record must be a JSON object")
+            else:
+                json.dumps(
+                    (result.headers, result.cells, result.highlighted_columns), allow_nan=False
+                )
             return result, stable_id(
                 "source-inspection",
                 context.tenant_id,

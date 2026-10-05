@@ -413,3 +413,31 @@ def test_expiry_rechecked_after_save_write_lock(
             holder.commit()
             with pytest.raises(BriefConflict):
                 future.result(timeout=5)
+
+
+def test_saved_version_replay_survives_replacement(tmp_path: Path) -> None:
+    service, run_id = setup(tmp_path / "r.db")
+    brief = service.draft(run_id, ARGS, context=HUMAN)
+    service.review(run_id, brief.brief_id, brief.digest, "approve", context=HUMAN)
+    saved = service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)
+    service.draft(run_id, ARGS, context=HUMAN)
+    assert (
+        service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)
+        == saved
+    )
+
+
+def test_vanished_item_during_save_is_typed_conflict(tmp_path: Path) -> None:
+    from unittest.mock import Mock
+
+    from procurement_intelligence_lab.ports.corpus import CorpusNotFoundError
+
+    service, run_id = setup(tmp_path / "r.db")
+    brief = service.draft(run_id, ARGS, context=HUMAN)
+    service.review(run_id, brief.brief_id, brief.digest, "approve", context=HUMAN)
+    investigator = Mock()
+    investigator.investigate.side_effect = CorpusNotFoundError("item removed")
+    service.tools = replace(service.tools, investigator=investigator)
+    with pytest.raises(BriefConflict):
+        service.save(run_id, brief.brief_id, brief.digest, brief.idempotency_key, context=HUMAN)
+    assert service.store.saved(brief, context=HUMAN) is None
