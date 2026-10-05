@@ -48,8 +48,7 @@ def test_banner_requires_complete_five_question_explanation() -> None:
 
 def test_visible_input_is_character_by_character_not_atomic_fill() -> None:
     assert build_typing_events("GPU-C", delay_ms=45) == [
-        {"kind": "key", "text": character, "delay_ms": 45}
-        for character in "GPU-C"
+        {"kind": "key", "text": character, "delay_ms": 45} for character in "GPU-C"
     ]
 
 

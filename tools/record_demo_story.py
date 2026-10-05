@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Record the explanatory deck followed by one live, evidence-focused review."""
 
 from __future__ import annotations
@@ -69,9 +68,7 @@ def public_report(config: RecordingConfig, result: dict[str, Any]) -> dict[str, 
 
 
 def _banner_html(parts: dict[str, str]) -> str:
-    labels = "".join(
-        f"<span><b>{key.title()}:</b> {value}</span>" for key, value in parts.items()
-    )
+    labels = "".join(f"<span><b>{key.title()}:</b> {value}</span>" for key, value in parts.items())
     return f"<div id='story-banner'><em>{labels}</em></div>"
 
 
