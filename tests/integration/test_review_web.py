@@ -115,8 +115,8 @@ def test_auth_before_work_and_transport_guards(tmp_path: Path) -> None:
             assert request(address, "/api/runs", headers=headers)[0] == 403
         status, page, headers = request(address, "/", token=None)
         assert status == 200 and 'type="password"' in page
-        assert "Fixture execution" in page and "Approve this finding" in page
-        assert "Review finding" in page and "Evidence used for this finding" in page
+        assert "Fixture execution" in page and "Choose a reconciliation outcome" in page
+        assert "Discrepancy assessment" in page and "Source evidence" in page
         assert headers["Cache-Control"] == "no-store"
         assert "frame-ancestors 'none'" in headers["Content-Security-Policy"]
         assert TOKEN not in page

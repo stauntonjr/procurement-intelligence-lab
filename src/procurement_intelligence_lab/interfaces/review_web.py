@@ -323,17 +323,26 @@ class ReviewHandler(BaseHTTPRequestHandler):
                         context=context,
                     )
                 elif url.path == "/api/reconcile":
-                    fields = _fields(
-                        data,
-                        {
-                            "run_id",
-                            "brief_id",
-                            "digest",
-                            "outcome",
-                            "selected_claim_id",
-                            "rationale",
-                        },
-                    )
+                    reconcile_fields = {
+                        "run_id",
+                        "brief_id",
+                        "digest",
+                        "outcome",
+                        "selected_claim_id",
+                        "rationale",
+                    }
+                    if (
+                        set(data) != reconcile_fields
+                        or any(
+                            type(value) is not str or len(value) > 2000 for value in data.values()
+                        )
+                        or any(
+                            not data[name].strip()
+                            for name in reconcile_fields - {"selected_claim_id"}
+                        )
+                    ):
+                        raise ValueError("invalid reconciliation fields")
+                    fields = data
                     self._send(
                         200,
                         reconciliation_result_dto(

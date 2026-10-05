@@ -9,12 +9,31 @@ import pytest
 from procurement_intelligence_lab.interfaces.review_page import HTML
 
 
-def test_review_page_uses_human_review_and_evidence_language() -> None:
-    assert "Review finding" in HTML
-    assert "Approve this finding" in HTML
-    assert "Reject this finding" in HTML
-    assert "Verified version" in HTML
-    assert "Evidence used for this finding" in HTML
+def test_review_page_uses_analyst_first_reconciliation_language() -> None:
+    for text in (
+        "Check procurement evidence",
+        "Item to review",
+        "Evidence available through",
+        "Check for discrepancies",
+        "Discrepancy assessment",
+        "Source evidence",
+        "Resolve or review",
+        "Keep this item unresolved",
+        "Assessment needs correction",
+    ):
+        assert text in HTML
+    for text in (
+        "Independent interview reference demo",
+        "demo brief",
+        "Investigate and draft",
+        "Typed requests only",
+        "Recent owned runs",
+        "Selected persisted run",
+        "Review finding",
+        "Approve this finding",
+        "Reject this finding",
+    ):
+        assert text not in HTML
 
 
 @pytest.mark.parametrize("mode", ["success", "source-failure"])
