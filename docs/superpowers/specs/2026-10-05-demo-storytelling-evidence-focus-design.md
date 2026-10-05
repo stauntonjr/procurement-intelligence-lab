@@ -103,14 +103,19 @@ first, followed by a direct transition into the live reviewer.
 - Fit every slide and reviewer view without clipping meaning-bearing content.
 - Use short reading pauses rather than the prior 40-to-80-second idle intervals.
 - Target a concise combined runtime of approximately three to four minutes.
+- Type visible questions, dates, and other scenario inputs character-by-character at a readable
+  pace instead of filling an entire field atomically. Keep the caret and field in view, use a brief
+  pause after the completed value, and then visibly submit the form so the viewer can follow the
+  transition from human request to system processing.
 - Add a persistent bottom banner during the live section. All banner text is italic and states the
   current scenario's **Who, What, Why, How, and When**.
 - Update the banner when the scenario phase changes; do not obscure controls, evidence, source
   cells, status messages, or the trust-boundary explanation.
 - Demonstrate one conflict case deeply. Additional mismatch and missing-observation outcomes may
   be summarized in the deck or shown briefly when runtime permits.
-- Authentication occurs before publishable live frames or is visually masked. Credentials must not
-  appear in video, URL, storage, report, or logs.
+- Authentication occurs before publishable live frames or is visually masked. The private token is
+  never shown or dynamically typed in publishable footage. Credentials must not appear in video,
+  URL, storage, report, or logs.
 - The video labels the run as local, synthetic, unmerged, and undeployed.
 
 The browser interaction clock and final media-container duration are reported separately. Automated
@@ -133,7 +138,8 @@ Use test-driven changes at the shipped reviewer boundary.
 - Inspect every slide render and repair clipping, overflow, unreadable text, ambiguous arrows, and
   unsupported claims before recording.
 - Verify the final WebM is seekable, has the intended dimensions, contains the complete slide/live
-  sequence, and has no credential text. Retain a compact report with scenario assertions and hashes.
+  sequence, visibly shows paced typing and submission of the scenario inputs, and has no credential
+  text. Retain a compact report with scenario assertions and hashes.
 
 ## Non-goals and boundaries
 
@@ -145,4 +151,3 @@ Use test-driven changes at the shipped reviewer boundary.
 - No merge, deployment, corpus expansion, or Issue closure in this slice.
 - PR #193's independent coverage failure must be diagnosed separately; this work does not hide or
   overwrite that status.
-
