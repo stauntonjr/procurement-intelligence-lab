@@ -49,6 +49,31 @@ def build_typing_events(text: str, *, delay_ms: int) -> list[dict[str, Any]]:
     return [{"kind": "key", "text": character, "delay_ms": delay_ms} for character in text]
 
 
+def extract_unresolved_facts(payload: dict[str, Any]) -> dict[str, Any]:
+    """Bind the recording narrative to the exact governed finding returned."""
+    try:
+        view = payload.get("workflow", payload)
+        facts = json.loads(view["brief"]["content_json"])
+        evidence_ids = [ref["evidence_id"] for ref in facts["evidence"]]
+    except (KeyError, TypeError, json.JSONDecodeError) as error:
+        raise ValueError("reviewer did not return a readable governed finding") from error
+    if (
+        facts.get("status") != "not_assessed"
+        or facts.get("reason") != "unresolved_requirement"
+        or facts.get("required_quantity") is not None
+    ):
+        raise ValueError("recording requires an unresolved_requirement finding")
+    if len(evidence_ids) < 3 or len(set(evidence_ids)) != len(evidence_ids):
+        raise ValueError("unresolved requirement must retain distinct competing evidence")
+    return {
+        "status": facts["status"],
+        "reason": facts["reason"],
+        "required_quantity": facts["required_quantity"],
+        "ordered_quantity": facts.get("ordered_quantity"),
+        "evidence_ids": evidence_ids,
+    }
+
+
 def prepare_output(path: Path) -> None:
     if path.exists():
         raise FileExistsError(f"never overwrite recording evidence: {path}")
@@ -204,13 +229,14 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
                     f"reviewer request failed: HTTP {response.value.status} "
                     f"code={payload.get('code', 'unknown')}"
                 )
+            governed_facts = extract_unresolved_facts(payload)
             expect(page.locator("#review-title")).to_be_visible()
             page.wait_for_timeout(config.read_pause_ms)
             _install_banner(page, banners["evidence"], config.banner_height)
             buttons = page.locator("#evidence button")
             count = buttons.count()
-            if count < 3:
-                raise AssertionError("unresolved scenario did not expose all cited sources")
+            if count != len(governed_facts["evidence_ids"]):
+                raise AssertionError("reviewer did not expose every governed evidence identity")
             for index in range(count):
                 button = buttons.nth(index)
                 with page.expect_response("**/api/source?*", timeout=30_000) as source_response:
@@ -245,6 +271,7 @@ def record(config: RecordingConfig, *, executable: str | None = None) -> dict[st
                 source_count=count,
                 selected_source_highlighted=True,
                 workflow_status=view["status"],
+                governed_facts=governed_facts,
                 credential_storage_empty=(
                     page.evaluate("localStorage.length + sessionStorage.length") == 0
                     and not context.cookies()

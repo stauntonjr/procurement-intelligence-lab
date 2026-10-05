@@ -81,7 +81,7 @@ application version; this changed page requires separate current-version live ve
 
 The [explanatory deck](../project/demo-storytelling-deck.md) and
 [captioned recording](../assets/rehearsal-v2/index.html) introduce the architecture and one
-unresolved evidence conflict before entering the reviewer. The 42.96-second recording uses the
+unresolved evidence conflict before entering the reviewer. The 42.92-second recording uses the
 current browser UI, character-by-character input, changing Who/What/Why/How/When banners, three
 highlighted original sources and a human rejection. It is explicitly zero-inference fixture
 execution. One separately retained current-version live attempt returned `model_unavailable`

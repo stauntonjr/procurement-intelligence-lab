@@ -2,7 +2,7 @@
 
 ## Evidence-focused explanatory recording — 2026-10-05
 
-[Open the 42.96-second captioned recording](../assets/rehearsal-v2/index.html) ·
+[Open the 42.92-second captioned recording](../assets/rehearsal-v2/index.html) ·
 [native editable deck](https://docs.google.com/presentation/d/1mzGR8CixHQPEn3h4bj_aPSZ_H_ec_Rm8MvLUyxE4uw0/edit) ·
 [deck manifest](demo-storytelling-deck.md) ·
 [compact results](demo-storytelling-results.json).

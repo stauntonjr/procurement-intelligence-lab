@@ -7,6 +7,7 @@ from tools.record_demo_story import (
     RecordingConfig,
     build_banner,
     build_typing_events,
+    extract_unresolved_facts,
     ordered_slides,
     prepare_output,
     public_report,
@@ -68,3 +69,46 @@ def test_public_report_redacts_token_and_refuses_existing_output(tmp_path: Path)
     prepare_output(config.output)
     with pytest.raises(FileExistsError, match="never overwrite"):
         prepare_output(config.output)
+
+
+def test_recording_requires_the_narrated_unresolved_requirement() -> None:
+    evidence = [
+        {"evidence_id": "bom-a", "artifact_id": "bom-a.xlsx"},
+        {"evidence_id": "bom-b", "artifact_id": "bom-b.xlsx"},
+        {"evidence_id": "order", "artifact_id": "po.xlsx"},
+    ]
+    payload = {
+        "workflow": {
+            "brief": {
+                "content_json": json.dumps(
+                    {
+                        "status": "not_assessed",
+                        "reason": "unresolved_requirement",
+                        "required_quantity": None,
+                        "ordered_quantity": "2",
+                        "evidence": evidence,
+                    }
+                )
+            }
+        }
+    }
+    facts = extract_unresolved_facts(payload)
+    assert facts == {
+        "status": "not_assessed",
+        "reason": "unresolved_requirement",
+        "required_quantity": None,
+        "ordered_quantity": "2",
+        "evidence_ids": ["bom-a", "bom-b", "order"],
+    }
+    bad = json.loads(json.dumps(payload))
+    bad["workflow"]["brief"]["content_json"] = json.dumps(
+        {
+            "status": "not_assessed",
+            "reason": "missing_observation",
+            "required_quantity": "4",
+            "ordered_quantity": None,
+            "evidence": evidence,
+        }
+    )
+    with pytest.raises(ValueError, match="unresolved_requirement"):
+        extract_unresolved_facts(bad)

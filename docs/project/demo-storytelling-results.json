@@ -8,15 +8,26 @@
   "viewport": {"width": 1440, "height": 900},
   "banner_height": 96,
   "typing_delay_ms": 45,
-  "interaction_seconds": 43.672,
+  "interaction_seconds": 43.598,
   "media": {
     "container": "webm",
     "codec": "vp8",
-    "duration": "0:00:42.960000000",
+    "duration": "0:00:42.920000000",
     "width": 1440,
     "height": 900,
     "seekable": true,
-    "sha256": "a52ee548c587c267090066f7f0ec1f94e7ad0a025258e6cdcaea1b3b7d7f55e1"
+    "sha256": "9c7e2fc32debe9b854cb026adfbcff711260a02d0949224452323b1fe8368abe"
+  },
+  "governed_facts": {
+    "status": "not_assessed",
+    "reason": "unresolved_requirement",
+    "required_quantity": null,
+    "ordered_quantity": "2",
+    "evidence_ids": [
+      "evidence:71bdac429103510a5e6478dc",
+      "evidence:4062b7a560cd9c03821947a3",
+      "evidence:fd11c98ba675cb17e6a88032"
+    ]
   },
   "assertions": {
     "source_count": 3,
