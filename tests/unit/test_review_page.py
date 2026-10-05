@@ -9,6 +9,14 @@ import pytest
 from procurement_intelligence_lab.interfaces.review_page import HTML
 
 
+def test_review_page_uses_human_review_and_evidence_language() -> None:
+    assert "Review finding" in HTML
+    assert "Approve this finding" in HTML
+    assert "Reject this finding" in HTML
+    assert "Verified version" in HTML
+    assert "Evidence used for this finding" in HTML
+
+
 def test_discovered_run_remains_recoverable_after_status_failure(tmp_path: Path) -> None:
     node = shutil.which("node")
     if node is None:
