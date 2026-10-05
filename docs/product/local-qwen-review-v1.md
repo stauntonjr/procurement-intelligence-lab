@@ -41,6 +41,12 @@ interpretation/checkpoint work. Authentication, owner scope, origin/Host checks 
 precede work. Recovery/approval never recall the model. No question/model text or token is put in a
 URL. Loading history shows execution kind and immutable-version compatibility.
 
+POST `/api/reconcile` accepts exactly `run_id`, `brief_id`, `digest`, `outcome`,
+`selected_claim_id`, and `rationale`. `selected_claim_id` is empty only for a non-selection outcome.
+The first resolver supports exactly two eligible conflicting required-quantity claims in the exact
+item/project/site scope. The model cannot choose a revision or provide authority, rationale, scope,
+or effective time.
+
 ## Bounded semantics
 
 One exact catalog item and explicit aware cutoff are supported. Requirement governance, conflict

@@ -26,6 +26,11 @@ Authenticated GET routes: `/api/runs` (newest 50 owned records), `/api/run?run_i
 `/api/events?run_id=...`, `/api/source?run_id=...&evidence_id=...`.
 POST JSON routes: `/api/start` takes exactly `item,as_of`; `/api/recover` takes `run_id`;
 `/api/review` takes `run_id,brief_id,digest,decision` (`approve` or `reject`).
+The reconciliation continuation adds POST `/api/reconcile` with exactly `run_id`, `brief_id`,
+`digest`, `outcome`, `selected_claim_id`, and `rationale`. `selected_claim_id` is empty only for a
+non-selection outcome. The first resolver supports exactly two eligible conflicting
+required-quantity claims for one item/project/site scope. Effective time and scope remain
+server-owned; retroactive and document-wide changes are unsupported.
 All API calls require an Authorization bearer header, exact configured Host and any Origin
 must match. No CORS, cookies, query tokens or client authority. JSON writes are capped at
 8192 bytes; repeated JSON/query fields and unknown fields are rejected.
