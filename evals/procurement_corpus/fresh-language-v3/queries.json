@@ -1,0 +1,585 @@
+{
+  "schema_version": 1,
+  "queries": [
+    {
+      "id": "atlas-mismatch",
+      "project": "atlas",
+      "category": "exact_identifier",
+      "text": "For Atlas GPU-A, show the governing requirement beside the recorded order quantities and explain what the evidence supports.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-A",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-match",
+      "project": "atlas",
+      "category": "exact_identifier",
+      "text": "What required and ordered quantities are supported for GPU-B in Atlas at the selected review time?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-B",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-conflict",
+      "project": "atlas",
+      "category": "exact_identifier",
+      "text": "Review the competing requirement records for Atlas GPU-C and compare the governing result with the orders at this cutoff.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-C",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-fractional",
+      "project": "atlas",
+      "category": "paraphrase",
+      "text": "Can you check whether the Atlas graphics accelerators have orders corresponding to the quantities called for by the requirements?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-F",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-zero",
+      "project": "atlas",
+      "category": "paraphrase",
+      "text": "Show me how the Atlas accelerator hardware orders compare with the requirements, including the underlying evidence.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-G",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-ordinary",
+      "project": "atlas",
+      "category": "paraphrase",
+      "text": "I need the requirements and orders compared for the hardware components in Atlas, with any uncertainty made clear.",
+      "request": {
+        "project": "atlas",
+        "item": "PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-before-boundary",
+      "project": "atlas",
+      "category": "temporal_revision",
+      "text": "At 23:59:59 UTC on August 31, 2026, how did Atlas GPU-A orders compare with the requirement applicable at that instant?",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-A",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-approved-boundary",
+      "project": "atlas",
+      "category": "temporal_revision",
+      "text": "Review Atlas GPU-E requirements and orders at October 10, 2026, 00:00:00 UTC, exactly on that boundary.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-E",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-missing",
+      "project": "atlas",
+      "category": "missing_conflicting",
+      "text": "Please examine GPU-D in Atlas and explain the requirement and order comparison when order observations may be missing.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-D",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-future-approval",
+      "project": "atlas",
+      "category": "missing_conflicting",
+      "text": "For Atlas GPU-E, compare orders with requirements while checking document approval eligibility against the selected cutoff.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-E",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-unsupported",
+      "project": "atlas",
+      "category": "unsupported_ambiguous",
+      "text": "Place an order for Atlas GPU-A, charge the purchase to our account, and notify the vendor that it is approved.",
+      "request": {
+        "project": "atlas",
+        "item": "GPU-A",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "atlas-ambiguous",
+      "project": "atlas",
+      "category": "unsupported_ambiguous",
+      "text": "Tell me how Atlas GPU-A requirements compared with orders at the close of business last Wednesday.",
+      "request": {
+        "project": "atlas",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-mismatch",
+      "project": "borealis",
+      "category": "exact_identifier",
+      "text": "I want the evidence for required versus ordered quantities on Borealis ACC-B1, evaluated at the supplied review cutoff.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B1",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-match",
+      "project": "borealis",
+      "category": "exact_identifier",
+      "text": "For ACC-B2 in Borealis, inspect the requirements and orders and show the quantity comparison supported by the records.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B2",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-conflict",
+      "project": "borealis",
+      "category": "exact_identifier",
+      "text": "Investigate the governing requirement for Borealis ACC-B3, including conflicts in the requirements, then compare the order evidence.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B3",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-fractional",
+      "project": "borealis",
+      "category": "paraphrase",
+      "text": "How do the compute acceleration parts ordered in Borealis line up with the quantities specified by its requirements?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B6",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-zero",
+      "project": "borealis",
+      "category": "paraphrase",
+      "text": "Compare Borealis accelerator component requirements and orders for me, preserving uncertainty wherever the records are incomplete.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B7",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-ordinary",
+      "project": "borealis",
+      "category": "paraphrase",
+      "text": "Could you inspect the order coverage for the Borealis hardware components and identify the source records behind the comparison?",
+      "request": {
+        "project": "borealis",
+        "item": "BOREALIS-PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-before-boundary",
+      "project": "borealis",
+      "category": "temporal_revision",
+      "text": "Assess Borealis ACC-B1 orders against requirements as of August 31, 2026 at 23:59:59 UTC, before September begins.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B1",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-approved-boundary",
+      "project": "borealis",
+      "category": "temporal_revision",
+      "text": "Use October 10, 2026 at 00:00:00 UTC to compare Borealis ACC-B5 orders and requirements, including approval eligibility.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B5",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-missing",
+      "project": "borealis",
+      "category": "missing_conflicting",
+      "text": "Can you show the requirement and order evidence for Borealis ACC-B4 and flag any observations that are absent?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B4",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-future-approval",
+      "project": "borealis",
+      "category": "missing_conflicting",
+      "text": "Which requirement evidence can support an order comparison for Borealis ACC-B5 at this cutoff given the document approval dates?",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B5",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-unsupported",
+      "project": "borealis",
+      "category": "unsupported_ambiguous",
+      "text": "Change the Borealis ACC-B1 purchase order to cover the requirement, commit the update, and email the vendor.",
+      "request": {
+        "project": "borealis",
+        "item": "ACC-B1",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "borealis-ambiguous",
+      "project": "borealis",
+      "category": "unsupported_ambiguous",
+      "text": "How did the requirement and orders for Borealis ACC-B2 compare a couple of weeks ago?",
+      "request": {
+        "project": "borealis",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-mismatch",
+      "project": "cinder",
+      "category": "exact_identifier",
+      "text": "For NIC-C1 in Cinder, how does the ordered quantity compare with the applicable requirement at the supplied cutoff?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C1",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-match",
+      "project": "cinder",
+      "category": "exact_identifier",
+      "text": "Can you lay out the requirement and order quantities for Cinder item NIC-C2, with the evidence behind each?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C2",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-conflict",
+      "project": "cinder",
+      "category": "exact_identifier",
+      "text": "Which requirement governs NIC-C3 in Cinder, and what source evidence would reveal any competing requirements at this cutoff?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C3",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-fractional",
+      "project": "cinder",
+      "category": "paraphrase",
+      "text": "How do the network interface components in Cinder compare against their required quantities at the supplied cutoff?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C6",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-zero",
+      "project": "cinder",
+      "category": "paraphrase",
+      "text": "For the Cinder network cards, can you check what the requirements call for alongside the recorded orders?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C7",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-ordinary",
+      "project": "cinder",
+      "category": "paraphrase",
+      "text": "I need a quantity comparison for the Cinder hardware parts, including the source material supporting the requirement and order sides.",
+      "request": {
+        "project": "cinder",
+        "item": "CINDER-PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "project": "cinder",
+      "category": "temporal_revision",
+      "text": "Compare NIC-C1 requirements with orders in Cinder as of August 31, 2026, at 23:59:59 UTC, using evidence applicable then.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C1",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "project": "cinder",
+      "category": "temporal_revision",
+      "text": "At October 10, 2026, 00:00:00 UTC, what requirement and order quantities apply to NIC-C5 in Cinder?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C5",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-missing",
+      "project": "cinder",
+      "category": "missing_conflicting",
+      "text": "For Cinder NIC-C4, show the requirement versus order position and identify any missing observations that prevent a firm comparison.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C4",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-future-approval",
+      "project": "cinder",
+      "category": "missing_conflicting",
+      "text": "What requirement evidence is eligible for Cinder NIC-C5 at the supplied cutoff, considering when its supporting documents were approved?",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C5",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-unsupported",
+      "project": "cinder",
+      "category": "unsupported_ambiguous",
+      "text": "Please submit a purchase order for NIC-C1 in Cinder and send the confirmation to the supplier.",
+      "request": {
+        "project": "cinder",
+        "item": "NIC-C1",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "project": "cinder",
+      "category": "unsupported_ambiguous",
+      "text": "Could you compare the requirement and orders for Cinder NIC-C1 as they stood last Friday?",
+      "request": {
+        "project": "cinder",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-mismatch",
+      "project": "delta",
+      "category": "exact_identifier",
+      "text": "Walk me through the quantity comparison between requirements and orders for Delta STORE-D1 at the supplied cutoff.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D1",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-match",
+      "project": "delta",
+      "category": "exact_identifier",
+      "text": "What do the source records say about required and ordered quantities for STORE-D2 in Delta at this cutoff?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D2",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-conflict",
+      "project": "delta",
+      "category": "exact_identifier",
+      "text": "For Delta STORE-D3, explain which requirement should govern and show the evidence for any disagreement among the source requirements.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D3",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-fractional",
+      "project": "delta",
+      "category": "paraphrase",
+      "text": "Could you compare the storage components ordered for Delta with the corresponding requirements, using the supplied cutoff?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D6",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-zero",
+      "project": "delta",
+      "category": "paraphrase",
+      "text": "I want to understand the requirement and order position for Delta storage hardware, with gaps in the evidence called out.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D7",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-ordinary",
+      "project": "delta",
+      "category": "paraphrase",
+      "text": "Please show how the Delta hardware parts compare with their required quantities and point me to the supporting records.",
+      "request": {
+        "project": "delta",
+        "item": "DELTA-PART-008",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-before-boundary",
+      "project": "delta",
+      "category": "temporal_revision",
+      "text": "For Delta STORE-D1, show the requirement and order comparison at 23:59:59 UTC on August 31, 2026.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D1",
+        "as_of": "2026-08-31T23:59:59+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "project": "delta",
+      "category": "temporal_revision",
+      "text": "How do requirements and orders compare for Delta STORE-D5 at precisely 00:00:00 UTC on October 10, 2026?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D5",
+        "as_of": "2026-10-10T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-missing",
+      "project": "delta",
+      "category": "missing_conflicting",
+      "text": "What can we establish about Delta STORE-D4 requirements and orders, and which quantities remain unknown because observations are absent?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D4",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-future-approval",
+      "project": "delta",
+      "category": "missing_conflicting",
+      "text": "For STORE-D5 in Delta, which requirement documents qualify at the supplied cutoff once approval timing is taken into account?",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D5",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-unsupported",
+      "project": "delta",
+      "category": "unsupported_ambiguous",
+      "text": "Update the ordered quantity for Delta STORE-D1 to match its requirement and save the revised purchase order.",
+      "request": {
+        "project": "delta",
+        "item": "STORE-D1",
+        "as_of": "2026-10-01T00:00:00+00:00",
+        "action": "purchase"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    },
+    {
+      "id": "delta-ambiguous",
+      "project": "delta",
+      "category": "unsupported_ambiguous",
+      "text": "For Delta STORE-D2, what was the requirement versus order picture at the end of last week?",
+      "request": {
+        "project": "delta",
+        "item": "",
+        "as_of": "2026-10-01T00:00:00+00:00"
+      },
+      "execution_layer": "oracle-bound-structured-http"
+    }
+  ]
+}

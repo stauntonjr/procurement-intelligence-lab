@@ -1,0 +1,32 @@
+{
+  "id": "C020",
+  "title": "Locked browser callbacks cannot issue follow-up history reads",
+  "introducing_commit": "cf277d374394de774bd812f16ae132ade46670ee",
+  "oracle": "Locked browser callbacks cannot issue follow-up history reads in the actual shipped fixture and live page JavaScript; backend authority remains independent.",
+  "known_bad": "Read history after a delayed prior-session response without checking the session epoch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/interfaces/review_page.py",
+      "find": "async function history(version){if(version!==epoch)return;",
+      "replace": "async function history(version){"
+    }
+  ],
+  "known_bad_failure_pattern": "locked callback issued a new request",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_review_page_recovery.py",
+    "-k",
+    "lock"
+  ],
+  "surfaces": [
+    "browser exact review state",
+    "human error and lock/recovery boundary"
+  ],
+  "prevention": [
+    "execute shipped JavaScript with deferred/failing public transport",
+    "retain real installed Chromium counterpart evidence"
+  ]
+}

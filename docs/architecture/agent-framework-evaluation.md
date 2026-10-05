@@ -11,7 +11,7 @@ The project currently treats LangGraph, LangChain, and DSPy as distinct candidat
 | Technology | Candidate role | Current status |
 | --- | --- | --- |
 | DSPy | Development-time optimization of LM programs against explicit eval metrics | Evaluate relatively early |
-| LangGraph | Runtime for genuinely stateful, branching, resumable, human-in-the-loop operational agents | Defer to agent milestone; prototype before adoption |
+| LangGraph | Runtime for genuinely stateful, branching, resumable, human-in-the-loop operational agents | Optional fixture checkpoint prototype on implementation branch; live adoption gated |
 | LangChain | Optional integration convenience for specific providers/tools | No planned architectural adoption |
 | Pydantic AI | Typed runtime agent/tool boundary | Candidate, benchmark with alternatives |
 | FastMCP | External agent/tool interoperability | Candidate interface adapter |
@@ -74,6 +74,11 @@ revision mismatch detected
 LangGraph should not be used merely to draw a pipeline as nodes. Predetermined processing such as document structuring, schema mapping, normalization, persistence, entity-resolution stages, or reconciliation remains ordinary application/workflow code.
 
 If adopted, LangGraph must sit behind a repository-owned abstraction such as `AgentWorkflowRuntime`. Framework-specific state must not become canonical procurement state.
+
+The current branch's [serial fixture prototype](../product/serial-review-workflow-v1.md) implements
+that port around the existing audited tools and exact-brief service. It tests durable pause/resume
+and crash recovery with pinned optional dependencies; it does not establish model quality or
+production adoption. The deterministic human brief CLI remains the native comparison path.
 
 ### Architectural invariant
 

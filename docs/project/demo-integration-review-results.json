@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "application": "sha256:aff5b30f7cbda546a0b536521767dae41d0e278e134b7d129ba8eb0f3c0bad64",
+  "wheel_sha256": "44da2155b4a02d39513223a45ad623d1f51b28e575702c2c8007c1ef21b776db",
+  "source_wheel_installed_python_files": 102,
+  "stack": {
+    "prs": [
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192
+    ],
+    "linear_ancestor_heads": 18,
+    "required_checks_passing_per_head": 10,
+    "unresolved_historical_review_threads": 6
+  },
+  "regressions": {
+    "original_red_failures": 6,
+    "initial_green": 61,
+    "review_red_failures": 5,
+    "corrective_green": 65
+  },
+  "challenges": {
+    "public_passed": 27,
+    "known_bad_rejected": 27,
+    "new_ids": [
+      "C022",
+      "C023",
+      "C024",
+      "C025",
+      "C026",
+      "C027"
+    ],
+    "agent_score": "not_evaluated"
+  },
+  "installed_browser": {
+    "passed": 13,
+    "fixture_runs": 3,
+    "fixture_saves": 2,
+    "model_calls": 0
+  },
+  "package_smoke": "passed",
+  "independent_review": {
+    "revision": "0cc22d685cc49f2c47a2c9bd3bf1ee9d033830b7",
+    "critical": 0,
+    "important": 2,
+    "minor": 0,
+    "root_corrective_pass": "both_fixed"
+  },
+  "roadmap_advisory": {
+    "run": 37257470160,
+    "outcome": "failed",
+    "reason": "Gemini daily quota429; no report"
+  },
+  "timed_human_rehearsal": false,
+  "deployed_acceptance": false,
+  "fresh_live_acceptance": false,
+  "release_ready": false,
+  "full_check": {
+    "passed": 763,
+    "opt_in_skipped": 22,
+    "seconds": 411.65,
+    "branch_coverage_percent": 88.98,
+    "coverage_ratchet": "passed",
+    "architecture": "passed"
+  }
+}

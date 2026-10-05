@@ -1,0 +1,237 @@
+{
+  "schema_version": 2,
+  "queries_sha256": "6e86c26c8357397960c1667666a1eea0804089ddef1ee1db47797a24d802cdff",
+  "contract": "ADR-032 literal item and explicit caller date; evaluator-only expectations",
+  "cases": [
+    {
+      "id": "atlas-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "atlas-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "borealis-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "delta-ambiguous",
+      "expected": "clarify"
+    }
+  ],
+  "evaluation_use": "fresh_language_holdout",
+  "limits": "Unseen language only over previously inspected synthetic source scenarios. Root development24; independent fresh-context validation12/test12 authored before reading old questions/model outputs/runtime prompt. Frozen runtime, one attempt each; no tuning or retry. Public data/schema/scenario ancestry and known vocabularies remain correlated, not new-source/project/blind/statistical quality. No browser/deployment/fullG2/expansion acceptance.",
+  "freshness": {
+    "runtime_git_revision": "55bac5c598d420faed2767a1afd1018c1df38f5c",
+    "runtime_versions": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:1389c8212a9aad41d734c5fea130352147177024b60a9f0b40f420e731fd27c4:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:78f50895c0a06e8fbdcbc0e111555c2e766ca784fd38ef28a92579d447985a6b"
+    },
+    "source_reuse": "previously_inspected_source_scenarios",
+    "heldout_author_file": "independent-language-author.json",
+    "heldout_author_sha256": "c733b676db52d2f138347aa29e4e040211db0b8b29c0fc5d76e69a567aeac004",
+    "prior_question_files": [
+      {
+        "path": "evals/procurement_corpus/v1/queries.json",
+        "sha256": "fa97639cf0d7481aa77519a49630b947352aef95f23d1a57204a3415294335d5"
+      },
+      {
+        "path": "evals/operational_agents/intent-development-v1.json",
+        "sha256": "5f7877a83a8f18b2563637dccef087161b859c6b52204dd10cf46558583df4dd"
+      },
+      {
+        "path": "evals/operational_agents/local-qwen-walkthrough-v1.json",
+        "sha256": "9484209f5a7bd8faad170e871add2321f7316f027a7006081eba045d7968a61d"
+      },
+      {
+        "path": "evals/operational_agents/browser-walkthrough-v1.json",
+        "sha256": "c28a5d284d7bf3c1b47e56990bd31e26f202892fc28e48ae09562bc1b0880c08"
+      },
+      {
+        "path": "evals/operational_agents/original-showcase-browser-v1.json",
+        "sha256": "a177eef1c022327c99e9272ca99c2e32ed1c8816be565f1e3f1ba6b34f3744cb"
+      }
+    ]
+  }
+}

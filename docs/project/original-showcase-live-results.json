@@ -1,0 +1,807 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "a177eef1c022327c99e9272ca99c2e32ed1c8816be565f1e3f1ba6b34f3744cb",
+  "wheel_sha256": "f4f9d659210c73cfc951ade289bab74df34a00c08df7b6e4f277d51f828bcab8",
+  "execution_kind": "live",
+  "application_git_revision": "39890485703a773236f090d6bb373583f34942f5",
+  "limits": "One authored question across three fixed original source sets, three repetitions each: nine actual local Qwen calls. No source/case/outcome labels or numerical expectations enter the model. Original observed order 2 remains unassessed for unresolved requirements. Not fresh held-out accuracy or deployment/full G2 acceptance. No prompt tuning or retry.",
+  "versions": {
+    "showcase-a-order": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:1389c8212a9aad41d734c5fea130352147177024b60a9f0b40f420e731fd27c4:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "original:35bf7be0d14e4b2513f3800b115b5dbb65ddabb13ec8c61f28dc6007705dbabc",
+      "application": "sha256:da8821a34969062448cbb1e6c5097173c10e241e57d161bd0caf639e83e3294f"
+    },
+    "showcase-a-b-order": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:1389c8212a9aad41d734c5fea130352147177024b60a9f0b40f420e731fd27c4:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "original:59b56524823168ce07d1b02216169d017ff3969be62eef5b3afc5f2570ed5b1b",
+      "application": "sha256:da8821a34969062448cbb1e6c5097173c10e241e57d161bd0caf639e83e3294f"
+    },
+    "showcase-a-only": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:1389c8212a9aad41d734c5fea130352147177024b60a9f0b40f420e731fd27c4:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "original:9606dbfe9719a59718c38ab5ed2c8fdddac243d1d47afd832532edd3d55c6868",
+      "application": "sha256:da8821a34969062448cbb1e6c5097173c10e241e57d161bd0caf639e83e3294f"
+    }
+  },
+  "acceptance": "original_browser_passed",
+  "browser": "151.0.7922.34",
+  "counts": {
+    "authored_questions": 1,
+    "source_sets": 3,
+    "scheduled_trials": 9,
+    "passed_trials": 9,
+    "inference_calls": 9,
+    "tool_starts": 18,
+    "saves": 8,
+    "source_checks": 18,
+    "process_restarts": 3
+  },
+  "runs": [
+    {
+      "sources": "showcase-a-order",
+      "repetition": 1,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "3d3d023f-8299-4656-960f-560f83e9a0f9",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.17376580205746,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "3d3d023f-8299-4656-960f-560f83e9a0f9",
+      "source_count": 2,
+      "process_restart_recovered": true,
+      "saved_id": "ddf0dd6e-4845-489a-b719-17625beb041e",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:bc4fee5d6619240213f86749",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_order_short.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+            "evidence_id": "evidence:fd11c98ba675cb17e6a88032",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc"
+          ],
+          "observation": [
+            "evidence:fd11c98ba675cb17e6a88032"
+          ],
+          "requirement": [
+            "evidence:71bdac429103510a5e6478dc"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:fc8a135d7348c4d374f2ffc8",
+        "governance_dispositions": {
+          "showcase:A": "governing"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "governed",
+        "input_dispositions": {
+          "evidence:fd11c98ba675cb17e6a88032": "eligible"
+        },
+        "item": "GPU-A",
+        "ordered_quantity": "2",
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": null,
+        "required_quantity": "4",
+        "snapshot_id": "original-showcase-snapshot:efd3d422806005a08903e2cd",
+        "status": "anomaly",
+        "unit": "each"
+      },
+      "digest": "77587f2c8397f88774e3762a4770b7ff69ce47b056178d1ab33a7c28cec30ac4"
+    },
+    {
+      "sources": "showcase-a-order",
+      "repetition": 2,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "9bca7857-3cb6-4fa0-856f-1c63668e6514",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.0993907970841974,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "9bca7857-3cb6-4fa0-856f-1c63668e6514",
+      "source_count": 2,
+      "saved_id": "4e4525bf-de4b-4381-af27-7e0e65c24874",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:bc4fee5d6619240213f86749",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_order_short.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+            "evidence_id": "evidence:fd11c98ba675cb17e6a88032",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc"
+          ],
+          "observation": [
+            "evidence:fd11c98ba675cb17e6a88032"
+          ],
+          "requirement": [
+            "evidence:71bdac429103510a5e6478dc"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:fc8a135d7348c4d374f2ffc8",
+        "governance_dispositions": {
+          "showcase:A": "governing"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "governed",
+        "input_dispositions": {
+          "evidence:fd11c98ba675cb17e6a88032": "eligible"
+        },
+        "item": "GPU-A",
+        "ordered_quantity": "2",
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": null,
+        "required_quantity": "4",
+        "snapshot_id": "original-showcase-snapshot:efd3d422806005a08903e2cd",
+        "status": "anomaly",
+        "unit": "each"
+      },
+      "digest": "a373050631f27cca5d56948f0a750e7148f22c539824781bbb3de747913fc3b0"
+    },
+    {
+      "sources": "showcase-a-order",
+      "repetition": 3,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "95701e70-fc22-43b8-a551-f56525d9d185",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1018913991283625,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "95701e70-fc22-43b8-a551-f56525d9d185",
+      "source_count": 2,
+      "saved_id": "a2ec028f-261a-4df6-a8e7-a4435adf678b",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:bc4fee5d6619240213f86749",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_order_short.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+            "evidence_id": "evidence:fd11c98ba675cb17e6a88032",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc"
+          ],
+          "observation": [
+            "evidence:fd11c98ba675cb17e6a88032"
+          ],
+          "requirement": [
+            "evidence:71bdac429103510a5e6478dc"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:fc8a135d7348c4d374f2ffc8",
+        "governance_dispositions": {
+          "showcase:A": "governing"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "governed",
+        "input_dispositions": {
+          "evidence:fd11c98ba675cb17e6a88032": "eligible"
+        },
+        "item": "GPU-A",
+        "ordered_quantity": "2",
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": null,
+        "required_quantity": "4",
+        "snapshot_id": "original-showcase-snapshot:efd3d422806005a08903e2cd",
+        "status": "anomaly",
+        "unit": "each"
+      },
+      "digest": "84ccf55b4b026f23392b9c2df4928deb66cbfc4c08148d7b02603b607200c5e5"
+    },
+    {
+      "sources": "showcase-a-b-order",
+      "repetition": 1,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "7c5f668c-e883-4fe7-863e-7d42001cbfcf",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1167415308300406,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "7c5f668c-e883-4fe7-863e-7d42001cbfcf",
+      "source_count": 3,
+      "process_restart_recovered": true,
+      "decision": "reject",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:6c07bd1a2a51ed6dc5f36cb6",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_bom_revision_b.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "evidence_id": "evidence:4062b7a560cd9c03821947a3",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_order_short.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+            "evidence_id": "evidence:fd11c98ba675cb17e6a88032",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc",
+            "evidence:4062b7a560cd9c03821947a3"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:5143abea5e264c7d23f4d73f",
+        "governance_dispositions": {
+          "showcase:A": "conflicting: no value established",
+          "showcase:B": "conflicting: no value established"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "unresolved",
+        "input_dispositions": {},
+        "item": "GPU-A",
+        "ordered_quantity": "2",
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": "unresolved_requirement",
+        "required_quantity": null,
+        "snapshot_id": "original-showcase-snapshot:20a77c3ca8bbac43a6e6ba93",
+        "status": "not_assessed",
+        "unit": null
+      },
+      "digest": "6b286f44b0f8024c309f783b5e7086caf2870577c521b6bb25d9763c4ac79836"
+    },
+    {
+      "sources": "showcase-a-b-order",
+      "repetition": 2,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "0079e936-7916-4ab6-a38f-9dd96e838706",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1046269631478935,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "0079e936-7916-4ab6-a38f-9dd96e838706",
+      "source_count": 3,
+      "saved_id": "9ff9e092-2647-408a-9736-da3fe303b61f",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:6c07bd1a2a51ed6dc5f36cb6",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_bom_revision_b.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "evidence_id": "evidence:4062b7a560cd9c03821947a3",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_order_short.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+            "evidence_id": "evidence:fd11c98ba675cb17e6a88032",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc",
+            "evidence:4062b7a560cd9c03821947a3"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:5143abea5e264c7d23f4d73f",
+        "governance_dispositions": {
+          "showcase:A": "conflicting: no value established",
+          "showcase:B": "conflicting: no value established"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "unresolved",
+        "input_dispositions": {},
+        "item": "GPU-A",
+        "ordered_quantity": "2",
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": "unresolved_requirement",
+        "required_quantity": null,
+        "snapshot_id": "original-showcase-snapshot:20a77c3ca8bbac43a6e6ba93",
+        "status": "not_assessed",
+        "unit": null
+      },
+      "digest": "8eeeccd8771b17443d09e5bb9677cf31bc6f338f87e3fa71c98c2f5242f2a6ab"
+    },
+    {
+      "sources": "showcase-a-b-order",
+      "repetition": 3,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "a9271994-dc56-4593-96ec-7b06d40b19e8",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1308042369782925,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "a9271994-dc56-4593-96ec-7b06d40b19e8",
+      "source_count": 3,
+      "saved_id": "fa3fb268-c9a0-44dd-8b6b-59e62897afbf",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:6c07bd1a2a51ed6dc5f36cb6",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_bom_revision_b.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "c12a72195c783343e24a05eb77ba9cb0145b889f5b39a66cc449d247c29bfdf2",
+            "evidence_id": "evidence:4062b7a560cd9c03821947a3",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          },
+          {
+            "artifact_id": "showcase:showcase_order_short.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "2e1fc82884b49252e1fd61d4ac6ce8e5466c883132d5e1dd3871dcb6fcb31337",
+            "evidence_id": "evidence:fd11c98ba675cb17e6a88032",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc",
+            "evidence:4062b7a560cd9c03821947a3"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:5143abea5e264c7d23f4d73f",
+        "governance_dispositions": {
+          "showcase:A": "conflicting: no value established",
+          "showcase:B": "conflicting: no value established"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "unresolved",
+        "input_dispositions": {},
+        "item": "GPU-A",
+        "ordered_quantity": "2",
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": "unresolved_requirement",
+        "required_quantity": null,
+        "snapshot_id": "original-showcase-snapshot:20a77c3ca8bbac43a6e6ba93",
+        "status": "not_assessed",
+        "unit": null
+      },
+      "digest": "fa555d54e8b4f5934d3f31b8d3b97a9e0e0c409dd5280f856f9234a6ed7de0d8"
+    },
+    {
+      "sources": "showcase-a-only",
+      "repetition": 1,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "f60300fb-6aed-419c-8198-8ece2b0cc997",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.113376131048426,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "f60300fb-6aed-419c-8198-8ece2b0cc997",
+      "source_count": 1,
+      "process_restart_recovered": true,
+      "saved_id": "2693d3f7-1811-4512-9e52-51e92467c663",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:4613586768f175e3e25176e0",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc"
+          ],
+          "requirement": [
+            "evidence:71bdac429103510a5e6478dc"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:fc8a135d7348c4d374f2ffc8",
+        "governance_dispositions": {
+          "showcase:A": "governing"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "governed",
+        "input_dispositions": {},
+        "item": "GPU-A",
+        "ordered_quantity": null,
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": "missing_observation",
+        "required_quantity": "4",
+        "snapshot_id": "original-showcase-snapshot:bc56ee5be4873eb0fc4f995c",
+        "status": "not_assessed",
+        "unit": "each"
+      },
+      "digest": "396a0b645fd4d6c508f3280a7c58db58dbc8194bfbb05842f3d5c5c83124b6fb"
+    },
+    {
+      "sources": "showcase-a-only",
+      "repetition": 2,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "78505583-d1b1-4556-ab0a-1dc6807b4607",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.114149111090228,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "78505583-d1b1-4556-ab0a-1dc6807b4607",
+      "source_count": 1,
+      "saved_id": "e19bf1be-d0c5-471d-8085-661ad709f877",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:4613586768f175e3e25176e0",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc"
+          ],
+          "requirement": [
+            "evidence:71bdac429103510a5e6478dc"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:fc8a135d7348c4d374f2ffc8",
+        "governance_dispositions": {
+          "showcase:A": "governing"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "governed",
+        "input_dispositions": {},
+        "item": "GPU-A",
+        "ordered_quantity": null,
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": "missing_observation",
+        "required_quantity": "4",
+        "snapshot_id": "original-showcase-snapshot:bc56ee5be4873eb0fc4f995c",
+        "status": "not_assessed",
+        "unit": "each"
+      },
+      "digest": "f007520e2879e370580693a99f5593e5b8cfbb427e58dda759f2783d7cd800c3"
+    },
+    {
+      "sources": "showcase-a-only",
+      "repetition": 3,
+      "outcome": "pass",
+      "http_status": 200,
+      "interpretation": {
+        "run_id": "03593b18-7b1f-42ca-9664-6e8cd4036d12",
+        "question_hash": "3b96506bbd0f0c63c0adc8fd4690d38238b2aec301d3e2c2ebac7848608acbb3",
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "status": "investigate",
+        "item": "GPU-A",
+        "reason": "none",
+        "elapsed_seconds": 1.1164116959553212,
+        "prompt_tokens": 937,
+        "completion_tokens": 73
+      },
+      "run_id": "03593b18-7b1f-42ca-9664-6e8cd4036d12",
+      "source_count": 1,
+      "saved_id": "471d2ff4-6e3a-41f3-8f2b-1ebac4992d97",
+      "decision": "approve",
+      "facts": {
+        "as_of": "2026-01-15T00:00:00+00:00",
+        "assessment_id": "anomaly-assessment:4613586768f175e3e25176e0",
+        "evidence": [
+          {
+            "artifact_id": "showcase:showcase_bom_revision_a.xlsx",
+            "cells": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ],
+            "content_hash": "818f93274d15859ca11b2f47d2b1ffff192a50712354150414d12fcff37f8fd8",
+            "evidence_id": "evidence:71bdac429103510a5e6478dc",
+            "location_kind": "tabular",
+            "row": 2,
+            "sheet": "BOM"
+          }
+        ],
+        "evidence_by_role": {
+          "governance": [
+            "evidence:71bdac429103510a5e6478dc"
+          ],
+          "requirement": [
+            "evidence:71bdac429103510a5e6478dc"
+          ]
+        },
+        "governance_decision_id": "governing-claim-decision:fc8a135d7348c4d374f2ffc8",
+        "governance_dispositions": {
+          "showcase:A": "governing"
+        },
+        "governance_policy_id": "procurement-governing-claims/v1",
+        "governance_status": "governed",
+        "input_dispositions": {},
+        "item": "GPU-A",
+        "ordered_quantity": null,
+        "policy_digest": "e7759786ba53ae7fcd49639a8e5920b5f70ca52798fe3bb7849f35c1f79b07e6",
+        "policy_id": "procurement-showcase-order-quantity/v1",
+        "reason": "missing_observation",
+        "required_quantity": "4",
+        "snapshot_id": "original-showcase-snapshot:bc56ee5be4873eb0fc4f995c",
+        "status": "not_assessed",
+        "unit": "each"
+      },
+      "digest": "3422bdf24c6214a4708bd713823562d649fabf093edeac2d6e18438a90288bfa"
+    }
+  ],
+  "local_artifacts": "artifacts/original-showcase/v1/final/report.json and per-source review.db; private credentials removed.",
+  "provider": {
+    "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+    "vllm_version": "0.23.1rc1.dev1353+g81f51a780.d20260721",
+    "endpoint": "loopback:8000/v1"
+  }
+}

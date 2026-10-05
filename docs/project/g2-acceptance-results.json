@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "target_versions": {
+    "provider": "local-vllm",
+    "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+    "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+    "tool_schema": "corpus-tools/v1",
+    "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+    "application": "sha256:afe3ae789743d40c56de8f5cf51c73334f865217e78a92184994633043a55146"
+  },
+  "groups": {
+    "fresh_language": {
+      "evidence_status": "pass",
+      "errors": [],
+      "counts": {
+        "pass": 48,
+        "fail": 0,
+        "unknown": 0,
+        "not_applicable": 0
+      },
+      "real_model_attempts": 48,
+      "controlled_protocol_attempts": 0,
+      "tool_starts": 56,
+      "saves": 28,
+      "model_transport_seconds": {
+        "count": 48,
+        "unknown": 0,
+        "min": 0.8037446469534189,
+        "median": 1.1579733014805242,
+        "p95": 1.2429042828734964,
+        "max": 1.2625470808707178
+      },
+      "cost_observed_usd": null,
+      "model_status_counts": {
+        "investigate": 28,
+        "clarify": 16,
+        "unsupported": 4
+      },
+      "reported_token_usage": {
+        "prompt_tokens": {
+          "total": 73493,
+          "observed_calls": 48,
+          "unknown_calls": 0
+        },
+        "completion_tokens": {
+          "total": 2965,
+          "observed_calls": 48,
+          "unknown_calls": 0
+        }
+      },
+      "failed_cases": [],
+      "public_workflow_roundtrip_seconds": {
+        "count": 48,
+        "unknown": 0,
+        "min": 1.390549031086266,
+        "median": 4.126991929486394,
+        "p95": 4.297592469025403,
+        "max": 4.346274926094338
+      },
+      "artifact": "artifacts/fresh-language-v3/v1/first-run.json",
+      "sha256": "40b5e4b46c7604a88a6827dc65f821ab6f568af11990c9e1009025e64c575f41",
+      "expected_cases": 48,
+      "use": "new_language_48_including_24_independent_over_known_sources"
+    },
+    "original_browser": {
+      "evidence_status": "pass",
+      "errors": [],
+      "counts": {
+        "pass": 9,
+        "fail": 0,
+        "unknown": 0,
+        "not_applicable": 0
+      },
+      "real_model_attempts": 9,
+      "controlled_protocol_attempts": 0,
+      "tool_starts": 18,
+      "saves": 8,
+      "model_transport_seconds": {
+        "count": 9,
+        "unknown": 0,
+        "min": 1.1355147580616176,
+        "median": 1.1418690669815987,
+        "p95": 1.488713619997725,
+        "max": 1.488713619997725
+      },
+      "cost_observed_usd": null,
+      "model_status_counts": {
+        "investigate": 9
+      },
+      "reported_token_usage": {
+        "prompt_tokens": {
+          "total": 10575,
+          "observed_calls": 9,
+          "unknown_calls": 0
+        },
+        "completion_tokens": {
+          "total": 657,
+          "observed_calls": 9,
+          "unknown_calls": 0
+        }
+      },
+      "failed_cases": [],
+      "artifact": "artifacts/cutoff-development/v1/original-browser-run/report.json",
+      "sha256": "81cbf460cec725c182846f48a4056338d76b2c9eec9da3520ba655c28a555e6e",
+      "expected_cases": 9,
+      "use": "three_correlated_fixtures_three_repetitions_each"
+    },
+    "adversarial": {
+      "evidence_status": "pass",
+      "errors": [],
+      "counts": {
+        "pass": 9,
+        "fail": 0,
+        "unknown": 0,
+        "not_applicable": 0
+      },
+      "real_model_attempts": 5,
+      "controlled_protocol_attempts": 3,
+      "tool_starts": 7,
+      "saves": 1,
+      "model_transport_seconds": {
+        "count": 5,
+        "unknown": 0,
+        "min": 0.7985568980220705,
+        "median": 1.1524976999498904,
+        "p95": 1.1550587641540915,
+        "max": 1.1550587641540915
+      },
+      "cost_observed_usd": null,
+      "tool_failures": 1,
+      "model_status_counts": {
+        "unsupported": 1,
+        "investigate": 4
+      },
+      "reported_token_usage": {
+        "prompt_tokens": {
+          "total": 7170,
+          "observed_calls": 5,
+          "unknown_calls": 0
+        },
+        "completion_tokens": {
+          "total": 332,
+          "observed_calls": 5,
+          "unknown_calls": 0
+        }
+      },
+      "controlled_model_status_counts": {
+        "failed": 3
+      },
+      "artifact": "artifacts/g2-adversarial/v1/first-run.json",
+      "sha256": "9d40ef4ae2dff93bc5276f53929d972f7dec829a4b17b20ef8949863666233dc",
+      "expected_cases": 9,
+      "use": "bounded_installed_acceptance"
+    },
+    "baseline_controls": {
+      "evidence_status": "pass",
+      "errors": [],
+      "counts": {
+        "pass": 25,
+        "fail": 3,
+        "unknown": 0,
+        "not_applicable": 0
+      },
+      "real_model_attempts": 28,
+      "controlled_protocol_attempts": 0,
+      "tool_starts": 26,
+      "saves": 0,
+      "model_transport_seconds": {
+        "count": 28,
+        "unknown": 0,
+        "min": 0.7684357189573348,
+        "median": 0.8387958954554051,
+        "p95": 1.1615927920211107,
+        "max": 1.1664662440307438
+      },
+      "cost_observed_usd": null,
+      "model_status_counts": {
+        "investigate": 13,
+        "clarify": 11,
+        "unsupported": 4
+      },
+      "reported_token_usage": {
+        "prompt_tokens": {
+          "total": 33878,
+          "observed_calls": 28,
+          "unknown_calls": 0
+        },
+        "completion_tokens": {
+          "total": 1632,
+          "observed_calls": 28,
+          "unknown_calls": 0
+        }
+      },
+      "failed_cases": [
+        {
+          "id": "atlas-before-boundary",
+          "errors": [
+            "interpretation_status"
+          ],
+          "status": "clarify",
+          "reason": "date_ambiguous"
+        },
+        {
+          "id": "control-consistent-boundary",
+          "errors": [
+            "interpretation_status"
+          ],
+          "status": "clarify",
+          "reason": "date_ambiguous"
+        },
+        {
+          "id": "control-explicit-conflict",
+          "errors": [
+            "interpretation_status"
+          ],
+          "status": "investigate",
+          "reason": "none"
+        }
+      ],
+      "artifact": "artifacts/cutoff-development/v1/baseline.json",
+      "sha256": "e04dbd2fa3a4f34f4c1b0ced52d19011ad0e96d06c7f76e4bd640662ff98107f",
+      "expected_cases": 28,
+      "use": "inspected_development_context"
+    },
+    "candidate_controls": {
+      "evidence_status": "pass",
+      "errors": [],
+      "counts": {
+        "pass": 26,
+        "fail": 2,
+        "unknown": 0,
+        "not_applicable": 0
+      },
+      "real_model_attempts": 28,
+      "controlled_protocol_attempts": 0,
+      "tool_starts": 24,
+      "saves": 0,
+      "model_transport_seconds": {
+        "count": 28,
+        "unknown": 0,
+        "min": 0.7967029390856624,
+        "median": 0.8594496693694964,
+        "p95": 1.1872535410802811,
+        "max": 1.2398092199582607
+      },
+      "cost_observed_usd": null,
+      "model_status_counts": {
+        "investigate": 12,
+        "clarify": 11,
+        "unsupported": 5
+      },
+      "reported_token_usage": {
+        "prompt_tokens": {
+          "total": 40542,
+          "observed_calls": 28,
+          "unknown_calls": 0
+        },
+        "completion_tokens": {
+          "total": 1603,
+          "observed_calls": 28,
+          "unknown_calls": 0
+        }
+      },
+      "failed_cases": [
+        {
+          "id": "atlas-before-boundary",
+          "errors": [
+            "interpretation_status"
+          ],
+          "status": "clarify",
+          "reason": "date_ambiguous"
+        },
+        {
+          "id": "borealis-conflict",
+          "errors": [
+            "interpretation_status"
+          ],
+          "status": "unsupported",
+          "reason": "unsupported"
+        }
+      ],
+      "artifact": "artifacts/cutoff-development/v1/candidate.json",
+      "sha256": "72807253e6a5e968b424f66431c3ef8474424592e167f9e1d4b17b5dbaa132ee",
+      "expected_cases": 28,
+      "use": "inspected_development_context"
+    },
+    "deterministic_baseline": {
+      "evidence_status": "pass",
+      "errors": [],
+      "counts": {
+        "pass": 48,
+        "fail": 0,
+        "unknown": 0,
+        "not_applicable": 0
+      },
+      "real_model_attempts": 0,
+      "controlled_protocol_attempts": 0,
+      "tool_starts": 0,
+      "saves": 0,
+      "model_transport_seconds": {
+        "count": 0,
+        "unknown": 0,
+        "min": null,
+        "median": null,
+        "p95": null,
+        "max": null
+      },
+      "cost_observed_usd": null,
+      "investigation_http_seconds": {
+        "count": 48,
+        "unknown": 0,
+        "min": 0.0006624828092753887,
+        "median": 0.1678136239061132,
+        "p95": 0.18591968691907823,
+        "max": 0.19731421605683863
+      },
+      "source_http_seconds": {
+        "count": 464,
+        "unknown": 0,
+        "min": 0.16097241500392556,
+        "median": 0.16718003305140883,
+        "p95": 0.18362504802644253,
+        "max": 0.1884312080219388
+      },
+      "artifact": "artifacts/g2-evidence/v1/deterministic-baseline.json",
+      "sha256": "71741bbc35f1a239c96aabbdddec3a331e0f05409839cbde1e1954610d72f249",
+      "expected_cases": 48,
+      "use": "One sequential run in fresh installed inspector process. OS/cache warm/cold state unmeasured; HTTP roundtrip includes admission and serialization. Structured oracle inputs; no natural-language interpretation, model calls, human review or saves. Source lookups measured separately."
+    }
+  },
+  "bounded_installed_suite_ready": true,
+  "release_ready": false,
+  "remaining_gates": {
+    "comprehensive_browser_accessibility_and_error_recovery": "unknown",
+    "deployed_agent_walkthrough": "unknown",
+    "measured_five_minute_presentation_or_recording": "unknown",
+    "integration_to_main": "unknown",
+    "broader_issue_layer_metrics": "unknown"
+  },
+  "limits": "Pinned historical evidence, not a new inference or general accuracy run. Populations/timing scopes remain separate; controlled protocol is not model quality. Costs unobserved/null. Full G2/release/B2 expansion not ready."
+}

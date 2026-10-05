@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "queries_sha256": "6e86c26c8357397960c1667666a1eea0804089ddef1ee1db47797a24d802cdff",
+  "contract": "ADR-032 literal item and explicit caller date; evaluator-only expectations",
+  "cases": [
+    {
+      "id": "atlas-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "atlas-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "atlas-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "atlas-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "borealis-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "borealis-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "borealis-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "cinder-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "cinder-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "cinder-ambiguous",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-mismatch",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-match",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-conflict",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-fractional",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-zero",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-ordinary",
+      "expected": "clarify"
+    },
+    {
+      "id": "delta-before-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-approved-boundary",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-missing",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-future-approval",
+      "expected": "investigate"
+    },
+    {
+      "id": "delta-unsupported",
+      "expected": "unsupported"
+    },
+    {
+      "id": "delta-ambiguous",
+      "expected": "clarify"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "C026",
+  "title": "Saved replay survives active version replacement",
+  "introducing_commit": "e7f437054596500c0886c6c79dcf79e57d00ead9",
+  "oracle": "Saved replay survives active version replacement. Required failures remain typed and retained; no false success or duplicate write.",
+  "known_bad": "Restore the reviewed defective branch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/adapters/sqlite_briefs.py",
+      "find": "                return saved\n            self._active(db, stored)",
+      "replace": "                self._active(db, stored)\n                return saved\n            self._active(db, stored)"
+    }
+  ],
+  "known_bad_failure_pattern": "brief version is no longer active",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/contract/test_exact_brief_review.py",
+    "-k",
+    "saved_version_replay"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/adapters/sqlite_briefs.py"
+  ],
+  "prevention": [
+    "Public regression oracle",
+    "Latest-revision semantic review"
+  ]
+}

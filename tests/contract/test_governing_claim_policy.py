@@ -1,4 +1,6 @@
 from dataclasses import replace
+
+# pyright: reportArgumentType=false
 from datetime import UTC, datetime
 from decimal import Decimal
 
@@ -12,6 +14,15 @@ from procurement_intelligence_lab.domains.procurement.governance import (
     reconcile_claims,
     reconcile_required_quantity,
 )
+from procurement_intelligence_lab.domains.procurement.review_reconciliation import (
+    HumanReconciliationDecision,
+    ReconciliationReviewOutcome,
+    prospective_decision_id,
+)
+from procurement_intelligence_lab.domains.procurement.state import (
+    project_governed_required_quantity,
+)
+from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.scope import (
     Permission,
@@ -86,6 +97,58 @@ def test_conflicting_competing_approved_revisions_abstain_and_retain_both() -> N
     assert decision.governing == ()
     assert tuple(claim.revision_id for claim in decision.losing) == ("A", "B")
     assert set(dict(decision.dispositions).values()) == {"conflicting: no value established"}
+
+
+@pytest.mark.contract
+def test_human_selection_is_prospective_and_retains_losing_claim() -> None:
+    candidates = (_claim("A", "4"), _claim("B", "6"))
+    values = {
+        "brief_id": "brief",
+        "brief_digest": "b" * 64,
+        "subject_key": "GPU-A",
+        "scope": SCOPE,
+        "outcome": ReconciliationReviewOutcome.SELECT_GOVERNING_REVISION,
+        "candidate_claim_ids": ("claim:A", "claim:B"),
+        "selected_claim_id": "claim:B",
+        "rationale": "Revision B governs this item prospectively.",
+        "reviewer_id": "planner",
+        "policy_id": "human-required-quantity/v1",
+        "recorded_at": AS_OF,
+        "effective_at": AS_OF,
+        "evidence": tuple(item.evidence for item in candidates),
+    }
+    human = HumanReconciliationDecision(  # pyright: ignore[reportArgumentType]
+        decision_id=prospective_decision_id(  # pyright: ignore[reportArgumentType]
+            **values
+        ),
+        **values,
+    )
+    before = project_governed_required_quantity(
+        candidates,
+        canonical_key="GPU-A",
+        request_context=CONTEXT,
+        as_of=AS_OF.replace(day=14),
+        human_decision=human,
+    )
+    after = project_governed_required_quantity(
+        candidates,
+        canonical_key="GPU-A",
+        request_context=CONTEXT,
+        as_of=AS_OF,
+        human_decision=human,
+    )
+    assert before.expected is None
+    assert after.expected and after.expected.required_quantity == Decimal(6)
+    assert tuple(item.claim_id for item in after.decision.governing) == ("claim:B",)
+    assert tuple(item.claim_id for item in after.decision.losing) == ("claim:A",)
+    with pytest.raises(SemanticContractError, match="exact candidates"):
+        project_governed_required_quantity(
+            candidates + (_claim("C", "7"),),
+            canonical_key="GPU-A",
+            request_context=CONTEXT,
+            as_of=AS_OF,
+            human_decision=human,
+        )
 
 
 @pytest.mark.contract

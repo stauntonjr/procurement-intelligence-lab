@@ -1,0 +1,530 @@
+{
+  "document": {
+    "artifact_id": "cinder-bom-r2",
+    "project_id": "cinder",
+    "role": "approved_bom_revision",
+    "site_id": "lab",
+    "tenant_id": "synthetic-tenant"
+  },
+  "records": [
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-009-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-009",
+      "row": 2,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-025-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-025",
+      "row": 3,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-022-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-022",
+      "row": 4,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C1-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C1",
+      "row": 5,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-017-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-017",
+      "row": 6,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-037-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-037",
+      "row": 7,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-033-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-033",
+      "row": 8,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-029-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-029",
+      "row": 9,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C6-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C6",
+      "row": 10,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-023-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-023",
+      "row": 11,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-018-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-018",
+      "row": 12,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-034-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-034",
+      "row": 13,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-GPU-A-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-GPU-A",
+      "row": 14,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-011-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-011",
+      "row": 15,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-013-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-013",
+      "row": 16,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-020-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-020",
+      "row": 17,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-030-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-030",
+      "row": 18,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-008-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-008",
+      "row": 19,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-040-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-040",
+      "row": 20,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-026-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-026",
+      "row": 21,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C7-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C7",
+      "row": 22,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-039-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-039",
+      "row": 23,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-10-10T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C5-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C5",
+      "row": 24,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C3-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C3",
+      "row": 25,
+      "supersedes": []
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-027-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-027",
+      "row": 26,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-032-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-032",
+      "row": 27,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-012-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-012",
+      "row": 28,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-035-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-035",
+      "row": 29,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-024-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-024",
+      "row": 30,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-019-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-019",
+      "row": 31,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-015-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-015",
+      "row": 32,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-016-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-016",
+      "row": 33,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-031-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-031",
+      "row": 34,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-021-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-021",
+      "row": 35,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C4-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C4",
+      "row": 36,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-028-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-028",
+      "row": 37,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-038-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-038",
+      "row": 38,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-036-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-036",
+      "row": 39,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-CINDER-PART-014-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-CINDER-PART-014",
+      "row": 40,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "cinder-bom-r2-NIC-C2-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "cinder-bom-r2-NIC-C2",
+      "row": 41,
+      "supersedes": [
+        "cinder-bom-r1"
+      ]
+    }
+  ],
+  "schema_version": 1
+}

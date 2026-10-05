@@ -1,0 +1,33 @@
+{
+  "artifact_kind": "reference_template_not_results",
+  "dataset": {"manifest_sha256": null, "split": null, "query_count": null},
+  "application_revision": null,
+  "model": {"provider": null, "identity": null, "configuration_sha256": null},
+  "prompt_version": null,
+  "tool_schema_version": null,
+  "evaluator_version": null,
+  "execution_kind": null,
+  "execution_kind_allowed": ["live_model", "deterministic", "replay", "synthetic_fixture"],
+  "run_id": null,
+  "thread_id": null,
+  "source_snapshot_id": null,
+  "observations": {
+    "attempted": null,
+    "completed": null,
+    "failed": null,
+    "unknown": null,
+    "not_applicable": null,
+    "authoritative_value_agreement": null,
+    "status_agreement": null,
+    "evidence_completeness": null,
+    "trajectory_gate": null,
+    "latency_ms": null,
+    "model_calls": null,
+    "tool_calls": null,
+    "tokens": null,
+    "cost_usd": null
+  },
+  "local_result_artifact": null,
+  "optional_trace_url": null,
+  "non_claims": ["No benchmark has been run by creating this template."]
+}

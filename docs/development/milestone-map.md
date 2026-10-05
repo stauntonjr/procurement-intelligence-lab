@@ -55,10 +55,181 @@ This workstream cuts across the existing M0-M9 delivery taxonomy; it does not cr
 Implementation issues and Project items must be created and reviewed before these steps are treated as scheduled work. This documentation change is part of the M0 domain semantic-model decision record and does not mark any step complete.
 
 The merged bounded M7/#60 inspector slice compares synthetic order quantity with the governed
-requirement and retains both source rows; missing/unresolved cases abstain. Issue #60 remains open
-while post-merge correctness fixes harden the eight qualified assessment kinds, canonical
+requirement and retains both source rows; missing/unresolved cases abstain. Issue #60 is complete through PR #174. Its merged correctness fixes harden the eight qualified assessment kinds, canonical
 policy evidence, append-only lifecycle projection, real HTTP source drill-down, and clean-wheel
 acceptance. The corrective slice covers assertion-first PO-line reconciliation, assessment-context
 anomaly identity, and superseded required schedules. M7 remains in progress for forecast and
 decision-support work. See [the comparison contract](../product/showcase-order-comparison.md) and
 [qualified assessment contract](../product/anomaly-assessment-v1.md).
+
+
+### Four-project demo branch — 2026-10-03
+
+PR #175 (`codex/demo-corpus-pilot`, part of #29/#12/#27/#71) expands to 24 workbooks,
+960 source-row occurrences and 48 oracle-bound structured HTTP cases. This is branch work,
+not `main` or public deployment. See the [execution record](../project/procurement-demo-execution-2026-10-03.md).
+Natural-language agent acceptance and retrieval quality remain G2/G3 work.
+
+### G2 run/event foundation branch — 2026-10-03
+
+#70 (M8) is the primary issue for the `codex/review-agent-run-contracts` continuation,
+part of #68/#72. Run/event persistence and completeness scoring precede graph construction;
+see [the contract](../product/review-agent-run-contract-v1.md). This branch is stacked on
+PR175; neither branch is described as merged or live acceptance.
+
+### G2 audited corpus tools branch — 2026-10-03
+
+#66 (M8), part of #53/#70/#72: two actual corpus-service tools with strict arguments, scoped
+source lookup, positive invocation/snapshot evidence and typed admission failures. Stacked
+on PR176; branch acceptance includes real CLI processes, clean wheels and unchanged structured
+HTTP outcomes. See [the acceptance record](../project/corpus-agent-tools-evidence.md).
+This does not complete model orchestration, exact-brief approval/save or live-agent evaluation.
+
+### G2 exact-brief review/save branch — 2026-10-03
+
+#67 (M8), part of #68/#53/#72: immutable deterministic briefs, exact receipts, active-version
+invalidation, expiry and transactional idempotent saving under ADR-029. The local human CLI
+is separate from runtime permissions. Graph recovery, browser review and live-model acceptance
+remain open; no broader Issue or milestone completion is inferred.
+
+### G2 fixture serial checkpoint branch — 2026-10-03
+
+#53 (M5), part of #68/#70: optional LangGraph runtime behind an owned port, serial exact
+review interrupt, durable receipt/result authority and process-recovery tests. Stacked on
+PR178. See [the contract](../product/serial-review-workflow-v1.md). Typed fixture input is
+an intermediate gate; model interpretation, browser controls/streams, live evaluation and
+broader routing/retry acceptance remain open.
+
+### G2 local fixture browser review branch — 2026-10-03
+
+#74 (M9), part of #53/#67/#68/#70: authenticated loopback transport over the existing exact
+review workflow, bounded owned run discovery, scoped source cells and persisted application
+timeline. Stacked on PR179. See [the public contract](../product/local-browser-review-v1.md)
+and [acceptance boundary](../project/local-browser-review-evidence.md). HTTP and installed
+process evidence are distinct from real browser accessibility/interaction, deployment and live
+model acceptance; these broader gates remain open. Main and public deployment unchanged.
+
+## Local Qwen intent increment (unmerged branch)
+
+M5/#53 now has bounded natural-language routing on `codex/local-qwen-interpretation`, stacked on PR #180. The local loaded model proposes intent; application-owned journals and existing tools/checkpoints/receipts own evidence and save authority. Nine repeated development CLI walkthroughs and four abstentions passed; see [execution evidence](../project/local-qwen-review-evidence.md). M9/#72 is being evaluated, not completed on main. Full G2 pilot, browser/deployment and held-out quality remain open; expansion continues to depend on G2.
+
+### G2 frozen pilot evaluation branch — 2026-10-03
+
+M9/#72: `codex/g2-pilot-evaluation` evaluates PR181 runtime without model/prompt changes. Installed structured HTTP 48/48 and 464 source checks passed; live intent targets 41/48 with seven unexpected abstentions. The 21 accepted investigations matched facts/recovered/saved once; no false factual answers observed. See [retained evaluation](../project/g2-pilot-evaluation.md). Full G2 is not ready; development interpretation and new frozen evaluation precede expansion. Branch work, unmerged/undeployed; browser release acceptance remains open.
+
+
+## Intent development continuation — 2026-10-04
+
+Primary M5/#53; Part of #72/#70, stacked on unmerged PR182. Read-only requirement governance and
+approval-applicability intents are explicit, with unchanged policy/quantities/human authority.
+Installed development regression46/48 versus historical41/48; controls18/20 with safe boundary
+abstentions retained and rejected unsafe candidate preserved. All original split cases are now
+inspected development data. See [durable experiment](../project/intent-contract-development.md).
+Fresh independently authored evaluation, full G2/browser/accessibility/deployment and tiny-fixture
+live acceptance stay open. Four projects/24workbooks/960source rows remain; no B2 expansion.
+
+### Real browser review acceptance branch — 2026-10-04
+
+#74 (M9), part of #53/#67/#68/#72/#73: actual clean installed browser source/review/restart
+walkthrough, credential-free wide/narrow screenshots and application ledger reconciliation.
+Three fixture and 14 authored live submissions pass; selected focus/reflow defects corrected.
+Stacked on PR183, unmerged. See [acceptance and remaining gates](../project/browser-live-acceptance.md).
+Held-out evaluation, tiny-fixture live routing, full G2 and deployment remain open; no expansion.
+
+### Original source live review branch — 2026-10-04
+
+#71 (M9), part of #53/#66/#67/#68/#70/#72/#74: three original source sets preserve
+January GPU-A policy/evidence identities through live intent and exact review. Nine authored
+installed browser trials pass with nine calls, eighteen source/tool checks, three restarts and
+eight saves. [Evidence and limits](../project/original-showcase-live.md). Stacked on draft PR184,
+unmerged; no new data. Held-out quality, full G2 and deployment remain open before expansion.
+
+### Fresh language evaluation branch — 2026-10-04
+
+#72 (M9), part of #53/#70/#71; stacked on draft PR #185. New independent language23/24:
+validation 11/12, test 12/12; root development 24/24. Total 47/48 with one valid Cinder cutoff
+query safely unsupported. Installed gold48/48 / 464 source checks;48 calls, 54 tool starts, 27 saves.
+[Evidence and limits](../project/fresh-language-evaluation.md). Runtime/source facts unchanged.
+Now inspected language data; no tuning/retry or full G2/deployment/expansion acceptance.
+
+## Cutoff intent development branch — 2026-10-04
+
+Primary #53/M5, part of #72 and existing authority/run Issues. Stack on #186; unmerged.
+A measured prompt clarification distinguishes matching review-cutoff metadata from writes.
+Baseline25/28 and candidate26/28 controls retain all failures; candidate inspected-language
+regression48/48 and original browser9/9 pass.113 calls/124 tool starts/36 saves, unchanged numeric
+policy/sources; old cohort retired. [Evidence/limits](../project/cutoff-intent-development.md).
+Global not_ready, broader Issues open, fresh evaluation/release/deployment/expansion gated.
+
+
+## Fresh language v3 candidate evaluation branch — 2026-10-04
+
+Primary #72/M9, part of #53/#70/#71; stacked on draft #187, unmerged. Frozen cutoff candidate
+passes new wording 48/48 (root 24, independently authored validation 12/test 12). Installed 48 gold
+and 464 source checks;48 terminal calls, 56 tools, 28 saves; one attempt each, no tuning/retry.
+[Evidence and remaining gates](../project/fresh-language-v3-evaluation.md). Expanded seven-file
+question lineage preserves historical version2. Source/gold/runtime unchanged; known correlation
+prevents source/statistical/causal claims. Full G2 adversarial/release, comprehensive accessibility,
+deployment and B2 expansion remain open; four projects/24 workbooks/960 source rows unchanged.
+
+## Installed G2 adversarial acceptance branch — 2026-10-04
+
+Primary #72/M9, part of #53/#66/#67/#68/#70/#71/#74. `codex/g2-adversarial-acceptance` stacks
+on draft #188, unmerged. Nine installed HTTP/process failure guards pass with five real and three
+controlled terminal attempts, seven tools/one expected failure, three receipts and one exact crash-
+recovered save. Missing causal/ownership evidence blocks acceptance. [Evidence and limits](../project/g2-adversarial-acceptance.md).
+No runtime/source/prompt/package changes. Full G2/release consolidation, comprehensive accessibility,
+deployment and B2 source expansion remain open; four projects/24workbooks/960rows unchanged.
+
+## G2 installed evidence consolidation branch — 2026-10-04
+
+Primary #72/M9; stacked on #189, unmerged. Six hash-bound report populations remain separate:
+fresh48/48, original9/9, adversarial9/9, prior controls25/28, candidate26/28 and installed structured
+48/48/464source checks. New baseline median investigation HTTP0.168s; fresh interpretation1.158s
+is a different task/timing scope, not a speed comparison. [Dossier/remaining gates](../project/g2-acceptance-dossier.md).
+Zero new inference; current four-project source corpus unchanged. Full G2/release/browser/accessibility,
+measured presentation, main integration, deployment and B2 remain open; broader Issues InProgress.
+
+## Installed browser error recovery branch — 2026-10-04
+
+M9/#74: `codex/browser-error-recovery`, stacked on draft#190, corrects observed draft-loss,
+private-error and late-after-lock defects. Actual installed Chromium12/12; fixture8runs/16tools/1save,
+zero inference. C018-C021 reject known-bad changes. [Evidence](../project/browser-error-recovery.md).
+UI application hash changed; previous G2 reports stay historical. Current-version live acceptance,
+measured rehearsal, comprehensive accessibility, main/deploy and full release/B2 remain open.
+
+## Current-version rehearsal artifacts — 2026-10-04
+
+M9/#72: `codex/demo-rehearsal-recording`, stacked on #191, records 14 current-version authored live
+browser submissions and a five-minute captioned fixture screenshot replay. Human timed rehearsal
+and main/deployed acceptance remain open. [Runbook and limits](../project/demo-rehearsal.md).
+No runtime/model/prompt/source change; B2 expansion remains gated.
+
+## Demo integration review corrections — 2026-10-04
+
+M9/#72, part of #66/#67/#68/#70: `codex/demo-integration-review-fixes` follows #192 and addresses
+six confirmed review defects across run accounting, immutable configuration, audited tool output
+and exact-save replay. ADR-033 keeps shared output validation in application code and HTTP link
+decoration in interfaces. [Audit and evidence](../project/demo-integration-review-fixes.md).
+Runtime hash changes; previous live results remain historical. No merge/deploy/inference or B2 expansion.
+
+## Evidence-focused explanatory rehearsal — 2026-10-05
+
+M9/#74, part of #72/#73: the current `codex/demo-integration-review-fixes` continuation makes cited
+sources the primary review interaction, highlights supporting original cells, and introduces an
+eight-slide editable architecture/use-case deck before a 30.72-second captioned browser recording.
+The publishable media is current-build fixture execution with no model call; one authorized live
+attempt failed `model_unavailable` with the local endpoint offline and was not retried. Full local
+checks pass (770 tests, 22 opt-in skips, 88.83% coverage), but current-build live inference, human
+timing, PR CI, merge, deployment, full release and second-vertical proof remain open.
+
+## Prospective exact-scope reconciliation review — 2026-10-05
+
+M9/#74, part of #67/#68/#72/#73: the current PR #193 continuation replaces ambiguous finding
+approval with explicit analyst outcomes for an exact tenant/project/site/item conflict. One of
+exactly two eligible displayed requirement claims may govern prospectively, or the analyst may keep
+the scope unresolved or flag the assessment for correction with a required rationale. Server-owned
+effective time preserves historical assessments; winning and losing assertions and evidence remain
+retained. ADR-034 and C028 define and guard the boundary. The replacement browser recording,
+latest-revision reviews, CI, merge, deployment, human timing, full release, and second-vertical proof
+remain open.

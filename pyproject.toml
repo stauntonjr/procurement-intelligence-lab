@@ -7,6 +7,12 @@ readme = "README.md"
 license = {text = "MIT"}
 dependencies = []
 
+[project.optional-dependencies]
+workflow = [
+    "langgraph==1.2.12",
+    "langgraph-checkpoint-sqlite==3.1.1",
+]
+
 [dependency-groups]
 dev = [
   "hypothesis>=6.138",
@@ -14,6 +20,7 @@ dev = [
   "pytest-cov>=6.2",
   "ruff>=0.8",
   "pyright>=1.1",
+  "playwright==1.63.0",
 ]
 release = ["python-semantic-release>=10.0"]
 

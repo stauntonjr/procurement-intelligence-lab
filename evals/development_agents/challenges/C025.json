@@ -1,0 +1,36 @@
+{
+  "id": "C025",
+  "title": "Malformed tool output cannot record success",
+  "introducing_commit": "489f1a274d312ffc7a4c64e661061f9819e2d15d",
+  "oracle": "Malformed tool output cannot record success. Required failures remain typed and retained; no false success or duplicate write.",
+  "known_bad": "Restore the reviewed defective branch.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/application/corpus_agent_tools.py",
+      "find": "            json.dumps(source_payload(result), allow_nan=False)",
+      "replace": "            pass"
+    },
+    {
+      "path": "src/procurement_intelligence_lab/application/corpus_agent_tools.py",
+      "find": "            json.dumps(investigation_payload(result, context), allow_nan=False)",
+      "replace": "            pass"
+    }
+  ],
+  "known_bad_failure_pattern": "DID NOT RAISE",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/contract/test_corpus_agent_tools.py",
+    "-k",
+    "invalid_port_output or malformed_nested"
+  ],
+  "surfaces": [
+    "src/procurement_intelligence_lab/application/corpus_agent_tools.py"
+  ],
+  "prevention": [
+    "Public regression oracle",
+    "Latest-revision semantic review"
+  ]
+}

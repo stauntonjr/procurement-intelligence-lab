@@ -1,0 +1,92 @@
+# Current-version demo walkthrough and five-minute fallback
+
+## Evidence-focused explanatory recording — 2026-10-05
+
+[Open the 30.72-second captioned recording](../assets/rehearsal-v2/index.html) ·
+[native editable deck](https://docs.google.com/presentation/d/17LFjSGQs1q3rIvuqdRKdNqvBFXXYjKWctcDvqlLjxoQ/edit) ·
+[deck manifest](demo-storytelling-deck.md) ·
+[compact results](demo-storytelling-results.json).
+
+Eight uncropped slides now precede the browser: value proposition; who/what/why/how;
+the full evidence-to-action architecture with gold-data and human-governance rails; a hypothetical two-revision conflict; processing flow; procurement
+scenarios; explicitly unimplemented candidate verticals; and the live-transition frame. The
+browser portion uses visible character-by-character typing and a fixed italic
+Who/What/Why/How/When banner. It opens and highlights the two conflicting BOM revisions, then the
+analyst selects revision `atlas-bom-r2` for the exact Atlas/lab/GPU-C scope and types a rationale.
+The choice becomes effective at the server save time. The October 1 unresolved assessment remains
+unchanged; the later current assessment uses required quantity 8 and observes 4. No purchase or
+external action is triggered. Short bounded pauses replace the earlier pacing.
+
+The publishable recording is current-build fixture execution with no model call. A single
+authorized current-version live submission returned `model_unavailable` because port 8000 was
+offline; it was retained locally and not retried. A previous successful live run could not be
+recovered into the changed build because immutable application-version compatibility correctly
+failed closed. Human timing, current-build live inference, merge and deployment remain unverified.
+
+Branch `codex/demo-integration-review-fixes` is proposed in PR #193; primary #72/M9, part of #74/#73.
+The recording is current-branch fixture evidence, not a deployment claim. Its SHA-256 is
+`d7c2584fe190303e0336aef5a12627fcc59845c538d86fd5ae2263fd5a8b52a1`.
+
+[Open the five-minute captioned fixture replay](../assets/rehearsal/index.html) ·
+[WebM](../assets/rehearsal/walkthrough.webm) · [Captions](../assets/rehearsal/walkthrough.vtt).
+This media contains six actual installed-browser screenshots paced to 300 seconds. It is explicitly
+**fixture execution with no model calls**, not a continuous screen recording or measured human
+rehearsal. Captions provide the presentation script. The existing older showcase recording retains
+its original revision and remains separate. Serve the repository with a local static HTTP server and open
+`docs/assets/rehearsal/index.html`; caption loading requires HTTP rather than file URLs.
+The initial playback check sought before decoded frame data was ready; waiting for media readiness
+fixed the check against the same simple static server. No media or application correction was needed.
+
+## Live result and limits
+
+One unchanged installed-browser harness batch passed all 14 previously inspected authored submissions
+in 50.55 seconds: nine scenario repetitions, four clarification/unsupported controls and one injected
+approval instruction. Actual local endpoint reported selected `nvidia/Qwen3.6-35B-A3B-NVFP4` before
+submission. Owned journals reconcile 14 interpretation calls, 20 tool starts, 108 source checks and 8 saved
+results. Explicit review, altered-digest rejection, repeat approval, actual process restart/recovery,
+keyboard controls, empty credential storage and narrow/wide rendering pass the existing checks.
+This is current-version development walkthrough evidence, not fresh held-out quality, causal model
+improvement, production access or measured human presentation. No retries, model reload or paid calls.
+
+The existing harness writes its closed 14-case inventory, question-manifest hash, actual runtime
+versions and installed parity before submission. The tracked [index](demo-rehearsal-input-index.json)
+was derived afterwards and says so; it is not a separately precommitted holdout manifest. The initial
+optional index helper used system Python lacking workflow extras. The unchanged harness independently
+bound the inputs before calls; no extra model batch was run. [Compact hashes and counts](demo-rehearsal-results.json)
+identify the local ignored bundle `artifacts/demo-rehearsal/v1/`.
+
+## Operator script
+
+| Time | Show | Say |
+|---|---|---|
+| 0:00–0:40 | Synthetic and fixture/live badge, scope/cutoff | Model proposes intent; deterministic policy owns facts; human review owns save. |
+| 0:40–2:00 | GPU-A facts and admitted source/authority | Required 8 versus assessed orders 6. Inspect original cells in the live presentation; the fallback shows source-reference controls only; provenance differs from execution events. |
+| 2:00–2:50 | Exact digest and saved result; repeat approval | Same exact result, no duplicate save. Saving a demo brief never places an order. Live operator may demonstrate restart/recovery. |
+| 2:50–3:35 | GPU-C unresolved requirement; reject | Conflicting evidence is unresolved, not zero. Rejection does not create a saved result. |
+| 3:35–4:20 | GPU-D missing observation | Required 4 is established; order observation is absent. Absence cannot establish zero or completion. |
+| 4:20–5:00 | Lock, limitations and retained outcomes | Distinguish actual live evidence from this fixture replay. Broader quality, deployment and expansion remain gated. |
+
+For the live presentation, use the existing 14-question walkthrough's ambiguous/injected-command
+controls when time permits. The fallback media deliberately shows fixture facts and human gates;
+it does not depict model clarification, injection handling or a server restart. Their evidence is
+the separately retained live batch. A human timed rehearsal remains outstanding.
+
+## Recording evidence and verification
+
+Final fixture capture: three runs, six tool starts, one saved result, zero inference. Every frame
+was captured after token erasure. Exact repeated saved identity was checked before capture.
+First capture attempt raced after repeat approval because an unchanged status string was mistaken
+for callback completion; it retained one run/one save. Corrected capture awaits the actual shipped
+callback promise. Both attempts remain retained; no product correction was needed.
+
+The cached Playwright FFmpeg build lacked concat/rawvideo/PNG-decoder support; three failed encoding
+attempts are retained. A separate temporary PyAV/Pillow environment rendered the existing PNGs;
+no repository dependency or runtime package changed. Final media duration/frame/caption checks and
+actual browser playback are recorded in compact results. These checks do not certify comprehensive
+accessibility. Source/wheel/installed 100 Python parity reuses #191's verified wheel; latest base full
+check: 748 passes/22 opt-in skips and 88.15% coverage is explicitly base-revision evidence. New draft CI is
+reported separately. This artifact-only slice does not repeat an identical full runtime suite.
+
+Current-version authored live walkthrough now passes; full G2/release, timed human rehearsal,
+main integration, comprehensive accessibility and deployed UI/API/agent acceptance remain open.
+Corpus remains 4 projects/24 workbooks/960 rows; approved 20-project expansion follows release gates.

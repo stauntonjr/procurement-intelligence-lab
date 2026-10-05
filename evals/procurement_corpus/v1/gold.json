@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "scope": "one-project-development-only",
+  "cases": [
+    {
+      "id": "mismatch",
+      "item": "GPU-A",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "anomaly",
+      "reason": null,
+      "required_quantity": "8",
+      "source_arithmetic": "8 required; independent PO lines 3 + 3 = 6",
+      "source_rows": [
+        "bom-r2:2",
+        "po-a:2",
+        "po-b:2"
+      ]
+    },
+    {
+      "id": "match",
+      "item": "GPU-B",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "clear",
+      "reason": null,
+      "required_quantity": "4",
+      "source_arithmetic": "4 required; 2 + 2 = 4",
+      "source_rows": [
+        "bom-r2:3",
+        "po-a:3",
+        "po-b:3"
+      ]
+    },
+    {
+      "id": "conflict",
+      "item": "GPU-C",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "required_quantity": null,
+      "source_arithmetic": "Active requirements 4 and 8 disagree; no supersession",
+      "source_rows": [
+        "bom-r1:4",
+        "bom-r2:4"
+      ]
+    },
+    {
+      "id": "missing",
+      "item": "GPU-D",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "not_assessed",
+      "reason": "missing_observation",
+      "required_quantity": "4",
+      "source_arithmetic": "Required 4; neither PO contains GPU-D; no coverage attestation",
+      "source_rows": [
+        "bom-r2:5"
+      ]
+    },
+    {
+      "id": "future-approval",
+      "item": "GPU-E",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "required_quantity": null,
+      "source_arithmetic": "Old requirement expired; new approval is October 10",
+      "source_rows": [
+        "bom-r1:6",
+        "bom-r2:6"
+      ]
+    },
+    {
+      "id": "fractional",
+      "item": "GPU-F",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "clear",
+      "reason": null,
+      "required_quantity": "1.5",
+      "source_arithmetic": "1.5 = 0.75 + 0.75",
+      "source_rows": [
+        "bom-r2:7",
+        "po-a:7",
+        "po-b:7"
+      ]
+    },
+    {
+      "id": "zero",
+      "item": "GPU-G",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "clear",
+      "reason": null,
+      "required_quantity": "0",
+      "source_arithmetic": "0 = 0 + 0 with positive source evidence",
+      "source_rows": [
+        "bom-r2:8",
+        "po-a:8",
+        "po-b:8"
+      ]
+    },
+    {
+      "id": "effective-boundary",
+      "item": "GPU-A",
+      "as_of": "2026-09-01T00:00:00+00:00",
+      "status": "anomaly",
+      "reason": null,
+      "required_quantity": "8",
+      "source_arithmetic": "At inclusive new effective start, old interval ends; 8 versus 3 + 3",
+      "source_rows": [
+        "bom-r1:2",
+        "bom-r2:2",
+        "po-a:2",
+        "po-b:2"
+      ]
+    },
+    {
+      "id": "before-boundary",
+      "item": "GPU-A",
+      "as_of": "2026-08-31T23:59:59+00:00",
+      "status": "not_assessed",
+      "reason": "missing_observation",
+      "required_quantity": "4",
+      "source_arithmetic": "Old requirement 4; both future PO assertions are rejected_future, leaving missing_observation without coverage",
+      "source_rows": [
+        "bom-r1:2",
+        "po-a:2",
+        "po-b:2"
+      ]
+    },
+    {
+      "id": "approved-boundary",
+      "item": "GPU-E",
+      "as_of": "2026-10-10T00:00:00+00:00",
+      "status": "clear",
+      "reason": null,
+      "required_quantity": "4",
+      "source_arithmetic": "New approval becomes eligible; 4 = 2 + 2",
+      "source_rows": [
+        "bom-r2:6",
+        "po-a:6",
+        "po-b:6"
+      ]
+    },
+    {
+      "id": "no-requirement",
+      "item": "ORDER-ONLY",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "not_assessed",
+      "reason": "unresolved_requirement",
+      "required_quantity": null,
+      "source_arithmetic": "Order-only identifier has no requirement; no zero inference",
+      "source_rows": [
+        "po-a:5",
+        "po-b:5"
+      ]
+    },
+    {
+      "id": "ordinary",
+      "item": "PART-008",
+      "as_of": "2026-10-01T00:00:00+00:00",
+      "status": "clear",
+      "reason": null,
+      "required_quantity": "4",
+      "source_arithmetic": "Ordinary component 4 = 2 + 2; quote 999 cannot govern",
+      "source_rows": [
+        "bom-r2:9",
+        "po-a:9",
+        "po-b:9",
+        "quote:9"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "issue": "#74",
+  "manifest": "evals/operational_agents/browser-recovery-v2.json",
+  "manifest_sha256": "57bc6031d50960a6b9375b7cb86dbd8871e5a903c7cef775ef12b888ebf2c48b",
+  "runtime_versions": {
+    "fixture": {
+      "provider": "fixture",
+      "model": "none",
+      "prompt": "serial-review/v1:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a"
+    },
+    "live_page_no_inference": {
+      "provider": "local-vllm",
+      "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+      "tool_schema": "corpus-tools/v1",
+      "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+      "application": "sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a"
+    }
+  },
+  "wheel_sha256": "9e30d46a10e274639b9acb75eb9f320e9700ea2ebed196644753226497d39343",
+  "source_wheel_installed_python_files": 100,
+  "browser": "Chromium151.0.7922.34",
+  "cases": [
+    {
+      "id": "test_failed_replacement_keeps_exact_persisted_draft",
+      "outcome": "pass",
+      "injected": "start503_before_backend",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_failed_replacement_keeps_exact_persisted_draft/report.json",
+      "report_sha256": "1789e4d9be2ba8d70b110d5535af449cb237e24291062997a94b892e3be3f19e",
+      "screenshots": [
+        {
+          "path": "retained-draft-error.png",
+          "sha256": "a41683a017debad071fd2188fa25db7d5b32f81ca048e6cb6203bfe21f3cbca1",
+          "width": 375
+        }
+      ]
+    },
+    {
+      "id": "test_failed_selected_run_read_is_keyboard_recoverable",
+      "outcome": "pass",
+      "injected": "run_read503_before_backend",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_failed_selected_run_read_is_keyboard_recoverable/report.json",
+      "report_sha256": "4aac1ba1055d34f8319d68d763133e72957d6e3932c9f3aaa5a52b4a1b8b12fa",
+      "screenshots": []
+    },
+    {
+      "id": "test_lock_during_delayed_timeline_has_no_late_follow_up",
+      "outcome": "pass",
+      "injected": "delay_actual_event_response_until_lock",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_lock_during_delayed_timeline_has_no_late_follow_up/report.json",
+      "report_sha256": "d252bbc4843833ac7e42a769fe765e3f58ba2bd54af687c085c077ea5eddfe14",
+      "screenshots": []
+    },
+    {
+      "id": "test_lost_save_acknowledgment_recovers_same_single_result",
+      "outcome": "pass",
+      "injected": "drop_after_actual_durable_save",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 1,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_lost_save_acknowledgment_recovers_same_single_result/report.json",
+      "report_sha256": "440d212e6b743c693d947187bd995e2e96429f792a64d95e4a1a61222512f140",
+      "screenshots": [
+        {
+          "path": "recovered-durable-save.png",
+          "sha256": "feb52c6c82dc1b677b349be9b4958b3e38962e0e989a2a550f59acaf592d136d",
+          "width": 1280
+        }
+      ]
+    },
+    {
+      "id": "test_malformed_response_is_a_safe_visible_failure[json-fixture]",
+      "outcome": "pass",
+      "injected": "malformed_response_before_backend",
+      "counts": {
+        "runs": 0,
+        "tool_starts": 0,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_response_is_a_safe_visible_failure_json-fixture_/report.json",
+      "report_sha256": "46859a95edbb5d1cdc5c42a90bd4140f89c3cd2708169fb4cead5b566a26afd4",
+      "screenshots": []
+    },
+    {
+      "id": "test_malformed_response_is_a_safe_visible_failure[json-live_page_no_inference]",
+      "outcome": "pass",
+      "injected": "malformed_response_before_backend",
+      "counts": {
+        "runs": 0,
+        "tool_starts": 0,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_response_is_a_safe_visible_failure_json-live_page_no_inference_/report.json",
+      "report_sha256": "6e9ced10cf483c226285af474104287b9d1468651870cab132eba13877be2e8a",
+      "screenshots": []
+    },
+    {
+      "id": "test_malformed_response_is_a_safe_visible_failure[text-fixture]",
+      "outcome": "pass",
+      "injected": "malformed_response_before_backend",
+      "counts": {
+        "runs": 0,
+        "tool_starts": 0,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_response_is_a_safe_visible_failure_text-fixture_/report.json",
+      "report_sha256": "5811132e01b0a7fd320a2d33ee171594aec1179f35f5da0fc02dec0491d9016c",
+      "screenshots": []
+    },
+    {
+      "id": "test_malformed_response_is_a_safe_visible_failure[text-live_page_no_inference]",
+      "outcome": "pass",
+      "injected": "malformed_response_before_backend",
+      "counts": {
+        "runs": 0,
+        "tool_starts": 0,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_response_is_a_safe_visible_failure_text-live_page_no_inference_/report.json",
+      "report_sha256": "4c850009aec61593a4cab4331277fd8e79729c27da1855837b7afec3fe1f39fd",
+      "screenshots": []
+    },
+    {
+      "id": "test_malformed_success_retains_exact_prior_draft[invalid_evidence]",
+      "outcome": "pass",
+      "injected": "malformed_200_and_review503_before_backend",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_success_retains_exact_prior_draft_invalid_evidence_/report.json",
+      "report_sha256": "bec3bd6a72802cdec830334b109d7cb6858ad7089c174f722711c365689a705d",
+      "screenshots": []
+    },
+    {
+      "id": "test_malformed_success_retains_exact_prior_draft[missing_brief]",
+      "outcome": "pass",
+      "injected": "malformed_200_and_review503_before_backend",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_success_retains_exact_prior_draft_missing_brief_/report.json",
+      "report_sha256": "7be7e20673fa5f5f1aa38a2875d3d1421274b7ed3d21761362f51bdf57c2f53e",
+      "screenshots": []
+    },
+    {
+      "id": "test_malformed_success_retains_exact_prior_draft[private_content]",
+      "outcome": "pass",
+      "injected": "malformed_200_and_review503_before_backend",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_malformed_success_retains_exact_prior_draft_private_content_/report.json",
+      "report_sha256": "c10829b369a9a3e10b28f00c918640d2ce402c344ed41dd49832895b2d4e7eb1",
+      "screenshots": []
+    },
+    {
+      "id": "test_source_failure_keeps_exact_review_and_prior_source",
+      "outcome": "pass",
+      "injected": "source503_before_backend",
+      "counts": {
+        "runs": 1,
+        "tool_starts": 2,
+        "saves": 0,
+        "model_attempts": 0
+      },
+      "report": "artifacts/browser-recovery/v2/final/test_source_failure_keeps_exact_review_and_prior_source/report.json",
+      "report_sha256": "37b538b0706163d024d1d5797eb647268049b9055fdffe83e314699671992a8b",
+      "screenshots": []
+    }
+  ],
+  "totals": {
+    "runs": 8,
+    "tool_starts": 16,
+    "saves": 1,
+    "model_attempts": 0
+  },
+  "bounded_browser_recovery_ready": true,
+  "live_quality_evaluated": false,
+  "release_ready": false,
+  "prior_g2_current_version_acceptance_inherited": false,
+  "limits": [
+    "Twelve authored transport/recovery cases, not model-quality or timing evidence.",
+    "Two live-page malformed-response cases intercept ask before backend; zero inference.",
+    "Eight fixture GPU-A runs are correlated repetitions.",
+    "Previous G2 model/browser reports retain their historical application hash.",
+    "No merge, deployment, new corpus, model reload, tracing, or paid inference."
+  ]
+}

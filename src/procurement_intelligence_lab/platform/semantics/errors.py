@@ -19,6 +19,18 @@ class ErrorCategory(StrEnum):
 class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
+    BRIEF_NOT_FOUND = "pil.input.brief_not_found"
+    BRIEF_REVIEW_CONFLICT = "pil.policy.brief_review_conflict"
+    BRIEF_STORE_UNAVAILABLE = "pil.infrastructure.brief_store_unavailable"
+    WORKFLOW_UNAVAILABLE = "pil.infrastructure.workflow_unavailable"
+    WORKFLOW_BUDGET_EXCEEDED = "pil.policy.workflow_budget_exceeded"
+    AGENT_TOOL_ADMISSION_FAILED = "pil.infrastructure.agent_tool_admission_failed"
+    AGENT_TOOL_TIMEOUT = "pil.transient.agent_tool_timeout"
+    AGENT_TOOL_UNAVAILABLE = "pil.infrastructure.agent_tool_unavailable"
+    AGENT_TOOL_INVALID_RESULT = "pil.input.agent_tool_invalid_result"
+    AGENT_RUN_NOT_FOUND = "pil.input.agent_run_not_found"
+    AGENT_RUN_CONFLICT = "pil.policy.agent_run_conflict"
+    AGENT_RUN_STORE_UNAVAILABLE = "pil.infrastructure.agent_run_store_unavailable"
     SEMANTIC_CONTRACT_VIOLATION = "pil.input.semantic_contract_violation"
     SEMANTIC_TYPE_CONTRACT_VIOLATION = "pil.input.semantic_type_contract_violation"
     SCOPE_CONTRACT_VIOLATION = "pil.input.scope_contract_violation"

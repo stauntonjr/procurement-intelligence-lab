@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "base": "ace7ab8ed41ea6a9f449ed159ae17bd53e71965f",
+  "versions": {
+    "provider": "local-vllm",
+    "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+    "prompt": "question-review/v1:a1988e677c510162e5e582d2cf5c49a3fdd12655691ce5bd2008424998179592:1.2.12:3.1.1",
+    "tool_schema": "corpus-tools/v1",
+    "fixture": "a92add68a76dca7bf0818bc073b0d8f127c0a6b28544c22f62b90d143fa4bd64",
+    "application": "sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a"
+  },
+  "wheel_sha256": "9e30d46a10e274639b9acb75eb9f320e9700ea2ebed196644753226497d39343",
+  "question_manifest": "evals/operational_agents/browser-walkthrough-v1.json",
+  "question_manifest_sha256": "c28a5d284d7bf3c1b47e56990bd31e26f202892fc28e48ae09562bc1b0880c08",
+  "model_attempt_cap": 14,
+  "retries": 0,
+  "source_python_files": 100,
+  "capture": "Existing browser harness writes manifest hash/runtime versions and closed 14-case inventory to report before submissions. This index was derived afterwards; it is not a separately precommitted holdout manifest.",
+  "limits": "Previously inspected authored questions; current-version development walkthrough, not fresh held-out quality or timed human presentation. Local selected Qwen only, no paid endpoint."
+}

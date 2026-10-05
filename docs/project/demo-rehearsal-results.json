@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "application": "sha256:38417accf2c31350b5f1f1a98ac5b1e36e70f4a27bfc9e761da27f2786c0fd4a",
+  "wheel_sha256": "9e30d46a10e274639b9acb75eb9f320e9700ea2ebed196644753226497d39343",
+  "source_python_parity": 100,
+  "live": {
+    "cases": 14,
+    "passes": 14,
+    "model_calls": 14,
+    "tool_starts": 20,
+    "source_checks": 108,
+    "saves": 8,
+    "seconds": 50.55,
+    "report_sha256": "1aa3a8eafbab8446d4725f8146125e500f98407cccb2751fa2d00a73a6726c41",
+    "limits": "Authored local browser walkthrough, not fresh held-out model quality, original tiny-fixture, comprehensive accessibility, production login or deployment. Fourteen live submissions: nine repeated scenario trials, four abstentions, one read-plus-injected-command control. No retry."
+  },
+  "fixture": {
+    "final_runs": 3,
+    "final_tool_starts": 6,
+    "final_saves": 1,
+    "model_calls": 0,
+    "failed_capture_runs": 1,
+    "failed_capture_saves": 1
+  },
+  "media": [
+    {
+      "path": "docs/assets/rehearsal/01-boundary.png",
+      "sha256": "ed89a8da379a03cfc361e6636eef0b2cad4fdf1274a86f09a6ceb3d6aa5df6ac",
+      "bytes": 113943
+    },
+    {
+      "path": "docs/assets/rehearsal/02-evidence.png",
+      "sha256": "32e6037fe40b57f3e9b0d5cb865dd93f176e20a90e68b2e0a87663bcd6f8a558",
+      "bytes": 174185
+    },
+    {
+      "path": "docs/assets/rehearsal/03-save.png",
+      "sha256": "2d94022e2f4915fe2921e7689edbab6ba50a9914974b5befc28034264b19054c",
+      "bytes": 186049
+    },
+    {
+      "path": "docs/assets/rehearsal/04-unresolved.png",
+      "sha256": "6bedc883f8bbf79a2c24f439f49b61470e84bfffcfab2ccd28ad434ed755aa9b",
+      "bytes": 186898
+    },
+    {
+      "path": "docs/assets/rehearsal/05-missing.png",
+      "sha256": "a4170f27049e3e51406775a3950c55533c0a459611a9c1829ae9422e663e897f",
+      "bytes": 188038
+    },
+    {
+      "path": "docs/assets/rehearsal/06-limits.png",
+      "sha256": "c5c8e87e09ebe84baa13ca1e7668b552f7876ff732ab4b9fd8e4c811f7db8aaf",
+      "bytes": 95466
+    },
+    {
+      "path": "docs/assets/rehearsal/index.html",
+      "sha256": "24f3917821602b8b73c72a8d949d7d0cec19da86a82677cd5b27d68c74da78b9",
+      "bytes": 954
+    },
+    {
+      "path": "docs/assets/rehearsal/walkthrough.vtt",
+      "sha256": "aab9746a38d159b1438a1dfed9164409ee353410114939983384b67f2aee1618",
+      "bytes": 867
+    },
+    {
+      "path": "docs/assets/rehearsal/walkthrough.webm",
+      "sha256": "8cfd7afcb85b14981f69c72a24622532de62fe9fa11c3619e0eb2fbe5f458ff1",
+      "bytes": 1147925
+    }
+  ],
+  "playback": {
+    "duration_seconds": 300,
+    "decoded_frames": 300,
+    "caption_cues": 6,
+    "browser_metadata_seek_captions": true,
+    "browser_playback_advanced": true,
+    "reflow_width": 375
+  },
+  "timed_human_rehearsal": false,
+  "fresh_heldout_quality": false,
+  "release_ready": false
+}

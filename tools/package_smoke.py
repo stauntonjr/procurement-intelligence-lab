@@ -14,6 +14,7 @@ from zipfile import ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = (
     "procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+    "procurement_intelligence_lab/examples/showcase_review_sources_v1.json",
     "procurement_intelligence_lab/examples/showcase_order_short.xlsx",
     "procurement_intelligence_lab/examples/showcase_order_matched.xlsx",
     "procurement_intelligence_lab/examples/showcase_bom_revision_a.xlsx",
@@ -46,6 +47,28 @@ def main() -> int:
             if missing:
                 raise RuntimeError(f"wheel is missing runtime resources {missing}")
 
+            corpus = "procurement_intelligence_lab/examples/corpus_v1/"
+            manifest = json.loads(archive.read(corpus + "manifest.json"))
+            for doc in manifest["documents"]:
+                for key in ("path", "metadata_path"):
+                    if corpus + doc[key] not in archive.namelist():
+                        raise RuntimeError("wheel is missing an admitted corpus source")
+            if any(
+                "/evals/" in name
+                or name.endswith(
+                    (
+                        "/gold.json",
+                        "/qrels.json",
+                        "/queries.json",
+                        "/gold-review.json",
+                        "/pilot-gold.json",
+                        "/pilot-gold-review.json",
+                    )
+                )
+                for name in archive.namelist()
+            ):
+                raise RuntimeError("wheel includes evaluator-only material")
+
         probe = ROOT / "tools/order_package_probe.py"
         probe_outputs: list[str] = []
         pythons: list[Path] = []
@@ -68,7 +91,21 @@ def main() -> int:
                 capture_output=True,
                 text=True,
             )
-            probe_outputs.append(probe_run.stdout.strip())
+            corpus_probe = subprocess.run(
+                [str(python), str(ROOT / "tools/corpus_package_probe.py")],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            subprocess.run(
+                [str(python), str(ROOT / "tools/agent_run_package_probe.py")],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            probe_outputs.append(probe_run.stdout.strip() + corpus_probe.stdout.strip())
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")
 
@@ -92,6 +129,94 @@ def main() -> int:
         )
         if "--host" not in web_help.stdout or "--port" not in web_help.stdout:
             raise RuntimeError("installed web server does not document host and port options")
+
+        unavailable = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "procurement_intelligence_lab.interfaces.workflow",
+                "--database",
+                str(temporary / "base-workflow.db"),
+                "start",
+                "--project",
+                "atlas",
+                "--item",
+                "GPU-A",
+                "--as-of",
+                "2026-10-01T00:00:00Z",
+            ],
+            cwd=temporary,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if unavailable.returncode != 1 or json.loads(unavailable.stdout) != {
+            "code": "pil.infrastructure.workflow_unavailable",
+            "category": "infrastructure",
+        }:
+            raise RuntimeError("base install does not fail clearly without optional workflow extra")
+        requirements = temporary / "workflow-requirements.txt"
+        subprocess.run(
+            [
+                uv,
+                "export",
+                "--frozen",
+                "--no-dev",
+                "--extra",
+                "workflow",
+                "--no-emit-project",
+                "--output-file",
+                str(requirements),
+            ],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            [
+                uv,
+                "pip",
+                "install",
+                "--python",
+                str(python),
+                "--require-hashes",
+                "-r",
+                str(requirements),
+            ],
+            cwd=temporary,
+            check=True,
+        )
+        subprocess.run(
+            [str(python), str(ROOT / "tools/workflow_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        subprocess.run(
+            [str(python), str(ROOT / "tools/review_web_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        subprocess.run(
+            [str(python), str(ROOT / "tools/live_review_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        subprocess.run(
+            [str(python), str(ROOT / "tools/original_showcase_package_probe.py")],
+            cwd=temporary,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
 
     print("package smoke test passed")
     return 0

@@ -1,0 +1,530 @@
+{
+  "document": {
+    "artifact_id": "delta-bom-r2",
+    "project_id": "delta",
+    "role": "approved_bom_revision",
+    "site_id": "lab",
+    "tenant_id": "synthetic-tenant"
+  },
+  "records": [
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-022-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-022",
+      "row": 2,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-031-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-031",
+      "row": 3,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-021-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-021",
+      "row": 4,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-030-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-030",
+      "row": 5,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-034-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-034",
+      "row": 6,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-038-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-038",
+      "row": 7,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-039-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-039",
+      "row": 8,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D7-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D7",
+      "row": 9,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-040-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-040",
+      "row": 10,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-017-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-017",
+      "row": 11,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-019-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-019",
+      "row": 12,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-018-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-018",
+      "row": 13,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D3-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D3",
+      "row": 14,
+      "supersedes": []
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-015-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-015",
+      "row": 15,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D4-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D4",
+      "row": 16,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-009-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-009",
+      "row": 17,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-026-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-026",
+      "row": 18,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-020-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-020",
+      "row": 19,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D2-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D2",
+      "row": 20,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-023-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-023",
+      "row": 21,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D6-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D6",
+      "row": 22,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-035-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-035",
+      "row": 23,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-014-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-014",
+      "row": 24,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-029-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-029",
+      "row": 25,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-016-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-016",
+      "row": 26,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-011-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-011",
+      "row": 27,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-GPU-A-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-GPU-A",
+      "row": 28,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-025-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-025",
+      "row": 29,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-10-10T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D5-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D5",
+      "row": 30,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-027-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-027",
+      "row": 31,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-037-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-037",
+      "row": 32,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-028-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-028",
+      "row": 33,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-024-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-024",
+      "row": 34,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-033-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-033",
+      "row": 35,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-012-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-012",
+      "row": 36,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-STORE-D1-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-STORE-D1",
+      "row": 37,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-008-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-008",
+      "row": 38,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-036-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-036",
+      "row": 39,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-013-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-013",
+      "row": 40,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "delta-bom-r2-DELTA-PART-032-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "delta-bom-r2-DELTA-PART-032",
+      "row": 41,
+      "supersedes": [
+        "delta-bom-r1"
+      ]
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,0 +1,111 @@
+"""Corpus HTTP boundary and visible composition root for the synthetic demo."""
+
+import json
+from datetime import datetime
+
+from procurement_intelligence_lab.adapters.synthetic_corpus import (
+    DEFAULT_SCOPES,
+    SyntheticCorpusReader,
+)
+from procurement_intelligence_lab.application.corpus_investigation import (
+    CorpusInvestigationService,
+    InvestigationRequest,
+)
+from procurement_intelligence_lab.interfaces.corpus_dto import investigation_dto, source_dto
+from procurement_intelligence_lab.platform.semantics.scope import (
+    Permission,
+    RequestContext,
+    ScopeAuthorizationError,
+)
+from procurement_intelligence_lab.ports.corpus import (
+    CorpusAdmissionError,
+    CorpusNotFoundError,
+)
+
+_HTML = """<!doctype html><html lang="en"><meta charset="utf-8"><title>Corpus investigation</title>
+<style>body{font:17px system-ui;max-width:1000px;margin:3rem auto;padding:0 1rem;color:#17304a}label{display:block;margin:1rem 0}input,select,button{font:inherit;padding:.5rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3f8;padding:1rem}li{margin:.4rem}a{color:#0758aa}#sources{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}#comparison{font-size:1.35rem;padding:1rem;background:#edf3f8;border-radius:8px}pre{max-height:22rem;overflow:auto}details{margin:1rem 0}table{border-collapse:collapse;width:100%;margin:1rem 0}td,th{text-align:left;padding:.6rem;border-bottom:1px solid #cad6e2}[hidden]{display:none!important}@media(max-width:650px){#sources{grid-template-columns:1fr}}</style>
+<h1>Procurement corpus investigation</h1><p>Synthetic development corpus: four projects, 24 workbooks, 960 source-row occurrences. Deterministic policy; no model calls.</p>
+<a href="/">Legacy evidence inspector</a>
+<form id="investigation"><label>Project <select name="project"><option value="atlas">Atlas</option><option value="borealis">Borealis</option><option value="cinder">Cinder</option><option value="delta">Delta</option></select></label>
+<label>Canonical item <input name="item" value="GPU-A" required></label>
+<label>As of (ISO 8601 with timezone) <input name="as_of" value="2026-10-01T00:00:00+00:00" size="32" required></label>
+<button>Investigate</button></form>
+<p>Atlas: GPU-A through GPU-G. Borealis: ACC-B1 through ACC-B7. Cinder: NIC-C1 through NIC-C7. Delta: STORE-D1 through STORE-D7. Each project includes differing quantities, agreement, conflicts, missing observations and numeric boundaries.</p>
+<p id="status" role="status"></p><p id="comparison" hidden></p><details><summary>Inspect the complete audit response</summary><pre id="result" hidden></pre></details><h2>Quantity and authority evidence</h2><ul id="sources"></ul><h2>Original source</h2><table id="cells" hidden></table><pre id="source">Select a quantity or authority reference.</pre>
+<script>
+const form=document.querySelector('form'),status=document.querySelector('#status'),result=document.querySelector('#result'),sources=document.querySelector('#sources'),source=document.querySelector('#source');
+const comparison=document.querySelector('#comparison'),cells=document.querySelector('#cells');
+let queryVersion=0,sourceVersion=0;
+function renderCells(data){cells.replaceChildren();cells.hidden=!data.cells;if(!data.cells)return;for(const values of [data.headers,data.cells]){const row=document.createElement('tr');for(const value of values){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}cells.append(row);}}
+form.addEventListener('submit',async event=>{event.preventDefault();const version=++queryVersion;++sourceVersion;status.textContent='Investigating…';result.hidden=true;comparison.hidden=true;cells.hidden=true;sources.replaceChildren();source.textContent='Select a quantity or authority reference.';
+try{const response=await fetch('/api/corpus/investigate?'+new URLSearchParams(new FormData(form)));const data=await response.json();if(version!==queryVersion)return;if(!response.ok)throw Error(data.error);status.textContent=data.status+(data.reason?' — '+data.reason:'');comparison.textContent='Required: '+(data.required_quantity??'unresolved')+' · Assessed ordered: '+(data.ordered_quantity??'not established')+(data.unit?' '+data.unit:'');comparison.hidden=false;result.textContent=JSON.stringify(data,null,2);result.hidden=false;
+for(const ref of data.evidence){const li=document.createElement('li'),a=document.createElement('a');a.href=ref.url;a.textContent=ref.artifact_id+' · '+(ref.row?'row '+ref.row:'authority record '+ref.record_key);a.addEventListener('click',async e=>{e.preventDefault();const clicked=++sourceVersion;cells.hidden=true;source.textContent='Loading original source…';try{const r=await fetch(a.href),d=await r.json();if(clicked!==sourceVersion||version!==queryVersion)return;if(!r.ok)throw Error(d.error);renderCells(d);source.textContent=JSON.stringify(d.authority??d.evidence,null,2);}catch(err){if(clicked!==sourceVersion||version!==queryVersion)return;source.textContent='Source unavailable: '+err.message;}});li.append(a);sources.append(li);}}
+catch(err){if(version!==queryVersion)return;status.textContent='Investigation unavailable: '+err.message;}});
+</script></html>"""
+
+
+def corpus_response(path: str, query: dict[str, list[str]]) -> tuple[int, str, bytes]:
+    if path == "/corpus":
+        return 200, "text/html; charset=utf-8", _HTML.encode()
+    try:
+        allowed = (
+            {"project", "item", "as_of"}
+            if path.endswith("/investigate")
+            else {"project", "evidence_id"}
+        )
+        if set(query) != allowed or any(len(v) != 1 or not v[0] for v in query.values()):
+            raise ValueError("provide each required query parameter exactly once")
+        scope = next((scope for scope in DEFAULT_SCOPES if scope[1] == query["project"][0]), None)
+        if scope is None:
+            raise ScopeAuthorizationError("project is not authorized for this demo")
+        context = RequestContext(
+            "public-synthetic-demo",
+            *scope,
+            frozenset({Permission.READ_STATE, Permission.READ_EVIDENCE}),
+            "corpus-http",
+        )
+        reader = SyntheticCorpusReader()
+        if path.endswith("/investigate"):
+            result = CorpusInvestigationService(reader).investigate(
+                InvestigationRequest(query["item"][0], datetime.fromisoformat(query["as_of"][0])),
+                context=context,
+            )
+            data = investigation_dto(result, context)
+        else:
+            identifier = query["evidence_id"][0]
+            source = reader.source_by_id(identifier, context=context)
+            data = source_dto(source)
+        return 200, "application/json", json.dumps(data).encode()
+    except ScopeAuthorizationError:
+        status = 403
+    except CorpusNotFoundError:
+        status = 404
+    except CorpusAdmissionError:
+        status = 503
+    except ValueError:
+        status = 422
+    # Python clears the exception variable at the end of an except clause.
+    return (
+        status,
+        "application/json",
+        json.dumps(
+            {"error": _MESSAGES[status], "code": _CODES[status], "category": _CATEGORIES[status]}
+        ).encode(),
+    )
+
+
+_MESSAGES = {
+    403: "project is not authorized for this demo",
+    404: "item or evidence not found in admitted scope",
+    422: "invalid or repeated query parameter; supply item and timezone-aware as_of",
+    503: "admitted corpus source validation failed",
+}
+
+_CODES = {
+    403: "forbidden_scope",
+    404: "not_found",
+    422: "invalid_request",
+    503: "corpus_admission_failed",
+}
+
+_CATEGORIES = {403: "authorization", 404: "input", 422: "input", 503: "infrastructure"}

@@ -1,0 +1,32 @@
+{
+  "id": "C018",
+  "title": "Failed replacement preserves the exact persisted browser brief",
+  "introducing_commit": "cf277d374394de774bd812f16ae132ade46670ee",
+  "oracle": "Failed replacement preserves the exact persisted browser brief in the actual shipped fixture and live page JavaScript; backend authority remains independent.",
+  "known_bad": "Clear the prior draft before a replacement request succeeds.",
+  "known_bad_mutation": [
+    {
+      "path": "src/procurement_intelligence_lab/interfaces/review_page.py",
+      "find": "action(async v=>{message('Executing scoped corpus tools\u2026');",
+      "replace": "action(async v=>{clear();message('Executing scoped corpus tools\u2026');"
+    }
+  ],
+  "known_bad_failure_pattern": "failed replacement erased exact draft",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_review_page_recovery.py",
+    "-k",
+    "retain"
+  ],
+  "surfaces": [
+    "browser exact review state",
+    "human error and lock/recovery boundary"
+  ],
+  "prevention": [
+    "execute shipped JavaScript with deferred/failing public transport",
+    "retain real installed Chromium counterpart evidence"
+  ]
+}

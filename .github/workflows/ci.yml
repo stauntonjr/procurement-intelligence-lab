@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make check-fast
 
   unit:
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true, python-version: "${{ matrix.python-version }}" }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make unit
 
   coverage:
@@ -31,9 +31,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
-      - run: uv run pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=85
-      - run: uv run python tools/check_coverage_ratchet.py
+      - run: uv sync --all-groups --extra workflow
+      - run: uv run --extra workflow pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=85
+      - run: uv run --extra workflow python tools/check_coverage_ratchet.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: branch-coverage
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make contract
 
   integration:
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make integration
 
   regression:
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make regression
 
   package-smoke:
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make package-smoke
 
   eval-manifest-validation:
@@ -81,9 +81,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with: { enable-cache: true }
-      - run: uv sync --all-groups
+      - run: uv sync --all-groups --extra workflow
       - run: make challenge-validate
-      - run: uv run python tools/run_challenges.py --verify-known-bad --results artifacts/challenges/latest.json --model "not-evaluated" --configuration "public-oracles-with-known-bad-mutations"
+      - run: uv run --extra workflow python tools/run_challenges.py --verify-known-bad --results artifacts/challenges/latest.json --model "not-evaluated" --configuration "public-oracles-with-known-bad-mutations"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:

@@ -1,0 +1,530 @@
+{
+  "document": {
+    "artifact_id": "atlas-bom-r2",
+    "project_id": "atlas",
+    "role": "approved_bom_revision",
+    "site_id": "lab",
+    "tenant_id": "synthetic-tenant"
+  },
+  "records": [
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-A-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-A",
+      "row": 2,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-B-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-B",
+      "row": 3,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-C-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-C",
+      "row": 4,
+      "supersedes": []
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-D-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-D",
+      "row": 5,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-10-10T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-E-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-E",
+      "row": 6,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-F-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-F",
+      "row": 7,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-GPU-G-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-GPU-G",
+      "row": 8,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-008-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-008",
+      "row": 9,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-009-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-009",
+      "row": 10,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-010-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-010",
+      "row": 11,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-011-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-011",
+      "row": 12,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-012-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-012",
+      "row": 13,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-013-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-013",
+      "row": 14,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-014-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-014",
+      "row": 15,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-015-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-015",
+      "row": 16,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-016-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-016",
+      "row": 17,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-017-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-017",
+      "row": 18,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-018-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-018",
+      "row": 19,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-019-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-019",
+      "row": 20,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-020-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-020",
+      "row": 21,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-021-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-021",
+      "row": 22,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-022-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-022",
+      "row": 23,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-023-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-023",
+      "row": 24,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-024-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-024",
+      "row": 25,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-025-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-025",
+      "row": 26,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-026-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-026",
+      "row": 27,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-027-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-027",
+      "row": 28,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-028-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-028",
+      "row": 29,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-029-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-029",
+      "row": 30,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-030-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-030",
+      "row": 31,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-031-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-031",
+      "row": 32,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-032-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-032",
+      "row": 33,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-033-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-033",
+      "row": 34,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-034-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-034",
+      "row": 35,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-035-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-035",
+      "row": 36,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-036-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-036",
+      "row": 37,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-037-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-037",
+      "row": 38,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-038-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-038",
+      "row": 39,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-039-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-039",
+      "row": 40,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    },
+    {
+      "approved_at": "2026-09-01T00:00:00+00:00",
+      "assertion_id": "bom-r2-PART-040-assertion",
+      "document_at": "2026-08-01T00:00:00+00:00",
+      "effective_from": "2026-09-01T00:00:00+00:00",
+      "effective_until": null,
+      "ingested_at": "2026-09-02T00:00:00+00:00",
+      "line_id": "bom-r2-PART-040",
+      "row": 41,
+      "supersedes": [
+        "atlas-bom-r1"
+      ]
+    }
+  ],
+  "schema_version": 1
+}

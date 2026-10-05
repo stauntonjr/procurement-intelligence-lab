@@ -1,5 +1,167 @@
 # Project handoff
 
+## Evidence-focused demo story and source highlighting — 2026-10-05
+
+`codex/demo-integration-review-fixes` now adds an analyst-first, exact-scope reconciliation review
+on top of the evidence-focused reviewer and eight-slide editable native deck. The review presents
+the discrepancy and highlighted admitted sources before technical run history. An authenticated
+analyst may choose one of exactly two eligible requirement revisions, keep the item unresolved,
+or flag the assessment for correction with a rationale. A governing choice applies only to the
+exact tenant/project/site/item scope from its server-owned effective time; it never rewrites an
+earlier assessment, discards the losing assertion, or triggers a purchase or external action.
+ADR-034, the public contract, and C028 record those boundaries. The replacement 30.72-second
+recording demonstrates the new resolution flow with character-by-character typing and both
+conflicting BOM sources highlighted.
+The deck now
+shows the complete source-to-action architecture vision, gold data at every boundary, human
+governance at controlled checkpoints, and the current implementation boundary. Findings open
+the first citation automatically; selectable evidence cards expose selection state; original row
+cells highlight supporting columns; governing-authority JSON remains fully inspectable. The
+The prior recording shows paced typing and changing Who/What/Why/How/When explanation before a human rejects
+an unresolved conflict. [Deck](demo-storytelling-deck.md), [recording and limits](demo-rehearsal.md),
+and [compact results](demo-storytelling-results.json).
+
+Latest local verification: focused reconciliation/reviewer checks passed; full `make check`
+passed 790 tests with 22 explicit opt-in skips and 88.94% coverage; package smoke passed; all 28
+known-bad challenges were rejected. The current public browser recorder completed one fixture
+submission and exact-scope reconciliation. The prior PR #193 coverage failure was a 180-second timeout in the baseline
+CLI test at older head `b3afe828`; it was not a coverage-threshold failure. The same full local suite
+now completes in 409.84 seconds. One current live recording attempt returned `model_unavailable`
+with port 8000 offline and was not retried; publishable media is explicitly fixture/no-model.
+No merge or deployment. Current-build live inference, human timing, full release and B2 remain open.
+
+## Demo integration review corrections — 2026-10-04
+
+`codex/demo-integration-review-fixes` is based on draft #192. Eighteen demo PR heads form a
+linear chain and all ten required checks passed at each inspected head, but six automated review
+threads on #176–#178 remained unresolved. This candidate fixes failure/non-applicability accounting,
+terminal chronology, run/brief CLI build fingerprints, tool payload validation, completed-save
+replay after replacement and vanished-item error mapping. [Contract, audit and verification](demo-integration-review-fixes.md).
+Independent review found two further gaps; the root corrective pass adds active-ledger integrity
+and complete shared payload validation ([ADR-033](../adr/033-validated-application-payloads.md)).
+
+No merge, deployment, inference or corpus change. Prior live walkthroughs retain their original
+application identity; changed runtime requires a separate current-version live check. Integration
+must include these corrections; older branches remain unsafe to release independently. Human timed
+rehearsal, full G2/release and deployed acceptance remain open; B2 stays gated.
+
+## Current-version demo rehearsal artifacts — 2026-10-04
+
+`codex/demo-rehearsal-recording` stacks on draft #191. The unchanged installed current app passes
+one 14-submission local Qwen development walkthrough: 14 calls/20 tools/108 source checks/8 saves.
+A [captioned five-minute fixture screenshot replay and operator script](demo-rehearsal.md) show
+mismatch, exact/repeated save, unresolved rejection and missing observation. It is not continuous
+screen recording or timed human rehearsal; fixture media and live evidence remain separate.
+Runtime/prompt/source/gold unchanged. Next: actual human timed rehearsal, deliberate stack integration
+and separately authorized deployment. Full release/B2 remain open; prior held-out evidence is historical.
+
+## Installed browser error recovery — 2026-10-04
+
+`codex/browser-error-recovery` stacks on draft #190, unmerged/undeployed. Twelve actual clean-installed
+Chromium cases pass: failed replacement retains the prior exact brief, private failure fragments
+stay out of UI, locked callbacks issue no late history request, and lost save acknowledgment
+recovers the same single durable result. Eight fixture runs/sixteen tool starts/one save/zero inference;
+live-page error checks intercept ask before backend. [Evidence and limits](browser-error-recovery.md).
+The changed page changes the application hash; prior G2 passes remain historical, not current
+live acceptance. Full G2/release/accessibility, measured rehearsal, main integration/deployment and
+B2 remain open. Next: bounded reviewer rehearsal and separately scoped current-version live check.
+
+## G2 installed evidence consolidation — 2026-10-04
+
+`codex/g2-evidence-consolidation` stacks on draft #189, unmerged. Hash-bound compiler reconciles
+fresh language48/48, original three-scenario9/9, adversarial9/9 and a new installed deterministic
+48/48/464source timing run, with zero new inference. Prior controls25/28 and candidate26/28 remain
+visible as inspected development; populations are not pooled. [Dossier, latency scopes and ordered
+remaining work](g2-acceptance-dossier.md). Bounded installed suite passes; full G2/release, actual
+browser error/accessibility coverage, measured presentation, main integration and deployment remain
+open. B2 stays gated; source corpus unchanged. Unknown evidence/cost is notzero. Next bounded work:
+#74 actual browser async/error recovery, then reviewer rehearsal and separately authorized rollout.
+
+## Installed G2 adversarial acceptance — 2026-10-04
+
+`codex/g2-adversarial-acceptance` is stacked on draft #188, unmerged. Nine installed HTTP/process
+guards pass: five real Qwen attempts plus three controlled protocol attempts; seven tool starts,
+one expected failed tool, three original approval receipts and one exact save preserved through
+actual post-save exit86/restart/repeated approval. Complete causal/run/receipt evidence is required;
+one independent evaluator Important finding fixed by six RED/GREEN regressions, 695 full tests.
+[Contract, compact outcomes and remaining gates](g2-adversarial-acceptance.md). This is bounded
+failure acceptance; full G2/release consolidation, comprehensive accessibility, deployment and B2
+expansion remain separate open gates. Source corpus remains four projects/24workbooks/960rows;
+historical language/control misses remain immutable. No runtime/model/prompt/source/package change.
+
+## Fresh language v3 candidate evaluation — 2026-10-04
+
+`codex/fresh-language-v3-evaluation` is stacked on draft #187, unmerged. Frozen cutoff candidate
+and new question wording pass 48/48: root 24, independent validation 12/test 12. Installed gold 48/48
+and 464 source checks; 48 actual terminal calls, 56 tool starts, 28 exact saves. See
+[provenance/results/remaining gates](fresh-language-v3-evaluation.md). Version3 includes retired
+language/control lineage; historical version2 remains unchanged. Independent evaluator review and
+explicit author data/results audit passed. This is language-only evidence over known correlated
+sources, not source expansion or broad accuracy. Full G2 adversarial/release, comprehensive browser
+accessibility, deployment and B2 expansion remain separate open gates. Historical control misses
+remain retained.
+
+## Cutoff intent development continuation — 2026-10-04
+
+`codex/cutoff-intent-development` is stacked on draft #186. Matching review-cutoff wording is
+request metadata, with existing scope/date/item and human-save guards. Baseline 25/28 includes
+a conflicting-date routing failure; candidate 26/28 retains two safe supported-request abstentions.
+Candidate inspected-language regression 48/48 and original browser 9/9 pass: 113 actual calls,
+124 tool starts and 36 saves. See [results/limits](cutoff-intent-development.md).
+The prior fresh-language cohort is retired as inspected development data before tuning. Full G2
+remains not_ready; new independent evaluation, release/deployment and expansion gates remain open.
+
+## Fresh language evaluation continuation — 2026-10-04
+
+`codex/fresh-language-evaluation` is stacked on draft PR #185. Unchanged runtime/source
+scenarios with new independently authored validation/test wording: 23/24 pass, one safe unsupported
+miss on a valid explicit-cutoff Cinder query. Root development 24/24; total 47/48. Installed gold
+48/48 plus 464 source checks, 48 actual calls, 54 tool starts, 27 exact saves. See
+[provenance/results/limits](fresh-language-evaluation.md). This new language cohort is now
+retired as inspected development data; see the cutoff continuation above. Unmerged, not_ready
+for bounded live acceptance/full G2;
+no new source-data independence or corpus expansion.
+
+## Original showcase live continuation — 2026-10-04
+
+`codex/original-showcase-live` is stacked on draft PR #184. Three original January source
+snapshots now use the existing live review workflow with original policy/evidence identities.
+Nine authored browser trials pass: nine model calls, eighteen tool starts, eighteen source checks,
+three process recoveries and eight exact saves. Unresolved requirements retain observed order 2
+while remaining `not_assessed`. See [contract/results/limits](original-showcase-live.md).
+Unmerged; fresh held-out evaluation, full G2 and deployment remain open. No corpus expansion.
+
+## Active real-browser acceptance continuation — 2026-10-04
+
+`codex/browser-live-acceptance`, stacked on draft PR #183, verifies a clean installed
+reviewer in actual local headless Chromium. Keyboard sign-in/focus contrast and narrow
+identifier wrapping are fixed. Three fixture and 14 authored live Qwen browser submissions
+pass source/review/restart/save accounting; eight live saves, four tool-free abstentions,
+and two rejected investigations. See [walkthrough, artifacts and remaining gates](browser-live-acceptance.md)
+and [compact versions/results](browser-live-results.json). This is branch work, not main,
+held-out quality, comprehensive accessibility or deployment. Fresh evaluation and full G2/release acceptance remain open; original tiny-fixture
+live routing is documented above; corpus expansion stays gated.
+
+## Active local browser review continuation — 2026-10-03
+
+`codex/browser-review-workflow` is stacked on open PR #179. It adds a loopback-only
+synthetic human reviewer, owned run discovery, exact approve/reject and recovery controls,
+scoped source cells and an application audit snapshot timeline. See
+[ADR-031](../adr/031-local-browser-review-transport.md),
+[public command and contract](../product/local-browser-review-v1.md) and
+[verification boundary](local-browser-review-evidence.md). Actual browser interaction,
+accessibility, deployment, streaming and live-model acceptance remain open; this slice is
+a draft continuation of #74, not a complete demo release.
+
+## Fixture checkpoint foundation — 2026-10-03
+
+`codex/serial-review-workflow` builds on open PR #178, adding the optional serial LangGraph
+prototype behind a repository-owned runtime port. See [ADR-030](../adr/030-optional-serial-review-workflow.md),
+[contract and CLI](../product/serial-review-workflow-v1.md) and
+[execution evidence](serial-review-workflow-evidence.md). Typed fixture inputs, persisted
+exact review and crash recovery precede natural-language/model and browser work. This is
+branch work; it does not update `main`, deployment or live acceptance.
+
 ## Purpose and use
 
 This page is a concise orientation index for a fresh human or development agent. It explains where the current state is recorded and what to read first; it is not a transcript, decision log, or duplicate architecture specification.
@@ -46,7 +208,13 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 
 ## Active work and PRs
 
-- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) is complete. [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) was reopened after post-merge counterexamples showed assertion/line identity aliasing, lifecycle identity reuse across changed assessment context, and obsolete required schedules driving findings. Branch `codex/issue-60-correctness` carries the bounded correction and C014-C016 evidence; it is not merged acceptance yet.
+- Intent development on `codex/intent-contract-development`, stacked on PR182: requirement governance and document approval applicability clarified with unchanged deterministic/human authority. Final installed development regression46/48 (prior frozen pilot41/48); separate controls18/20, with safe boundary abstentions retained. The rejected candidate's unsafe date interpretations remain recorded. All prior split cases are now inspected development data, never fresh held-out evidence. See [experiment, limits and next work](intent-contract-development.md). Fresh evaluation and full G2/browser/release gates precede expansion.
+
+- Frozen G2 pilot evaluation on `codex/g2-pilot-evaluation`, stacked on draft PR #181: installed deterministic HTTP 48/48 and 464 original source checks passed; live intent/end-to-end target checks 41/48, with seven unexpected abstentions retained. Independent ledger: 48 inference attempts, 42 tool starts, 21 single saved results. See [evaluation and next work](g2-pilot-evaluation.md). Prioritize development-only interpretation improvements and fresh frozen evaluation; full G2/browser/deployment and expansion gates remain open.
+
+- Local Qwen live interpretation is implemented on `codex/local-qwen-interpretation`, stacked on the PR #180 browser draft: same owned run, strict scope/date/item proposal, durable redacted inference journal, existing deterministic brief and human review. Nine repeated development CLI walkthroughs and four live abstentions passed; installed authenticated live HTTP restart/save also passed. See [ADR-032](../adr/032-local-model-intent-and-journal.md), [caller contract](../product/local-qwen-review-v1.md), and [evidence and limits](local-qwen-review-evidence.md). Broader #53/#72 and full G2, actual browser/deployed acceptance remain open; no dataset expansion yet.
+
+- [Issue #47](https://github.com/stauntonjr/procurement-intelligence-lab/issues/47) and [Issue #60](https://github.com/stauntonjr/procurement-intelligence-lab/issues/60) are complete. [PR #174](https://github.com/stauntonjr/procurement-intelligence-lab/pull/174) merged the bounded assertion/line identity, lifecycle identity, and schedule-supersession corrections with C014-C016 evidence; `main` includes them at `b0cc77e`.
 - [Issue #54](https://github.com/stauntonjr/procurement-intelligence-lab/issues/54) remains open despite the delivered lexical lifecycle foundation and unsupported-kind rejection; reconcile its full acceptance evidence before closure. Follow-on M6 work includes [Issues #55, #57, #59, #62, and #63](https://github.com/stauntonjr/procurement-intelligence-lab/issues/63); preserve their dependencies and evaluation gates.
 - Identity, source-viewer, and review-context slices are complete; see [Issues #85, #87, and #89](https://github.com/stauntonjr/procurement-intelligence-lab/issues/89).
 
@@ -69,6 +237,11 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - Which runtime registry, capability-validation, and logical-to-physical planning slice should follow the completed DomainPackage compiler without introducing domain-name branching? Create a scoped issue before scheduling it; use [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and the [architecture contract](../architecture/domain-package-and-stage-planning.md) as its constraints.
 
 ## Recommended next work
+
+The [LangChain Academy reference notes](../langchain-ref/README.md) capture selected official
+course-code patterns for the planned evidence-review agent, with pinned source revisions,
+current-API caveats, an offline evaluator example, and Issue-specific acceptance checks.
+They are reference material, not implemented agent capability or live evaluation evidence.
 
 The owner prioritizes independent employer-facing showcases for Procurement Intelligence Lab and
 SciFact RAG, with explicit integration planning. See the [parallel product development plan](parallel-product-development.md).
@@ -99,7 +272,7 @@ Treat this page as a concise index, not a second source of truth. On each meanin
 5. Use the roadmap stewardship audit to flag drift, but record material chat decisions deliberately in durable artifacts.
 6. Recheck links and run the lightweight documentation check before opening or updating a PR.
 
-## Bounded Issue #60 order comparison
+## Historical bounded Issue #60 order comparison
 
 The inspector's synthetic order scenarios compare a governed requirement with a fixture-pinned
 order quantity using the existing deterministic quantity-mismatch detector. A 4-versus-2 case
@@ -122,7 +295,65 @@ lifecycle fixture, original order scenarios, new examples, and source drill-down
 
 The original acceptance evidence is retained in
 [`artifacts/issue-60-semantic-evidence.json`](../../artifacts/issue-60-semantic-evidence.json) with
-its post-merge findings and `not_ready` disposition. Completion requires merged assertion-first
+its post-merge findings and historical `not_ready` disposition. The merged correction is recorded in
+[`artifacts/issue-60-correctness-semantic-evidence.json`](../../artifacts/issue-60-correctness-semantic-evidence.json): assertion-first
 line reconciliation, assessment-context-bound anomaly identity, symmetric schedule supersession,
 and C014-C016 known-bad rejection. Adjacent review, relationships, forecasting, costing, and
 decision support remain under #41, #44, #61, #52, and #65.
+
+## Demo corpus execution — 2026-10-03
+
+The owner approved the [corpus design](../superpowers/specs/2026-10-03-procurement-demo-corpus-design.md)
+and [execution plan](../superpowers/plans/2026-10-03-procurement-demo-corpus.md). Work began on
+`codex/demo-corpus-pilot`, primarily #29 (part of #12/#27/#71). PR #175 now contains four projects, 24 source workbooks, 960 row occurrences and 48 structured
+HTTP evaluation cases, extending the first one-project increment. Independent original-source
+audit and evaluator regression checks are recorded with the branch.
+This is branch work, not acceptance on `main`; agent and retrieval milestones remain open.
+See [ADR-027](../adr/027-synthetic-corpus-admission.md) for the admitted-input boundary.
+
+First-increment execution, restored public-release identity, and acceptance boundaries are recorded
+in [the execution note](procurement-demo-execution-2026-10-03.md).
+
+## G2 run/event foundation — 2026-10-03
+
+`codex/review-agent-run-contracts` is stacked on PR #175's four-project corpus commit.
+The foundation implements application-issued run/thread identities, immutable reproducibility
+metadata, a scoped SQLite audit ledger and trajectory completeness checks under #70/#68/#72.
+The local CLI demonstrates owned resume across process lifetimes. Read the
+[run contract](../product/review-agent-run-contract-v1.md),
+[ADR-028](../adr/028-application-owned-review-agent-runs.md) and
+[foundation plan](../superpowers/plans/2026-10-03-review-agent-run-foundation.md).
+
+This is branch work. Typed corpus tools, model/graph orchestration, exact-brief approval,
+idempotent brief saving and live walkthrough acceptance remain subsequent G2 work. Existing
+ADR-014 review previews remain non-persistent and do not confer new save authority.
+
+## G2 audited corpus tools — 2026-10-03
+
+`codex/audited-corpus-agent-tools` is stacked on PR #176. Two tools call the existing scoped
+investigation/source services and record actual starts, result snapshots or closed typed failures.
+Their DTOs share the HTTP serializers. Model arguments cannot supply identity or permissions.
+The fixture CLI demonstrates create/investigate/source/finish across processes; these traces
+remain excluded from live inference counts. Read the [tool contract](../product/corpus-agent-tools-v1.md)
+and [acceptance record](corpus-agent-tools-evidence.md). #66 remains open/In Progress; serial
+model orchestration, exact-brief approval/save and live acceptance remain subsequent G2 work.
+
+## G2 exact-brief review/save branch — 2026-10-03
+
+`codex/exact-brief-approval` continues PR #177 for #67/#68. Application-owned immutable
+core-fact briefs, exact approval/rejection receipts and atomic single-result saves remain
+independent of graph checkpoints. See [ADR-029](../adr/029-exact-brief-review-and-idempotent-save.md),
+[the contract](../product/exact-brief-review-v1.md) and
+[the execution plan](../superpowers/plans/2026-10-03-exact-brief-approval.md). A separate fixed
+human CLI exercises process restart; runtime agent permissions cannot review/save.
+Model drafting, graph interrupts, authenticated browser controls and live acceptance remain
+subsequent work; this branch does not change main or the public release.
+
+### G2 local fixture browser review branch — 2026-10-03
+
+#74 (M9), part of #53/#67/#68/#70: authenticated loopback transport over the existing exact
+review workflow, bounded owned run discovery, scoped source cells and persisted application
+timeline. Stacked on PR179. See [the public contract](../product/local-browser-review-v1.md)
+and [acceptance boundary](../project/local-browser-review-evidence.md). HTTP and installed
+process evidence are distinct from real browser accessibility/interaction, deployment and live
+model acceptance; these broader gates remain open. Main and public deployment unchanged.
