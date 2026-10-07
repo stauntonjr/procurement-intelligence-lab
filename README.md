@@ -1,19 +1,29 @@
 # Procurement Intelligence Lab
 
-The current implementation branch also contains a **fixture-only durable review workflow**:
-typed corpus request -> exact brief -> human pause -> idempotent save, with optional pinned
-LangGraph dependencies. See [the CLI contract](docs/product/serial-review-workflow-v1.md).
-The branch also adds [authenticated local browser review](docs/product/local-browser-review-v1.md):
-owned run discovery, exact approve/reject controls, source cells, actual audit timeline and
-restart recovery. [Installed browser acceptance](docs/project/browser-live-acceptance.md) now
-records real Chromium fixture/live source and human-review walkthroughs. Deployment, fresh
-held-out evaluation and full integrated acceptance remain separate.
-
 Procurement Intelligence Lab is a public, synthetic-data reference architecture for trustworthy BOM and procurement intelligence. It turns semi-structured documents into provenance-preserving knowledge, keeps source assertions distinct from truth, reconciles them into operational state, and exposes deterministic and AI-assisted investigation tools.
 
 Reusable semantic contracts and DomainPackage compilation live under `platform/`; procurement-owned
 BOM, BoQ, Purchase Order, state, reconciliation, and anomaly behavior lives under
 `domains/procurement/`. See [platform semantics and vertical ownership](docs/architecture/platform-semantics.md).
+
+## At A Glance
+
+![Procurement Intelligence Lab evidence-to-action architecture: source understanding, identity and governed state, and intelligence and execution, with gold data at every boundary and human review across the pipeline. Current procurement behavior is distinguished from contracts and future execution.](docs/assets/procurement-architecture.svg)
+
+**Who and why:** procurement analysts need to understand what is required, what
+has been ordered, and where the evidence disagrees. Every material result should
+be traceable to the source document, governing policy, scope, and as-of time.
+
+**How:** documents become evidence-backed assertions; explicit resolution and
+reconciliation produce operational state; deterministic services derive facts
+and assess discrepancies. Models can interpret questions and route investigation,
+while those services own quantities, statuses, and policy outcomes.
+
+**Current boundary:** selected synthetic procurement paths run through anomaly
+assessment and authenticated human review. The local review workflow persists
+exact assessments and supports scoped, prospective reconciliation. Prediction,
+procurement decision policy, and external action execution remain future work;
+complete gold-data coverage at every boundary is an evaluation goal.
 
 ## Showcase
 
@@ -42,7 +52,54 @@ open <http://127.0.0.1:8000/>. It runs locally without model services or externa
 
 ## Architecture
 
-Artifacts flow through StructuredDocument → MappedDocument → normalized observations → source assertions → entity mentions → resolution decisions → canonicalized assertions → reconciliation → operational state → derived intelligence. Postgres is the intended canonical store; search, vector, and graph systems are replaceable projections. Core semantics are framework-independent Python dataclasses behind ports and adapters.
+The full evidence-to-action vision preserves each intermediate artifact:
+
+1. **Source and understanding:** source artifact → structured document →
+   schema-mapped structured document → normalized observations → source assertions.
+   Structuring captures layout, values, and source coordinates; mapping assigns
+   schema meaning. Assertions retain what a source says without declaring it truth.
+2. **Identity and governed state:** entity mentions → entity resolution decisions
+   → canonical assertions → reconciliation → operational state. Reconciliation
+   considers versions, dates, status, and lifecycle stages under explicit policy,
+   retaining governing, losing, and conflicting assertions. Operational state is
+   the current interpretation of project status from those reconciled assertions.
+3. **Intelligence and execution:** derived facts (counts, averages, trends) →
+   anomalies (measured deviations from expected norms) → predictions and forecasts
+   (uncertain or future states) → decisions (evidence-based policy, rules, and
+   thresholds) → authorized actions (alerts and processes). This is the full vision:
+   current facts include counts and costs, and current anomaly assessments may
+   explicitly abstain. Broad trend analytics and procurement execution are not
+   implied by the diagram.
+
+**Gold data and evaluation belong at every boundary.** Expected artifacts and
+outcomes should test structuring, mapping, normalization, identity, state, and
+downstream intelligence independently. Existing tests, source oracles, and
+development-agent challenges cover selected paths; complete boundary-gold
+coverage remains future work.
+
+**Human review spans the pipeline and its outcomes.** Current reviewers can
+confirm or challenge an assessment, and eligible conflicts can be reconciled for
+one exact item + project + site with a required rationale. Reconciliation takes
+effect prospectively, retains both alternatives, and preserves earlier as-of
+state. Confirming an assessment and selecting a governing revision are distinct
+operations. Future procurement decisions and external actions require their own
+authority and approval controls.
+
+The diagram shows logical boundaries. The current XLSX adapter physically
+combines structuring and mapping; the reusable platform defines typed contracts
+through `PREDICT`, `DECIDE`, and `ACT`, but procurement has no executors for those
+three stages. Postgres is the intended canonical store; local review persistence
+uses SQLite, and search, vector, and graph systems are replaceable projections.
+Core semantics are framework-independent Python dataclasses behind ports and
+adapters.
+
+Read the [procurement semantic model](docs/domains/procurement/semantic-model.md),
+[logical-stage contracts and runtime limits](docs/architecture/universal-stage-semantics.md),
+[evidence drill-down](docs/architecture/evidence-and-ux.md), and
+[prospective reconciliation contract](docs/adr/034-prospective-human-reconciliation.md)
+for the detailed boundaries. The [local review CLI](docs/product/serial-review-workflow-v1.md)
+and [authenticated browser review](docs/product/local-browser-review-v1.md) retain
+their own acceptance and deployment limits.
 
 ## Project memory and status
 
