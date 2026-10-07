@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="960" viewBox="0 0 1200 960" role="img" aria-labelledby="title desc">
+<title id="title">Procurement Intelligence Lab: full evidence-to-action architecture</title>
+<desc id="desc">Read each numbered column from top to bottom, then move to the next column. Source artifact, structured document, schema-mapped structured document, normalized observations, source assertions, entity mentions, entity resolution decisions, canonical assertions, reconciliation, operational state, derived facts, anomalies, predictions and forecasts, policy decisions, and authorized actions. Selected synthetic procurement paths execute through anomaly assessment. Structure and mapping have separate contracts but are combined physically in the XLSX adapter. Predictions, procurement decision policy, and external action executors remain future work. Gold data at every boundary is the evaluation target, with selected tests and oracles implemented today. Human review is cross-cutting: current assessment review and prospective exact-scope reconciliation preserve history, while broader decision and action approvals remain future work. Every result retains scope, time, evidence, and provenance back to its original source.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 Z" fill="#64748b"/></marker>
+<style>
+text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+.body { font-size: 17px; fill: #334155; }
+.small { font-size: 15px; fill: #475569; }
+.label { font-size: 14px; font-weight: 700; letter-spacing: 1px; }
+.flow { fill: none; stroke: #64748b; stroke-width: 2; marker-end: url(#arrow); }
+</style>
+</defs>
+<rect width="1200" height="960" rx="20" fill="#f8fafc"/>
+<text x="40" y="43" class="label" fill="#475569">PROCUREMENT INTELLIGENCE LAB / FULL PIPELINE VISION</text>
+<text x="40" y="84" font-size="30" font-weight="700" fill="#0f172a">From source documents to governed procurement intelligence</text>
+<rect x="40" y="107" width="17" height="17" rx="3" fill="#ecfdf5" stroke="#0f766e"/>
+<text x="67" y="121" class="small">Current bounded paths</text>
+<rect x="299" y="107" width="17" height="17" rx="3" fill="#fffbeb" stroke="#b45309"/>
+<text x="326" y="121" class="small">Contracts; combined runtime</text>
+<rect x="596" y="107" width="17" height="17" rx="3" fill="#ffffff" stroke="#64748b" stroke-dasharray="4 3"/>
+<text x="623" y="121" class="small">Future procurement execution</text>
+<text x="1160" y="121" text-anchor="end" class="small">Read 01 → 15</text>
+
+<rect x="40" y="147" width="1120" height="49" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="60" y="169" class="label" fill="#1d4ed8">GOLD DATA + EVALUATION AT EVERY BOUNDARY</text>
+<text x="60" y="187" class="small">Target across the full pipeline; current source oracles, tests, and challenges cover selected paths.</text>
+
+<rect x="40" y="214" width="340" height="547" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="60" y="247" class="label" fill="#0f766e">01–05 / SOURCE &amp; UNDERSTANDING</text>
+<text x="60" y="271" class="small">Follow the numbered artifacts ↓</text>
+<g data-stage="01" data-status="current"><rect x="58" y="288" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="69" y="315" font-size="13" font-weight="700" fill="#0f766e">01</text><text x="98" y="315" font-size="18" font-weight="600" fill="#0f172a">Source artifact</text><text x="69" y="340" font-size="14" fill="#475569">Immutable capture + source identity</text></g>
+<path d="M 210 356 V 370" class="flow"/>
+<g data-stage="02" data-status="contract"><rect x="58" y="372" width="304" height="68" rx="9" fill="#fffbeb" stroke="#fbbf24"/><text x="69" y="399" font-size="13" font-weight="700" fill="#92400e">02</text><text x="98" y="399" font-size="18" font-weight="600" fill="#0f172a">Structured document</text><text x="69" y="424" font-size="14" fill="#475569">Layout, values + source coordinates</text></g>
+<path d="M 210 440 V 454" class="flow"/>
+<g data-stage="03" data-status="contract"><rect x="58" y="456" width="304" height="68" rx="9" fill="#fffbeb" stroke="#fbbf24"/><text x="69" y="483" font-size="13" font-weight="700" fill="#92400e">03</text><text x="98" y="483" font-size="18" font-weight="600" fill="#0f172a">Schema-mapped document</text><text x="69" y="508" font-size="14" fill="#475569">Structured fields mapped to a schema</text></g>
+<path d="M 210 524 V 538" class="flow"/>
+<g data-stage="04" data-status="current"><rect x="58" y="540" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="69" y="567" font-size="13" font-weight="700" fill="#0f766e">04</text><text x="98" y="567" font-size="18" font-weight="600" fill="#0f172a">Normalized observations</text><text x="69" y="592" font-size="14" fill="#475569">Comparable values, types + units</text></g>
+<path d="M 210 608 V 622" class="flow"/>
+<g data-stage="05" data-status="current"><rect x="58" y="624" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="69" y="651" font-size="13" font-weight="700" fill="#0f766e">05</text><text x="98" y="651" font-size="18" font-weight="600" fill="#0f172a">Source assertions</text><text x="69" y="676" font-size="14" fill="#475569">What the source says; not yet truth</text></g>
+<text x="60" y="735" font-size="14" fill="#475569">XLSX: structure + mapping share one adapter.</text>
+<rect x="430" y="214" width="340" height="547" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="450" y="247" class="label" fill="#1d4ed8">06–10 / IDENTITY &amp; GOVERNED STATE</text>
+<text x="450" y="271" class="small">Follow the numbered artifacts ↓</text>
+<g data-stage="06" data-status="current"><rect x="448" y="288" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="459" y="315" font-size="13" font-weight="700" fill="#0f766e">06</text><text x="488" y="315" font-size="18" font-weight="600" fill="#0f172a">Entity mentions</text><text x="459" y="340" font-size="14" fill="#475569">Source references to items + entities</text></g>
+<path d="M 600 356 V 370" class="flow"/>
+<g data-stage="07" data-status="current"><rect x="448" y="372" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="459" y="399" font-size="13" font-weight="700" fill="#0f766e">07</text><text x="488" y="399" font-size="18" font-weight="600" fill="#0f172a">Entity resolution decisions</text><text x="459" y="424" font-size="14" fill="#475569">Canonical identity or typed abstention</text></g>
+<path d="M 600 440 V 454" class="flow"/>
+<g data-stage="08" data-status="current"><rect x="448" y="456" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="459" y="483" font-size="13" font-weight="700" fill="#0f766e">08</text><text x="488" y="483" font-size="18" font-weight="600" fill="#0f172a">Canonical assertions</text><text x="459" y="508" font-size="14" fill="#475569">Assertions tied to resolved identities</text></g>
+<path d="M 600 524 V 538" class="flow"/>
+<g data-stage="09" data-status="current"><rect x="448" y="540" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="459" y="567" font-size="13" font-weight="700" fill="#0f766e">09</text><text x="488" y="567" font-size="18" font-weight="600" fill="#0f172a">Reconciliation</text><text x="459" y="592" font-size="14" fill="#475569">Versions · dates · status · lifecycle</text></g>
+<path d="M 600 608 V 622" class="flow"/>
+<g data-stage="10" data-status="current"><rect x="448" y="624" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="459" y="651" font-size="13" font-weight="700" fill="#0f766e">10</text><text x="488" y="651" font-size="18" font-weight="600" fill="#0f172a">Operational state</text><text x="459" y="676" font-size="14" fill="#475569">Project status from reconciled assertions</text></g>
+<text x="450" y="735" font-size="14" fill="#475569">Retain governing, losing + conflicting claims.</text>
+<rect x="820" y="214" width="340" height="547" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="840" y="247" class="label" fill="#6d28d9">11–15 / INTELLIGENCE &amp; EXECUTION</text>
+<text x="840" y="271" class="small">Follow the numbered artifacts ↓</text>
+<g data-stage="11" data-status="current"><rect x="838" y="288" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="849" y="315" font-size="13" font-weight="700" fill="#0f766e">11</text><text x="878" y="315" font-size="18" font-weight="600" fill="#0f172a">Derived facts</text><text x="849" y="340" font-size="14" fill="#475569">Counts + costs now; averages/trends later</text></g>
+<path d="M 990 356 V 370" class="flow"/>
+<g data-stage="12" data-status="current"><rect x="838" y="372" width="304" height="68" rx="9" fill="#ecfdf5" stroke="#99d7c7"/><text x="849" y="399" font-size="13" font-weight="700" fill="#0f766e">12</text><text x="878" y="399" font-size="18" font-weight="600" fill="#0f172a">Anomalies</text><text x="849" y="424" font-size="14" fill="#475569">Expected vs observed; explicit abstentions</text></g>
+<path d="M 990 440 V 454" class="flow"/>
+<g data-stage="13" data-status="future"><rect x="838" y="456" width="304" height="68" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="6 4"/><text x="849" y="483" font-size="13" font-weight="700" fill="#475569">13</text><text x="878" y="483" font-size="18" font-weight="600" fill="#0f172a">Predictions + forecasts</text><text x="849" y="508" font-size="14" fill="#475569">Uncertain / future states; no executor</text></g>
+<path d="M 990 524 V 538" class="flow"/>
+<g data-stage="14" data-status="future"><rect x="838" y="540" width="304" height="68" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="6 4"/><text x="849" y="567" font-size="13" font-weight="700" fill="#475569">14</text><text x="878" y="567" font-size="18" font-weight="600" fill="#0f172a">Policy decisions</text><text x="849" y="592" font-size="14" fill="#475569">Evidence + rules + thresholds; future</text></g>
+<path d="M 990 608 V 622" class="flow"/>
+<g data-stage="15" data-status="future"><rect x="838" y="624" width="304" height="68" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="6 4"/><text x="849" y="651" font-size="13" font-weight="700" fill="#475569">15</text><text x="878" y="651" font-size="18" font-weight="600" fill="#0f172a">Authorized actions</text><text x="849" y="676" font-size="14" fill="#475569">Triggered alerts + processes; future</text></g>
+<text x="840" y="735" font-size="14" fill="#475569">Models route; services own facts and policy.</text>
+<path d="M 384 246 H 426" class="flow"/>
+<path d="M 774 246 H 816" class="flow"/>
+
+<rect x="40" y="785" width="1120" height="101" rx="12" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="60" y="811" class="label" fill="#6d28d9">HUMAN REVIEW + GOVERNANCE ACROSS THE PIPELINE AND ITS OUTCOMES</text>
+<text x="60" y="837" class="body">Today: confirm / challenge assessments; reconcile eligible conflicts prospectively for one item + project + site.</text>
+<text x="60" y="864" class="body">Future: governed decision approval, authorization before external actions, and review of action outcomes.</text>
+
+<text x="40" y="918" class="small">Evidence + provenance persist across every layer · Source assertions are not truth · Missing evidence is not zero</text>
+<text x="40" y="943" class="small">Synthetic-data lab · Current counts/costs and qualified anomaly paths ≠ complete analytics or procurement execution</text>
+</svg>
