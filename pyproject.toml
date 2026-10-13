@@ -9,7 +9,7 @@ dependencies = []
 
 [project.optional-dependencies]
 workflow = [
-    "langgraph==1.2.12",
+    "langgraph==1.2.14",
     "langgraph-checkpoint-sqlite==3.1.1",
 ]
 
