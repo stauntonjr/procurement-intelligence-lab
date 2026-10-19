@@ -1,5 +1,16 @@
 # Project handoff
 
+## Core architecture resumption — 2026-10-19
+
+The owner has resumed core architecture work after the demo integration. Issue #201
+adds the first real procurement DomainPackage, domain-owned BOM source schema and
+installed canonical-manifest command; see [package contract](../domains/procurement/package-v1.md).
+This is an initial declaration/adoption slice. Full procurement stage adaptation,
+runtime registry/capability validation and physical planning remain subsequent work;
+EXECUTE bindings are requirements, not runtime availability claims. Demo acceptance
+and broader M0–M9 criteria remain separately tracked. The audit repair is merged in
+PR #200 and the main-branch hosted audit passed at `f4d8145` (run 39340032790).
+
 ## Roadmap audit recovery — 2026-10-19
 
 Issue #199 replaces the quota-exhausting Gemini agent loop with one explicit-model,

@@ -19,6 +19,7 @@ class ErrorCategory(StrEnum):
 class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
+    DOMAIN_PACKAGE_INVALID = "pil.input.domain_package_invalid"
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
     BRIEF_REVIEW_CONFLICT = "pil.policy.brief_review_conflict"
     BRIEF_STORE_UNAVAILABLE = "pil.infrastructure.brief_store_unavailable"

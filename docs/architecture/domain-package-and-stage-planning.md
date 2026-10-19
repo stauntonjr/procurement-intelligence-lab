@@ -2,7 +2,9 @@
 
 Status: accepted architecture contract. The deterministic compiler and concrete contracts for all
 twelve logical stages are implemented; the runtime capability registry, physical planner, complete
-procurement package, and multi-domain runtime are not.
+procurement package, and multi-domain runtime are not. Issue #201 supplies the initial
+[BOM package declaration and source-schema adoption](../domains/procurement/package-v1.md),
+without claiming complete stage adaptation or runtime execution.
 
 The goal is to make procurement one vertical on a reusable evidence-first platform without moving procurement meaning into provider adapters or making a future control plane aware of domain names. Four layers keep those responsibilities separate.
 

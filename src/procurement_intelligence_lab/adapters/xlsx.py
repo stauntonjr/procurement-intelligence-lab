@@ -13,6 +13,7 @@ from procurement_intelligence_lab.domains.procurement.assertions import (
     assertions_for_bom,
 )
 from procurement_intelligence_lab.domains.procurement.bom import Bom, BomLine
+from procurement_intelligence_lab.domains.procurement.source_schema import BOM_TABLE_SCHEMA
 from procurement_intelligence_lab.domains.procurement.provenance import local_provenance_context
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef, TabularLocation
 from procurement_intelligence_lab.platform.semantics.provenance import (
@@ -31,7 +32,7 @@ _NS = {
 }
 _STRUCTURER_NAME = "xlsx-bom-structurer"
 _STRUCTURER_VERSION = "1"
-_BOM_SCHEMA_VERSION = "bom-xlsx-v1"
+_BOM_SCHEMA_VERSION = BOM_TABLE_SCHEMA.schema_id
 _CELL_REFERENCE = re.compile(r"^([A-Z]+)([1-9][0-9]*)$")
 
 
@@ -171,7 +172,7 @@ def _worksheet_root(archive: ZipFile, sheet: str) -> ET.Element:
 
 def read_bom(
     path: str | Path,
-    sheet: str = "BOM",
+    sheet: str = BOM_TABLE_SCHEMA.sheet_name,
     *,
     artifact_id: str | None = None,
 ) -> Bom:
@@ -182,7 +183,7 @@ def read_bom(
 
 def read_bom_with_provenance(
     path: str | Path,
-    sheet: str = "BOM",
+    sheet: str = BOM_TABLE_SCHEMA.sheet_name,
     provenance_context: ProvenanceContext | None = None,
     implementation_version: str = _STRUCTURER_VERSION,
     schema_version: str = _BOM_SCHEMA_VERSION,
@@ -211,7 +212,7 @@ def read_bom_with_provenance(
             values, populated_columns = _row_values(row, shared)
             rows.append((int(row.attrib.get("r", fallback_row_number)), values, populated_columns))
 
-    if not rows or rows[0][1][:4] != ["SKU", "Description", "Quantity", "Unit Price"]:
+    if not rows or not BOM_TABLE_SCHEMA.matches_headers(rows[0][1]):
         raise ValueError("expected BOM headers: SKU, Description, Quantity, Unit Price")
 
     artifact_id = artifact_id or str(path)
