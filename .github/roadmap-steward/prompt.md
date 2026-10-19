@@ -26,3 +26,7 @@ confirmation. Do not invent roadmap work.
 
 Return a JSON object with one string field, "response", containing the report.
 Every required section must contain substantive text, even when no finding is established.
+Honor explicit historical labels and superseding status notes: an archived branch
+narrative under a current integration notice is not, by itself, contradictory.
+Avoid aggregate counts unless the supplied evidence explicitly establishes them.
+Treat closure/status as tracker evidence, not proof of every acceptance criterion.
