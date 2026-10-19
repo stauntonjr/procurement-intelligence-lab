@@ -1,0 +1,11 @@
+schema_version = "1.0"
+source_profile = "events"
+source_profile_version = "1.0.0"
+application_version = "test-build"
+
+[[selections]]
+stage = "INGEST"
+implementation_id = "fixture.ingest"
+config_schema_version = "1.0"
+[selections.settings]
+endpoint_ref = "fixture://offline"

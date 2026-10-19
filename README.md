@@ -222,4 +222,20 @@ python -m procurement_intelligence_lab.interfaces.domain_package --source-profil
 This prints the real procurement declaration as canonical JSON. It performs no
 pipeline execution. The [package contract](docs/domains/procurement/package-v1.md)
 records its schema, reference meanings, typed EMPTY late stages and the remaining
-runtime registry/planning boundary.
+universal-stage execution boundary.
+
+
+### Validate a deployment plan
+
+```bash
+python -m procurement_intelligence_lab.interfaces.domain_package > /tmp/procurement-manifest.json
+python -m procurement_intelligence_lab.interfaces.plan_package \
+  --manifest /tmp/procurement-manifest.json \
+  --registry tests/fixtures/planning/procurement-registry.json \
+  --config tests/fixtures/planning/procurement-config.toml
+```
+
+This emits a deterministic plan and SHA-256, retaining all twelve stages and rejecting
+incompatible selections. These external fixtures advertise compatibility only; no stage runs.
+The [runtime planning contract](docs/architecture/runtime-planning.md) documents deployment
+schemas, typed failures, version/hash boundaries and clean-installed acceptance.

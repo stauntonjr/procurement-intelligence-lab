@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "implementations": [
+    {
+      "implementation_id": "fixture.ingest",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "INGEST",
+      "input_contract": {
+        "name": "SourceReference",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "Artifact",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    }
+  ]
+}
