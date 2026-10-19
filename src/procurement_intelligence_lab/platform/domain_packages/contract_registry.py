@@ -136,3 +136,6 @@ def validate_stage_contract_registry(
 
 
 CONTRACT_REGISTRY = validate_stage_contract_registry()
+
+# Initial concrete semantic-contract revision, independent of manifest/planning schemas.
+CONTRACT_VERSIONS = MappingProxyType({item.name: "1.0" for item in CONTRACT_DEFINITIONS})

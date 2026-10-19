@@ -64,7 +64,8 @@ The semantic contracts are reusable definitions, not claims of deployed capabili
   procurement semantic model;
 - no procurement `DomainPackage` is yet wired to the runtime;
 - PREDICT, DECIDE, and ACT have no procurement executors or policies;
-- the runtime capability registry and logical-to-physical planner remain future work; and
+- Issue #205 supplies descriptor admission and deterministic logical-to-physical planning
+  ([contract](runtime-planning.md)); stage execution and semantic execution traces remain future work; and
 - a second production vertical remains an M9 proof, while the inventory fixture is only a
   portability counterexample.
 

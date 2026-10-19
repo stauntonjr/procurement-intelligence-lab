@@ -27,6 +27,7 @@ that obscure ownership.
 src/procurement_intelligence_lab/
   platform/
     domain_packages/   # stage catalog, concrete contract registry, schema, compiler
+    planning/          # immutable deployment descriptors/config and pure physical planner
     semantics/         # universal stage records, evidence foundations, strategy Protocols
   domains/
     procurement/       # BOM, BoQ, PO and procurement policy/algorithms

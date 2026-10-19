@@ -1,8 +1,9 @@
 # Domain packages and stage planning
 
 Status: accepted architecture contract. The deterministic compiler and concrete contracts for all
-twelve logical stages are implemented; the runtime capability registry, physical planner, complete
-procurement package, and multi-domain runtime are not. Issue #201 supplies the initial
+twelve logical stages, initial procurement package and deterministic deployment admission/planner
+are implemented. Full procurement stage adaptation and multi-domain execution remain separate work.
+See [runtime planning](runtime-planning.md) for the implemented registry/config/plan contract. Issue #201 supplies the initial
 [BOM package declaration and source-schema adoption](../domains/procurement/package-v1.md),
 without claiming complete stage adaptation or runtime execution.
 

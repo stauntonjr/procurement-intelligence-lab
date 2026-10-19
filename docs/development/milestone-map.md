@@ -53,8 +53,11 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 Issue #201 (M1, part of #20/#7) introduces the real procurement declaration and
 BOM source-schema ownership with an installed manifest command. It preserves
 current BOM behavior and evidence. This is the first package adoption slice;
-it does not complete M1–M4 extraction, universal-stage execution, runtime
-registry/planning, forecasting, actions or second-vertical proof. See the
+it does not complete M1–M4 extraction, universal-stage execution, forecasting,
+actions or second-vertical proof. Issue #205 (M9, parent #12) adds runtime registry
+admission, explicit deployment config and deterministic physical planning;
+[planning acceptance](../architecture/runtime-planning.md) uses fixture descriptors,
+not operational executors. Semantic execution traces and stage adaptation remain open. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream
@@ -66,7 +69,7 @@ This workstream cuts across the existing M0-M9 delivery taxonomy; it does not cr
 | Platform contracts | M0 Engineering and architecture harness | Ratified stage definitions, fixed meta-schema, neutral modes, reusable semantic/strategy contracts, dependency rules, and conformance/versioning rules | Stage contract ratified by M0.33; compiler delivered by M0.34; ownership correction delivered by #149 / PR #150; complete typed topology and contract registry delivered by M0.36 / #151 / PR #152 |
 | Procurement extraction | M1-M4 semantic pipeline | Procurement package, BOM/BoQ/PO records, source profiles, policy/config refs, and evaluation refs | Initial BoQ/PO pressure-test records were delivered by Issue #149 / PR #150; complete package extraction still requires no observable semantic or provenance regression |
 | Compiler and manifest | M0 Engineering and architecture harness | Deterministic compiler, validator, manifest hash, compatibility tests under `platform/domain_packages` | Delivered by M0.34; equivalent authoring data yields byte-equivalent canonical JSON |
-| Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | No domain-name branching; incompatible implementations fail closed |
+| Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | #205 delivers immutable descriptors/config, compatibility checks, deterministic plan and installed CLI without domain-name branching; semantic execution traces and executors remain open |
 | SME/MCP authoring | M8 Guarded agent tools | Schema-aware declarative authoring and validation interfaces | Import remains side-effect-free; writes are reviewable and policy constrained |
 | Second-vertical proof | M9 Integrated demo | Another domain package plus shared conformance and swap benchmarks | Demonstrates reuse without changing platform topology for domain convenience |
 

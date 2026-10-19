@@ -44,7 +44,8 @@ does not introduce currencies, broader unit normalization or new numeric policy.
 These versioned reference meanings name the current behavior. They are not provider
 registrations, callbacks or proof that universal strategy executors are available.
 The compiler currently validates reference syntax; a runtime's reference-resolution
-and capability-admission rules are subsequent work. Each reference's evaluation
+remains subsequent work. Issue #205 supplies descriptor-based capability admission and planning
+without resolving these references or executing stages. Each reference's evaluation
 suite is the listed repository test surface at version 1, not a claim that every
 broader milestone criterion is complete.
 
@@ -74,8 +75,9 @@ become procurement DECIDE/ACT executors merely because those workflows exist.
 The installed command and schema extraction are the first package adoption slice.
 The existing application still invokes procurement services directly. Shared
 StructuredDocument/MappedDocument/NormalizedObservation/OperationalState adaptation,
-registry descriptors, runtime capability validation, physical planning, policy
-parameter loading and semantic execution traces remain subsequent implementation.
+policy parameter loading and semantic execution traces remain subsequent implementation.
+Issue #205 supplies generic registry descriptors, runtime capability validation and physical
+planning; its fixtures advertise compatibility only, without procurement executors.
 BoQ/PO source profiles and complete procurement-package extraction remain open;
 neither source format is silently treated as a BOM. The package may specify an
 EXECUTE requirement even when the future runtime has no compatible implementation;

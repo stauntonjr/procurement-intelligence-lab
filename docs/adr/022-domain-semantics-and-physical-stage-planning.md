@@ -12,7 +12,7 @@ The repository already separates structure from mapping, assertions from truth, 
 
 ## Decision
 
-Adopt the four-layer model described in [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md) as the platform contract. This decision ratifies the semantic boundary and schema rules. The deterministic compiler is implemented; the runtime registry/planner and a complete declarative procurement package are not.
+Adopt the four-layer model described in [Domain packages and stage planning](../architecture/domain-package-and-stage-planning.md) as the platform contract. This decision ratifies the semantic boundary and schema rules. The deterministic compiler, initial procurement BOM package and deployment admission/planner are implemented. Full procurement stage adaptation and execution remain separate work.
 
 1. platform-owned `StageDefinition` records define universal stage semantics, input/output contracts, guarantees, and allowed logical topology;
 2. domain-owned declarative `StageBinding` records define mode, semantic requirements, domain config/policy references, and evaluation references, but do not normally select providers, models, services, or regions;
@@ -61,8 +61,8 @@ Record the platform schema version, domain version, compiled-manifest hash, runt
 - Stage-catalog evolution is an architecture change, not an ordinary domain edit.
 - Adding a vertical-specific record does not make shared evidence, provenance, scope, or strategy
   contracts vertical-owned.
-- The semantic contract layer is complete across the fixed topology, while procurement-package
-  extraction, the runtime registry/planner, SME/MCP authoring tools, operational late-stage
+- The semantic contract layer is complete across the fixed topology, while complete procurement-package
+  adaptation, runtime execution, SME/MCP authoring tools, operational late-stage
   implementations, and a second production vertical remain separate work.
 
 ## Alternatives considered
@@ -88,3 +88,20 @@ Rejected for ordinary configuration because semantic order is a platform invaria
 The stage catalog, fixed meta-schema, neutral modes, versioning rules, current-semantics mapping, and compiler conformance matrix are ratified in [the conformance contract](../architecture/domain-package-conformance.md). M0.34 compiles and validates manifests; M0.36 supplies and validates concrete semantic types and strategy Protocols for the complete logical topology; M1-M4 extract the procurement package; M8 adds guarded authoring; and M9 adds runtime planning and a second-vertical proof.
 
 Current repository types and application services remain authoritative for behavior on main until those slices are implemented and accepted. Provider choices remain evaluation hypotheses until supported by reproducible evidence.
+
+## Runtime planning adoption — Issue #205
+
+The deployment boundary uses immutable implementation descriptors and explicit per-stage selections.
+The JSON registry and TOML config have schema 1.0; configuration pins source-profile ID/version.
+Descriptors name exact catalog input/output contracts and their independent semantic versions,
+capabilities, config-schema revision and required/optional string-valued setting keys. Every entry
+is admitted, including unused descriptors; no registry order, ambient configuration or provider
+availability inference selects an implementation. The platform revalidates compiled JSON through
+the compiler before planning. Incompatible or absent selections fail with typed diagnostics.
+
+Canonical plans retain all twelve logical bindings, neutral dispositions, selected descriptors,
+capability checks, semantic references and independent versions. Manifest/config digests and a
+plan content hash identify the planning inputs; settings values do not appear in plans. Physical
+steps list selected EXECUTE stages only. A plan does not establish source-data validation, wiring,
+execution, service health, policy loading, semantic traces or action authority. The concrete
+schemas, caller and conformance evidence are in [runtime planning](../architecture/runtime-planning.md).

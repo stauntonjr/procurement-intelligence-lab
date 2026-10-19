@@ -116,3 +116,12 @@ registration.
 | Existing procurement semantics | no behavioral/provenance regression in assertions, resolution, reconciliation, state, and anomaly tests | regression and challenge |
 
 M0.34 must attach each case to an executable test, fixture, or challenge result before it is closed.
+
+
+## Runtime planning conformance — Issue #205
+
+The [runtime planning contract](runtime-planning.md) records the implemented planner schemas,
+public command, all twelve retained logical dispositions, descriptor/config compatibility rules,
+typed diagnostics, scenario evidence and clean-wheel acceptance. Missing providers are failures,
+never EMPTY substitutes. Profile/version pins and exact semantic-contract versions fail closed.
+A planning result with fixture descriptors is not procurement executor or second-vertical acceptance.

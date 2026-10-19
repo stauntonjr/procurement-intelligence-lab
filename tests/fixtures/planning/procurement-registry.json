@@ -1,0 +1,257 @@
+{
+  "schema_version": "1.0",
+  "implementations": [
+    {
+      "implementation_id": "fixture.ingest",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "INGEST",
+      "input_contract": {
+        "name": "SourceReference",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "Artifact",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.structure",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "STRUCTURE",
+      "input_contract": {
+        "name": "Artifact",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "StructuredDocument",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.map",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "MAP",
+      "input_contract": {
+        "name": "StructuredDocument",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "MappedDocument",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.normalize",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "NORMALIZE",
+      "input_contract": {
+        "name": "MappedDocument",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "NormalizedObservation",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.assert",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "ASSERT",
+      "input_contract": {
+        "name": "NormalizedObservation",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "SourceAssertion",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.resolve",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "RESOLVE",
+      "input_contract": {
+        "name": "SourceAssertion",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "ResolutionDecision",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.reconcile",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "RECONCILE",
+      "input_contract": {
+        "name": "CanonicalizedAssertion",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "OperationalState",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.derive",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "DERIVE",
+      "input_contract": {
+        "name": "OperationalState",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "DerivedFact",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.detect",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "DETECT",
+      "input_contract": {
+        "name": "OperationalState",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "Anomaly",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    }
+  ]
+}

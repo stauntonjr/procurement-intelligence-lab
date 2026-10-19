@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 import subprocess
@@ -147,8 +148,87 @@ def main() -> int:
                 )
             ):
                 raise RuntimeError("installed manifest command silently accepts an unknown profile")
+            # The descriptor fixtures advertise compatibility only; they contain no executors.
+            planning_fixture = ROOT / "tests/fixtures/planning"
+            planning_outputs: list[str] = []
+            for domain in ("procurement", "conformance"):
+                planning_manifest = temporary / f"{domain}-manifest.json"
+                planning_manifest.write_text(
+                    manifest_run.stdout
+                    if domain == "procurement"
+                    else (planning_fixture / "conformance-manifest.json").read_text()
+                )
+                planned = subprocess.run(
+                    [
+                        str(python),
+                        "-m",
+                        "procurement_intelligence_lab.interfaces.plan_package",
+                        "--manifest",
+                        str(planning_manifest),
+                        "--registry",
+                        str(planning_fixture / f"{domain}-registry.json"),
+                        "--config",
+                        str(planning_fixture / f"{domain}-config.toml"),
+                    ],
+                    cwd=temporary,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                plan_envelope = json.loads(planned.stdout)
+                plan = plan_envelope["plan"]
+                plan_bytes = json.dumps(
+                    plan, sort_keys=True, ensure_ascii=False, separators=(",", ":")
+                ).encode("utf-8")
+                if plan_envelope["plan_hash"] != hashlib.sha256(plan_bytes).hexdigest():
+                    raise RuntimeError(
+                        "installed plan hash does not identify its canonical payload"
+                    )
+                if len(plan["stages"]) != 12 or len(plan["physical_steps"]) != (
+                    9 if domain == "procurement" else 1
+                ):
+                    raise RuntimeError(
+                        "installed planner lost logical stages or executable selections"
+                    )
+                if (
+                    plan["domain"]["id"] != domain
+                    or plan["stages"][-1]["disposition"] != "TYPED_EMPTY"
+                ):
+                    raise RuntimeError("installed planner lost domain or neutral semantics")
+                planning_outputs.append(planned.stdout.strip())
+            missing_registry = temporary / "missing-registry.json"
+            missing_registry.write_text('{"schema_version":"1.0","implementations":[]}')
+            rejected_plan = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.plan_package",
+                    "--manifest",
+                    str(temporary / "conformance-manifest.json"),
+                    "--registry",
+                    str(missing_registry),
+                    "--config",
+                    str(planning_fixture / "conformance-config.toml"),
+                ],
+                cwd=temporary,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if (
+                rejected_plan.returncode != 2
+                or rejected_plan.stdout
+                or not any(
+                    issue["code"] == "unknown_implementation"
+                    for issue in json.loads(rejected_plan.stderr)["issues"]
+                )
+            ):
+                raise RuntimeError("installed planner did not reject an unavailable implementation")
             probe_outputs.append(
-                probe_run.stdout.strip() + corpus_probe.stdout.strip() + manifest_run.stdout.strip()
+                probe_run.stdout.strip()
+                + corpus_probe.stdout.strip()
+                + manifest_run.stdout.strip()
+                + "".join(planning_outputs)
             )
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")
