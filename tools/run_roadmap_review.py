@@ -153,7 +153,7 @@ def run_review(prompt_path: Path, github_output: Path, report_file: Path | None 
             snapshot = build_snapshot(ROOT, paths)
             digest = hashlib.sha256(snapshot.encode()).hexdigest()
             print(
-                f"Roadmap model={MODEL}; snapshot_sha256={digest}; files={len(paths)}; requests=1"
+                f"Roadmap model={MODEL}; snapshot_sha256={digest}; files={len(paths)}; request_limit=1"
             )
             report = generate_report(
                 prompt_path.read_text(encoding="utf-8"),
