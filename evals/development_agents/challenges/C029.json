@@ -1,0 +1,33 @@
+{
+  "id": "C029",
+  "title": "Roadmap reports require substantive sections",
+  "introducing_commit": "dfa06215b91b9b9820f9d5731bdfce5ec2f17e4a",
+  "oracle": "A response containing only the four required headings must fail report admission, while a report with all four non-empty sections succeeds.",
+  "known_bad": "Accept a report solely because its four headings match, even when every section is empty.",
+  "known_bad_mutation": [
+    {
+      "path": "tools/run_roadmap_review.py",
+      "find": "        if not response[match.end() : end].strip():",
+      "replace": "        if False:"
+    }
+  ],
+  "known_bad_failure_pattern": "DID NOT RAISE",
+  "test_command": [
+    "uv",
+    "run",
+    "pytest",
+    "-q",
+    "tests/unit/test_roadmap_review.py",
+    "-k",
+    "parse_report"
+  ],
+  "surfaces": [
+    "tools/run_roadmap_review.py",
+    "tests/unit/test_roadmap_review.py"
+  ],
+  "prevention": [
+    "Non-empty section admission test",
+    "Hosted report validation",
+    "Latest-revision semantic review"
+  ]
+}
