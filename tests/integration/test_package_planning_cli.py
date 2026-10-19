@@ -100,3 +100,36 @@ def test_public_planning_cli_errors_are_typed_and_have_no_plan(
     assert error["category"] == "input"
     assert issue in {x["code"] for x in error["issues"]}
     assert "Traceback" not in result.stderr
+
+
+@pytest.mark.parametrize("target", ["manifest", "registry"])
+@pytest.mark.parametrize("content", [b'{"x":1,"x":2}', b'{"x":NaN}'])
+def test_json_hook_diagnostics_retain_input_context(
+    tmp_path: Path, target: str, content: bytes
+) -> None:
+    paths = {
+        "manifest": FIXTURES / "conformance-manifest.json",
+        "registry": FIXTURES / "conformance-registry.json",
+        "config": FIXTURES / "conformance-config.toml",
+    }
+    invalid = tmp_path / "invalid.json"
+    invalid.write_bytes(content)
+    paths[target] = invalid
+    result = invoke(paths["manifest"], paths["registry"], paths["config"])
+    assert result.returncode == 2 and not result.stdout
+    assert all(x["path"].startswith(target) for x in json.loads(result.stderr)["issues"])
+
+
+def test_registry_contract_diagnostics_retain_input_context(tmp_path: Path) -> None:
+    payload = json.loads((FIXTURES / "conformance-registry.json").read_text())
+    payload["implementations"][0]["input_contract"]["version"] = "broken"
+    invalid = tmp_path / "invalid-registry.json"
+    invalid.write_text(json.dumps(payload))
+    result = invoke(
+        FIXTURES / "conformance-manifest.json", invalid, FIXTURES / "conformance-config.toml"
+    )
+    assert result.returncode == 2 and not result.stdout
+    assert (
+        json.loads(result.stderr)["issues"][0]["path"]
+        == "registry.implementations[0].input_contract.version"
+    )

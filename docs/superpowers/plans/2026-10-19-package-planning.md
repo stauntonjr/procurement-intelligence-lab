@@ -53,3 +53,14 @@ Files: `interfaces/plan_package.py`, `tools/package_smoke.py`, integration tests
 - [x] Extend clean-wheel smoke using external planning fixtures, not packaged fake executors.
 - [ ] Update architecture/status docs and run focused tests, package smoke, `make check`, challenges.
 - [ ] Record exact-revision semantic evidence, independent review and required CI; merge only when green.
+
+
+## Review correction
+
+Independent review of `004fe75` found that duplicate/non-finite JSON diagnostics used the generic
+`json` path and malformed contract versions lost registry source identity. Five real CLI cases
+first failed their input-context assertions, then passed after loader errors retained their source
+and registry-contract field context. This is a pre-merge acceptance correction, not a shipped
+semantic defect. PhysicalPlan constructor validation was assessed as optional: the output-only
+record is populated exclusively with immutable bytes and a computed string hash by the planner.
+Final exact-revision commands/review are retained in the linked PR semantic evidence.

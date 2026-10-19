@@ -54,9 +54,11 @@ def load_json(data: bytes, path: str) -> object:
         return json.loads(
             data.decode("utf-8"), object_pairs_hook=_object_pairs, parse_constant=_invalid_constant
         )
-    except (ValueError, UnicodeError, RecursionError) as exc:
-        if isinstance(exc, PlanningError):
-            raise
+    except PlanningError as exc:
+        raise PlanningError(
+            tuple(ValidationIssue(issue.code, path, issue.message) for issue in exc.issues)
+        ) from None
+    except (ValueError, UnicodeError, RecursionError):
         reject("invalid_json", path, "expected valid UTF-8 JSON")
 
 
@@ -102,9 +104,19 @@ def _stage(value: object, path: str) -> StageId:
 
 def _contract(value: object, path: str) -> ContractRef:
     data = record(value, path, {"name", "version"})
-    return ContractRef(
-        string(data["name"], path + ".name"), string(data["version"], path + ".version")
-    )
+    name = string(data["name"], path + ".name")
+    version = string(data["version"], path + ".version")
+    try:
+        return ContractRef(name, version)
+    except PlanningError as exc:
+        raise PlanningError(
+            tuple(
+                ValidationIssue(
+                    issue.code, path + "." + issue.path.removeprefix("contract."), issue.message
+                )
+                for issue in exc.issues
+            )
+        ) from None
 
 
 def load_registry(data: bytes) -> ImplementationRegistry:
