@@ -48,6 +48,15 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 - Update GitHub Issue, milestone, Project, and this map together when state changes.
 - Do not infer milestone status from branch names, PR numbers, or historical slice labels.
 
+## Current core architecture continuation — 2026-10-19
+
+Issue #201 (M1, part of #20/#7) introduces the real procurement declaration and
+BOM source-schema ownership with an installed manifest command. It preserves
+current BOM behavior and evidence. This is the first package adoption slice;
+it does not complete M1–M4 extraction, universal-stage execution, runtime
+registry/planning, forecasting, actions or second-vertical proof. See the
+[package contract](../domains/procurement/package-v1.md).
+
 ## Ratified horizontal domain-platform workstream
 
 This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the contract.

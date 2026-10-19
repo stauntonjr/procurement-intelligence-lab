@@ -105,7 +105,51 @@ def main() -> int:
                 capture_output=True,
                 text=True,
             )
-            probe_outputs.append(probe_run.stdout.strip() + corpus_probe.stdout.strip())
+            manifest_run = subprocess.run(
+                [str(python), "-m", "procurement_intelligence_lab.interfaces.domain_package"],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            manifest = json.loads(manifest_run.stdout)
+            if manifest["domain"] != {"id": "procurement", "version": "0.1.0"}:
+                raise RuntimeError("installed procurement package identity drifted")
+            if manifest["source_profile"]["id"] != "bom-table" or len(manifest["stages"]) != 12:
+                raise RuntimeError("installed procurement source profile is incomplete")
+            if [
+                (stage["mode"], stage["neutral_semantics"]) for stage in manifest["stages"][9:]
+            ] != [
+                ("EMPTY", "no_predictions"),
+                ("EMPTY", "no_decisions_or_recommendations"),
+                ("EMPTY", "no_action_attempted"),
+            ]:
+                raise RuntimeError("installed package declares unimplemented late-stage behavior")
+            unsupported_profile = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.domain_package",
+                    "--source-profile",
+                    "purchase-order",
+                ],
+                cwd=temporary,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if (
+                unsupported_profile.returncode != 2
+                or unsupported_profile.stdout
+                or not any(
+                    issue["code"] == "unknown_source_profile"
+                    for issue in json.loads(unsupported_profile.stderr)["issues"]
+                )
+            ):
+                raise RuntimeError("installed manifest command silently accepts an unknown profile")
+            probe_outputs.append(
+                probe_run.stdout.strip() + corpus_probe.stdout.strip() + manifest_run.stdout.strip()
+            )
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")
 

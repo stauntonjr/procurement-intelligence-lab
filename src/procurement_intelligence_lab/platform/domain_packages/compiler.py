@@ -22,6 +22,7 @@ from procurement_intelligence_lab.platform.domain_packages.package import (
     StageId,
     StageMode,
 )
+from procurement_intelligence_lab.platform.semantics.errors import ErrorCode, SemanticContractError
 
 SUPPORTED_SCHEMA_VERSION = "1.0"
 SUPPORTED_CAPABILITIES = frozenset(
@@ -66,8 +67,10 @@ class ValidationIssue:
     message: str
 
 
-class DomainPackageValidationError(ValueError):
+class DomainPackageValidationError(SemanticContractError):
     """Raised when a package cannot be compiled without semantic inference."""
+
+    code = ErrorCode.DOMAIN_PACKAGE_INVALID
 
     def __init__(self, issues: tuple[ValidationIssue, ...]) -> None:
         self.issues = issues

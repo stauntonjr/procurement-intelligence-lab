@@ -212,3 +212,14 @@ The [G2 acceptance dossier](docs/project/g2-acceptance-dossier.md) consolidates 
 fresh language, failure guards and a measured installed deterministic baseline with pinned artifacts.
 Historical misses and separate latency/cost scopes remain visible. It uses zero new model requests;
 full release/browser/deployment and source expansion remain gated.
+
+### Compile the procurement package
+
+```bash
+python -m procurement_intelligence_lab.interfaces.domain_package --source-profile bom-table
+```
+
+This prints the real procurement declaration as canonical JSON. It performs no
+pipeline execution. The [package contract](docs/domains/procurement/package-v1.md)
+records its schema, reference meanings, typed EMPTY late stages and the remaining
+runtime registry/planning boundary.
