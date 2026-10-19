@@ -17,16 +17,14 @@ def test_dependabot_config_covers_all_managed_ecosystems_with_bounded_updates() 
     text = CONFIG.read_text(encoding="utf-8")
 
     assert text.startswith("version: 2\nupdates:\n")
-    assert text.count('package-ecosystem: "') == 3
+    assert text.count('package-ecosystem: "') == 2
 
     for ecosystem, limit, time in (
         ("uv", "open-pull-requests-limit: 3", 'time: "04:00"'),
         ("github-actions", "open-pull-requests-limit: 2", 'time: "04:30"'),
-        ("npm", "open-pull-requests-limit: 1", 'time: "05:00"'),
     ):
         section = _section(text, ecosystem)
-        expected_directory = "/.github/roadmap-steward" if ecosystem == "npm" else "/"
-        assert f'directory: "{expected_directory}"' in section
+        assert 'directory: "/"' in section
         assert 'interval: "weekly"' in section
         assert 'day: "monday"' in section
         assert time in section

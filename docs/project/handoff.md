@@ -1,5 +1,13 @@
 # Project handoff
 
+## Roadmap audit recovery — 2026-10-19
+
+Issue #199 replaces the quota-exhausting Gemini agent loop with one explicit-model,
+read-only evidence-snapshot request. See [ADR-036](../adr/036-bounded-roadmap-review-request.md)
+and [recovery evidence](roadmap-review-recovery.md). The bounded scope excludes PR
+bodies and source-code inspection; broader Project/pagination work remains #117.
+This repair does not change procurement architecture delivery priorities.
+
 ## PR reconciliation — 2026-10-05
 
 PR #193 merged the complete #175–#192 demo chain and its corrective review pass to `main`

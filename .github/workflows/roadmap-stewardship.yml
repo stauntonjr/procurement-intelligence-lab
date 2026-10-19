@@ -13,9 +13,11 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Capture durable planning snapshot
         env:
@@ -27,27 +29,16 @@ jobs:
             --json number,title,state,stateReason,labels,milestone,url,closedAt,body \
             > .roadmap-audit/issues.json
           gh pr list --repo "$GITHUB_REPOSITORY" --state all --limit 200 \
-            --json number,title,state,isDraft,mergedAt,url,body \
+            --json number,title,state,isDraft,mergedAt,url \
             > .roadmap-audit/pull-requests.json
           gh api --paginate "repos/$GITHUB_REPOSITORY/milestones?state=all&per_page=100" \
             > .roadmap-audit/milestones.json
-
-      - name: Install lockfile-pinned Gemini CLI
-        working-directory: .github/roadmap-steward
-        run: npm ci --ignore-scripts --no-audit --no-fund
-
-      - name: Configure Gemini CLI
-        run: |
-          mkdir -p .gemini
-          cp .github/roadmap-steward/settings.json .gemini/settings.json
 
       - name: Run advisory roadmap review
         id: gemini
         env:
           GITHUB_TOKEN: ""
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_CLI_TRUST_WORKSPACE: "true"
-          SURFACE: "GitHub"
         run: python -m tools.run_roadmap_review
 
       - name: Publish advisory report

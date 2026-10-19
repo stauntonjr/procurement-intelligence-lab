@@ -8,7 +8,15 @@ It is not an autonomous product manager, issue writer, or authority to change ro
 
 ## What the audit reviews
 
-The manually dispatched or weekly workflow snapshots GitHub Issues, pull requests, milestones, and the repository's planning and architecture documents. The Gemini CLI runtime is installed from the checked-in npm lockfile rather than a third-party composite Action, and its tool surface is limited to reading files from the ephemeral checkout. A successful workflow run means the CLI returned valid JSON with a non-empty report containing the four required headings; missing credentials, quota errors, malformed output, and incomplete reports fail the run instead of appearing green. Its advisory report can flag:
+The manually dispatched or weekly workflow snapshots GitHub Issues (including bodies),
+PR metadata (excluding bodies), milestones, and the repository's named planning,
+architecture and ADR documents. A trusted Python script sends one request to the
+explicit `gemini-3.8-flash` model. There are no model tools or agent file-reading
+turns. Missing, malformed or oversized inputs fail explicitly. A successful run
+requires a completed provider response and all four non-empty report sections;
+quota errors, timeouts, truncated output and invalid reports fail the job.
+[ADR-036](../adr/036-bounded-roadmap-review-request.md) and the
+[recovery evidence](../project/roadmap-review-recovery.md) record the boundary. Its advisory report can flag:
 
 - completed or closed work still presented as active;
 - stale handoff or milestone-map references;
@@ -37,3 +45,17 @@ GitHub Project field state is reviewed deliberately by the maintainer. The workf
 5. In a PR, record whether chat/Work exploration produced a material decision that has been captured durably.
 
 The audit improves consistency of the durable record; it cannot prove that every private conversation has been captured.
+
+## Runtime and failure diagnosis
+
+The runner requires `GEMINI_API_KEY` in Actions secrets. It uses Python stdlib HTTPS,
+a 180-second request timeout and a five-minute job limit, with no automatic retry.
+Logs name the model and snapshot digest; provider error bodies and keys are not
+published. HTTP 429 means quota/rate-limit unavailability and cannot count as a
+completed audit. For an existing JSON report, use
+`python -m tools.run_roadmap_review --report-file RESPONSE.json --github-output OUTPUT`
+to exercise the same report validator without inference.
+
+Source-code inspection, PR bodies, private Chat/Work and live Project state are not
+in the supplied model context. Issue/PR capture is bounded at 200 records each;
+#117 retains the broader pagination and scoped Project integration work.
