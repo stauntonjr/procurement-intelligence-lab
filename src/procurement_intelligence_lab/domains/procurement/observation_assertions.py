@@ -101,6 +101,8 @@ def validate_bom_assertions(
     expected_mentions: list[EntityMention] = []
     sku_observations: list[NormalizedObservation] = []
     for observation, claim in zip(observations, assertions, strict=True):
+        if claim.context is None or claim.context.confidence_diagnostic != "not estimated":
+            raise SourceAssertionError("BOM assertion confidence must remain not estimated")
         expected = _PREDICATES.get(
             observation.source_field.field_name, AssertionPredicate.UNMAPPED_FIELD
         )

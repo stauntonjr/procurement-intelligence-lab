@@ -174,11 +174,15 @@ def test_strategy_rejects_drop_duplicate_foreign_and_wrong_bom_profile(tmp_path:
         "entity_type",
         "duplicate_attached",
         "wrong_predicate",
+        "synthetic_confidence",
     ],
 )
 def test_application_rejects_invalid_assertion_producer(tmp_path: Path, change: str) -> None:
     from procurement_intelligence_lab.domains.procurement.observation_assertions import BomAssert
-    from procurement_intelligence_lab.platform.semantics.assertions import AssertionOrigin
+    from procurement_intelligence_lab.platform.semantics.assertions import (
+        AssertionOrigin,
+        SourceAssertion,
+    )
     from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
     from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
 
@@ -194,6 +198,24 @@ def test_application_rejects_invalid_assertion_producer(tmp_path: Path, change: 
             claims, mentions = BomAssert(self.origin).assert_observations(
                 observations, provenance=provenance
             )
+            if change == "synthetic_confidence":
+                confidence_claims: list[SourceAssertion] = []
+                for claim in claims:
+                    assert claim.context is not None
+                    confidence_claims.append(
+                        replace(
+                            claim,
+                            context=replace(claim.context, confidence_diagnostic="estimated 0.99"),
+                        )
+                    )
+                updated = tuple(
+                    replace(
+                        m,
+                        assertions=tuple(confidence_claims[claims.index(c)] for c in m.assertions),
+                    )
+                    for m in mentions
+                )
+                return tuple(confidence_claims), updated
             if change == "entity_type":
                 return claims, (replace(mentions[0], entity_type="unrelated"), *mentions[1:])
             if change == "duplicate_attached":

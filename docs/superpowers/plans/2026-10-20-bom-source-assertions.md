@@ -32,3 +32,8 @@ Review ruling: add an injected procurement output validator. Fresh review reprod
 partial, description-as-SKU and relabeled predicate outputs accepted by generic lineage checks.
 Four failing producer tests pin the correction; core/application stays domain-neutral. This
 strengthens the already specified producer-output boundary without expanding business policy.
+
+Final automated review ruling: enforce the fixed unknown-confidence diagnostic in the injected
+BOM validator. The synthetic-confidence replacement-producer regression failed before the guard;
+no numeric confidence is introduced. This pre-merge finding extends the existing producer tests,
+not the shipped-defect challenge set. All acceptance runs target the new revision.
