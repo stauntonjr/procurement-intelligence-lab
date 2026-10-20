@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import inspect
 import json
+import subprocess
+import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -26,7 +29,33 @@ def digest(value: object) -> str:
     ).hexdigest()
 
 
-def benchmark(manifest_path: Path, revision: str) -> dict[str, object]:
+def checkout_revision(expected: str | None = None) -> str:
+    try:
+        revision = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD"], cwd=ROOT, text=True, stderr=subprocess.PIPE
+        ).strip()
+        dirty = subprocess.check_output(
+            ["git", "status", "--porcelain", "--untracked-files=normal"],
+            cwd=ROOT,
+            text=True,
+            stderr=subprocess.PIPE,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise ValueError("conformance context requires a readable Git checkout") from exc
+    if expected is not None and expected != revision:
+        raise ValueError("conformance context revision does not match checkout HEAD")
+    if dirty:
+        raise ValueError("conformance context requires a clean tracked and untracked worktree")
+    if (
+        Path(inspect.getfile(build_bom_stage_service)).resolve()
+        != (ROOT / "src/procurement_intelligence_lab/bootstrap.py").resolve()
+    ):
+        raise ValueError("conformance context imported code from outside the verified checkout")
+    return revision
+
+
+def benchmark(manifest_path: Path, revision: str | None = None) -> dict[str, object]:
+    revision = checkout_revision(revision)
     manifest_bytes = manifest_path.read_bytes()
     manifest = json.loads(manifest_bytes)
     records: list[dict[str, object]] = []
@@ -117,6 +146,7 @@ def benchmark(manifest_path: Path, revision: str) -> dict[str, object]:
                 "latency_seconds": round(time.perf_counter() - started, 6),
             }
         )
+    checkout_revision(revision)
     return {
         "schema_version": 1,
         "kind": "deterministic-bom-stage-conformance",
@@ -136,10 +166,16 @@ def benchmark(manifest_path: Path, revision: str) -> dict[str, object]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
-    parser.add_argument("--revision", required=True)
+    parser.add_argument(
+        "--revision", help="Optional exact HEAD assertion; actual identity is derived from Git"
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    report = benchmark(args.manifest, args.revision)
+    try:
+        report = benchmark(args.manifest, args.revision)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     print(
         json.dumps(

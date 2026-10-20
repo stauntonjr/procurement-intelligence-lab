@@ -16,7 +16,9 @@ durable storage, crash recovery, multi-tenant authorization, replay/idempotency 
 `XlsxStructure` reads by captured hash through the port, verifying hash and byte length before
 parsing. It never reopens the source URI. Shared `xlsx_cells.py` mechanics retain the existing
 legacy decoder behavior and C002's sparse-coordinate oracle. The new structurer admits unique
-positive row/cell coordinates, resolves shared/inline strings, and emits generic `row`/`cell`
+positive row/cell coordinates, resolves internal worksheet targets against `/xl/workbook.xml`
+(including package-absolute and relative dot-segment paths, following the
+[OPC source-part rule](https://learn.microsoft.com/en-us/dotnet/api/system.io.packaging.packagerelationship.targeturi?view=netframework-4.8.1)), resolves shared/inline strings, and emits generic `row`/`cell`
 elements with physical worksheet coordinates. It assigns no schema meaning or business units.
 Row/cell ordering follows source coordinates; blank rows without cells emit no elements.
 
@@ -116,9 +118,12 @@ evidence artifact/hash identity must match the captured source. Extra `Line ID` 
 unmapped. The initial gold construction omitted those extras; correcting the source-derived
 expectation preserved the specified unmapped-field behavior rather than dropping source data.
 Nine workbooks yield 1,608 mapped fields. The runner records input and layer hashes, record counts,
-per-source latency, code revision and manifest hash; inference calls/cost are zero and compute cost
+per-source latency, verified checkout revision and manifest hash; inference calls/cost are zero and compute cost
 is unavailable. Expected digests are conformance checks, not an OCR quality score or #30's external
-parser comparison. Evaluator files are not shipped as runtime resources.
+parser comparison. The runner derives HEAD and requires a clean tracked/untracked worktree, verifies
+that imported stage code belongs to that checkout, and rechecks the context before emitting a report.
+An optional `--revision` is an exact HEAD assertion; mismatched, dirty or foreign-code contexts exit 2
+without writing a report. Evaluator files are not shipped as runtime resources.
 
 ```bash
 python tools/benchmark_bom_stages.py --revision CODE_REVISION --output /tmp/bom-stage-conformance.json

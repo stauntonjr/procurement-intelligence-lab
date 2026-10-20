@@ -2,6 +2,7 @@
 
 import re
 from collections.abc import Callable
+from urllib.parse import urljoin, urlsplit
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile
 
@@ -94,4 +95,28 @@ def worksheet_root(archive: ZipFile, sheet: str, *, strict: bool = False) -> ET.
         for rel in rels
     ):
         raise ValueError("external worksheet relationships are unsupported")
-    return ET.fromstring(archive.read("xl/" + relmap[target].lstrip("/")))
+    part = _worksheet_part(relmap[target]) if strict else "xl/" + relmap[target].lstrip("/")
+    return ET.fromstring(archive.read(part))
+
+
+def _worksheet_part(target: str) -> str:
+    uri = urlsplit(target)
+    if (
+        uri.scheme
+        or uri.netloc
+        or uri.query
+        or uri.fragment
+        or not uri.path
+        or "\\" in target
+        or "\x00" in target
+    ):
+        raise ValueError("worksheet target must be an internal package part URI")
+    depth = 0 if uri.path.startswith("/") else 1
+    for segment in uri.path.split("/"):
+        if segment == "..":
+            if depth == 0:
+                raise ValueError("worksheet target escapes the package root")
+            depth -= 1
+        elif segment not in {"", "."}:
+            depth += 1
+    return urljoin("/xl/workbook.xml", target).lstrip("/")

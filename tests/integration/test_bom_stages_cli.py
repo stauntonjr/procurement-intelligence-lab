@@ -195,3 +195,37 @@ def test_cli_recovers_only_rich_display_text_without_xml_indentation(
     assert result.returncode == 0, result.stderr
     fields = json.loads(result.stdout)["mapped_document"]["fields"]
     assert next(f for f in fields if f["field_name"] == "quantity")["raw_value"] == "0.5"
+
+
+@pytest.mark.parametrize(
+    ("target", "accepted"),
+    [
+        ("/xl/worksheets/sheet1.xml", True),
+        ("worksheets/../worksheets/sheet1.xml", True),
+        ("../xl/worksheets/sheet1.xml", True),
+        ("../../xl/worksheets/sheet1.xml", False),
+        ("//example.invalid/sheet.xml", False),
+        ("https://example.invalid/sheet.xml", False),
+        ("worksheets/sheet1.xml?query=1", False),
+        ("worksheets/sheet1.xml#fragment", False),
+    ],
+)
+def test_cli_resolves_internal_worksheet_target_uris(
+    tmp_path: Path, target: str, accepted: bool
+) -> None:
+    path = workbook(tmp_path / "uri.xlsx", HEADER + ROW)
+    with ZipFile(path) as archive:
+        members = {name: archive.read(name) for name in archive.namelist()}
+    rels = "xl/_rels/workbook.xml.rels"
+    members[rels] = members[rels].replace(b"worksheets/sheet1.xml", target.encode())
+    with ZipFile(path, "w") as archive:
+        for name, content in members.items():
+            archive.writestr(name, content)
+    result = invoke(path)
+    if not accepted:
+        assert result.returncode == 2 and not result.stdout
+        assert json.loads(result.stderr)["code"] == "pil.interpretation.document_structure_invalid"
+        return
+    assert result.returncode == 0, result.stderr
+    fields = json.loads(result.stdout)["mapped_document"]["fields"]
+    assert next(f for f in fields if f["field_name"] == "quantity")["raw_value"] == "0.5"
