@@ -105,3 +105,16 @@ plan content hash identify the planning inputs; settings values do not appear in
 steps list selected EXECUTE stages only. A plan does not establish source-data validation, wiring,
 execution, service health, policy loading, semantic traces or action authority. The concrete
 schemas, caller and conformance evidence are in [runtime planning](../architecture/runtime-planning.md).
+
+
+## Initial executable stage adoption — Issue #207
+
+A synchronous application service composes the first three shared Protocols. An injected
+`ArtifactContentStore` retains the exact captured bytes; the structurer reads by hash and verifies
+hash/length rather than reopening a mutable source URI. Local in-memory retention is explicitly
+not durable storage or a replay/authorization boundary. Shared XLSX mechanics contain no vertical
+meaning; a domain-owned mapper supplies the BOM schema and raw-field/missing/unmapped semantics.
+Distinct capture, structuring and mapping events retain exact inputs/outputs, injected provenance
+and parent-event links. This diagnostic caller is independent of the general physical planner:
+three real strategies do not establish complete nine-stage procurement execution. See
+[BOM stage adoption](../domains/procurement/bom-stage-adoption.md) for the executable contract.

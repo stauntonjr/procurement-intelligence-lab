@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "dataset": "bom-stages-v1",
+  "mapping_schema": "procurement.mapping/bom-table@1",
+  "structurer": "xlsx-cell-structure@1",
+  "mapper": "bom-table-map@1",
+  "tolerance": "exact strings, coordinates and record counts; no numeric coercion",
+  "sources": [
+    {
+      "path": "src/procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+      "sha256": "c029f43dcbbf3d1e3bc9ca8dce91f325ca5fa37704cf9ab0578915f0b60f67e5",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "sample",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 3,
+          "sha256": "44be931111e16c37c55698d0b1cf810ddddcdbf0fafe34e63795a6e4be80eed7"
+        },
+        "cells": {
+          "count": 12,
+          "sha256": "23f17c37eb78c112f82a12c0be6a9a6b66d11bef431916527f947230d3eba258"
+        },
+        "fields": {
+          "count": 8,
+          "sha256": "fabc50d97656ddc8fe379c15c5d17daa653bcd3d312a1a1b53c26bac819acaba"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r1.xlsx",
+      "sha256": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "atlas",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "05579b59c188750428acc10b2b553d7c4104bf791d1a6578daa8591ff931272e"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "830502f08a28a8926c4b05785f3cae26f432c1cf70811a9f65975cab718c9f1b"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r2.xlsx",
+      "sha256": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "atlas",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "bf5525a9f4b5a9f906933c67d80a727a0fcf734faa08feedac6de8c8de367f96"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "319251c34359590a73ddee5dedc8c7bc067bbcfb843eb0e39ce26a37e8a0b771"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/borealis-bom-r1.xlsx",
+      "sha256": "2918749ebed01e8f3c5d5cad6d67813f64956a0e96ddde98ccbdd25b1dedc5db",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "borealis",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "94880f51f21d6516d7be86767dabd5f0bcbdca2f98c027591af13d7caa56258c"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "6b51d7a82d057cd20c8a1a655f6e0277cba88ee7b7a2110786a4d413af78bc67"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/borealis-bom-r2.xlsx",
+      "sha256": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "borealis",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "65b1cf4f548a6fd1ab6ee32d4b04922a55a7cb45e70f69cdc043994185489991"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "1af8f59d3a587f748f11c74e9d7fda5c298f8a2d2b9dc7193d1fdf68dab6e90f"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/cinder-bom-r1.xlsx",
+      "sha256": "a2f624a9109df7512dfd7edd4992ae66a98f1ee50724d0ab552e7f2f8456dd58",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "cinder",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "5137b2c2e0bbb83fe258a2a08bd837c1543f764d8a67bb6e6a6feecf1547f264"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "3d818db5f63345dbe5c626721699bbc7e1914865cecf53964cd4b9572dfbc75d"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/cinder-bom-r2.xlsx",
+      "sha256": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "cinder",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "21a47f4d844d7899144536b70a3b84efefb6ad767cb3d39d5e1fc3da162cfb40"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "1c03e07b96214f9acc4e48dcfe05094e9ca4fb83f80cf60756cefba7ba844137"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/delta-bom-r1.xlsx",
+      "sha256": "5f6d9d1ae75212ad712ffb8691d495444fd1a937412faff7b3a2d638c8605be0",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "delta",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "990aa05dbf87340e3b079732691b1ead0fb363f0768fc8de92279af554ddb22f"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "0d8b1c5a945a7bf2710d0e2660bec6284cdfb1783c0884f902c2884a6813dc36"
+        }
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/delta-bom-r2.xlsx",
+      "sha256": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "delta",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "rows": {
+          "count": 41,
+          "sha256": "d6dd29b9ee96ff7cfd6433ddaae3c8e99a183e5e28c29e48632e8ecda1d187e7"
+        },
+        "cells": {
+          "count": 205,
+          "sha256": "8ced8da99f69fb8be9b3b153bae3972b6cc62114deb396c696513a9c4552c719"
+        },
+        "fields": {
+          "count": 200,
+          "sha256": "d88379422be979f076f54b76c64e81dda041ff75a72e207bf1ed646bf96673f1"
+        }
+      }
+    }
+  ]
+}

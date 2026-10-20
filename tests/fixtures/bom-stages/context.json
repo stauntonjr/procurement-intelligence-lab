@@ -1,0 +1,8 @@
+{
+  "scope": {"tenant_id": "synthetic", "project_id": "bom-stage-contract", "site_id": "lab", "version": "1"},
+  "observed_at": "2026-10-19T00:00:00+00:00",
+  "captured_at": "2026-10-19T00:00:01+00:00",
+  "source_version": "synthetic-v1",
+  "run_id": "stage-contract",
+  "code_revision": "fixture-context-not-production"
+}

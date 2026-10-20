@@ -130,7 +130,8 @@ and compares byte-identical output across installation paths.
 | Equivalent JSON/registry/config order; relevant version/settings change | Unit determinism/metamorphic tests; two clean installed paths |
 | Business scope/as-of, stale/future source claims, approvals | Not evaluated by planning; no source data or execution authority input |
 
-Next work adapts real procurement services to universal stage contracts with source/evidence
-acceptance, then adds execution receipts and durable ledger/replay. Forecasting, decision/action
+Issue #207 adopts real capture/structure/mapping strategies with source/evidence acceptance in
+a [separate caller](../domains/procurement/bom-stage-adoption.md). General execution receipts,
+remaining stage adaptation and durable ledger/replay remain subsequent work. Forecasting, decision/action
 policies, provider/model selection benchmarks and second-production-vertical acceptance remain
 separate deliverables.

@@ -59,7 +59,9 @@ and its deterministic hash remain stable.
 
 The semantic contracts are reusable definitions, not claims of deployed capability:
 
-- the current XLSX procurement path still combines STRUCTURE and MAP physically;
+- the legacy XLSX procurement path still combines STRUCTURE and MAP physically;
+- Issue #207 adds real INGEST/STRUCTURE/MAP strategies and separate transformation events in a
+  [synchronous diagnostic caller](../domains/procurement/bom-stage-adoption.md);
 - existing procurement behavior executes through DETECT with the limitations documented in the
   procurement semantic model;
 - no procurement `DomainPackage` is yet wired to the runtime;

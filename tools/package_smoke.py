@@ -43,7 +43,11 @@ def main() -> int:
         if len(wheels) != 1:
             raise RuntimeError(f"expected one wheel, found {len(wheels)}")
         wheel = wheels[0]
+        stage_source = temporary / "shared-stage-source.xlsx"
         with ZipFile(wheel) as archive:
+            stage_source.write_bytes(
+                archive.read("procurement_intelligence_lab/examples/synthetic_bom.xlsx")
+            )
             missing = sorted(set(RESOURCES) - set(archive.namelist()))
             if missing:
                 raise RuntimeError(f"wheel is missing runtime resources {missing}")
@@ -224,11 +228,63 @@ def main() -> int:
                 )
             ):
                 raise RuntimeError("installed planner did not reject an unavailable implementation")
+            stage_run = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.bom_stages",
+                    str(stage_source),
+                    "--context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                ],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            stage_payload = json.loads(stage_run.stdout)
+            if stage_payload["executed_stages"] != ["INGEST", "STRUCTURE", "MAP"]:
+                raise RuntimeError(
+                    "installed shared-stage command lost its actual execution boundary"
+                )
+            fields = stage_payload["mapped_document"]["fields"]
+            gpu_quantity = next(field for field in fields if field["field_key"] == "BOM!C2")
+            if gpu_quantity["raw_value"] != "4" or gpu_quantity["evidence"]["cells"] != ["C"]:
+                raise RuntimeError("installed mapping lost raw quantity or source cell evidence")
+            events = stage_payload["transformations"]
+            if len(events) != 3 or events[2]["parent_event_ids"] != [events[1]["event_id"]]:
+                raise RuntimeError("installed shared stages lost transformation parentage")
+            invalid_source = temporary / "invalid-stage-source.xlsx"
+            invalid_source.write_bytes(b"not XLSX")
+            invalid_stage = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.bom_stages",
+                    str(invalid_source),
+                    "--context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                ],
+                cwd=temporary,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if (
+                invalid_stage.returncode != 2
+                or invalid_stage.stdout
+                or json.loads(invalid_stage.stderr)["code"]
+                != "pil.interpretation.document_structure_invalid"
+            ):
+                raise RuntimeError(
+                    "installed shared stages did not report typed unsupported-source failure"
+                )
             probe_outputs.append(
                 probe_run.stdout.strip()
                 + corpus_probe.stdout.strip()
                 + manifest_run.stdout.strip()
                 + "".join(planning_outputs)
+                + stage_run.stdout.strip()
             )
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")
