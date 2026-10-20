@@ -8,7 +8,7 @@ from zipfile import ZipFile
 
 import pytest
 
-from tests.bom_stage_fixtures import HEADER, ROW, workbook
+from tests.bom_stage_fixtures import HEADER, ROW, with_shared_strings, workbook
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTEXT = ROOT / "tests/fixtures/bom-stages/context.json"
@@ -150,6 +150,10 @@ def test_cli_rejects_ambiguous_workbook_and_cell_representations(
         members[sheet] = members[sheet].replace(
             '<c r="C7"><v>0.5</v></c>', '<c r="C7" t="s"><v>0</v></c>'
         )
+        members["xl/_rels/workbook.xml.rels"] = members["xl/_rels/workbook.xml.rels"].replace(
+            "</Relationships>",
+            '<Relationship Id="strings1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/></Relationships>',
+        )
         members["xl/sharedStrings.xml"] = (
             '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
             "<si><t>0.5</t><t>9000</t></si></sst>"
@@ -185,12 +189,11 @@ def test_cli_recovers_only_rich_display_text_without_xml_indentation(
         value = '<c r="C7" t="s"><v>0</v></c>'
     path = workbook(tmp_path / "rich.xlsx", HEADER + ROW.replace('<c r="C7"><v>0.5</v></c>', value))
     if kind == "s":
-        with ZipFile(path, "a") as archive:
-            archive.writestr(
-                "xl/sharedStrings.xml",
-                '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-                f"<si>\n  {rich}\n</si></sst>",
-            )
+        with_shared_strings(
+            path,
+            '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            f"<si>\n  {rich}\n</si></sst>",
+        )
     result = invoke(path)
     assert result.returncode == 0, result.stderr
     fields = json.loads(result.stdout)["mapped_document"]["fields"]
@@ -238,3 +241,162 @@ def test_cli_resolves_internal_worksheet_target_uris(
     assert result.returncode == 0, result.stderr
     fields = json.loads(result.stdout)["mapped_document"]["fields"]
     assert next(f for f in fields if f["field_name"] == "quantity")["raw_value"] == "0.5"
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        "missing_type",
+        "wrong_type",
+        "workbook_root",
+        "relationships_root",
+        "relationship_element",
+        "worksheet_root",
+        "nested_sheet_data",
+        "duplicate_sheet_data",
+        "shared_root",
+        "nested_sheets",
+    ],
+)
+def test_cli_requires_worksheet_relationship_and_physical_part_shape(
+    tmp_path: Path, change: str
+) -> None:
+    path = workbook(tmp_path / "part.xlsx", HEADER + ROW)
+    with ZipFile(path) as archive:
+        members = {name: archive.read(name).decode() for name in archive.namelist()}
+    book, rels, sheet = "xl/workbook.xml", "xl/_rels/workbook.xml.rels", "xl/worksheets/sheet1.xml"
+    worksheet_type = (
+        ' Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"'
+    )
+    if change == "missing_type":
+        members[rels] = members[rels].replace(worksheet_type, "")
+    elif change == "wrong_type":
+        members[rels] = members[rels].replace("relationships/worksheet", "relationships/styles")
+    elif change == "workbook_root":
+        members[book] = (
+            members[book].replace("<workbook ", "<other ").replace("</workbook>", "</other>")
+        )
+    elif change == "relationships_root":
+        members[rels] = (
+            members[rels]
+            .replace("<Relationships ", "<Other ")
+            .replace("</Relationships>", "</Other>")
+        )
+    elif change == "relationship_element":
+        members[rels] = members[rels].replace("<Relationship ", "<Other ")
+    elif change == "worksheet_root":
+        members[sheet] = (
+            members[sheet]
+            .replace("<worksheet ", "<styleSheet ")
+            .replace("</worksheet>", "</styleSheet>")
+        )
+    elif change == "nested_sheet_data":
+        members[sheet] = (
+            members[sheet]
+            .replace("<sheetData>", "<ext><sheetData>")
+            .replace("</sheetData>", "</sheetData></ext>")
+        )
+    elif change == "duplicate_sheet_data":
+        members[sheet] = members[sheet].replace(HEADER, HEADER + "</sheetData><sheetData>")
+    elif change == "nested_sheets":
+        members[book] = (
+            members[book]
+            .replace("<sheets>", "<ext><sheets>")
+            .replace("</sheets>", "</sheets></ext>")
+        )
+    else:
+        members[sheet] = members[sheet].replace(
+            '<c r="C7"><v>0.5</v></c>', '<c r="C7" t="s"><v>0</v></c>'
+        )
+        members["xl/_rels/workbook.xml.rels"] = members["xl/_rels/workbook.xml.rels"].replace(
+            "</Relationships>",
+            '<Relationship Id="strings1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/></Relationships>',
+        )
+        members["xl/sharedStrings.xml"] = (
+            '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>0.5</t></si></styleSheet>'
+        )
+    with ZipFile(path, "w") as archive:
+        for name, content in members.items():
+            archive.writestr(name, content)
+    result = invoke(path)
+    assert result.returncode == 2, result.stdout
+    assert not result.stdout
+    assert json.loads(result.stderr)["code"] == "pil.interpretation.document_structure_invalid"
+
+
+@pytest.mark.parametrize("change", ["redirect", "missing", "duplicate", "external"])
+def test_cli_selects_shared_strings_by_relationship_not_orphan_filename(
+    tmp_path: Path, change: str
+) -> None:
+    path = workbook(
+        tmp_path / "shared.xlsx",
+        HEADER + ROW.replace('<c r="C7"><v>0.5</v></c>', '<c r="C7" t="s"><v>0</v></c>'),
+    )
+    with ZipFile(path) as archive:
+        members = {name: archive.read(name).decode() for name in archive.namelist()}
+    table = '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>{}</t></si></sst>'
+    members["xl/sharedStrings.xml"] = table.format("9000")
+    members["xl/strings/actual.xml"] = table.format("0.5")
+    relationship = '<Relationship Id="strings1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="strings/actual.xml"/>'
+    if change == "external":
+        relationship = relationship.replace('Id="strings1"', 'Id="strings1" TargetMode="External"')
+    elif change == "duplicate":
+        relationship += relationship.replace('Id="strings1"', 'Id="strings2"')
+    elif change == "missing":
+        relationship = ""
+    members["xl/_rels/workbook.xml.rels"] = members["xl/_rels/workbook.xml.rels"].replace(
+        "</Relationships>", relationship + "</Relationships>"
+    )
+    with ZipFile(path, "w") as archive:
+        for name, content in members.items():
+            archive.writestr(name, content)
+    result = invoke(path)
+    if change == "redirect":
+        assert result.returncode == 0, result.stderr
+        fields = json.loads(result.stdout)["mapped_document"]["fields"]
+        assert next(f for f in fields if f["field_name"] == "quantity")["raw_value"] == "0.5"
+    else:
+        assert result.returncode == 2 and not result.stdout
+        assert json.loads(result.stderr)["code"] == "pil.interpretation.document_structure_invalid"
+
+
+@pytest.mark.parametrize(
+    "change", ["matching", "redirect", "missing_type", "duplicate", "external"]
+)
+def test_cli_fixed_workbook_profile_rejects_contradictory_root_relationships(
+    tmp_path: Path, change: str
+) -> None:
+    path = workbook(tmp_path / "root.xlsx", HEADER + ROW)
+    with ZipFile(path) as archive:
+        members = {name: archive.read(name).decode() for name in archive.namelist()}
+    relationship = '<Relationship Id="root1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
+    if change == "redirect":
+        relationship = relationship.replace("xl/workbook.xml", "other/workbook.xml")
+        members["other/workbook.xml"] = members["xl/workbook.xml"]
+        members["other/_rels/workbook.xml.rels"] = members["xl/_rels/workbook.xml.rels"]
+        members["other/worksheets/sheet1.xml"] = members["xl/worksheets/sheet1.xml"].replace(
+            "0.5", "9000"
+        )
+    elif change == "missing_type":
+        relationship = relationship.replace(
+            ' Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"',
+            "",
+        )
+    elif change == "duplicate":
+        relationship += relationship.replace('Id="root1"', 'Id="root2"')
+    elif change == "external":
+        relationship = relationship.replace('Id="root1"', 'Id="root1" TargetMode="External"')
+    members["_rels/.rels"] = (
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        + relationship
+        + "</Relationships>"
+    )
+    with ZipFile(path, "w") as archive:
+        for name, content in members.items():
+            archive.writestr(name, content)
+    result = invoke(path)
+    if change == "matching":
+        assert result.returncode == 0, result.stderr
+    else:
+        assert result.returncode == 2 and not result.stdout
+        assert json.loads(result.stderr)["code"] == "pil.interpretation.document_structure_invalid"

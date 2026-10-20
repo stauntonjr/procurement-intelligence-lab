@@ -7,8 +7,8 @@
   "tolerance": "exact strings, coordinates and record counts; no numeric coercion",
   "sources": [
     {
-      "path": "src/procurement_intelligence_lab/examples/synthetic_bom.xlsx",
-      "sha256": "c029f43dcbbf3d1e3bc9ca8dce91f325ca5fa37704cf9ab0578915f0b60f67e5",
+      "path": "src/procurement_intelligence_lab/examples/synthetic_bom_stages.xlsx",
+      "sha256": "d24ebb7abddc3986eec3dda1fee5a8f498f39a2e30118810dfeb2f04d65e6292",
       "scope": {
         "tenant_id": "synthetic",
         "project_id": "sample",

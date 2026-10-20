@@ -25,7 +25,8 @@ Row/cell ordering follows source coordinates; blank rows without cells emit no e
 The adapter rejects inconsistent/duplicate row/cell coordinates, duplicate archive members,
 ambiguous worksheet/relationship identifiers, external worksheet relationships, literal target URI
 whitespace/control characters and empty path segments (before URL normalization), unknown cell types,
-conflicting scalar/inline/shared-string representations, invalid shared-string indices, formulas
+conflicting scalar/inline/shared-string representations, missing/non-worksheet relationship types, wrong XML part roots or nested/duplicate sheetData,
+invalid shared-string indices, formulas
 and merged cells, unsupported media types and malformed
 archives/XML. Admitted cell types are `n`, `s`, `inlineStr`, `str`, `b` and `d`; values remain raw
 text without interpreting numbers, booleans or dates. String decoding accepts plain text and
@@ -112,11 +113,20 @@ runs the installed command outside the checkout in two environments against the 
 source/context and compares identical output; unsupported-source failures remain typed.
 
 The [conformance manifest](../../../evals/extraction/bom-stages-v1/manifest.json) pins the existing
-synthetic sample and eight BOM revisions from the admitted four-project corpus, excluding PO,
+metadata-complete `synthetic_bom_stages.xlsx` sample and eight BOM revisions from the admitted four-project corpus, excluding PO,
 quote and commitment roles. Its independent source-XML expectations check row grouping, physical
 cell text/coordinates, raw mapped fields and the actual attached field evidence separately;
 evidence artifact/hash identity must match the captured source. Extra `Line ID` cells are deliberately
-unmapped. The initial gold construction omitted those extras; correcting the source-derived
+unmapped. The historical `synthetic_bom.xlsx` remains byte-identical for existing demo/reproduction
+evidence; it lacks a worksheet relationship type and is rejected by the new strict caller. The new
+sample preserves its table values while adding that explicit relationship metadata, with a separate
+file identity/hash. Workbook, relationship, worksheet and shared-string part roots are validated
+before extraction. Shared strings come from one explicit internal workbook relationship; an orphan
+canonical table is rejected rather than guessed. Root package relationships are optional in this
+fixed-path profile, but when present must uniquely identify internal `xl/workbook.xml`; contradictory
+or arbitrary workbook layouts fail closed. This is a constrained table profile, not full OOXML
+schema validation.
+The initial gold construction omitted those extras; correcting the source-derived
 expectation preserved the specified unmapped-field behavior rather than dropping source data.
 Nine workbooks yield 1,608 mapped fields. The runner records input and layer hashes, record counts,
 per-source latency, verified checkout revision and manifest hash; inference calls/cost are zero and compute cost

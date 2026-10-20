@@ -70,19 +70,34 @@ def read_row_values(
 
 def worksheet_root(archive: ZipFile, sheet: str, *, strict: bool = False) -> ET.Element:
     workbook = ET.fromstring(archive.read("xl/workbook.xml"))
-    rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+    rels = (
+        _relationships(archive, "xl/_rels/workbook.xml.rels")
+        if strict
+        else ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+    )
     if strict:
-        sheets = workbook.findall(".//x:sheet", NS)
+        if "_rels/.rels" in archive.namelist():
+            entry = _relationship_part(
+                _relationships(archive, "_rels/.rels"), "officeDocument", "/"
+            )
+            if entry != "xl/workbook.xml":
+                raise ValueError(
+                    "fixed workbook profile requires internal xl/workbook.xml entrypoint"
+                )
+        if workbook.tag != f"{{{NS['x']}}}workbook" or len(workbook.findall("x:sheets", NS)) != 1:
+            raise ValueError("workbook and relationship parts have unsupported structure")
+        sheets = workbook.findall("x:sheets/x:sheet", NS)
         for attribute in ("name", "sheetId", f"{{{NS['r']}}}id"):
             values = [node.attrib[attribute] for node in sheets]
             if any(not value for value in values) or len(values) != len(set(values)):
                 raise ValueError("worksheet names and identifiers must be nonempty and unique")
-        identifiers = [rel.attrib["Id"] for rel in rels]
-        if any(not value for value in identifiers) or len(identifiers) != len(set(identifiers)):
-            raise ValueError("worksheet relationship identifiers must be nonempty and unique")
     relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
     sheet_node = next(
-        (item for item in workbook.findall(".//x:sheet", NS) if item.attrib["name"] == sheet),
+        (
+            item
+            for item in workbook.findall("x:sheets/x:sheet" if strict else ".//x:sheet", NS)
+            if item.attrib["name"] == sheet
+        ),
         None,
     )
     if sheet_node is None:
@@ -95,11 +110,21 @@ def worksheet_root(archive: ZipFile, sheet: str, *, strict: bool = False) -> ET.
         for rel in rels
     ):
         raise ValueError("external worksheet relationships are unsupported")
+    if strict and any(
+        rel.attrib["Id"] == target and rel.attrib.get("Type") != f"{NS['r']}/worksheet"
+        for rel in rels
+    ):
+        raise ValueError("selected relationship must explicitly identify a worksheet")
     part = _worksheet_part(relmap[target]) if strict else "xl/" + relmap[target].lstrip("/")
-    return ET.fromstring(archive.read(part))
+    result = ET.fromstring(archive.read(part))
+    if strict and (
+        result.tag != f"{{{NS['x']}}}worksheet" or len(result.findall("x:sheetData", NS)) != 1
+    ):
+        raise ValueError("worksheet part requires one direct sheetData element")
+    return result
 
 
-def _worksheet_part(target: str) -> str:
+def _worksheet_part(target: str, base: str = "/xl/workbook.xml") -> str:
     if any(
         character.isspace() or ord(character) < 0x20 or 0x7F <= ord(character) <= 0x9F
         for character in target
@@ -117,7 +142,9 @@ def _worksheet_part(target: str) -> str:
         or "\x00" in target
     ):
         raise ValueError("worksheet target must be an internal package part URI")
-    depth = 0 if uri.path.startswith("/") else 1
+    depth = (
+        0 if uri.path.startswith("/") else len([s for s in base.rsplit("/", 1)[0].split("/") if s])
+    )
     for segment in uri.path.split("/"):
         if segment == "..":
             if depth == 0:
@@ -125,7 +152,44 @@ def _worksheet_part(target: str) -> str:
             depth -= 1
         elif segment not in {"", "."}:
             depth += 1
-    part = urljoin("/xl/workbook.xml", target).lstrip("/")
+    part = urljoin(base, target).lstrip("/")
     if not part or part.endswith("/"):
         raise ValueError("worksheet target must identify a part, not a directory")
     return part
+
+
+def _relationships(archive: ZipFile, path: str) -> ET.Element:
+    root = ET.fromstring(archive.read(path))
+    namespace = "http://schemas.openxmlformats.org/package/2006/relationships"
+    if root.tag != f"{{{namespace}}}Relationships" or any(
+        rel.tag != f"{{{namespace}}}Relationship" for rel in root
+    ):
+        raise ValueError("unsupported relationship part structure")
+    identifiers = [rel.attrib["Id"] for rel in root]
+    if any(not value for value in identifiers) or len(identifiers) != len(set(identifiers)):
+        raise ValueError("relationship identifiers must be nonempty and unique")
+    return root
+
+
+def _relationship_part(rels: ET.Element, kind: str, base: str) -> str | None:
+    selected = [rel for rel in rels if rel.attrib.get("Type") == f"{NS['r']}/{kind}"]
+    if not selected:
+        return None
+    if len(selected) != 1 or selected[0].attrib.get("TargetMode", "Internal") != "Internal":
+        raise ValueError("related part must have one internal relationship")
+    return _worksheet_part(selected[0].attrib["Target"], base)
+
+
+def shared_string_root(archive: ZipFile) -> ET.Element | None:
+    """Resolve shared text through workbook metadata, never an orphan filename."""
+    part = _relationship_part(
+        _relationships(archive, "xl/_rels/workbook.xml.rels"), "sharedStrings", "/xl/workbook.xml"
+    )
+    if part is None:
+        if "xl/sharedStrings.xml" in archive.namelist():
+            raise ValueError("shared-string table requires an explicit relationship")
+        return None
+    result = ET.fromstring(archive.read(part))
+    if result.tag != f"{{{NS['x']}}}sst":
+        raise ValueError("shared-string part must be an sst table")
+    return result

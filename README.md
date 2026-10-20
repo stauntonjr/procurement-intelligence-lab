@@ -245,7 +245,7 @@ schemas, typed failures, version/hash boundaries and clean-installed acceptance.
 
 ```bash
 python -m procurement_intelligence_lab.interfaces.bom_stages \
-  src/procurement_intelligence_lab/examples/synthetic_bom.xlsx \
+  src/procurement_intelligence_lab/examples/synthetic_bom_stages.xlsx \
   --context tests/fixtures/bom-stages/context.json
 ```
 

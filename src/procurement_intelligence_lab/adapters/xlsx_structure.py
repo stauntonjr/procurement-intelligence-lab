@@ -14,6 +14,7 @@ from procurement_intelligence_lab.adapters.xlsx_cells import (
     NS,
     column_index,
     read_row_values,
+    shared_string_root,
     worksheet_root,
 )
 from procurement_intelligence_lab.platform.semantics.artifacts import Artifact
@@ -53,17 +54,14 @@ class XlsxStructure:
             with ZipFile(BytesIO(content)) as archive:
                 if len(archive.namelist()) != len(set(archive.namelist())):
                     raise DocumentStructureError("duplicate XLSX archive members are unsupported")
-                strings = (
-                    ET.fromstring(archive.read("xl/sharedStrings.xml")).findall("x:si", NS)
-                    if "xl/sharedStrings.xml" in archive.namelist()
-                    else []
-                )
-                shared = [_string_value(string) for string in strings]
                 root = worksheet_root(archive, self.sheet, strict=True)
+                table = shared_string_root(archive)
+                strings = table.findall("x:si", NS) if table is not None else []
+                shared = [_string_value(string) for string in strings]
                 if root.find("x:mergeCells", NS) is not None:
                     raise DocumentStructureError("merged-cell worksheets are unsupported")
                 rows: dict[int, tuple[list[str], tuple[str, ...]]] = {}
-                for fallback, row in enumerate(root.findall(".//x:sheetData/x:row", NS), start=1):
+                for fallback, row in enumerate(root.findall("x:sheetData/x:row", NS), start=1):
                     number = int(row.attrib.get("r", fallback))
                     if number < 1 or number > 1_048_576 or number in rows:
                         raise DocumentStructureError(

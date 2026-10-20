@@ -251,16 +251,15 @@ def test_xlsx_grid_boundary_is_rejected_before_dense_row_expansion(
 
 
 def test_negative_shared_string_index_is_not_python_negative_indexing(tmp_path: Path) -> None:
-    from zipfile import ZipFile
+    from tests.bom_stage_fixtures import with_shared_strings
 
     path = workbook(
         tmp_path / "source.xlsx", HEADER + '<row r="7"><c r="A7" t="s"><v>-1</v></c></row>'
     )
-    with ZipFile(path, "a") as archive:
-        archive.writestr(
-            "xl/sharedStrings.xml",
-            '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>wrong last string</t></si></sst>',
-        )
+    with_shared_strings(
+        path,
+        '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><t>wrong last string</t></si></sst>',
+    )
     _, ingest, structure, _ = adapters()
     (artifact,) = ingest.ingest(source(path), provenance=provenance())
     with pytest.raises(DocumentStructureError):

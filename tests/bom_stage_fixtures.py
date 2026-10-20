@@ -42,7 +42,7 @@ def workbook(path: Path, rows: str, *, extra: str = "") -> Path:
         )
         archive.writestr(
             "xl/_rels/workbook.xml.rels",
-            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Target="worksheets/sheet1.xml"/></Relationships>',
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>',
         )
         archive.writestr(
             "xl/worksheets/sheet1.xml",
@@ -59,3 +59,15 @@ HEADER = '<row r="1"><c r="A1"><v>SKU</v></c><c r="B1"><v>Description</v></c><c 
 ROW = (
     '<row r="7"><c r="D7"><v>100.50</v></c><c r="A7"><v>GPU-A</v></c><c r="C7"><v>0.5</v></c></row>'
 )
+
+
+def with_shared_strings(path: Path, content: str) -> None:
+    with ZipFile(path) as archive:
+        members = {name: archive.read(name) for name in archive.namelist()}
+    members["xl/sharedStrings.xml"] = content.encode()
+    part = "xl/_rels/workbook.xml.rels"
+    relationship = b'<Relationship Id="strings1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/>'
+    members[part] = members[part].replace(b"</Relationships>", relationship + b"</Relationships>")
+    with ZipFile(path, "w", ZIP_DEFLATED) as archive:
+        for name, data in members.items():
+            archive.writestr(name, data)

@@ -15,6 +15,7 @@ from zipfile import ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = (
     "procurement_intelligence_lab/examples/synthetic_bom.xlsx",
+    "procurement_intelligence_lab/examples/synthetic_bom_stages.xlsx",
     "procurement_intelligence_lab/examples/showcase_review_sources_v1.json",
     "procurement_intelligence_lab/examples/showcase_order_short.xlsx",
     "procurement_intelligence_lab/examples/showcase_order_matched.xlsx",
@@ -49,7 +50,7 @@ def main() -> int:
             if missing:
                 raise RuntimeError(f"wheel is missing runtime resources {missing}")
             stage_source.write_bytes(
-                archive.read("procurement_intelligence_lab/examples/synthetic_bom.xlsx")
+                archive.read("procurement_intelligence_lab/examples/synthetic_bom_stages.xlsx")
             )
 
             corpus = "procurement_intelligence_lab/examples/corpus_v1/"
