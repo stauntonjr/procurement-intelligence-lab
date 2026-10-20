@@ -109,10 +109,10 @@ def _worksheet_part(target: str) -> str:
     if (
         uri.scheme
         or uri.netloc
-        or uri.query
-        or uri.fragment
+        or "?" in target
+        or "#" in target
         or not uri.path
-        or "//" in uri.path
+        or "//" in target
         or "\\" in target
         or "\x00" in target
     ):
