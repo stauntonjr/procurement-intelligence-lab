@@ -23,7 +23,8 @@ elements with physical worksheet coordinates. It assigns no schema meaning or bu
 Row/cell ordering follows source coordinates; blank rows without cells emit no elements.
 
 The adapter rejects inconsistent/duplicate row/cell coordinates, duplicate archive members,
-ambiguous worksheet/relationship identifiers, external worksheet relationships, unknown cell types,
+ambiguous worksheet/relationship identifiers, external worksheet relationships, literal target URI
+whitespace/control characters and empty path segments (before URL normalization), unknown cell types,
 conflicting scalar/inline/shared-string representations, invalid shared-string indices, formulas
 and merged cells, unsupported media types and malformed
 archives/XML. Admitted cell types are `n`, `s`, `inlineStr`, `str`, `b` and `d`; values remain raw

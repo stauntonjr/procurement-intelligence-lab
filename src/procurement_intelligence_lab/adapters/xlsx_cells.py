@@ -100,6 +100,11 @@ def worksheet_root(archive: ZipFile, sheet: str, *, strict: bool = False) -> ET.
 
 
 def _worksheet_part(target: str) -> str:
+    if any(
+        character.isspace() or ord(character) < 0x20 or 0x7F <= ord(character) <= 0x9F
+        for character in target
+    ):
+        raise ValueError("worksheet target cannot contain literal whitespace or control characters")
     uri = urlsplit(target)
     if (
         uri.scheme
@@ -107,6 +112,7 @@ def _worksheet_part(target: str) -> str:
         or uri.query
         or uri.fragment
         or not uri.path
+        or "//" in uri.path
         or "\\" in target
         or "\x00" in target
     ):
@@ -119,4 +125,7 @@ def _worksheet_part(target: str) -> str:
             depth -= 1
         elif segment not in {"", "."}:
             depth += 1
-    return urljoin("/xl/workbook.xml", target).lstrip("/")
+    part = urljoin("/xl/workbook.xml", target).lstrip("/")
+    if not part or part.endswith("/"):
+        raise ValueError("worksheet target must identify a part, not a directory")
+    return part
