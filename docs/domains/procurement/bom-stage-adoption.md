@@ -39,7 +39,9 @@ This is a constrained table adapter, not general Excel rendering, formula evalua
 `domains/procurement/mapping.py` owns `BomTableMap`. It validates the first source row's four
 ordered, distinct BOM headers from `BOM_TABLE_SCHEMA`. It maps A–D to `sku`, `description`,
 `quantity`, `unit_price`, retaining raw strings and exact cell evidence. Additional cells remain
-explicit `unmapped.<column>` fields with diagnostics; they never silently acquire business meaning.
+explicit `unmapped.<column>` fields with diagnostics, including when trailing labels repeat a
+required label or one another. Only A–D govern header matching; extras never silently acquire
+business meaning.
 Multiple rows with the same SKU remain distinct. A row with a missing SKU is retained.
 
 Empty/blank field values are unresolved with diagnostics, not zero. A physically missing column

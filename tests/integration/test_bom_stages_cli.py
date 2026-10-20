@@ -400,3 +400,23 @@ def test_cli_fixed_workbook_profile_rejects_contradictory_root_relationships(
     else:
         assert result.returncode == 2 and not result.stdout
         assert json.loads(result.stderr)["code"] == "pil.interpretation.document_structure_invalid"
+
+
+@pytest.mark.parametrize("label", ["SKU", "Extra"])
+def test_cli_duplicate_trailing_labels_remain_unmapped_without_invalidating_required_headers(
+    tmp_path: Path, label: str
+) -> None:
+    headers = HEADER.replace(
+        "</row>", f'<c r="E1"><v>{label}</v></c><c r="F1"><v>{label}</v></c></row>'
+    )
+    data = ROW.replace(
+        "</row>", '<c r="E7"><v>extra one</v></c><c r="F7"><v>extra two</v></c></row>'
+    )
+    result = invoke(workbook(tmp_path / "trailing.xlsx", headers + data))
+    assert result.returncode == 0, result.stderr
+    fields = {f["field_name"]: f for f in json.loads(result.stdout)["mapped_document"]["fields"]}
+    assert fields["quantity"]["raw_value"] == "0.5"
+    for column, value in [("E", "extra one"), ("F", "extra two")]:
+        field = fields[f"unmapped.{column}"]
+        assert field["raw_value"] == value and field["evidence"]["cells"] == [column]
+        assert field["diagnostic"] == f"unmapped column {column}"

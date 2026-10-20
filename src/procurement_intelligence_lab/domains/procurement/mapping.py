@@ -60,12 +60,7 @@ class BomTableMap:
         headers = tuple(
             cells[(header, col)].text if (header, col) in cells else "" for col in _COLUMNS
         )
-        all_headers = tuple(
-            element.text
-            for (number, _), element in cells.items()
-            if number == header and element.text
-        )
-        if not self.schema.matches_headers(headers) or len(set(all_headers)) != len(all_headers):
+        if not self.schema.matches_headers(headers):
             raise SchemaMappingError(
                 "expected distinct ordered BOM headers: SKU, Description, Quantity, Unit Price"
             )
