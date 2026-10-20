@@ -56,6 +56,34 @@ def test_restart_retry_preserves_complete_claims_and_exact_bytes(archive_dsn: st
             again.content(scope, receipt.snapshot_id)
 
 
+def test_malformed_stored_record_fails_typed_after_checksum_validation(
+    archive_dsn: str, tmp_path: Path
+) -> None:
+    import json
+    from hashlib import sha256
+
+    from procurement_intelligence_lab.adapters.semantic_codec import digest
+
+    snapshot, content = inputs(tmp_path)
+    archive = store(archive_dsn)
+    receipt = archive.append(snapshot, content)
+    node: dict[str, object] = {"kind": "DocumentSnapshot", "fields": json.loads("[[]]")}
+    key = digest(node)
+    payload = json.dumps({"schema": 1, "root": ["ref", key], "records": {key: node}})
+    with psycopg.connect(archive_dsn) as conn:
+        conn.execute("ALTER TABLE pil_archive_batches DISABLE TRIGGER USER")
+        conn.execute(
+            "UPDATE pil_archive_batches SET payload=%s,payload_sha256=%s",
+            (payload, sha256(payload.encode()).hexdigest()),
+        )
+        conn.execute("ALTER TABLE pil_archive_batches ENABLE TRIGGER USER")
+    for read in (archive.load, archive.content):
+        with pytest.raises(ArchiveIntegrityError):
+            read(receipt.scope, receipt.snapshot_id)
+    with pytest.raises(ArchiveIntegrityError):
+        archive.history(receipt.scope)
+
+
 def test_concurrent_identical_appends_commit_once(archive_dsn: str, tmp_path: Path):
     snapshot, content = inputs(tmp_path)
     archive = store(archive_dsn)

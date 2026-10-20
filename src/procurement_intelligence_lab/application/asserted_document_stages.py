@@ -19,8 +19,8 @@ from procurement_intelligence_lab.platform.semantics.assertions import (
     AssertionOrigin,
     SourceAssertion,
 )
+from procurement_intelligence_lab.platform.semantics.batch_identity import assertion_batch_id
 from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
-from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
 from procurement_intelligence_lab.platform.semantics.provenance import (
     DecisionProvenance,
@@ -42,8 +42,7 @@ class AssertedDocumentResult:
 
     @property
     def batch_id(self) -> str:
-        return stable_id(
-            "source-assertion-batch-v1",
+        return assertion_batch_id(
             self.origin.origin_id,
             tuple(x.assertion_id for x in self.assertions),
             tuple(x.mention_id for x in self.mentions),

@@ -8,6 +8,10 @@ from procurement_intelligence_lab.platform.semantics.assertions import (
     AssertionOrigin,
     SourceAssertion,
 )
+from procurement_intelligence_lab.platform.semantics.batch_identity import (
+    assertion_batch_id,
+    normalization_batch_id,
+)
 from procurement_intelligence_lab.platform.semantics.documents import (
     MappedDocument,
     StructuredDocument,
@@ -98,6 +102,20 @@ class DocumentSnapshot:
             ProvenanceEdge(used, self.origin.origin_id),
         ):
             raise ArchiveContractError("snapshot semantic transformation inputs disagree")
+        if self.origin.normalization_batch_id != normalization_batch_id(
+            self.mapped.mapped_document_id,
+            tuple(x.observation_id for x in self.observations),
+            self.transformations[3].provenance.provenance_id,
+            self.normalization_policy_reference,
+        ):
+            raise ArchiveContractError("snapshot normalization batch identity disagrees")
+        if self.transformations[4].output_ids[0] != assertion_batch_id(
+            self.origin.origin_id,
+            tuple(x.assertion_id for x in self.assertions),
+            tuple(x.mention_id for x in self.mentions),
+            self.transformations[4].provenance.provenance_id,
+        ):
+            raise ArchiveContractError("snapshot assertion batch identity disagrees")
         if self.transformations[4].output_ids[1:] != (
             *(x.assertion_id for x in self.assertions),
             *(x.mention_id for x in self.mentions),

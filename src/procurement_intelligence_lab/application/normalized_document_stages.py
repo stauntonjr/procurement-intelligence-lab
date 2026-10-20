@@ -10,8 +10,8 @@ from procurement_intelligence_lab.application.document_stages import (
     with_input_snapshot,
 )
 from procurement_intelligence_lab.platform.semantics.artifacts import SourceReference
+from procurement_intelligence_lab.platform.semantics.batch_identity import normalization_batch_id
 from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
-from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
 from procurement_intelligence_lab.platform.semantics.provenance import (
     DecisionProvenance,
@@ -31,8 +31,7 @@ class NormalizedDocumentResult:
 
     @property
     def batch_id(self) -> str:
-        return stable_id(
-            "normalization-batch",
+        return normalization_batch_id(
             self.stages.mapped.mapped_document_id,
             tuple(x.observation_id for x in self.observations),
             self.provenance.provenance_id,

@@ -200,7 +200,18 @@ class SemanticCodec:
                 if digest(node) != key or set(node) != {"kind", "fields"}:
                     raise ValueError("node digest")
                 cls = self.records[node["kind"]]
-                if [x[0] for x in node["fields"]] != [f.name for f in fields(cast(Any, cls))]:
+                pairs: Any = node["fields"]
+                if not isinstance(pairs, list):
+                    raise TypeError("record field pairs")
+                for candidate_pair in cast(list[object], pairs):
+                    if not isinstance(candidate_pair, list):
+                        raise TypeError("record field pair")
+                    pair = cast(list[object], candidate_pair)
+                    if len(pair) != 2 or not isinstance(pair[0], str):
+                        raise TypeError("record field pair")
+                if [x[0] for x in cast(list[list[Any]], pairs)] != [
+                    f.name for f in fields(cast(Any, cls))
+                ]:
                     raise ValueError("record fields")
                 active.add(key)
                 values: dict[str, Any] = {

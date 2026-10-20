@@ -140,3 +140,58 @@ def test_source_event_mismatch_is_not_an_archive_snapshot(tmp_path: Path) -> Non
     origin = replace(snapshot.origin, normalization_event=events[3])
     with pytest.raises(ArchiveContractError):
         replace(snapshot, transformations=tuple(events), origin=origin)
+
+
+@pytest.mark.parametrize(
+    "fields", ["[[]]", '[["tenant_id"]]', "[[null]]", '[["tenant_id", [], "extra"]]']
+)
+def test_malformed_record_pairs_fail_with_typed_integrity(fields: str) -> None:
+    import json
+
+    from procurement_intelligence_lab.adapters.semantic_codec import digest
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveIntegrityError
+
+    node = {"kind": "StateScope", "fields": json.loads(fields)}
+    key = digest(node)
+    raw = json.dumps({"schema": 1, "root": ["ref", key], "records": {key: node}})
+    with pytest.raises(ArchiveIntegrityError):
+        bootstrap.archive_codec().loads(raw)
+
+
+@pytest.mark.parametrize("stage", ["normalization", "assertion"])
+def test_snapshot_rejects_coherent_events_with_false_batch_identity(
+    tmp_path: Path, stage: str
+) -> None:
+    from dataclasses import replace
+
+    from procurement_intelligence_lab.application.archived_documents import snapshot_for
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveContractError
+    from procurement_intelligence_lab.platform.semantics.provenance import ProvenanceEdge
+
+    result = bootstrap.build_bom_assertion_service(
+        captured_at=AT, context=provenance().context, policy=POLICY
+    ).run(source(workbook(tmp_path / "source.xlsx", HEADER)))
+    snapshot = snapshot_for(result)
+    events = list(snapshot.transformations)
+    origin = snapshot.origin
+    if stage == "normalization":
+        events[3] = replace(events[3], output_ids=("false-normalization-batch",))
+        origin = replace(
+            origin, normalization_batch_id=events[3].output_ids[0], normalization_event=events[3]
+        )
+        events[4] = replace(
+            events[4],
+            input_edges=tuple(
+                ProvenanceEdge(e.relation, target)
+                for e, target in zip(
+                    events[4].input_edges,
+                    (origin.normalization_batch_id, origin.origin_id),
+                    strict=True,
+                )
+            ),
+            parent_event_ids=(events[3].event_id,),
+        )
+    else:
+        events[4] = replace(events[4], output_ids=("false-assertion-batch",))
+    with pytest.raises(ArchiveContractError, match=f"{stage} batch identity"):
+        replace(snapshot, transformations=tuple(events), origin=origin)

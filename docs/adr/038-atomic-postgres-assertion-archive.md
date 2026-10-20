@@ -20,6 +20,8 @@ concrete enum types. Shared nodes are deduplicated by content, independent of Py
 sharing. No pickle or dynamic imports. Strict schema/field/type/hash/reachability/size checks and
 reconstructed semantic validation reject corrupt or unsupported data. A checksum detects
 inconsistency, not a malicious database owner who replaces all coordinated records.
+Shared core identity functions preserve the existing normalization/assertion batch formulae;
+snapshots validate both complete batch identities before any adapter can materialize them.
 
 The Postgres adapter owns schema, transactions and driver failures. Schema initialization is an
 explicit local administration command; reads/appends do not silently create or migrate tables.
