@@ -251,5 +251,8 @@ python -m procurement_intelligence_lab.interfaces.bom_stages \
 
 This executes real capture, structure and raw schema mapping with source cells and distinct
 transformation events. The example context is explicitly synthetic/local. [Stage contract](docs/domains/procurement/bom-stage-adoption.md)
-documents the context schema, typed failures and process-local retention. Normalization,
-assertions, general plan execution and durable storage remain subsequent work.
+documents the context schema, typed failures and process-local retention. Add
+`--normalization-policy tests/fixtures/bom-stages/normalization-policy.json` to execute NORMALIZE
+with explicit quantity/price units and currency. [Normalization contract](docs/domains/procurement/bom-normalization.md)
+describes exact decimals, retained raw evidence and unresolved values. Assertions, broader
+normalization, general plan execution and durable storage remain subsequent work.

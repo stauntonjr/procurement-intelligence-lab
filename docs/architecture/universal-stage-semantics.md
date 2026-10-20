@@ -62,6 +62,8 @@ The semantic contracts are reusable definitions, not claims of deployed capabili
 - the legacy XLSX procurement path still combines STRUCTURE and MAP physically;
 - Issue #207 adds real INGEST/STRUCTURE/MAP strategies and separate transformation events in a
   [synchronous diagnostic caller](../domains/procurement/bom-stage-adoption.md);
+- Issue #209 extends that caller with an opt-in NormalizeStrategy under an explicit
+  [BOM unit/currency policy](../domains/procurement/bom-normalization.md), preserving raw source fields;
 - existing procurement behavior executes through DETECT with the limitations documented in the
   procurement semantic model;
 - no procurement `DomainPackage` is yet wired to the runtime;

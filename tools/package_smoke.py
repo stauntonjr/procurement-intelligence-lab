@@ -255,6 +255,69 @@ def main() -> int:
             events = stage_payload["transformations"]
             if len(events) != 3 or events[2]["parent_event_ids"] != [events[1]["event_id"]]:
                 raise RuntimeError("installed shared stages lost transformation parentage")
+            normalized = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.bom_stages",
+                    str(stage_source),
+                    "--context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                    "--normalization-policy",
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                ],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            normalized_payload = json.loads(normalized.stdout)
+            quantity = next(
+                x
+                for x in normalized_payload["normalization"]["observations"]
+                if x["observation_key"] == "BOM!C2"
+            )
+            if (
+                quantity["value"] != "4"
+                or quantity["unit"] != "each"
+                or quantity["source_field"]["raw_value"] != "4"
+                or quantity["source_field"]["evidence"]["cells"] != ["C"]
+            ):
+                raise RuntimeError(
+                    "installed normalization lost exact value, units or source evidence"
+                )
+            if (
+                normalized_payload["executed_stages"] != ["INGEST", "STRUCTURE", "MAP", "NORMALIZE"]
+                or len(normalized_payload["transformations"]) != 4
+            ):
+                raise RuntimeError("installed normalization lost its actual stage boundary")
+            invalid_policy = temporary / "invalid-normalization-policy.json"
+            invalid_policy.write_text('{"currency":"USD"}')
+            invalid_normalization = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.bom_stages",
+                    str(stage_source),
+                    "--context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                    "--normalization-policy",
+                    str(invalid_policy),
+                ],
+                cwd=temporary,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if (
+                invalid_normalization.returncode != 2
+                or invalid_normalization.stdout
+                or json.loads(invalid_normalization.stderr)["code"]
+                != "pil.input.normalization_policy_invalid"
+            ):
+                raise RuntimeError(
+                    "installed normalization did not reject missing unit/currency policy"
+                )
             invalid_source = temporary / "invalid-stage-source.xlsx"
             invalid_source.write_bytes(b"not XLSX")
             invalid_stage = subprocess.run(
@@ -286,6 +349,7 @@ def main() -> int:
                 + manifest_run.stdout.strip()
                 + "".join(planning_outputs)
                 + stage_run.stdout.strip()
+                + normalized.stdout.strip()
             )
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")

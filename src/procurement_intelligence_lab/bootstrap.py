@@ -9,10 +9,17 @@ from procurement_intelligence_lab.adapters.local_artifacts import (
 from procurement_intelligence_lab.adapters.xlsx_structure import XlsxStructure
 from procurement_intelligence_lab.application.anomaly_service import AnomalyService
 from procurement_intelligence_lab.application.document_stages import DocumentStages
+from procurement_intelligence_lab.application.normalized_document_stages import (
+    NormalizedDocumentStages,
+)
 from procurement_intelligence_lab.domains.procurement.anomaly_assessment import (
     QuantityAssessmentPolicies,
 )
 from procurement_intelligence_lab.domains.procurement.mapping import BomTableMap
+from procurement_intelligence_lab.domains.procurement.normalization import (
+    BomNormalizationPolicy,
+    BomNormalize,
+)
 from procurement_intelligence_lab.domains.procurement.package import (
     BOM_PROFILE_ID,
     PROCUREMENT_PACKAGE,
@@ -71,4 +78,23 @@ def build_bom_stage_service(*, captured_at: datetime, context: ProvenanceContext
             schema_version=BOM_TABLE_SCHEMA.schema_id,
         ),
         BOM_TABLE_SCHEMA.reference_id,
+    )
+
+
+def build_bom_normalization_service(
+    *, captured_at: datetime, context: ProvenanceContext, policy: BomNormalizationPolicy
+) -> NormalizedDocumentStages:
+    """Extend the same captured-document path with an explicitly configured domain normalizer."""
+    return NormalizedDocumentStages(
+        build_bom_stage_service(captured_at=captured_at, context=context),
+        BomNormalize(policy),
+        DecisionProvenance(
+            context,
+            "bom-value-normalization",
+            ComponentKind.DETERMINISTIC,
+            "1",
+            policy_version=policy.reference_id,
+            schema_version="bom-decimal@1",
+        ),
+        policy.reference_id,
     )

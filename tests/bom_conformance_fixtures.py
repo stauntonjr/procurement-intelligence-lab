@@ -14,8 +14,15 @@ def conformance_checkout(repo: Path) -> Path:
     )
     (repo / "tools").mkdir()
     shutil.copyfile(ROOT / "tools/benchmark_bom_stages.py", repo / "tools/benchmark_bom_stages.py")
+    shutil.copyfile(
+        ROOT / "tools/benchmark_bom_normalization.py", repo / "tools/benchmark_bom_normalization.py"
+    )
     shutil.copytree(
         ROOT / "evals/extraction/bom-stages-v1", repo / "evals/extraction/bom-stages-v1"
+    )
+    shutil.copytree(
+        ROOT / "evals/extraction/bom-normalization-v1",
+        repo / "evals/extraction/bom-normalization-v1",
     )
     shutil.copyfile(ROOT / ".gitignore", repo / ".gitignore")
     for args in (

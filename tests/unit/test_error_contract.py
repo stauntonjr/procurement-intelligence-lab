@@ -46,6 +46,8 @@ def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
         "pil.interpretation.document_structure_invalid",
         "pil.interpretation.schema_mapping_invalid",
         "pil.input.document_stage_invalid",
+        "pil.interpretation.normalization_invalid",
+        "pil.input.normalization_policy_invalid",
         "pil.input.domain_package_invalid",
         "pil.input.brief_not_found",
         "pil.policy.brief_review_conflict",
