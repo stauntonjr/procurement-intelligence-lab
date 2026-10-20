@@ -14,7 +14,8 @@ def test_hash_pinned_bom_conformance_matches_each_layer() -> None:
     sources = json.loads(json.dumps(report["sources"]))
     assert len(sources) == 9
     assert all(
-        set(record["checks"]) == {"rows", "cells", "fields"} and all(record["checks"].values())
+        set(record["checks"]) == {"rows", "cells", "fields", "field_evidence", "evidence_identity"}
+        and all(record["checks"].values())
         for record in sources
     )
     assert sum(record["layers"]["fields"]["count"] for record in sources) == 1608

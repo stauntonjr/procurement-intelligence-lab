@@ -85,11 +85,28 @@ def benchmark(manifest_path: Path, revision: str) -> dict[str, object]:
                 for f in result.mapped.fields
             ]
         )
+        field_evidence = sorted(
+            [f.field_key, f.evidence.sheet, f.evidence.row, list(f.evidence.cells)]
+            for f in result.mapped.fields
+        )
         layers = {
             name: {"count": len(values), "sha256": digest(values)}
-            for name, values in [("rows", rows), ("cells", cells), ("fields", fields)]
+            for name, values in [
+                ("rows", rows),
+                ("cells", cells),
+                ("fields", fields),
+                ("field_evidence", field_evidence),
+            ]
         }
         checks = {name: layers[name] == item["expected"][name] for name in layers}
+        checks["evidence_identity"] = all(
+            evidence.artifact_id == result.artifact.artifact_id
+            and evidence.content_hash == actual_hash
+            for evidence in [
+                *(e.evidence for e in result.structured.elements),
+                *(f.evidence for f in result.mapped.fields),
+            ]
+        )
         records.append(
             {
                 "path": item["path"],

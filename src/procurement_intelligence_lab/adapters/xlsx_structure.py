@@ -54,17 +54,15 @@ class XlsxStructure:
             with ZipFile(BytesIO(content)) as archive:
                 if len(archive.namelist()) != len(set(archive.namelist())):
                     raise DocumentStructureError("duplicate XLSX archive members are unsupported")
-                shared = (
-                    [
-                        text_value(node)
-                        for node in ET.fromstring(archive.read("xl/sharedStrings.xml")).findall(
-                            ".//x:si", NS
-                        )
-                    ]
+                strings = (
+                    ET.fromstring(archive.read("xl/sharedStrings.xml")).findall("x:si", NS)
                     if "xl/sharedStrings.xml" in archive.namelist()
                     else []
                 )
-                root = worksheet_root(archive, self.sheet)
+                for string in strings:
+                    _validate_string(string)
+                shared = [text_value(string) for string in strings]
+                root = worksheet_root(archive, self.sheet, strict=True)
                 if root.find("x:mergeCells", NS) is not None:
                     raise DocumentStructureError("merged-cell worksheets are unsupported")
                 rows: dict[int, tuple[list[str], tuple[str, ...]]] = {}
@@ -77,6 +75,7 @@ class XlsxStructure:
                     indices: set[int] = set()
                     next_index = 0
                     for cell in row.findall("x:c", NS):
+                        _validate_cell(cell)
                         reference = cell.attrib.get("r")
                         if reference:
                             match = CELL_REFERENCE.fullmatch(reference.upper())
@@ -154,3 +153,27 @@ class XlsxStructure:
                     )
                 )
         return StructuredDocument(artifact, tuple(elements), provenance)
+
+
+def _validate_string(node: ET.Element) -> None:
+    texts = node.findall("x:t", NS)
+    runs = node.findall("x:r", NS)
+    if len(texts) > 1 or (texts and runs) or any(len(run.findall("x:t", NS)) != 1 for run in runs):
+        raise DocumentStructureError("string cells require one text value or explicit rich runs")
+
+
+def _validate_cell(cell: ET.Element) -> None:
+    kind = cell.attrib.get("t", "n")
+    if kind not in {"n", "s", "inlineStr", "str", "b", "d"}:
+        raise DocumentStructureError("unsupported XLSX cell type")
+    values = cell.findall("x:v", NS)
+    strings = cell.findall("x:is", NS)
+    if len(values) > 1 or len(strings) > 1 or any(len(value) for value in values):
+        raise DocumentStructureError("cell content must have a single scalar or inline value")
+    if kind == "inlineStr":
+        if values:
+            raise DocumentStructureError("inline string cells cannot contain scalar values")
+        for string in strings:
+            _validate_string(string)
+    elif strings:
+        raise DocumentStructureError("scalar/shared cells cannot contain inline strings")

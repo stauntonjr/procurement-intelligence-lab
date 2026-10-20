@@ -21,8 +21,11 @@ elements with physical worksheet coordinates. It assigns no schema meaning or bu
 Row/cell ordering follows source coordinates; blank rows without cells emit no elements.
 
 The adapter rejects inconsistent/duplicate row/cell coordinates, duplicate archive members,
-invalid shared-string indices, formulas and merged cells, unsupported media types and malformed
-archives/XML. Formula caches are not recalculated or accepted as verified values. Coordinates
+ambiguous worksheet/relationship identifiers, external worksheet relationships, unknown cell types,
+conflicting scalar/inline/shared-string representations, invalid shared-string indices, formulas
+and merged cells, unsupported media types and malformed
+archives/XML. Admitted cell types are `n`, `s`, `inlineStr`, `str`, `b` and `d`; values remain raw
+text without interpreting numbers, booleans or dates. Error cells (`e`) are unsupported. Formula caches are not recalculated or accepted as verified values. Coordinates
 must fit the [documented XLSX grid](https://support.microsoft.com/en-us/excel/excel-specifications-and-limits):
 1,048,576 rows and 16,384 columns. Bounds are checked before dense-row mechanics allocate padding.
 This is a constrained table adapter, not general Excel rendering, formula evaluation or OCR.
@@ -106,7 +109,8 @@ source/context and compares identical output; unsupported-source failures remain
 The [conformance manifest](../../../evals/extraction/bom-stages-v1/manifest.json) pins the existing
 synthetic sample and eight BOM revisions from the admitted four-project corpus, excluding PO,
 quote and commitment roles. Its independent source-XML expectations check row grouping, physical
-cell text/coordinates and raw mapped fields separately. Extra `Line ID` cells are deliberately
+cell text/coordinates, raw mapped fields and the actual attached field evidence separately;
+evidence artifact/hash identity must match the captured source. Extra `Line ID` cells are deliberately
 unmapped. The initial gold construction omitted those extras; correcting the source-derived
 expectation preserved the specified unmapped-field behavior rather than dropping source data.
 Nine workbooks yield 1,608 mapped fields. The runner records input and layer hashes, record counts,

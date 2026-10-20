@@ -59,9 +59,18 @@ def read_row_values(
     return [indexed.get(index, "") for index in range(width)], tuple(populated)
 
 
-def worksheet_root(archive: ZipFile, sheet: str) -> ET.Element:
+def worksheet_root(archive: ZipFile, sheet: str, *, strict: bool = False) -> ET.Element:
     workbook = ET.fromstring(archive.read("xl/workbook.xml"))
     rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+    if strict:
+        sheets = workbook.findall(".//x:sheet", NS)
+        for attribute in ("name", "sheetId", f"{{{NS['r']}}}id"):
+            values = [node.attrib[attribute] for node in sheets]
+            if any(not value for value in values) or len(values) != len(set(values)):
+                raise ValueError("worksheet names and identifiers must be nonempty and unique")
+        identifiers = [rel.attrib["Id"] for rel in rels]
+        if any(not value for value in identifiers) or len(identifiers) != len(set(identifiers)):
+            raise ValueError("worksheet relationship identifiers must be nonempty and unique")
     relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
     sheet_node = next(
         (item for item in workbook.findall(".//x:sheet", NS) if item.attrib["name"] == sheet),
@@ -72,4 +81,9 @@ def worksheet_root(archive: ZipFile, sheet: str) -> ET.Element:
     target = sheet_node.attrib.get(f"{{{NS['r']}}}id", sheet_node.attrib.get("r:id", ""))
     if not target or target not in relmap:
         raise ValueError(f"sheet {sheet!r} has no valid relationship")
+    if strict and any(
+        rel.attrib["Id"] == target and rel.attrib.get("TargetMode", "Internal") != "Internal"
+        for rel in rels
+    ):
+        raise ValueError("external worksheet relationships are unsupported")
     return ET.fromstring(archive.read("xl/" + relmap[target].lstrip("/")))
