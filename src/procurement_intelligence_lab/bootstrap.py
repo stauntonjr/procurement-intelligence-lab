@@ -21,7 +21,10 @@ from procurement_intelligence_lab.domains.procurement.normalization import (
     BomNormalizationPolicy,
     BomNormalize,
 )
-from procurement_intelligence_lab.domains.procurement.observation_assertions import BomAssert
+from procurement_intelligence_lab.domains.procurement.observation_assertions import (
+    BomAssert,
+    validate_bom_assertions,
+)
 from procurement_intelligence_lab.domains.procurement.package import (
     BOM_PROFILE_ID,
     PROCUREMENT_PACKAGE,
@@ -117,4 +120,5 @@ def build_bom_assertion_service(
             policy_version="bom-assertions@1",
         ),
         captured_at,
+        validate_bom_assertions,
     )

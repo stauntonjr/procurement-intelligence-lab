@@ -89,3 +89,44 @@ class BomAssert:
                     )
                 )
         return tuple(claims), tuple(mentions)
+
+
+def validate_bom_assertions(
+    observations: tuple[NormalizedObservation, ...],
+    assertions: tuple[SourceAssertion, ...],
+    mentions: tuple[EntityMention, ...],
+) -> None:
+    """Check domain postconditions independently of the selected assertion producer."""
+    rows: dict[str, list[SourceAssertion]] = {}
+    expected_mentions: list[EntityMention] = []
+    sku_observations: list[NormalizedObservation] = []
+    for observation, claim in zip(observations, assertions, strict=True):
+        expected = _PREDICATES.get(
+            observation.source_field.field_name, AssertionPredicate.UNMAPPED_FIELD
+        )
+        if claim.predicate.value != expected.value:
+            raise SourceAssertionError(
+                "BOM assertion predicate must retain the observed field meaning"
+            )
+        rows.setdefault(observation.subject_hint, []).append(claim)
+        if (
+            observation.source_field.field_name == "sku"
+            and isinstance(observation.value, str)
+            and observation.value.strip()
+        ):
+            sku_observations.append(observation)
+    for sku in sku_observations:
+        assert isinstance(sku.value, str)
+        expected_mentions.append(
+            EntityMention(
+                sku.value,
+                "procurement_item",
+                tuple(rows[sku.subject_hint]),
+                sku.scope,
+                sku.effective_at,
+            )
+        )
+    if mentions != tuple(expected_mentions):
+        raise SourceAssertionError(
+            "BOM mentions must retain every complete source-SKU row exactly once"
+        )

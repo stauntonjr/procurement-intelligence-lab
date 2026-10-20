@@ -27,3 +27,8 @@ governing Issues were read directly. The latest post-merge Gemini audit failed H
 a new bounded audit was requested for this slice. Provider availability is not implementation
 evidence and its report remains advisory. Known unrelated drift: #109's unchecked #112/#115 and
 duplicate ADR-033 numbering; historical branch notes are explicitly superseded.
+
+Review ruling: add an injected procurement output validator. Fresh review reproduced dropped,
+partial, description-as-SKU and relabeled predicate outputs accepted by generic lineage checks.
+Four failing producer tests pin the correction; core/application stays domain-neutral. This
+strengthens the already specified producer-output boundary without expanding business policy.

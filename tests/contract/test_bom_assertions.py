@@ -168,12 +168,17 @@ def test_strategy_rejects_drop_duplicate_foreign_and_wrong_bom_profile(tmp_path:
         "duplicate_mention",
         "fabricated_mention",
         "cross_row",
+        "drop_mentions",
+        "description_mention",
+        "partial_row",
+        "entity_type",
+        "duplicate_attached",
+        "wrong_predicate",
     ],
 )
 def test_application_rejects_invalid_assertion_producer(tmp_path: Path, change: str) -> None:
     from procurement_intelligence_lab.domains.procurement.observation_assertions import BomAssert
     from procurement_intelligence_lab.platform.semantics.assertions import AssertionOrigin
-    from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
     from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
     from procurement_intelligence_lab.platform.semantics.provenance import DecisionProvenance
 
@@ -189,6 +194,29 @@ def test_application_rejects_invalid_assertion_producer(tmp_path: Path, change: 
             claims, mentions = BomAssert(self.origin).assert_observations(
                 observations, provenance=provenance
             )
+            if change == "entity_type":
+                return claims, (replace(mentions[0], entity_type="unrelated"), *mentions[1:])
+            if change == "duplicate_attached":
+                return claims, (
+                    replace(mentions[0], assertions=mentions[0].assertions + claims[:1]),
+                    *mentions[1:],
+                )
+            if change == "drop_mentions":
+                return claims, ()
+            if change == "description_mention":
+                return claims, (replace(mentions[0], text="source description"), *mentions[1:])
+            if change == "partial_row":
+                return claims, (replace(mentions[0], assertions=claims[:1]), *mentions[1:])
+            if change == "wrong_predicate":
+                from procurement_intelligence_lab.domains.procurement.assertions import (
+                    AssertionPredicate,
+                )
+
+                changed = replace(claims[0], predicate=AssertionPredicate.HAS_QUANTITY)
+                return (changed, *claims[1:]), (
+                    replace(mentions[0], assertions=(changed, *mentions[0].assertions[1:])),
+                    *mentions[1:],
+                )
             if change == "drop":
                 return claims[1:], mentions
             if change == "duplicate":
@@ -215,8 +243,15 @@ def test_application_rejects_invalid_assertion_producer(tmp_path: Path, change: 
                 return claims, (replace(mentions[0], text="invented"),)
             return claims, (replace(mentions[0], assertions=claims),)
 
-    ref = source(workbook(tmp_path / "source.xlsx", HEADER + ROW + ROW.replace("7", "8")))
-    with pytest.raises(DocumentStageError):
+    ref = source(
+        workbook(
+            tmp_path / "source.xlsx",
+            HEADER
+            + ROW.replace("</row>", '<c r="B7"><v>source description</v></c></row>')
+            + ROW.replace("7", "8"),
+        )
+    )
+    with pytest.raises(SemanticContractError):
         replace(s, assertion_factory=Broken).run(ref)
 
 

@@ -21,6 +21,7 @@ from procurement_intelligence_lab.platform.semantics.assertions import (
 )
 from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
+from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
 from procurement_intelligence_lab.platform.semantics.provenance import (
     DecisionProvenance,
     ProvenanceEdge,
@@ -155,6 +156,10 @@ class AssertedDocumentStages:
     assertion_factory: Callable[[AssertionOrigin], AssertStrategy]
     assertion_provenance: DecisionProvenance
     recorded_at: datetime
+    assertion_validator: Callable[
+        [tuple[NormalizedObservation, ...], tuple[SourceAssertion, ...], tuple[EntityMention, ...]],
+        None,
+    ]
 
     def run(self, source: SourceReference) -> AssertedDocumentResult:
         normalized = self.documents.run(source)
@@ -199,4 +204,5 @@ class AssertedDocumentStages:
                     "ASSERT mention must retain returned claims and source scope/time"
                 )
             seen.add(mention.mention_id)
+        self.assertion_validator(normalized.observations, assertions, mentions)
         return AssertedDocumentResult(normalized, assertions, mentions, origin, provenance)

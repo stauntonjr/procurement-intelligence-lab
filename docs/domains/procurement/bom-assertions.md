@@ -69,3 +69,9 @@ other document types. #13/#35/#37 retain durable storage/index/replay acceptance
 normalization. Resolution, governing-source policy, canonical state and general physical-plan
 execution remain separate. The next core slice should pin ledger/content serialization, append and
 replay semantics against #13/#35/#37 before wiring the assertions into downstream runtime state.
+
+The application also receives a procurement-owned output validator through bootstrap. It checks
+field-to-predicate meaning and complete, exactly-once source-SKU row mentions independently of the
+selected producer; replacement strategies cannot drop mentions, use description text as SKU, or
+retain only part of a row. This is explicit runtime dependency injection, not a DomainPackage
+callback or a procurement rule in shared application code.

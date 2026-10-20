@@ -15,6 +15,7 @@ from procurement_intelligence_lab.platform.semantics.errors import (
     ScopeMismatchError,
     SemanticContractError,
     SemanticTypeContractError,
+    SourceAssertionError,
     TemporalContractError,
 )
 from procurement_intelligence_lab.platform.semantics.reconciliation import (
@@ -47,6 +48,7 @@ def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
         "pil.interpretation.schema_mapping_invalid",
         "pil.input.document_stage_invalid",
         "pil.interpretation.normalization_invalid",
+        "pil.interpretation.source_assertion_invalid",
         "pil.input.normalization_policy_invalid",
         "pil.input.domain_package_invalid",
         "pil.input.brief_not_found",
@@ -86,6 +88,12 @@ def test_platform_semantic_errors_require_specific_failure_evidence() -> None:
 @pytest.mark.parametrize(
     ("error_type", "base_type", "category", "code"),
     (
+        (
+            SourceAssertionError,
+            ValueError,
+            ErrorCategory.INTERPRETATION,
+            ErrorCode.SOURCE_ASSERTION_INVALID,
+        ),
         (
             SemanticContractError,
             ValueError,

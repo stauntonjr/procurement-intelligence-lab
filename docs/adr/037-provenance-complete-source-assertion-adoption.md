@@ -46,3 +46,9 @@ scope/version/time, stable identities, legacy ID compatibility and append retent
 the actual CLI and clean installed wheel, three/four/five modes, error envelopes and source-cell
 drill-down. Nine-source gold checks claims, mentions and attached evidence separately. Required
 full checks, coverage ratchet and public challenge/mutation checks apply to the latest revision.
+
+The application also receives a procurement-owned output validator through bootstrap. It checks
+field-to-predicate meaning and complete, exactly-once source-SKU row mentions independently of the
+selected producer; replacement strategies cannot drop mentions, use description text as SKU, or
+retain only part of a row. This is explicit runtime dependency injection, not a DomainPackage
+callback or a procurement rule in shared application code.
