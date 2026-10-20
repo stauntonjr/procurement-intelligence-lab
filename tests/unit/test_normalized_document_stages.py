@@ -16,6 +16,41 @@ from tests.bom_stage_fixtures import AT, HEADER, ROW, provenance, workbook
 from tests.contract.test_bom_stage_adapters import source
 
 
+@pytest.mark.parametrize("rows", [HEADER, HEADER + ROW], ids=["empty", "populated"])
+def test_public_service_receipt_preserves_upstream_snapshots_and_exact_source_fields(
+    tmp_path: Path, rows: str
+) -> None:
+    context = replace(provenance().context, input_snapshot_ids=("upstream-input",))
+    policy = BomNormalizationPolicy(CountUnit.DOZEN, "USD", CountUnit.EACH)
+    service = build_bom_normalization_service(captured_at=AT, context=context, policy=policy)
+    reference = source(workbook(tmp_path / "source.xlsx", rows))
+    result = service.run(reference)
+    payload = result.as_dict()
+    assert result.provenance.context.input_snapshot_ids == (
+        "upstream-input",
+        result.stages.mapped.mapped_document_id,
+        policy.reference_id,
+    )
+    assert tuple(x.source_field for x in result.observations) == result.stages.mapped.fields
+    assert result.transformation.output_ids == (
+        result.batch_id,
+        *(x.observation_id for x in result.observations),
+    )
+    assert result.transformation.parent_event_ids == (result.stages.transformations[-1].event_id,)
+    assert payload["executed_stages"] == ["INGEST", "STRUCTURE", "MAP", "NORMALIZE"]
+    assert payload["artifact"] == result.stages.as_dict()["artifact"]
+    assert service.run(reference).as_dict() == payload
+    changed = replace(
+        service,
+        normalization_provenance=replace(
+            service.normalization_provenance, implementation_version="next"
+        ),
+    )
+    assert changed.run(reference).batch_id != result.batch_id
+    with pytest.raises(DocumentStageError):
+        replace(service, policy_reference=" ")
+
+
 @pytest.mark.parametrize(
     "change", ["drop", "duplicate", "foreign_scope", "time", "provenance", "source_field"]
 )

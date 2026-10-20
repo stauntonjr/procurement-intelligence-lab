@@ -134,6 +134,12 @@ def test_profile_mismatch_and_nontext_values_fail_before_coercion(tmp_path: Path
             ),
         ),
         replace(document, fields=document.fields[1:]),
+        replace(
+            document,
+            fields=tuple(
+                replace(f, raw_value=123) if f.field_name == "sku" else f for f in document.fields
+            ),
+        ),
     )
     for candidate in invalid:
         with pytest.raises(NormalizationError):
