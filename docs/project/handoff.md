@@ -1,5 +1,16 @@
 # Project handoff
 
+## Explicit BOM normalization — 2026-10-19
+
+Issue #209 (M1, parent #31) adds a procurement NormalizeStrategy to the existing shared-stage CLI
+with explicit `--normalization-policy` input. [Contract and continuation](../domains/procurement/bom-normalization.md):
+quantities become exact Decimal each, prices retain declared currency/denominator, raw source
+fields/evidence remain available, and missing/unmapped values stay unresolved. Source-row hints
+preserve duplicate/missing SKU rows. The fourth transformation records policy/provenance and an
+empty batch receipt when appropriate; no assertion or authority selection is performed. Default
+three-stage behavior and the legacy demo remain compatible. #31 stays open for broader normalization;
+next is source-assertion adoption under #33, followed by durable ledger/content/replay work.
+
 ## Shared BOM stage adoption — 2026-10-19
 
 Issue #207 (M1, parent #7) adds concrete capture/structure/mapping strategies and an installed
@@ -9,7 +20,8 @@ cell coordinates; procurement mapping retains raw values and missing/unmapped di
 real transformations retain source and component provenance. Nine hash-pinned synthetic BOMs match
 row/cell/raw-field expectations (1,608 fields). Legacy paths retain shared cell mechanics and C002.
 This is not a general plan executor, durable store or normalized/asserted procurement pipeline.
-Next: NORMALIZE/ASSERT adoption against #31/#33, then durable ledger/content/replay work.
+Issue #209 adds the bounded normalization path below #31; ASSERT adoption against #33 and broader
+normalization remain separate, followed by durable ledger/content/replay work.
 
 ## Runtime package planning — 2026-10-19
 

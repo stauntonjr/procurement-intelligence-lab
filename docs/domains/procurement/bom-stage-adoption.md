@@ -1,5 +1,9 @@
 # BOM capture, structure and mapping adoption
 
+The default remains these three stages. Issue #209 adds an explicit opt-in
+[BOM normalization path](bom-normalization.md) with declared units/currency and a fourth event.
+Statements below about normalization remaining separate describe this three-stage boundary.
+
 Issue [#207](https://github.com/stauntonjr/procurement-intelligence-lab/issues/207), M1, parent #7,
 implements the first three shared strategy contracts from ADR-022. The real path is
 `SourceReference -> Artifact -> StructuredDocument -> MappedDocument`. These are actual synchronous

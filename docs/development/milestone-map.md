@@ -59,7 +59,9 @@ admission, explicit deployment config and deterministic physical planning;
 [planning acceptance](../architecture/runtime-planning.md) uses fixture descriptors,
 not operational executors. Issue #207 (M1, parent #7) now adopts concrete capture/structure/mapping strategies and three
 transformation events through an installed caller; [acceptance](../domains/procurement/bom-stage-adoption.md)
-keeps NORMALIZE/ASSERT, durable storage and general plan execution open. See the
+retains raw evidence. Issue #209 (M1, parent #31) adds explicit-policy typed BOM normalization
+and a fourth event; [normalization acceptance](../domains/procurement/bom-normalization.md) leaves
+broader #31, ASSERT, durable storage and general plan execution open. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream

@@ -1,4 +1,4 @@
-"""Inspect real capture/structure/mapping outputs with explicit synthetic/local context."""
+"""Inspect shared BOM stages with optional explicit-policy normalization."""
 
 import argparse
 import json
@@ -8,7 +8,11 @@ from hashlib import sha256
 from pathlib import Path
 from typing import cast
 
-from procurement_intelligence_lab.bootstrap import build_bom_stage_service
+from procurement_intelligence_lab.bootstrap import (
+    build_bom_normalization_service,
+    build_bom_stage_service,
+)
+from procurement_intelligence_lab.interfaces.bom_normalization_policy import load_policy
 from procurement_intelligence_lab.platform.semantics.artifacts import SourceReference
 from procurement_intelligence_lab.platform.semantics.errors import (
     DocumentStageError,
@@ -65,11 +69,16 @@ def _context(path: Path) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inspect BOM capture, structure and mapping; later stages do not run."
+        description="Inspect BOM capture, structure and mapping, with optional explicit-policy normalization."
     )
     parser.add_argument("source", type=Path)
     parser.add_argument(
         "--context", type=Path, required=True, help="Explicit scope/time/run/code JSON context"
+    )
+    parser.add_argument(
+        "--normalization-policy",
+        type=Path,
+        help="Opt in to NORMALIZE with explicit quantity/price units and currency JSON",
     )
     args = parser.parse_args()
     try:
@@ -107,11 +116,26 @@ def main() -> int:
         source = SourceReference(
             "local-file", args.source.absolute().as_uri(), scope, observed_at, version
         )
-        result = build_bom_stage_service(captured_at=captured_at, context=context).run(source)
+        if args.normalization_policy is None:
+            result = (
+                build_bom_stage_service(captured_at=captured_at, context=context)
+                .run(source)
+                .as_dict()
+            )
+        else:
+            policy = load_policy(args.normalization_policy)
+            result = (
+                build_bom_normalization_service(
+                    captured_at=captured_at, context=context, policy=policy
+                )
+                .run(source)
+                .as_dict()
+            )
+            result["normalization_policy"] = policy.as_dict()
     except SemanticContractError as exc:
         print(json.dumps(exc.as_dict()), file=sys.stderr)
         return 2
-    print(json.dumps(result.as_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+    print(json.dumps(result, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
     return 0
 
 

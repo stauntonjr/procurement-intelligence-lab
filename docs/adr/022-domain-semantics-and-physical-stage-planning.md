@@ -118,3 +118,11 @@ Distinct capture, structuring and mapping events retain exact inputs/outputs, in
 and parent-event links. This diagnostic caller is independent of the general physical planner:
 three real strategies do not establish complete nine-stage procurement execution. See
 [BOM stage adoption](../domains/procurement/bom-stage-adoption.md) for the executable contract.
+
+Issue #209 extends that diagnostic path with the existing NormalizeStrategy under an explicit
+procurement-owned, content-identified unit/currency policy. The default remains three stages;
+opt-in executes four. Normalized observations retain source fields/scope/time, and a batch receipt
+allows a truthful empty normalization event without inventing an observation. The receipt belongs
+to the application and introduces no platform stage or persistence contract. See
+[BOM normalization](../domains/procurement/bom-normalization.md). Broader #31 and assertion #33
+acceptance remain open; the physical planner is still separate from this concrete service.

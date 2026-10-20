@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "dataset": "bom-normalization-v1",
+  "policy": {
+    "profile": "bom-decimal@1",
+    "quantity_unit": "each",
+    "currency": "USD",
+    "price_unit": "each"
+  },
+  "gold_provenance": "Independent direct XML transcription of the nine hash-pinned sources; fixed-point Decimal expectations, explicit experiment units/currency; no production mapper or normalizer used to generate gold. Quantity dozen conversion and boundary/failure coverage reside in contract/CLI tests.",
+  "sources": [
+    {
+      "path": "src/procurement_intelligence_lab/examples/synthetic_bom_stages.xlsx",
+      "sha256": "d24ebb7abddc3986eec3dda1fee5a8f498f39a2e30118810dfeb2f04d65e6292",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "sample",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 8,
+        "sha256": "a99d323ea868df289a8b1a6be35479e378269671374730e2e284dbf18676a5d3"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r1.xlsx",
+      "sha256": "a6b6de938f9be516ed906d7c36b9997e3ca91f5672959f2fe8286cf5eaf8ea5a",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "atlas",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "e2979e5b4af86e720044154f1c9cd91bd1d93efb128a902adde4bcb90fdea1d5"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/atlas-bom-r2.xlsx",
+      "sha256": "3576883dc2eae57ee1ad2f15c73d8a89d850e813f0ad03d1de5a8c861b83be4a",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "atlas",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "b5b40f4ced593b93e19f274daf5a32d05e4238fcbe1c768ce4e5548abe773652"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/borealis-bom-r1.xlsx",
+      "sha256": "2918749ebed01e8f3c5d5cad6d67813f64956a0e96ddde98ccbdd25b1dedc5db",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "borealis",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "c8c29a8e6f02f241b15fa01a6f47550b09a31ce10c4dad8306f9e75191c75d09"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/borealis-bom-r2.xlsx",
+      "sha256": "61eba7b77829077411e21e9823f9b449c07264e925b77f1f726094effcb4166b",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "borealis",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "faab82c7a9997d58592b2e0a7d5e7c928a306733cd4db3ece8ff82d5a9e5dafe"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/cinder-bom-r1.xlsx",
+      "sha256": "a2f624a9109df7512dfd7edd4992ae66a98f1ee50724d0ab552e7f2f8456dd58",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "cinder",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "11c208298b0c405c277bbe2dde124540b927aa98fa084854d3bb72558ac19178"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/cinder-bom-r2.xlsx",
+      "sha256": "8298b8320a93f8b96d6cb4f81c3e614ceb93a0836925ec6563e5195e8f8323fd",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "cinder",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "271ac7f1d2f42dc9837a65309ff6b33969d6799f871c87eab372fa49ffff1204"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/delta-bom-r1.xlsx",
+      "sha256": "5f6d9d1ae75212ad712ffb8691d495444fd1a937412faff7b3a2d638c8605be0",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "delta",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "e66d4b718f8127838f2d4afd15dda700be76675fb57785658bdb20f8bb9a5536"
+      }
+    },
+    {
+      "path": "src/procurement_intelligence_lab/examples/corpus_v1/delta-bom-r2.xlsx",
+      "sha256": "2df2641e7037584b47982a070515ac0d672c32afcc3e72b3caff773b47039231",
+      "scope": {
+        "tenant_id": "synthetic-tenant",
+        "project_id": "delta",
+        "site_id": "lab",
+        "version": "conformance-1"
+      },
+      "expected": {
+        "count": 200,
+        "sha256": "45ce72d3331d812ac51a834d5fa9428aaec198c9cb9fe6f2ff96ddcab974fa9d"
+      }
+    }
+  ]
+}

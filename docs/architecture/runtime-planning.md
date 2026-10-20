@@ -131,7 +131,9 @@ and compares byte-identical output across installation paths.
 | Business scope/as-of, stale/future source claims, approvals | Not evaluated by planning; no source data or execution authority input |
 
 Issue #207 adopts real capture/structure/mapping strategies with source/evidence acceptance in
-a [separate caller](../domains/procurement/bom-stage-adoption.md). General execution receipts,
+a [separate caller](../domains/procurement/bom-stage-adoption.md). Issue #209 adds opt-in
+[explicit BOM normalization](../domains/procurement/bom-normalization.md) to that caller.
+General execution receipts,
 remaining stage adaptation and durable ledger/replay remain subsequent work. Forecasting, decision/action
 policies, provider/model selection benchmarks and second-production-vertical acceptance remain
 separate deliverables.
