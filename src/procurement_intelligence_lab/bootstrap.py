@@ -1,6 +1,7 @@
 """Explicit composition helpers for application services."""
 
-from datetime import datetime
+from collections.abc import Callable
+from datetime import UTC, datetime
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
     LocalFileIngest,
@@ -157,6 +158,15 @@ def archive_codec():
         SourceAssertion,
         SourceAssertionContext,
     )
+    from procurement_intelligence_lab.platform.semantics.document_reviews import (
+        DocumentReviewDecision,
+        DocumentReviewTask,
+        ReviewDecisionCommand,
+        ReviewHistory,
+        ReviewOutcome,
+        ReviewProposal,
+        ReviewWorkflow,
+    )
     from procurement_intelligence_lab.platform.semantics.documents import (
         MappedDocument,
         MappedField,
@@ -182,6 +192,11 @@ def archive_codec():
         (
             ArchiveReceipt,
             DocumentSnapshot,
+            ReviewProposal,
+            DocumentReviewTask,
+            ReviewDecisionCommand,
+            DocumentReviewDecision,
+            ReviewHistory,
             Artifact,
             SourceReference,
             AssertionOrigin,
@@ -202,7 +217,14 @@ def archive_codec():
             EntityMention,
             StateScope,
         ),
-        (AssertionPredicate, EpistemicStatus, ComponentKind, ProvenanceRelation),
+        (
+            AssertionPredicate,
+            EpistemicStatus,
+            ComponentKind,
+            ProvenanceRelation,
+            ReviewWorkflow,
+            ReviewOutcome,
+        ),
     )
 
 
@@ -238,4 +260,32 @@ def build_archive_reader(dsn: str):
 
     return ArchiveReader(
         build_assertion_archive(dsn), validate_bom_assertions, validate_bom_policy_declaration
+    )
+
+
+def build_document_review_journal(dsn: str):
+    from procurement_intelligence_lab.platform.semantics.errors import ReviewUnavailableError
+
+    try:
+        from procurement_intelligence_lab.adapters.postgres_document_reviews import (
+            PostgresDocumentReviewJournal,
+        )
+    except ImportError:
+        raise ReviewUnavailableError(
+            "document review requires the installed storage extra"
+        ) from None
+    return PostgresDocumentReviewJournal(dsn, archive_codec(), build_assertion_archive(dsn))
+
+
+def build_document_review_service(dsn: str, *, clock: Callable[[], datetime] | None = None):
+    from procurement_intelligence_lab.application.document_reviews import DocumentReviewService
+    from procurement_intelligence_lab.domains.procurement.document_reviews import (
+        validate_bom_review,
+    )
+
+    return DocumentReviewService(
+        build_assertion_archive(dsn),
+        build_document_review_journal(dsn),
+        validate_bom_review,
+        clock or (lambda: datetime.now(UTC)),
     )

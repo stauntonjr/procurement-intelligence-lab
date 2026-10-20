@@ -30,29 +30,29 @@ application/document_reviews.py, domains/procurement/document_reviews.py; unit t
 Consumes archived SourceAssertion and RequestContext; produces ReviewProposal/Task/DecisionCommand/
 Decision/History, Journal Protocol and application propose/decide/show/history with injected clock,
 archive, journal and proposal validator.
-- [ ] Write boundary tests for missing/foreign/unsupported/digest/time/value/authority cases.
-- [ ] Run focused unit tests and observe missing feature failures, then implement minimal contract.
-- [ ] Verify positive and negative cases and exact typed task digest/identity stability.
+- [x] Write boundary tests for missing/foreign/unsupported/digest/time/value/authority cases.
+- [x] Run focused unit tests and observe missing feature failures, then implement minimal contract.
+- [x] Verify positive and negative cases and exact typed task digest/identity stability.
 
 ### Task2: Atomic Postgres journal and explicit composition
 
 Files: adapters/postgres_document_reviews.py, bootstrap.py; contract tests.
 Consumes Task1 journal contract and existing archive1/codec; produces initialized additive journal.
-- [ ] Write real isolated DB tests for init/retry/concurrency/conflict/rollback/as-of/SQL guards/corruption.
-- [ ] Observe RED; implement fixed schema, transaction mechanics and strict retained-data/source validation.
-- [ ] Verify existing archive reads/bytes unchanged and all targeted contracts GREEN.
+- [x] Write real isolated DB tests for init/retry/concurrency/conflict/rollback/as-of/SQL guards/corruption.
+- [x] Observe RED; implement fixed schema, transaction mechanics and strict retained-data/source validation.
+- [x] Verify existing archive reads/bytes unchanged and all targeted contracts GREEN.
 
 ### Task3: Public human CLI and clean artifact acceptance
 
 Files: interfaces/document_review.py, tools/archive_package_probe.py, docs/handoff/milestone/README;
 actual subprocess and in-process parser contracts.
-- [ ] Add actual propose -> restart/show -> exact approve/reject -> historical reads and denial tests.
-- [ ] Observe RED; implement strict request JSON and trusted human configuration, typed failures.
-- [ ] Extend installed storage probe and absent-driver checks; document exact contract and acceptance.
+- [x] Add actual propose -> restart/show -> exact approve/reject -> historical reads and denial tests.
+- [x] Observe RED; implement strict request JSON and trusted human configuration, typed failures.
+- [x] Extend installed storage probe and absent-driver checks; document exact contract and acceptance.
 
 ### Task4: Seal, qualify, review and deliver
 
-- [ ] Seal code, run make check/ratchet, clean package, all30 challenge/mutations and source conformance.
+- [x] Seal code, run make check/ratchet, clean package, all30 challenge/mutations and source conformance.
 - [ ] Independent latest-head architecture/semantic review; resolve concrete findings with regressions.
 - [ ] Embed validated same-head JSON in PR; every required deterministic check green before merge.
 - [ ] Verify merged main/tree/caller; close216 only, ProjectDone, broader13/37/41 stayopen/InProgress;

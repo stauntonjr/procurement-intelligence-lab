@@ -1,5 +1,18 @@
 # Project handoff
 
+## Document-value correction/review lineage — 2026-10-20
+
+Issue #216 (M2, parent #41, part of #37/#13) adds evidence-bound immutable document-value tasks,
+exact-digest human decisions and separate accepted-correction records behind a journal port.
+[Public contract](../architecture/document-review.md) and ADR-039 retain original source values,
+scoped/as-of history, stable retries/conflicts and prospective review time. Accepted corrections
+signal recomputation required with downstream discovery not evaluated; no governing state or source
+assertion is rewritten. Explicit additive Postgres init leaves archive schema1 intact. The separate
+trusted human CLI does not grant operational agents REVIEW permission or production authentication.
+Broader #13/#37/#41 stay open for other review workflows, downstream traversal/recomputation and
+policy integration. Latest pre-slice advisory audit39497397461 at main1bf87ac failed Gemini503;
+Project and deterministic planning audit were reviewed separately. No successful advisory report.
+
 ## Durable Postgres assertion archive — 2026-10-20
 
 Issue #213 (M2, parent #37, part of #13/#35/#36) adds atomic materialization of the complete

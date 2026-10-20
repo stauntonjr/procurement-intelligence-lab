@@ -481,6 +481,23 @@ def main() -> int:
             or "storage extra" not in json.loads(missing_storage.stderr)["message"]
         ):
             raise RuntimeError("base wheel did not report absent optional storage driver")
+        missing_review_storage = subprocess.run(
+            [str(python), "-m", "procurement_intelligence_lab.interfaces.document_review", "init"],
+            cwd=temporary,
+            env={**os.environ, "PIL_ASSERTION_ARCHIVE_DSN": "configured-but-driver-absent"},
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if (
+            missing_review_storage.returncode != 2
+            or missing_review_storage.stdout
+            or "storage extra" not in json.loads(missing_review_storage.stderr)["message"]
+            or json.loads(missing_review_storage.stderr)["code"]
+            != "pil.infrastructure.document_review_unavailable"
+        ):
+            raise RuntimeError("base wheel did not report typed missing review storage extra")
+
         requirements = temporary / "workflow-requirements.txt"
         subprocess.run(
             [

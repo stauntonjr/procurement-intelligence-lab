@@ -19,7 +19,7 @@ validates task binding/digest/time. Approval yields a distinct correction identi
 and recomputation_required; downstream discovery is explicitly not_evaluated. No source fact is
 rewritten and no canonical/governing value is selected, including across contradictory approved tasks.
 
-Both creation and decision require REVIEW and matching RequestContext tenant/project/site; reads
+Both creation and decision require REVIEW plus READ_EVIDENCE and matching RequestContext tenant/project/site; reads
 require READ_EVIDENCE. Exact StateScope/version always scopes persistence. Operational contexts
 without REVIEW cannot propose/decide. Separate trusted local CLI composes these permissions from
 PIL_DOCUMENT_REVIEWER_ID and exact scope; no actor/permissions/time arguments or JSON overrides.
