@@ -32,6 +32,40 @@ def invoke(source: Path, context: Path = CONTEXT) -> subprocess.CompletedProcess
     )
 
 
+@pytest.mark.parametrize("column", ["C", "E"])
+@pytest.mark.parametrize("raw", ["   ", "&#9;&#10;", " 0 "])
+def test_cli_blank_text_is_unresolved_without_trimming_nonblank_values(
+    tmp_path: Path, column: str, raw: str
+) -> None:
+    cell = f'<c r="{column}7" t="inlineStr"><is><t xml:space="preserve">{raw}</t></is></c>'
+    rows = (
+        ROW.replace('<c r="C7"><v>0.5</v></c>', cell)
+        if column == "C"
+        else ROW.replace("</row>", cell + "</row>")
+    )
+    result = invoke(workbook(tmp_path / "spaces.xlsx", HEADER + rows))
+    assert result.returncode == 0, result.stderr
+    payload = json.loads(result.stdout)
+    field = next(
+        f for f in payload["mapped_document"]["fields"] if f["field_key"] == f"BOM!{column}7"
+    )
+    element = next(
+        e
+        for e in payload["structured_document"]["elements"]
+        if e["kind"] == "cell" and e["evidence"]["cells"] == [column] and e["evidence"]["row"] == 7
+    )
+    expected = "\t\n" if raw == "&#9;&#10;" else raw
+    assert element["text"] == expected
+    assert field["evidence"] == element["evidence"]
+    assert field["raw_value"] == (expected if expected.strip() else None)
+    assert field["status"] == ("observed" if expected.strip() else "unresolved")
+    assert field["diagnostic"] == (
+        (None if column == "C" else "unmapped column E")
+        if expected.strip()
+        else ("blank cell" if column == "C" else "blank unmapped column E")
+    )
+
+
 def test_cli_executes_first_three_stages_with_source_and_transformation_links(
     tmp_path: Path,
 ) -> None:

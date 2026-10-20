@@ -12,6 +12,23 @@ from tests.bom_stage_fixtures import AT, HEADER, ROW, provenance, workbook
 from tests.contract.test_bom_stage_adapters import source
 
 
+def test_service_retains_injected_snapshots_and_adds_each_direct_input_once(tmp_path: Path) -> None:
+    path = workbook(tmp_path / "source.xlsx", HEADER + ROW)
+    reference = source(path)
+    snapshots = ("caller-snapshot", reference.reference_id)
+    context = replace(provenance().context, input_snapshot_ids=snapshots)
+    service = build_bom_stage_service(captured_at=AT, context=context)
+    result = service.run(reference)
+    records = (result.artifact, result.structured, result.mapped)
+    inputs = (reference.reference_id, result.artifact.artifact_id, result.structured.document_id)
+    for record, event, direct in zip(records, result.transformations, inputs, strict=True):
+        assert record.provenance.context.input_snapshot_ids == tuple(
+            dict.fromkeys((*snapshots, direct))
+        )
+        assert event.provenance == record.provenance
+    assert service.run(reference).as_dict() == result.as_dict()
+
+
 def test_service_rejects_foreign_artifact_and_ignored_injected_provenance(tmp_path: Path) -> None:
     path = workbook(tmp_path / "source.xlsx", HEADER + ROW)
     service = build_bom_stage_service(captured_at=AT, context=provenance().context)

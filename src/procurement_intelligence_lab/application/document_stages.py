@@ -114,7 +114,8 @@ class DocumentStageResult:
 
 
 def _inputs(provenance: DecisionProvenance, input_id: str) -> DecisionProvenance:
-    return replace(provenance, context=replace(provenance.context, input_snapshot_ids=(input_id,)))
+    snapshots = tuple(dict.fromkeys((*provenance.context.input_snapshot_ids, input_id)))
+    return replace(provenance, context=replace(provenance.context, input_snapshot_ids=snapshots))
 
 
 @dataclass(frozen=True)

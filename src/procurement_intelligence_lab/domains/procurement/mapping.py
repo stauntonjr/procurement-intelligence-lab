@@ -70,7 +70,7 @@ class BomTableMap:
                 continue
             for column, name in zip(_COLUMNS, _FIELD_NAMES, strict=True):
                 element = cells.get((number, column))
-                value = element.text if element is not None and element.text else None
+                value = element.text if element is not None and element.text.strip() else None
                 diagnostic = (
                     None
                     if value is not None
@@ -91,15 +91,18 @@ class BomTableMap:
             for (row_number, column), element in sorted(cells.items()):
                 if row_number != number or column in _COLUMNS:
                     continue
+                value = element.text if element.text.strip() else None
                 fields.append(
                     MappedField(
                         f"{self.schema.sheet_name}!{column}{number}",
                         f"unmapped.{column}",
-                        element.text or None,
+                        value,
                         element.evidence,
-                        EpistemicStatus.OBSERVED if element.text else EpistemicStatus.UNRESOLVED,
+                        EpistemicStatus.OBSERVED
+                        if value is not None
+                        else EpistemicStatus.UNRESOLVED,
                         f"unmapped column {column}"
-                        if element.text
+                        if value is not None
                         else f"blank unmapped column {column}",
                     )
                 )

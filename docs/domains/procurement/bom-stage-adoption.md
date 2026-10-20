@@ -44,7 +44,9 @@ required label or one another. Only A–D govern header matching; extras never s
 business meaning.
 Multiple rows with the same SKU remain distinct. A row with a missing SKU is retained.
 
-Empty/blank field values are unresolved with diagnostics, not zero. A physically missing column
+Empty/blank field values, including whitespace-only text, are unresolved with diagnostics, not zero.
+The structured cell retains its exact text; nonblank mapped strings retain surrounding whitespace.
+A physically missing column
 retains the source row evidence and reports `missing column X`; an explicitly blank cell retains
 its own cell evidence and reports `blank cell`. Missing-column evidence identifies the actual
 populated source row, not an invented source cell. Raw `0`, `-1`, `0.5` or `not-a-number` remains
@@ -57,7 +59,9 @@ rejecting empty/multiple captures, foreign artifact/document lineage or ignored 
 provenance. It creates distinct transformation events only after successful stages. Capture uses
 the source-reference ID; structure uses the artifact ID and capture parent event; mapping uses the
 structured-document ID, schema reference and structure parent event. Output records and events
-retain their component versions, scope and explicit observation/capture context. `bootstrap.py`
+retain their component versions, scope and explicit observation/capture context. Each stage appends
+its direct input to caller-injected snapshot IDs with stable deduplication, preserving upstream
+execution inputs. `bootstrap.py`
 wires the local content store, generic structurer and procurement mapper. Platform and ports have
 no vertical imports. Provider callbacks are absent from the DomainPackage.
 
