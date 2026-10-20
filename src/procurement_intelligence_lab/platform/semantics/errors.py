@@ -28,6 +28,7 @@ class ErrorCode(StrEnum):
     DOCUMENT_STAGE_INVALID = "pil.input.document_stage_invalid"
     NORMALIZATION_INVALID = "pil.interpretation.normalization_invalid"
     NORMALIZATION_POLICY_INVALID = "pil.input.normalization_policy_invalid"
+    SOURCE_ASSERTION_INVALID = "pil.interpretation.source_assertion_invalid"
     DOMAIN_PACKAGE_INVALID = "pil.input.domain_package_invalid"
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
     BRIEF_REVIEW_CONFLICT = "pil.policy.brief_review_conflict"
@@ -211,3 +212,10 @@ class NormalizationPolicyError(SemanticContractError):
     """A normalization policy is missing or contains unsupported declarations."""
 
     code = ErrorCode.NORMALIZATION_POLICY_INVALID
+
+
+class SourceAssertionError(SemanticContractError):
+    """Source claims or their derivation context violate the assertion contract."""
+
+    category = ErrorCategory.INTERPRETATION
+    code = ErrorCode.SOURCE_ASSERTION_INVALID

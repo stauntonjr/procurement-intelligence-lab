@@ -254,5 +254,8 @@ transformation events. The example context is explicitly synthetic/local. [Stage
 documents the context schema, typed failures and process-local retention. Add
 `--normalization-policy tests/fixtures/bom-stages/normalization-policy.json` to execute NORMALIZE
 with explicit quantity/price units and currency. [Normalization contract](docs/domains/procurement/bom-normalization.md)
-describes exact decimals, retained raw evidence and unresolved values. Assertions, broader
-normalization, general plan execution and durable storage remain subsequent work.
+describes exact decimals, retained raw evidence and unresolved values. Add `--assertions` as well
+to execute ASSERT and inspect provenance-complete claims and source-SKU mentions. The
+[assertion contract](docs/domains/procurement/bom-assertions.md) describes missing/conflicting
+claims, immutable versions and trace links. Resolution, broader normalization, general plan
+execution and durable storage remain subsequent work.

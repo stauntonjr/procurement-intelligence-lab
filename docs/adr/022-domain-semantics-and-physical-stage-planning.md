@@ -126,3 +126,12 @@ allows a truthful empty normalization event without inventing an observation. Th
 to the application and introduces no platform stage or persistence contract. See
 [BOM normalization](../domains/procurement/bom-normalization.md). Broader #31 and assertion #33
 acceptance remain open; the physical planner is still separate from this concrete service.
+
+
+Issue #211 adopts AssertStrategy as a fifth concrete BOM stage. ADR-037 extends SourceAssertion
+additively with immutable derivation context, retaining legacy IDs and rejecting unqualified nulls.
+Bootstrap injects a per-run origin factory without changing the existing strategy signature or
+adding executable DomainPackage callbacks. Assertions retain upstream NORMALIZE identity; a
+separate ASSERT receipt/event avoids cycles. Source-SKU mentions await resolution. This remains
+bounded source-assertion adoption, with broader #33 and durable ledger/content/replay acceptance
+open; see [BOM source assertions](../domains/procurement/bom-assertions.md).

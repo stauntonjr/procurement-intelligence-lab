@@ -1,5 +1,19 @@
 # Project handoff
 
+## BOM source assertion adoption — 2026-10-20
+
+Issue #211 (M1, parent #33) extends the concrete BOM caller to five stages with `--assertions`
+and explicit normalization policy. [Contract and continuation](../domains/procurement/bom-assertions.md)
+and ADR-037 record additive SourceAssertion context, upstream event identity, unresolved nulls,
+raw evidence, distinct conflicting rows and source-SKU-only mentions. Legacy assertion IDs and
+three/four-stage modes remain compatible. Null without unresolved context is rejected (C030).
+This slice emits claims and mentions without resolution, authority selection or CLI persistence.
+#33 remains open; next is durable ledger/content/replay semantics against #13/#35/#37. The general
+physical planner remains separate. Main's pre-slice roadmap audit succeeded on 32b1788 in
+[run 39430341581](https://github.com/stauntonjr/procurement-intelligence-lab/actions/runs/39430341581).
+Its historical-demo narrative finding is qualified by the explicit supersession notice below;
+#109 checkbox drift and broader #120/#121 acceptance require separate stewardship.
+
 ## Explicit BOM normalization — 2026-10-19
 
 Issue #209 (M1, parent #31) adds a procurement NormalizeStrategy to the existing shared-stage CLI
