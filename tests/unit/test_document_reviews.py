@@ -150,3 +150,19 @@ def test_domain_admission_preserves_predicates_units_and_typed_values(tmp_path: 
         validate_bom_review(
             replace(p, previous=replace(p.previous, predicate=AssertionPredicate.UNMAPPED_FIELD))
         )
+
+
+def test_unicode_task_input_is_portable_before_any_write(tmp_path: Path):
+    c = contract()
+    p = proposal(tmp_path)
+    invalid = "bad" + chr(0xD800) + "text"
+    for changes in (
+        {"reason": invalid},
+        {"request_id": invalid},
+        {"proposer_id": invalid},
+        {"proposed_value": invalid},
+    ):
+        with pytest.raises(ValueError):
+            replace(p, **changes)
+    good = replace(p, reason="Source checked: résumé " + chr(0x1F4E6))
+    assert c.DocumentReviewTask(good, AT + timedelta(seconds=2)).digest

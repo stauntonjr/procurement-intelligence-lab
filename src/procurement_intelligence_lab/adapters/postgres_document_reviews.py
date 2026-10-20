@@ -109,7 +109,15 @@ class PostgresDocumentReviewJournal:
             if retained:
                 raise ReviewIntegrityError("retained review source is absent or invalid") from None
             raise ReviewNotFoundError("review requires a valid scoped archived snapshot") from None
-        if proposal.previous not in snapshot.assertions:
+        original = next(
+            (
+                claim
+                for claim in snapshot.assertions
+                if claim.assertion_id == proposal.previous.assertion_id
+            ),
+            None,
+        )
+        if original is None or self.codec.dumps(original) != self.codec.dumps(proposal.previous):
             if retained:
                 raise ReviewIntegrityError("retained review assertion differs from archived source")
             raise ReviewContractError(

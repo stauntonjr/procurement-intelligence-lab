@@ -22,6 +22,7 @@ from procurement_intelligence_lab.platform.semantics.document_reviews import (
     ReviewOutcome,
     ReviewWorkflow,
     aware,
+    text,
 )
 from procurement_intelligence_lab.platform.semantics.errors import (
     ReviewContractError,
@@ -61,8 +62,11 @@ def load_request(path: Path, keys: set[str]) -> dict[str, Any]:
                 or len(item) > (2000 if key == "reason" else 500)
             ):
                 raise ValueError("request text")
+        for key, item in request.items():
+            if key != "proposed_value":
+                text(item, 2000 if key == "reason" else 500)
         return request
-    except (OSError, ValueError, TypeError):
+    except (OSError, ValueError, TypeError, RecursionError):
         raise ReviewContractError(
             "review input requires the exact documented JSON fields"
         ) from None
@@ -97,6 +101,9 @@ def human_context(scope: StateScope) -> RequestContext:
         raise ReviewContractError(
             "configure PIL_DOCUMENT_REVIEWER_ID at the trusted human shell boundary"
         )
+    text(actor)
+    for value in (scope.tenant_id, scope.project_id, scope.site_id, scope.version):
+        text(value)
     return RequestContext(
         actor,
         scope.tenant_id,
@@ -198,7 +205,7 @@ def main() -> int:
     except (SemanticContractError, ScopeAuthorizationError) as error:
         print(json.dumps(error.as_dict()), file=sys.stderr)
         return 2
-    print(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+    print(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True))
     return 0
 
 

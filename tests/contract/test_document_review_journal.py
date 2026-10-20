@@ -310,3 +310,30 @@ def test_backdated_and_altered_decisions_leave_pending_task(archive_dsn: str, tm
     with pytest.raises(ReviewConflictError):
         journal.decide(replace(command(task), task_digest="0" * 64), AT + timedelta(seconds=3))
     assert journal.get(p.scope, task.task_id).decision is None
+
+
+def test_equal_python_source_with_different_retained_encoding_is_not_exact(
+    archive_dsn: str, tmp_path: Path
+):
+    from datetime import timezone
+
+    from procurement_intelligence_lab.platform.semantics.errors import ReviewContractError
+
+    journal, _, p, _ = setup(archive_dsn, tmp_path)
+    context = p.previous.context
+    assert context is not None
+    changed_provenance = replace(
+        context.provenance,
+        context=replace(
+            context.provenance.context,
+            started_at=context.provenance.context.started_at.astimezone(
+                timezone(timedelta(hours=1))
+            ),
+        ),
+    )
+    changed = replace(p.previous, context=replace(context, provenance=changed_provenance))
+    assert changed == p.previous and changed.assertion_id == p.previous.assertion_id
+    assert bootstrap.archive_codec().dumps(changed) != bootstrap.archive_codec().dumps(p.previous)
+    with pytest.raises(ReviewContractError):
+        journal.propose(replace(p, previous=changed), AT + timedelta(seconds=2))
+    assert journal.history(p.scope) == ()

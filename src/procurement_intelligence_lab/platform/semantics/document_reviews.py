@@ -28,9 +28,17 @@ class ReviewOutcome(StrEnum):
     REJECT = "reject"
 
 
+def unicode_text(value: str) -> None:
+    try:
+        value.encode("utf-8")
+    except UnicodeError:
+        raise ReviewContractError("review text must contain valid Unicode scalar values") from None
+
+
 def text(value: str, limit: int = 500) -> None:
     if type(value) is not str or not value.strip() or len(value) > limit:
         raise ReviewContractError("review text must be bounded and nonempty")
+    unicode_text(value)
 
 
 def aware(value: datetime) -> None:
@@ -75,6 +83,13 @@ class ReviewProposal:
         for value in (self.request_id, self.snapshot_id, self.proposer_id):
             text(value)
         text(self.reason, 2000)
+        for value in (
+            self.scope.tenant_id,
+            self.scope.project_id,
+            self.scope.site_id,
+            self.scope.version,
+        ):
+            text(value)
         if self.workflow is not ReviewWorkflow.DOCUMENT_VALUE:
             raise ReviewContractError("only document_value review is supported")
         if type(self.previous) is not SourceAssertion or self.previous.context is None:
@@ -84,6 +99,8 @@ class ReviewProposal:
         value = self.proposed_value
         if value is not None and type(value) not in (str, bool, int, Decimal, date, datetime):
             raise ReviewContractError("unsupported proposed value type")
+        if type(value) is str:
+            unicode_text(value)
         if type(value) is Decimal and not value.is_finite():
             raise ReviewContractError("proposed decimal must be finite")
         if type(value) is datetime:

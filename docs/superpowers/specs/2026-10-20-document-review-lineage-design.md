@@ -46,6 +46,8 @@ Public interfaces.document_review: init; propose --scope scope.json --input prop
 decide --scope scope.json --input decision.json; show --scope ... --task-id ... [--as-of ...];
 history --scope ... [--as-of ...]. Proposal JSON has exactly request_id,snapshot_id,assertion_id,
 workflow,proposed_value,reason. Decision JSON has exactly request_id,task_id,task_digest,outcome,reason.
+Input strings require valid Unicode scalar values; excessive JSON nesting fails typed before writes.
+Output JSON uses ASCII escapes so serialization is total for retained Unicode text.
 Typed value JSON is {type:decimal,value:string}, {type:str,value:string}, or {type:null,value:null}.
 Output includes previous/proposed typed values, original evidence, principals, timestamps, exact
 binding digest, decision and optional accepted correction. Unknown IDs/scope, malformed/unsupported

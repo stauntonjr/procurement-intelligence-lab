@@ -129,3 +129,35 @@ def test_cli_rejects_untrusted_authority_and_unsupported_input(archive_dsn: str,
     missing = run_cli(archive_dsn, "history", "--scope", str(scope), actor=False)
     assert missing.returncode == 2 and not missing.stdout
     assert json.loads(missing.stderr)["code"] == "pil.input.document_review_contract_invalid"
+
+
+@pytest.mark.parametrize("malformed", ["surrogate", "deep_json", "deep_scope"])
+def test_malformed_unicode_and_depth_fail_typed_without_committing(
+    archive_dsn: str, tmp_path: Path, malformed: str
+):
+    journal, _, p, _ = setup(archive_dsn, tmp_path)
+    scope = tmp_path / "scope.json"
+    scope.write_text(json.dumps(asdict(p.scope)))
+    request = tmp_path / "malformed.json"
+    payload = {
+        "request_id": "malformed",
+        "snapshot_id": p.snapshot_id,
+        "assertion_id": p.previous.assertion_id,
+        "workflow": "document_value",
+        "proposed_value": {"type": "decimal", "value": "8"},
+        "reason": "bad" + chr(0xD800) + "text",
+    }
+    request.write_text(
+        json.dumps(payload) if malformed == "surrogate" else "[" * 15000 + "0" + "]" * 15000
+    )
+    if malformed == "deep_scope":
+        scope.write_text("[" * 15000 + "0" + "]" * 15000)
+    result = run_cli(archive_dsn, "propose", "--scope", str(scope), "--input", str(request))
+    assert result.returncode == 2 and not result.stdout
+    expected_code = (
+        "pil.input.archive_contract_invalid"
+        if malformed == "deep_scope"
+        else "pil.input.document_review_contract_invalid"
+    )
+    assert json.loads(result.stderr)["code"] == expected_code
+    assert journal.history(p.scope) == ()

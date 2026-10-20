@@ -46,7 +46,8 @@ uv run --extra storage python -m procurement_intelligence_lab.interfaces.documen
 
 Values are exact finite decimal strings for quantities/prices, nonblank strings for SKU/description,
 or `{ "type": "null", "value": null }`. Booleans, JSON floating-point numeric proposals, unit changes,
-unknown fields, duplicate keys and client authority/time overrides are rejected.
+unknown fields, duplicate keys, invalid Unicode scalar text, excessive JSON nesting and client
+authority/time overrides are rejected. Output uses ASCII JSON escapes to remain serializable.
 
 Read `task_id` and `digest` from the task output. `decision.json` has exactly `request_id`, `task_id`,
 `task_digest`, `outcome` (`approve` or `reject`) and `reason`. Then use:
