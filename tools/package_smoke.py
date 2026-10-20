@@ -45,12 +45,12 @@ def main() -> int:
         wheel = wheels[0]
         stage_source = temporary / "shared-stage-source.xlsx"
         with ZipFile(wheel) as archive:
-            stage_source.write_bytes(
-                archive.read("procurement_intelligence_lab/examples/synthetic_bom.xlsx")
-            )
             missing = sorted(set(RESOURCES) - set(archive.namelist()))
             if missing:
                 raise RuntimeError(f"wheel is missing runtime resources {missing}")
+            stage_source.write_bytes(
+                archive.read("procurement_intelligence_lab/examples/synthetic_bom.xlsx")
+            )
 
             corpus = "procurement_intelligence_lab/examples/corpus_v1/"
             manifest = json.loads(archive.read(corpus + "manifest.json"))
