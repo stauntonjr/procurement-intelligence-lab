@@ -116,6 +116,9 @@ def test_cli_failures_are_typed_without_partial_success(
         "mixed_value_inline",
         "duplicate_inline_text",
         "duplicate_shared_text",
+        "phonetic_annotation",
+        "nested_text",
+        "rich_property_text",
     ],
 )
 def test_cli_rejects_ambiguous_workbook_and_cell_representations(
@@ -157,6 +160,9 @@ def test_cli_rejects_ambiguous_workbook_and_cell_representations(
             "duplicate_value": '<c r="C7"><v>0.5</v><v>9000</v></c>',
             "duplicate_inline": '<c r="C7" t="inlineStr"><is><t>0.5</t></is><is><t>9000</t></is></c>',
             "mixed_value_inline": '<c r="C7" t="inlineStr"><v>9000</v><is><t>0.5</t></is></c>',
+            "phonetic_annotation": '<c r="C7" t="inlineStr"><is><t>0.5</t><rPh sb="0" eb="3"><t>9000</t></rPh></is></c>',
+            "nested_text": '<c r="C7" t="inlineStr"><is><t>0.5<t>9000</t></t></is></c>',
+            "rich_property_text": '<c r="C7" t="inlineStr"><is><r><rPr><t>9000</t></rPr><t>0.5</t></r></is></c>',
             "duplicate_inline_text": '<c r="C7" t="inlineStr"><is><t>0.5</t><t>9000</t></is></c>',
         }[change]
         members[sheet] = members[sheet].replace('<c r="C7"><v>0.5</v></c>', replacement)
@@ -167,3 +173,25 @@ def test_cli_rejects_ambiguous_workbook_and_cell_representations(
     assert result.returncode == 2, result.stdout
     assert not result.stdout
     assert json.loads(result.stderr)["code"] == "pil.interpretation.document_structure_invalid"
+
+
+@pytest.mark.parametrize("kind", ["inlineStr", "s"])
+def test_cli_recovers_only_rich_display_text_without_xml_indentation(
+    tmp_path: Path, kind: str
+) -> None:
+    rich = "<r><rPr><b/></rPr><t>0.</t></r>\n  <r><t>5</t></r>"
+    value = f'<c r="C7" t="inlineStr"><is>\n  {rich}\n</is></c>'
+    if kind == "s":
+        value = '<c r="C7" t="s"><v>0</v></c>'
+    path = workbook(tmp_path / "rich.xlsx", HEADER + ROW.replace('<c r="C7"><v>0.5</v></c>', value))
+    if kind == "s":
+        with ZipFile(path, "a") as archive:
+            archive.writestr(
+                "xl/sharedStrings.xml",
+                '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+                f"<si>\n  {rich}\n</si></sst>",
+            )
+    result = invoke(path)
+    assert result.returncode == 0, result.stderr
+    fields = json.loads(result.stdout)["mapped_document"]["fields"]
+    assert next(f for f in fields if f["field_name"] == "quantity")["raw_value"] == "0.5"

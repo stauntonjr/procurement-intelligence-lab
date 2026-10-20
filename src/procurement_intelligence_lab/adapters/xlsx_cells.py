@@ -1,6 +1,7 @@
 """Shared XLSX cell mechanics; no schema mapping or procurement imports."""
 
 import re
+from collections.abc import Callable
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile
 
@@ -15,9 +16,13 @@ def text_value(node: ET.Element | None) -> str:
     return "".join(node.itertext()) if node is not None else ""
 
 
-def _cell_value(cell: ET.Element, shared_strings: list[str]) -> str:
+def _cell_value(
+    cell: ET.Element,
+    shared_strings: list[str],
+    inline_decoder: Callable[[ET.Element | None], str],
+) -> str:
     if cell.attrib.get("t") == "inlineStr":
-        return text_value(cell.find("x:is", NS))
+        return inline_decoder(cell.find("x:is", NS))
     value = text_value(cell.find("x:v", NS))
     return shared_strings[int(value)] if cell.attrib.get("t") == "s" else value
 
@@ -42,7 +47,10 @@ def column_name(index: int) -> str:
 
 
 def read_row_values(
-    row: ET.Element, shared_strings: list[str]
+    row: ET.Element,
+    shared_strings: list[str],
+    *,
+    inline_decoder: Callable[[ET.Element | None], str] = text_value,
 ) -> tuple[list[str], tuple[str, ...]]:
     """Return coordinate-aligned values and the populated source columns."""
 
@@ -52,7 +60,7 @@ def read_row_values(
     for cell in row.findall("x:c", NS):
         reference = cell.attrib.get("r")
         index = column_index(reference) if reference else next_index
-        indexed[index] = _cell_value(cell, shared_strings)
+        indexed[index] = _cell_value(cell, shared_strings, inline_decoder)
         populated.append(column_name(index))
         next_index = index + 1
     width = max(indexed, default=-1) + 1

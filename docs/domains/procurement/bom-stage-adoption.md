@@ -25,7 +25,9 @@ ambiguous worksheet/relationship identifiers, external worksheet relationships, 
 conflicting scalar/inline/shared-string representations, invalid shared-string indices, formulas
 and merged cells, unsupported media types and malformed
 archives/XML. Admitted cell types are `n`, `s`, `inlineStr`, `str`, `b` and `d`; values remain raw
-text without interpreting numbers, booleans or dates. Error cells (`e`) are unsupported. Formula caches are not recalculated or accepted as verified values. Coordinates
+text without interpreting numbers, booleans or dates. String decoding accepts plain text and
+validated rich display-text runs, ignoring XML indentation; phonetic annotations and malformed
+nested text are unsupported. Error cells (`e`) are unsupported. Formula caches are not recalculated or accepted as verified values. Coordinates
 must fit the [documented XLSX grid](https://support.microsoft.com/en-us/excel/excel-specifications-and-limits):
 1,048,576 rows and 16,384 columns. Bounds are checked before dense-row mechanics allocate padding.
 This is a constrained table adapter, not general Excel rendering, formula evaluation or OCR.

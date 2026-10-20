@@ -14,7 +14,6 @@ from procurement_intelligence_lab.adapters.xlsx_cells import (
     NS,
     column_index,
     read_row_values,
-    text_value,
     worksheet_root,
 )
 from procurement_intelligence_lab.platform.semantics.artifacts import Artifact
@@ -59,9 +58,7 @@ class XlsxStructure:
                     if "xl/sharedStrings.xml" in archive.namelist()
                     else []
                 )
-                for string in strings:
-                    _validate_string(string)
-                shared = [text_value(string) for string in strings]
+                shared = [_string_value(string) for string in strings]
                 root = worksheet_root(archive, self.sheet, strict=True)
                 if root.find("x:mergeCells", NS) is not None:
                     raise DocumentStructureError("merged-cell worksheets are unsupported")
@@ -100,7 +97,7 @@ class XlsxStructure:
                             )
                         indices.add(index)
                         next_index = index + 1
-                    rows[number] = read_row_values(row, shared)
+                    rows[number] = read_row_values(row, shared, inline_decoder=_string_value)
         except (
             BadZipFile,
             KeyError,
@@ -155,11 +152,72 @@ class XlsxStructure:
         return StructuredDocument(artifact, tuple(elements), provenance)
 
 
-def _validate_string(node: ET.Element) -> None:
+def _string_value(node: ET.Element | None) -> str:
+    if node is None:
+        return ""
     texts = node.findall("x:t", NS)
     runs = node.findall("x:r", NS)
-    if len(texts) > 1 or (texts and runs) or any(len(run.findall("x:t", NS)) != 1 for run in runs):
-        raise DocumentStructureError("string cells require one text value or explicit rich runs")
+
+    def tag(name: str) -> str:
+        return f"{{{NS['x']}}}{name}"
+
+    if (
+        (node.text or "").strip()
+        or len(texts) > 1
+        or (texts and runs)
+        or any(child.tag not in {tag("t"), tag("r")} for child in node)
+        or any((child.tail or "").strip() for child in node)
+    ):
+        raise DocumentStructureError("unsupported or conflicting string content")
+    leaves = list(texts)
+    properties = {
+        tag(name)
+        for name in (
+            "rFont",
+            "charset",
+            "family",
+            "b",
+            "i",
+            "strike",
+            "outline",
+            "shadow",
+            "condense",
+            "extend",
+            "color",
+            "sz",
+            "u",
+            "vertAlign",
+            "scheme",
+        )
+    }
+    for run in runs:
+        display = run.findall("x:t", NS)
+        styles = run.findall("x:rPr", NS)
+        if (
+            len(display) != 1
+            or len(styles) > 1
+            or (run.text or "").strip()
+            or any(child.tag not in {tag("t"), tag("rPr")} for child in run)
+            or any((child.tail or "").strip() for child in run)
+        ):
+            raise DocumentStructureError("malformed rich-string run")
+        for style in styles:
+            if (
+                (style.text or "").strip()
+                or len({child.tag for child in style}) != len(style)
+                or any(
+                    child.tag not in properties
+                    or len(child)
+                    or (child.text or "").strip()
+                    or (child.tail or "").strip()
+                    for child in style
+                )
+            ):
+                raise DocumentStructureError("unsupported rich-string properties")
+        leaves.extend(display)
+    if any(len(leaf) for leaf in leaves):
+        raise DocumentStructureError("string text must be a leaf value")
+    return "".join(leaf.text or "" for leaf in leaves)
 
 
 def _validate_cell(cell: ET.Element) -> None:
@@ -174,6 +232,6 @@ def _validate_cell(cell: ET.Element) -> None:
         if values:
             raise DocumentStructureError("inline string cells cannot contain scalar values")
         for string in strings:
-            _validate_string(string)
+            _string_value(string)
     elif strings:
         raise DocumentStructureError("scalar/shared cells cannot contain inline strings")
