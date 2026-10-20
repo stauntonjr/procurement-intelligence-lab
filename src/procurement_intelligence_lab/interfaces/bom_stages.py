@@ -1,4 +1,4 @@
-"""Inspect real capture/structure/mapping outputs with explicit synthetic/local context."""
+"""Inspect shared BOM stages with optional explicit-policy normalization."""
 
 import argparse
 import json
@@ -69,7 +69,7 @@ def _context(path: Path) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inspect BOM capture, structure and mapping; later stages do not run."
+        description="Inspect BOM capture, structure and mapping, with optional explicit-policy normalization."
     )
     parser.add_argument("source", type=Path)
     parser.add_argument(
