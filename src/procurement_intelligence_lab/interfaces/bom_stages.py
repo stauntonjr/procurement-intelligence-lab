@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import cast
 
 from procurement_intelligence_lab.bootstrap import (
+    build_bom_archive_service,
     build_bom_assertion_service,
     build_bom_normalization_service,
     build_bom_stage_service,
@@ -86,8 +87,15 @@ def main() -> int:
         action="store_true",
         help="Opt in to ASSERT after NORMALIZE; requires --normalization-policy",
     )
+    parser.add_argument(
+        "--archive",
+        action="store_true",
+        help="Atomically retain source claims and captured bytes in Postgres; requires --assertions",
+    )
     args = parser.parse_args()
     try:
+        if args.archive and not args.assertions:
+            raise DocumentStageError("--archive requires --assertions and --normalization-policy")
         if args.assertions and args.normalization_policy is None:
             raise DocumentStageError("--assertions requires --normalization-policy")
         data = _context(args.context)
@@ -132,15 +140,29 @@ def main() -> int:
             )
         else:
             policy = load_policy(args.normalization_policy)
-            result = (
-                (
-                    build_bom_assertion_service
-                    if args.assertions
-                    else build_bom_normalization_service
-                )(captured_at=captured_at, context=context, policy=policy)
-                .run(source)
-                .as_dict()
-            )
+            if args.archive:
+                from procurement_intelligence_lab.interfaces.archive_config import configured_dsn
+
+                result = (
+                    build_bom_archive_service(
+                        captured_at=captured_at,
+                        context=context,
+                        policy=policy,
+                        dsn=configured_dsn(),
+                    )
+                    .run(source)
+                    .as_dict()
+                )
+            else:
+                result = (
+                    (
+                        build_bom_assertion_service
+                        if args.assertions
+                        else build_bom_normalization_service
+                    )(captured_at=captured_at, context=context, policy=policy)
+                    .run(source)
+                    .as_dict()
+                )
             result["normalization_policy"] = policy.as_dict()
     except SemanticContractError as exc:
         print(json.dumps(exc.as_dict()), file=sys.stderr)

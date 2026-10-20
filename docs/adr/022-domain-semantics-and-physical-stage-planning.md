@@ -135,3 +135,9 @@ adding executable DomainPackage callbacks. Assertions retain upstream NORMALIZE 
 separate ASSERT receipt/event avoids cycles. Source-SKU mentions await resolution. This remains
 bounded source-assertion adoption, with broader #33 and durable ledger/content/replay acceptance
 open; see [BOM source assertions](../domains/procurement/bom-assertions.md).
+
+
+Issue #213 materializes the concrete five-stage result through an atomic Postgres archive port.
+The receipt is persistence evidence, not a new logical stage or general executor. Bootstrap
+registers allowed types/enums and injects staging content and persistence; core remains neutral.
+ADR-038 and the [archive contract](../architecture/assertion-archive.md) retain broader #13/#35/#36/#37 acceptance.

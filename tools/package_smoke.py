@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -458,6 +459,28 @@ def main() -> int:
             "category": "infrastructure",
         }:
             raise RuntimeError("base install does not fail clearly without optional workflow extra")
+        missing_storage = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "procurement_intelligence_lab.interfaces.assertion_archive",
+                "init",
+            ],
+            env={
+                **os.environ,
+                "PIL_ASSERTION_ARCHIVE_DSN": "postgresql://unavailable.invalid/unused",
+            },
+            cwd=temporary,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if (
+            missing_storage.returncode != 2
+            or missing_storage.stdout
+            or "storage extra" not in json.loads(missing_storage.stderr)["message"]
+        ):
+            raise RuntimeError("base wheel did not report absent optional storage driver")
         requirements = temporary / "workflow-requirements.txt"
         subprocess.run(
             [
@@ -467,6 +490,8 @@ def main() -> int:
                 "--no-dev",
                 "--extra",
                 "workflow",
+                "--extra",
+                "storage",
                 "--no-emit-project",
                 "--output-file",
                 str(requirements),
@@ -518,6 +543,19 @@ def main() -> int:
             cwd=temporary,
             check=True,
             capture_output=True,
+            text=True,
+        )
+
+        subprocess.run(
+            [
+                str(python),
+                str(ROOT / "tools/archive_package_probe.py"),
+                str(stage_source),
+                str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+            ],
+            cwd=temporary,
+            check=True,
             text=True,
         )
 

@@ -1,5 +1,17 @@
 # Project handoff
 
+## Durable Postgres assertion archive — 2026-10-20
+
+Issue #213 (M2, parent #37, part of #13/#35/#36) adds atomic materialization of the complete
+five-stage source snapshot and captured bytes behind a neutral port. [Archive contract](../architecture/assertion-archive.md)
+and ADR-038 define explicit init, scoped restart reads/export, stable exact retry, conflict retention
+and typed integrity failures. The optional storage driver stays outside core semantics; the default
+BOM modes and legacy in-memory ledger remain compatible. This is a trusted local developer boundary,
+not production deployment or queue exactly-once processing. Broader #13/#35/#36/#37 stay open; next
+is explicit correction/review lineage under #37/#41. The pre-slice advisory audit failed Gemini
+HTTP 503 (run 39443547796); no successful report is claimed. Project and deterministic planning
+audit were reviewed separately; known #109 checkbox drift and duplicate ADR-033 remain separate.
+
 ## BOM source assertion adoption — 2026-10-20
 
 Issue #211 (M1, parent #33) extends the concrete BOM caller to five stages with `--assertions`

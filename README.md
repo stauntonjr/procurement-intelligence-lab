@@ -259,3 +259,8 @@ to execute ASSERT and inspect provenance-complete claims and source-SKU mentions
 [assertion contract](docs/domains/procurement/bom-assertions.md) describes missing/conflicting
 claims, immutable versions and trace links. Resolution, broader normalization, general plan
 execution and durable storage remain subsequent work.
+
+Use `--archive` with `--assertions` to retain the complete result and captured bytes in an explicitly
+configured Postgres archive. [Initialization, scoped restart reads/export, retry semantics and limits](docs/architecture/assertion-archive.md)
+require the optional `storage` extra. This materialization does not resolve identity or select a
+governing source.
