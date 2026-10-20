@@ -85,5 +85,5 @@ reports storage qualification not requested; that is not durable-storage accepta
 
 #13/#37 stay open for broader assertion/correction/supersession/review schemas and production storage
 qualification. #35 owns general bounded EvidenceTrace traversal; #36 owns listener/job/attempt/queue
-processing; #38/#41 govern temporal decisions and human correction policy. Next is explicit append-only
-correction/review lineage with controlled reconstruction, before canonical state or agent actions.
+processing; #38/#41 govern temporal decisions and human correction policy. Issue #216 adds [document-value review lineage](document-review.md) as a separate append-only journal.
+Other review workflows and controlled downstream recomputation remain subsequent work.

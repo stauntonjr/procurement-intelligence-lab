@@ -33,6 +33,11 @@ class ErrorCode(StrEnum):
     ARCHIVE_CONFLICT = "pil.policy.archive_conflict"
     ARCHIVE_INTEGRITY_INVALID = "pil.infrastructure.archive_integrity_invalid"
     ARCHIVE_UNAVAILABLE = "pil.infrastructure.archive_unavailable"
+    DOCUMENT_REVIEW_CONTRACT_INVALID = "pil.input.document_review_contract_invalid"
+    DOCUMENT_REVIEW_NOT_FOUND = "pil.input.document_review_not_found"
+    DOCUMENT_REVIEW_CONFLICT = "pil.policy.document_review_conflict"
+    DOCUMENT_REVIEW_INTEGRITY_INVALID = "pil.infrastructure.document_review_integrity_invalid"
+    DOCUMENT_REVIEW_UNAVAILABLE = "pil.infrastructure.document_review_unavailable"
     SOURCE_ASSERTION_INVALID = "pil.interpretation.source_assertion_invalid"
     DOMAIN_PACKAGE_INVALID = "pil.input.domain_package_invalid"
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
@@ -257,3 +262,38 @@ class ArchiveUnavailableError(SemanticContractError):
 
     category = ErrorCategory.INFRASTRUCTURE
     code = ErrorCode.ARCHIVE_UNAVAILABLE
+
+
+class ReviewContractError(SemanticContractError):
+    """Typed document-review boundary failure."""
+
+    category = ErrorCategory.INPUT
+    code = ErrorCode.DOCUMENT_REVIEW_CONTRACT_INVALID
+
+
+class ReviewNotFoundError(SemanticContractError):
+    """Typed document-review boundary failure."""
+
+    category = ErrorCategory.INPUT
+    code = ErrorCode.DOCUMENT_REVIEW_NOT_FOUND
+
+
+class ReviewConflictError(SemanticContractError):
+    """Typed document-review boundary failure."""
+
+    category = ErrorCategory.POLICY
+    code = ErrorCode.DOCUMENT_REVIEW_CONFLICT
+
+
+class ReviewIntegrityError(SemanticContractError):
+    """Typed document-review boundary failure."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.DOCUMENT_REVIEW_INTEGRITY_INVALID
+
+
+class ReviewUnavailableError(SemanticContractError):
+    """Typed document-review boundary failure."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.DOCUMENT_REVIEW_UNAVAILABLE

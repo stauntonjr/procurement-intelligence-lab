@@ -46,3 +46,6 @@ backup/HA, distributed ingestion, user authentication or completion of #13/#35/#
 Transaction and locking mechanics follow the upstream
 [Psycopg transaction contract](https://www.psycopg.org/psycopg3/docs/basic/transactions.html) and
 [Postgres 16 explicit-lock semantics](https://www.postgresql.org/docs/16/explicit-locking.html).
+
+ADR-039 / Issue #216 adds a separately initialized document-value review journal alongside unchanged
+archive schema1. Accepted corrections remain distinct from the original snapshot and governing state.

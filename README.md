@@ -264,3 +264,7 @@ Use `--archive` with `--assertions` to retain the complete result and captured b
 configured Postgres archive. [Initialization, scoped restart reads/export, retry semantics and limits](docs/architecture/assertion-archive.md)
 require the optional `storage` extra. This materialization does not resolve identity or select a
 governing source.
+
+Document-value correction/review is a separate trusted local workflow over the durable archive;
+see [the journal contract](docs/architecture/document-review.md). Exact human decisions preserve
+original source facts and signal recomputation requirements without changing governing state.
