@@ -24,6 +24,12 @@ def conformance_checkout(repo: Path) -> Path:
         ROOT / "evals/extraction/bom-normalization-v1",
         repo / "evals/extraction/bom-normalization-v1",
     )
+    shutil.copyfile(
+        ROOT / "tools/benchmark_bom_assertions.py", repo / "tools/benchmark_bom_assertions.py"
+    )
+    shutil.copytree(
+        ROOT / "evals/extraction/bom-assertions-v1", repo / "evals/extraction/bom-assertions-v1"
+    )
     shutil.copyfile(ROOT / ".gitignore", repo / ".gitignore")
     for args in (
         ["init", "-q"],

@@ -291,6 +291,63 @@ def main() -> int:
                 or len(normalized_payload["transformations"]) != 4
             ):
                 raise RuntimeError("installed normalization lost its actual stage boundary")
+            asserted = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.bom_stages",
+                    str(stage_source),
+                    "--context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                    "--normalization-policy",
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                    "--assertions",
+                ],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            assertion_payload = json.loads(asserted.stdout)
+            claims = assertion_payload["assertion_batch"]["claims"]
+            claim = next(x for x in claims if x["trace"]["mapped_field_key"] == "BOM!C2")
+            if (
+                assertion_payload["executed_stages"]
+                != ["INGEST", "STRUCTURE", "MAP", "NORMALIZE", "ASSERT"]
+                or len(assertion_payload["transformations"]) != 5
+                or claim["value"] != "4"
+                or claim["raw_value"] != "4"
+                or claim["unit"] != "each"
+                or claim["status"] != "observed"
+                or claim["evidence"]["cells"] != ["C"]
+                or claim["trace"]["normalization_event_id"]
+                != assertion_payload["transformations"][3]["event_id"]
+                or claim["trace"]["assertion_event_id"]
+                != assertion_payload["transformations"][4]["event_id"]
+                or claim["confidence_diagnostic"] != "not estimated"
+            ):
+                raise RuntimeError("installed source assertions lost claim meaning or provenance")
+            missing_policy = subprocess.run(
+                [
+                    str(python),
+                    "-m",
+                    "procurement_intelligence_lab.interfaces.bom_stages",
+                    str(stage_source),
+                    "--context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                    "--assertions",
+                ],
+                cwd=temporary,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            if (
+                missing_policy.returncode != 2
+                or missing_policy.stdout
+                or json.loads(missing_policy.stderr)["code"] != "pil.input.document_stage_invalid"
+            ):
+                raise RuntimeError("installed ASSERT accepted missing normalization policy")
             invalid_policy = temporary / "invalid-normalization-policy.json"
             invalid_policy.write_text('{"currency":"USD"}')
             invalid_normalization = subprocess.run(
@@ -350,6 +407,7 @@ def main() -> int:
                 + "".join(planning_outputs)
                 + stage_run.stdout.strip()
                 + normalized.stdout.strip()
+                + asserted.stdout.strip()
             )
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")

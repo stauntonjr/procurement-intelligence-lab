@@ -1,4 +1,4 @@
-"""Inspect shared BOM stages with optional explicit-policy normalization."""
+"""Inspect BOM stages with optional explicit-policy normalization and source claims."""
 
 import argparse
 import json
@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import cast
 
 from procurement_intelligence_lab.bootstrap import (
+    build_bom_assertion_service,
     build_bom_normalization_service,
     build_bom_stage_service,
 )
@@ -69,7 +70,7 @@ def _context(path: Path) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inspect BOM capture, structure and mapping, with optional explicit-policy normalization."
+        description="Inspect BOM capture, structure and mapping, optional normalization and source assertions."
     )
     parser.add_argument("source", type=Path)
     parser.add_argument(
@@ -80,8 +81,15 @@ def main() -> int:
         type=Path,
         help="Opt in to NORMALIZE with explicit quantity/price units and currency JSON",
     )
+    parser.add_argument(
+        "--assertions",
+        action="store_true",
+        help="Opt in to ASSERT after NORMALIZE; requires --normalization-policy",
+    )
     args = parser.parse_args()
     try:
+        if args.assertions and args.normalization_policy is None:
+            raise DocumentStageError("--assertions requires --normalization-policy")
         data = _context(args.context)
         scope_value = data["scope"]
         if not isinstance(scope_value, dict) or set(cast(dict[str, object], scope_value)) != {
@@ -125,9 +133,11 @@ def main() -> int:
         else:
             policy = load_policy(args.normalization_policy)
             result = (
-                build_bom_normalization_service(
-                    captured_at=captured_at, context=context, policy=policy
-                )
+                (
+                    build_bom_assertion_service
+                    if args.assertions
+                    else build_bom_normalization_service
+                )(captured_at=captured_at, context=context, policy=policy)
                 .run(source)
                 .as_dict()
             )

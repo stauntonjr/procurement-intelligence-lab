@@ -9,6 +9,7 @@ from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 
 
 class AssertionPredicate(StrEnum):
+    UNMAPPED_FIELD = "unmapped_field"
     HAS_SKU = "has_sku"
     HAS_DESCRIPTION = "has_description"
     HAS_QUANTITY = "has_quantity"

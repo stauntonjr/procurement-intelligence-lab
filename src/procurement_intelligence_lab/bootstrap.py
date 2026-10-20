@@ -8,6 +8,7 @@ from procurement_intelligence_lab.adapters.local_artifacts import (
 )
 from procurement_intelligence_lab.adapters.xlsx_structure import XlsxStructure
 from procurement_intelligence_lab.application.anomaly_service import AnomalyService
+from procurement_intelligence_lab.application.asserted_document_stages import AssertedDocumentStages
 from procurement_intelligence_lab.application.document_stages import DocumentStages
 from procurement_intelligence_lab.application.normalized_document_stages import (
     NormalizedDocumentStages,
@@ -20,6 +21,7 @@ from procurement_intelligence_lab.domains.procurement.normalization import (
     BomNormalizationPolicy,
     BomNormalize,
 )
+from procurement_intelligence_lab.domains.procurement.observation_assertions import BomAssert
 from procurement_intelligence_lab.domains.procurement.package import (
     BOM_PROFILE_ID,
     PROCUREMENT_PACKAGE,
@@ -97,4 +99,22 @@ def build_bom_normalization_service(
             schema_version="bom-decimal@1",
         ),
         policy.reference_id,
+    )
+
+
+def build_bom_assertion_service(
+    *, captured_at: datetime, context: ProvenanceContext, policy: BomNormalizationPolicy
+) -> AssertedDocumentStages:
+    """Adopt source claims with immutable per-run origin, before identity resolution."""
+    return AssertedDocumentStages(
+        build_bom_normalization_service(captured_at=captured_at, context=context, policy=policy),
+        BomAssert,
+        DecisionProvenance(
+            context,
+            "bom-source-assertions",
+            ComponentKind.DETERMINISTIC,
+            "1",
+            policy_version="bom-assertions@1",
+        ),
+        captured_at,
     )

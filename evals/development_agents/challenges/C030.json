@@ -1,0 +1,16 @@
+{
+  "id": "C030",
+  "title": "Null source claims require unresolved derivation context",
+  "introducing_commit": "f0cea2b0a90bd61f35c56144462464ae0bffbcef",
+  "oracle": "A SourceAssertion with null value and no context must fail typed admission; a genuine numeric zero retains legacy identity and an unresolved null with source context survives the public assertion path.",
+  "known_bad": "Admit null as an ordinary source claim without status or missing-data diagnostic.",
+  "known_bad_mutation": [{
+    "path": "src/procurement_intelligence_lab/platform/semantics/assertions.py",
+    "find": "        if self.value is None and self.context is None:",
+    "replace": "        if False:"
+  }],
+  "known_bad_failure_pattern": "DID NOT RAISE",
+  "test_command": ["uv", "run", "pytest", "-q", "tests/regression/test_source_assertion_context.py", "-k", "null_without_context"],
+  "surfaces": ["src/procurement_intelligence_lab/platform/semantics/assertions.py", "tests/regression/test_source_assertion_context.py"],
+  "prevention": ["Intrinsic null-admission guard", "Unresolved-context and genuine-zero contracts", "Actual CLI missing-field evidence", "Latest-revision semantic review"]
+}
