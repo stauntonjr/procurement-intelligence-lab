@@ -1,5 +1,16 @@
 # Project handoff
 
+## Shared BOM stage adoption — 2026-10-19
+
+Issue #207 (M1, parent #7) adds concrete capture/structure/mapping strategies and an installed
+`interfaces.bom_stages` caller. [Contract and continuation](../domains/procurement/bom-stage-adoption.md):
+exact captured bytes survive mutable source changes within a process; generic XLSX structure keeps
+cell coordinates; procurement mapping retains raw values and missing/unmapped diagnostics. Three
+real transformations retain source and component provenance. Nine hash-pinned synthetic BOMs match
+row/cell/raw-field expectations (1,608 fields). Legacy paths retain shared cell mechanics and C002.
+This is not a general plan executor, durable store or normalized/asserted procurement pipeline.
+Next: NORMALIZE/ASSERT adoption against #31/#33, then durable ledger/content/replay work.
+
 ## Runtime package planning — 2026-10-19
 
 Issue #205 adds platform-owned immutable implementation descriptors, strict JSON registry/TOML

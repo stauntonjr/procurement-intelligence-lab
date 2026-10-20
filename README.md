@@ -239,3 +239,17 @@ This emits a deterministic plan and SHA-256, retaining all twelve stages and rej
 incompatible selections. These external fixtures advertise compatibility only; no stage runs.
 The [runtime planning contract](docs/architecture/runtime-planning.md) documents deployment
 schemas, typed failures, version/hash boundaries and clean-installed acceptance.
+
+
+### Inspect shared BOM stages
+
+```bash
+python -m procurement_intelligence_lab.interfaces.bom_stages \
+  src/procurement_intelligence_lab/examples/synthetic_bom_stages.xlsx \
+  --context tests/fixtures/bom-stages/context.json
+```
+
+This executes real capture, structure and raw schema mapping with source cells and distinct
+transformation events. The example context is explicitly synthetic/local. [Stage contract](docs/domains/procurement/bom-stage-adoption.md)
+documents the context schema, typed failures and process-local retention. Normalization,
+assertions, general plan execution and durable storage remain subsequent work.

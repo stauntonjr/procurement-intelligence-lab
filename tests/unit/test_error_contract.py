@@ -40,6 +40,12 @@ def test_failure_categories_are_a_closed_stable_vocabulary() -> None:
 def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
     assert {code.value for code in ErrorCode} == {
         "pil.input.package_planning_invalid",
+        "pil.infrastructure.artifact_source_unavailable",
+        "pil.infrastructure.artifact_content_invalid",
+        "pil.input.source_reference_unsupported",
+        "pil.interpretation.document_structure_invalid",
+        "pil.interpretation.schema_mapping_invalid",
+        "pil.input.document_stage_invalid",
         "pil.input.domain_package_invalid",
         "pil.input.brief_not_found",
         "pil.policy.brief_review_conflict",

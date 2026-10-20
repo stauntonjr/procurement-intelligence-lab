@@ -1,6 +1,5 @@
 """Minimal dependency-free XLSX BOM adapter for synthetic fixtures."""
 
-import re
 from dataclasses import dataclass, replace
 from decimal import Decimal
 from hashlib import sha256
@@ -8,6 +7,12 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile
 
+from procurement_intelligence_lab.adapters.xlsx_cells import (
+    NS,
+    read_row_values,
+    text_value,
+    worksheet_root,
+)
 from procurement_intelligence_lab.domains.procurement.assertions import (
     SourceAssertion,
     assertions_for_bom,
@@ -26,14 +31,9 @@ from procurement_intelligence_lab.platform.semantics.provenance import (
 )
 
 
-_NS = {
-    "x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-}
 _STRUCTURER_NAME = "xlsx-bom-structurer"
 _STRUCTURER_VERSION = "1"
 _BOM_SCHEMA_VERSION = BOM_TABLE_SCHEMA.schema_id
-_CELL_REFERENCE = re.compile(r"^([A-Z]+)([1-9][0-9]*)$")
 
 
 @dataclass(frozen=True)
@@ -60,52 +60,6 @@ class XlsxSourceRow:
     highlighted_columns: tuple[str, ...]
 
 
-def _text(node: ET.Element | None) -> str:
-    return "".join(node.itertext()) if node is not None else ""
-
-
-def _cell_value(cell: ET.Element, shared_strings: list[str]) -> str:
-    if cell.attrib.get("t") == "inlineStr":
-        return _text(cell.find("x:is", _NS))
-    value = _text(cell.find("x:v", _NS))
-    return shared_strings[int(value)] if cell.attrib.get("t") == "s" else value
-
-
-def _column_index(reference: str) -> int:
-    match = _CELL_REFERENCE.fullmatch(reference.upper())
-    if match is None:
-        raise ValueError(f"invalid XLSX cell reference: {reference!r}")
-    index = 0
-    for character in match.group(1):
-        index = index * 26 + ord(character) - ord("A") + 1
-    return index - 1
-
-
-def _column_name(index: int) -> str:
-    name = ""
-    value = index + 1
-    while value:
-        value, remainder = divmod(value - 1, 26)
-        name = chr(ord("A") + remainder) + name
-    return name
-
-
-def _row_values(row: ET.Element, shared_strings: list[str]) -> tuple[list[str], tuple[str, ...]]:
-    """Return coordinate-aligned values and the populated source columns."""
-
-    indexed: dict[int, str] = {}
-    populated: list[str] = []
-    next_index = 0
-    for cell in row.findall("x:c", _NS):
-        reference = cell.attrib.get("r")
-        index = _column_index(reference) if reference else next_index
-        indexed[index] = _cell_value(cell, shared_strings)
-        populated.append(_column_name(index))
-        next_index = index + 1
-    width = max(indexed, default=-1) + 1
-    return [indexed.get(index, "") for index in range(width)], tuple(populated)
-
-
 def read_source_row(
     path: str | Path,
     *,
@@ -122,18 +76,18 @@ def read_source_row(
     with ZipFile(path) as archive:
         shared = (
             [
-                _text(node)
+                text_value(node)
                 for node in ET.fromstring(archive.read("xl/sharedStrings.xml")).findall(
-                    ".//x:si", _NS
+                    ".//x:si", NS
                 )
             ]
             if "xl/sharedStrings.xml" in archive.namelist()
             else []
         )
-        root = _worksheet_root(archive, evidence.sheet)
+        root = worksheet_root(archive, evidence.sheet)
         rows = {
-            int(row.attrib["r"]): _row_values(row, shared)
-            for row in root.findall(".//x:sheetData/x:row", _NS)
+            int(row.attrib["r"]): read_row_values(row, shared)
+            for row in root.findall(".//x:sheetData/x:row", NS)
             if row.attrib.get("r", "").isdigit()
         }
     if evidence.row not in rows:
@@ -152,22 +106,6 @@ def read_source_row(
         cells,
         evidence.cells,
     )
-
-
-def _worksheet_root(archive: ZipFile, sheet: str) -> ET.Element:
-    workbook = ET.fromstring(archive.read("xl/workbook.xml"))
-    rels = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
-    relmap = {rel.attrib["Id"]: rel.attrib["Target"] for rel in rels}
-    sheet_node = next(
-        (item for item in workbook.findall(".//x:sheet", _NS) if item.attrib["name"] == sheet),
-        None,
-    )
-    if sheet_node is None:
-        raise ValueError(f"sheet {sheet!r} not found in workbook")
-    target = sheet_node.attrib.get(f"{{{_NS['r']}}}id", sheet_node.attrib.get("r:id", ""))
-    if not target or target not in relmap:
-        raise ValueError(f"sheet {sheet!r} has no valid relationship")
-    return ET.fromstring(archive.read("xl/" + relmap[target].lstrip("/")))
 
 
 def read_bom(
@@ -196,20 +134,20 @@ def read_bom_with_provenance(
     with ZipFile(path) as archive:
         shared = (
             [
-                _text(node)
+                text_value(node)
                 for node in ET.fromstring(archive.read("xl/sharedStrings.xml")).findall(
-                    ".//x:si", _NS
+                    ".//x:si", NS
                 )
             ]
             if "xl/sharedStrings.xml" in archive.namelist()
             else []
         )
-        root = _worksheet_root(archive, sheet)
+        root = worksheet_root(archive, sheet)
         rows: list[tuple[int, list[str], tuple[str, ...]]] = []
         for fallback_row_number, row in enumerate(
-            root.findall(".//x:sheetData/x:row", _NS), start=1
+            root.findall(".//x:sheetData/x:row", NS), start=1
         ):
-            values, populated_columns = _row_values(row, shared)
+            values, populated_columns = read_row_values(row, shared)
             rows.append((int(row.attrib.get("r", fallback_row_number)), values, populated_columns))
 
     if not rows or not BOM_TABLE_SCHEMA.matches_headers(rows[0][1]):

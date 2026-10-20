@@ -57,7 +57,9 @@ it does not complete M1–M4 extraction, universal-stage execution, forecasting,
 actions or second-vertical proof. Issue #205 (M9, parent #12) adds runtime registry
 admission, explicit deployment config and deterministic physical planning;
 [planning acceptance](../architecture/runtime-planning.md) uses fixture descriptors,
-not operational executors. Semantic execution traces and stage adaptation remain open. See the
+not operational executors. Issue #207 (M1, parent #7) now adopts concrete capture/structure/mapping strategies and three
+transformation events through an installed caller; [acceptance](../domains/procurement/bom-stage-adoption.md)
+keeps NORMALIZE/ASSERT, durable storage and general plan execution open. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream

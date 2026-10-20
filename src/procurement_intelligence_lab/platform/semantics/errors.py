@@ -20,6 +20,12 @@ class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
     PACKAGE_PLANNING_INVALID = "pil.input.package_planning_invalid"
+    ARTIFACT_SOURCE_UNAVAILABLE = "pil.infrastructure.artifact_source_unavailable"
+    ARTIFACT_CONTENT_INVALID = "pil.infrastructure.artifact_content_invalid"
+    SOURCE_REFERENCE_UNSUPPORTED = "pil.input.source_reference_unsupported"
+    DOCUMENT_STRUCTURE_INVALID = "pil.interpretation.document_structure_invalid"
+    SCHEMA_MAPPING_INVALID = "pil.interpretation.schema_mapping_invalid"
+    DOCUMENT_STAGE_INVALID = "pil.input.document_stage_invalid"
     DOMAIN_PACKAGE_INVALID = "pil.input.domain_package_invalid"
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
     BRIEF_REVIEW_CONFLICT = "pil.policy.brief_review_conflict"
@@ -150,3 +156,43 @@ class IdempotencyContractError(SemanticContractError):
 
     category = ErrorCategory.POLICY
     code = ErrorCode.IDEMPOTENCY_CONTRACT_VIOLATION
+
+
+class ArtifactSourceError(SemanticContractError):
+    """The explicit source bytes cannot be read."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.ARTIFACT_SOURCE_UNAVAILABLE
+
+
+class ArtifactContentError(SemanticContractError):
+    """Captured content is absent or fails its identity/integrity contract."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.ARTIFACT_CONTENT_INVALID
+
+
+class SourceReferenceError(SemanticContractError):
+    """A source reference requests an unsupported transport or URI variant."""
+
+    code = ErrorCode.SOURCE_REFERENCE_UNSUPPORTED
+
+
+class DocumentStructureError(SemanticContractError):
+    """The captured document cannot be structured by the selected adapter."""
+
+    category = ErrorCategory.INTERPRETATION
+    code = ErrorCode.DOCUMENT_STRUCTURE_INVALID
+
+
+class SchemaMappingError(SemanticContractError):
+    """Structured evidence cannot be mapped under the selected schema."""
+
+    category = ErrorCategory.INTERPRETATION
+    code = ErrorCode.SCHEMA_MAPPING_INVALID
+
+
+class DocumentStageError(SemanticContractError):
+    """Stage inputs, caller context or returned lineage violate the contract."""
+
+    code = ErrorCode.DOCUMENT_STAGE_INVALID

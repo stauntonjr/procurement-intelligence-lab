@@ -74,8 +74,9 @@ become procurement DECIDE/ACT executors merely because those workflows exist.
 
 The installed command and schema extraction are the first package adoption slice.
 The existing application still invokes procurement services directly. Shared
-StructuredDocument/MappedDocument/NormalizedObservation/OperationalState adaptation,
-policy parameter loading and semantic execution traces remain subsequent implementation.
+Issue #207 adopts Artifact/StructuredDocument/MappedDocument in a separate
+[three-stage caller](bom-stage-adoption.md). NormalizedObservation/OperationalState adaptation,
+policy parameter loading and complete semantic execution traces remain subsequent implementation.
 Issue #205 supplies generic registry descriptors, runtime capability validation and physical
 planning; its fixtures advertise compatibility only, without procurement executors.
 BoQ/PO source profiles and complete procurement-package extraction remain open;
