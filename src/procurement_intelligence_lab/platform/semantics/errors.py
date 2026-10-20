@@ -28,6 +28,11 @@ class ErrorCode(StrEnum):
     DOCUMENT_STAGE_INVALID = "pil.input.document_stage_invalid"
     NORMALIZATION_INVALID = "pil.interpretation.normalization_invalid"
     NORMALIZATION_POLICY_INVALID = "pil.input.normalization_policy_invalid"
+    ARCHIVE_CONTRACT_INVALID = "pil.input.archive_contract_invalid"
+    ARCHIVE_NOT_FOUND = "pil.input.archive_not_found"
+    ARCHIVE_CONFLICT = "pil.policy.archive_conflict"
+    ARCHIVE_INTEGRITY_INVALID = "pil.infrastructure.archive_integrity_invalid"
+    ARCHIVE_UNAVAILABLE = "pil.infrastructure.archive_unavailable"
     SOURCE_ASSERTION_INVALID = "pil.interpretation.source_assertion_invalid"
     DOMAIN_PACKAGE_INVALID = "pil.input.domain_package_invalid"
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
@@ -219,3 +224,36 @@ class SourceAssertionError(SemanticContractError):
 
     category = ErrorCategory.INTERPRETATION
     code = ErrorCode.SOURCE_ASSERTION_INVALID
+
+
+class ArchiveContractError(SemanticContractError):
+    """Archive inputs cannot satisfy the portable snapshot contract."""
+
+    code = ErrorCode.ARCHIVE_CONTRACT_INVALID
+
+
+class ArchiveNotFoundError(SemanticContractError):
+    """No archive record is available within the exact requested scope."""
+
+    code = ErrorCode.ARCHIVE_NOT_FOUND
+
+
+class ArchiveConflictError(SemanticContractError):
+    """An immutable identity was reused with different content."""
+
+    category = ErrorCategory.POLICY
+    code = ErrorCode.ARCHIVE_CONFLICT
+
+
+class ArchiveIntegrityError(SemanticContractError):
+    """Stored data is missing, corrupt or incompatible with its claimed identity."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.ARCHIVE_INTEGRITY_INVALID
+
+
+class ArchiveUnavailableError(SemanticContractError):
+    """The selected persistence backend cannot complete this operation."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.ARCHIVE_UNAVAILABLE

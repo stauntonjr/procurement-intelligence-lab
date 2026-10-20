@@ -20,6 +20,7 @@ from procurement_intelligence_lab.domains.procurement.mapping import BomTableMap
 from procurement_intelligence_lab.domains.procurement.normalization import (
     BomNormalizationPolicy,
     BomNormalize,
+    validate_bom_policy_declaration,
 )
 from procurement_intelligence_lab.domains.procurement.observation_assertions import (
     BomAssert,
@@ -39,6 +40,7 @@ from procurement_intelligence_lab.platform.semantics.provenance import (
     DecisionProvenance,
     ProvenanceContext,
 )
+from procurement_intelligence_lab.ports.artifacts import ArtifactContentStore
 
 
 def build_application() -> None:
@@ -60,9 +62,14 @@ def compile_procurement_manifest(*, source_profile: str = BOM_PROFILE_ID) -> Com
     return compile_domain_package(PROCUREMENT_PACKAGE, source_profile=source_profile)
 
 
-def build_bom_stage_service(*, captured_at: datetime, context: ProvenanceContext) -> DocumentStages:
+def build_bom_stage_service(
+    *,
+    captured_at: datetime,
+    context: ProvenanceContext,
+    content_store: ArtifactContentStore | None = None,
+) -> DocumentStages:
     """Wire the first three real strategies; content retention lasts for this service instance."""
-    store = MemoryArtifactContent()
+    store = content_store if content_store is not None else MemoryArtifactContent()
     return DocumentStages(
         LocalFileIngest(store, captured_at),
         XlsxStructure(store, BOM_TABLE_SCHEMA.sheet_name),
@@ -87,11 +94,17 @@ def build_bom_stage_service(*, captured_at: datetime, context: ProvenanceContext
 
 
 def build_bom_normalization_service(
-    *, captured_at: datetime, context: ProvenanceContext, policy: BomNormalizationPolicy
+    *,
+    captured_at: datetime,
+    context: ProvenanceContext,
+    policy: BomNormalizationPolicy,
+    content_store: ArtifactContentStore | None = None,
 ) -> NormalizedDocumentStages:
     """Extend the same captured-document path with an explicitly configured domain normalizer."""
     return NormalizedDocumentStages(
-        build_bom_stage_service(captured_at=captured_at, context=context),
+        build_bom_stage_service(
+            captured_at=captured_at, context=context, content_store=content_store
+        ),
         BomNormalize(policy),
         DecisionProvenance(
             context,
@@ -106,11 +119,17 @@ def build_bom_normalization_service(
 
 
 def build_bom_assertion_service(
-    *, captured_at: datetime, context: ProvenanceContext, policy: BomNormalizationPolicy
+    *,
+    captured_at: datetime,
+    context: ProvenanceContext,
+    policy: BomNormalizationPolicy,
+    content_store: ArtifactContentStore | None = None,
 ) -> AssertedDocumentStages:
     """Adopt source claims with immutable per-run origin, before identity resolution."""
     return AssertedDocumentStages(
-        build_bom_normalization_service(captured_at=captured_at, context=context, policy=policy),
+        build_bom_normalization_service(
+            captured_at=captured_at, context=context, policy=policy, content_store=content_store
+        ),
         BomAssert,
         DecisionProvenance(
             context,
@@ -121,4 +140,102 @@ def build_bom_assertion_service(
         ),
         captured_at,
         validate_bom_assertions,
+    )
+
+
+def archive_codec():
+    """Only the composition root registers concrete predicate enums for portable persistence."""
+    from procurement_intelligence_lab.adapters.semantic_codec import SemanticCodec
+    from procurement_intelligence_lab.domains.procurement.assertions import AssertionPredicate
+    from procurement_intelligence_lab.platform.semantics.archive import (
+        ArchiveReceipt,
+        DocumentSnapshot,
+    )
+    from procurement_intelligence_lab.platform.semantics.artifacts import Artifact, SourceReference
+    from procurement_intelligence_lab.platform.semantics.assertions import (
+        AssertionOrigin,
+        SourceAssertion,
+        SourceAssertionContext,
+    )
+    from procurement_intelligence_lab.platform.semantics.documents import (
+        MappedDocument,
+        MappedField,
+        StructuredDocument,
+        StructuredElement,
+    )
+    from procurement_intelligence_lab.platform.semantics.epistemics import EpistemicStatus
+    from procurement_intelligence_lab.platform.semantics.evidence import (
+        EvidenceRef,
+        RecordLocation,
+        TabularLocation,
+    )
+    from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
+    from procurement_intelligence_lab.platform.semantics.provenance import (
+        ProvenanceEdge,
+        ProvenanceRelation,
+        TransformationEvent,
+    )
+    from procurement_intelligence_lab.platform.semantics.resolution import EntityMention
+    from procurement_intelligence_lab.platform.semantics.scope import StateScope
+
+    return SemanticCodec(
+        (
+            ArchiveReceipt,
+            DocumentSnapshot,
+            Artifact,
+            SourceReference,
+            AssertionOrigin,
+            SourceAssertion,
+            SourceAssertionContext,
+            MappedDocument,
+            MappedField,
+            StructuredDocument,
+            StructuredElement,
+            EvidenceRef,
+            RecordLocation,
+            TabularLocation,
+            NormalizedObservation,
+            ProvenanceContext,
+            DecisionProvenance,
+            ProvenanceEdge,
+            TransformationEvent,
+            EntityMention,
+            StateScope,
+        ),
+        (AssertionPredicate, EpistemicStatus, ComponentKind, ProvenanceRelation),
+    )
+
+
+def build_assertion_archive(dsn: str):
+    """Driver import is lazy so the base wheel remains independent of storage extras."""
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        from procurement_intelligence_lab.adapters.postgres_archive import PostgresAssertionArchive
+    except ImportError:
+        raise ArchiveUnavailableError("archive requires the installed storage extra") from None
+    return PostgresAssertionArchive(dsn, archive_codec())
+
+
+def build_bom_archive_service(
+    *, captured_at: datetime, context: ProvenanceContext, policy: BomNormalizationPolicy, dsn: str
+):
+    from procurement_intelligence_lab.application.archived_documents import ArchivedDocumentStages
+
+    store = MemoryArtifactContent()
+    return ArchivedDocumentStages(
+        build_bom_assertion_service(
+            captured_at=captured_at, context=context, policy=policy, content_store=store
+        ),
+        store,
+        build_assertion_archive(dsn),
+        tuple(sorted(policy.as_dict().items())),
+    )
+
+
+def build_archive_reader(dsn: str):
+    from procurement_intelligence_lab.application.archived_documents import ArchiveReader
+
+    return ArchiveReader(
+        build_assertion_archive(dsn), validate_bom_assertions, validate_bom_policy_declaration
     )

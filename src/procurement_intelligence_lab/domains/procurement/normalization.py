@@ -164,3 +164,20 @@ class BomNormalize:
                 )
             )
         return tuple(observations)
+
+
+def validate_bom_policy_declaration(
+    parameters: tuple[tuple[str, str], ...], reference: str
+) -> None:
+    """Validate retained declarations without inferring units from extracted observations."""
+    try:
+        data = dict(parameters)
+        policy = BomNormalizationPolicy(
+            CountUnit(data["quantity_unit"]), data["currency"], CountUnit(data["price_unit"])
+        )
+        if data != policy.as_dict() or policy.reference_id != reference:
+            raise ValueError("policy identity")
+    except (KeyError, ValueError):
+        raise NormalizationPolicyError(
+            "retained BOM policy declaration does not match its reference"
+        ) from None

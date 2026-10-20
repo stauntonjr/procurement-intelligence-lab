@@ -64,7 +64,9 @@ and a fourth event; [normalization acceptance](../domains/procurement/bom-normal
 broader #31, durable storage and general plan execution open. Issue #211 (M1, parent #33)
 adds provenance-complete source claims and source-SKU mentions through a fifth ASSERT event;
 [assertion acceptance](../domains/procurement/bom-assertions.md) leaves broad #33 open, followed
-by ledger/content/replay work against #13/#35/#37. See the
+by Issue #213 (M2, parent #37): [atomic Postgres archive](../architecture/assertion-archive.md),
+including captured bytes and scoped restart reads. This preserves broader #13/#35/#36/#37
+acceptance; correction/review lineage remains subsequent work. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream

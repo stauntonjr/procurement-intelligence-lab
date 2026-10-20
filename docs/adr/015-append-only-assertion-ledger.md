@@ -26,3 +26,9 @@ A future durable adapter may use Postgres or another store, but it must preserve
 The semantic core and application services can depend on a small typed port while adapters own storage mechanics. Tests can validate temporal and ordering semantics without a database. The in-memory adapter is not a production durability claim; it is a contract reference and composition-root fixture.
 
 Schema design, migrations, correction events, retention, and transactional guarantees remain separate decisions for the durable adapter.
+
+
+Issue #213 / ADR-038 adds a separate atomic AssertionArchive batch port and Postgres adapter for
+complete five-stage source snapshots and captured bytes. It leaves this single-assertion reference
+port and in-memory behavior compatible. Exact immutable retry returns a stable materialization
+receipt; conflicting payloads fail. Broader correction/review lineage remains #37/#41.

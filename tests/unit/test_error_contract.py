@@ -40,6 +40,11 @@ def test_failure_categories_are_a_closed_stable_vocabulary() -> None:
 
 def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
     assert {code.value for code in ErrorCode} == {
+        "pil.input.archive_contract_invalid",
+        "pil.input.archive_not_found",
+        "pil.policy.archive_conflict",
+        "pil.infrastructure.archive_integrity_invalid",
+        "pil.infrastructure.archive_unavailable",
         "pil.input.package_planning_invalid",
         "pil.infrastructure.artifact_source_unavailable",
         "pil.infrastructure.artifact_content_invalid",
