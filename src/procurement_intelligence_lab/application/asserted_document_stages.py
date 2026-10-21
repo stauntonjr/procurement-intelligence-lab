@@ -20,6 +20,7 @@ from procurement_intelligence_lab.platform.semantics.assertions import (
     SourceAssertion,
 )
 from procurement_intelligence_lab.platform.semantics.batch_identity import assertion_batch_id
+from procurement_intelligence_lab.platform.semantics.document_lineage import validate_assertions
 from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
 from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
 from procurement_intelligence_lab.platform.semantics.provenance import (
@@ -174,34 +175,8 @@ class AssertedDocumentStages:
         assertions, mentions = self.assertion_factory(origin).assert_observations(
             normalized.observations, provenance=provenance
         )
-        if len(assertions) != len(normalized.observations) or len(
-            {x.assertion_id for x in assertions}
-        ) != len(assertions):
-            raise DocumentStageError("ASSERT must retain every observation exactly once")
-        for claim, observation in zip(assertions, normalized.observations, strict=True):
-            if (
-                claim.context is None
-                or claim.context.observation != observation
-                or claim.context.origin != origin
-                or claim.context.provenance != provenance
-            ):
-                raise DocumentStageError(
-                    "ASSERT must retain exact origin, observations and injected provenance"
-                )
-        ids = {x.assertion_id: x for x in assertions}
-        seen: set[str] = set()
-        for mention in mentions:
-            if (
-                mention.mention_id in seen
-                or mention.scope != source.scope
-                or mention.observed_at != source.observed_at
-                or any(ids.get(x.assertion_id) != x for x in mention.assertions)
-                or len({x.subject_key for x in mention.assertions}) != 1
-                or not any(x.value == mention.text for x in mention.assertions)
-            ):
-                raise DocumentStageError(
-                    "ASSERT mention must retain returned claims and source scope/time"
-                )
-            seen.add(mention.mention_id)
+        validate_assertions(
+            source, normalized.observations, assertions, mentions, origin, provenance
+        )
         self.assertion_validator(normalized.observations, assertions, mentions)
         return AssertedDocumentResult(normalized, assertions, mentions, origin, provenance)

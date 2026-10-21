@@ -5,11 +5,15 @@ from datetime import date, datetime
 from decimal import Decimal
 
 from procurement_intelligence_lab.platform.semantics.artifacts import Artifact, SourceReference
+from procurement_intelligence_lab.platform.semantics.document_lineage import (
+    validate_capture,
+    validate_mapping,
+    validate_structure,
+)
 from procurement_intelligence_lab.platform.semantics.documents import (
     MappedDocument,
     StructuredDocument,
 )
-from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
 from procurement_intelligence_lab.platform.semantics.provenance import (
     DecisionProvenance,
     ProvenanceEdge,
@@ -131,29 +135,13 @@ class DocumentStages:
     def run(self, source: SourceReference) -> DocumentStageResult:
         capture_provenance = with_input_snapshot(self.ingest_provenance, source.reference_id)
         captured = self.ingest.ingest(source, provenance=capture_provenance)
-        if (
-            len(captured) != 1
-            or captured[0].source != source
-            or captured[0].provenance != capture_provenance
-        ):
-            raise DocumentStageError(
-                "single-document capture must return exactly the requested source"
-            )
-        artifact = captured[0]
+        artifact = validate_capture(source, captured, capture_provenance)
         structure_provenance = with_input_snapshot(self.structure_provenance, artifact.artifact_id)
         document = self.structure.structure(artifact, provenance=structure_provenance)
-        if document.artifact != artifact or document.provenance != structure_provenance:
-            raise DocumentStageError("structured output must retain the exact captured artifact")
+        validate_structure(artifact, document, structure_provenance)
         mapping_provenance = with_input_snapshot(self.mapping_provenance, document.document_id)
         mapped = self.mapper.map_document(document, provenance=mapping_provenance)
-        if (
-            mapped.source_document != document
-            or mapped.mapping_schema != self.mapping_schema
-            or mapped.provenance != mapping_provenance
-        ):
-            raise DocumentStageError(
-                "mapped output must retain the exact source document and configured schema"
-            )
+        validate_mapping(document, mapped, self.mapping_schema, mapping_provenance)
         capture_event = TransformationEvent(
             "artifact-capture",
             artifact.provenance,

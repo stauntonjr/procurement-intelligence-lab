@@ -11,6 +11,7 @@ from procurement_intelligence_lab.application.document_stages import (
 )
 from procurement_intelligence_lab.platform.semantics.artifacts import SourceReference
 from procurement_intelligence_lab.platform.semantics.batch_identity import normalization_batch_id
+from procurement_intelligence_lab.platform.semantics.document_lineage import validate_normalization
 from procurement_intelligence_lab.platform.semantics.errors import DocumentStageError
 from procurement_intelligence_lab.platform.semantics.observations import NormalizedObservation
 from procurement_intelligence_lab.platform.semantics.provenance import (
@@ -121,17 +122,5 @@ class NormalizedDocumentStages:
             self.policy_reference,
         )
         observations = self.normalizer.normalize(stages.mapped, provenance=provenance)
-        if len(observations) != len(stages.mapped.fields):
-            raise DocumentStageError("normalization must retain every mapped field exactly once")
-        for observation, field in zip(observations, stages.mapped.fields, strict=True):
-            if (
-                observation.source_field != field
-                or observation.observation_key != field.field_key
-                or observation.scope != source.scope
-                or observation.effective_at != source.observed_at
-                or observation.provenance != provenance
-            ):
-                raise DocumentStageError(
-                    "normalized output must retain source fields, scope/time and injected provenance"
-                )
+        validate_normalization(source, stages.mapped, observations, provenance)
         return NormalizedDocumentResult(stages, observations, provenance, self.policy_reference)
