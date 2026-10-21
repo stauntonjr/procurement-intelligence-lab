@@ -57,7 +57,10 @@ def validate_execution(context: ProvenanceContext, snapshot_id: str) -> None:
     if (
         context.workflow_name != WORKFLOW
         or context.workflow_version != "1"
+        or type(context.input_snapshot_ids) is not tuple
+        or any(type(pin) is not str for pin in context.input_snapshot_ids)
         or context.input_snapshot_ids != (snapshot_id,)
+        or type(context.environment) is not tuple
         or context.environment != ()
     ):
         raise SourceQueryContractError(
@@ -98,7 +101,28 @@ class SourceSkuQuery:
                 "source query requires a typed source snapshot and producer"
             )
         validate_execution(self.provenance.context, self.snapshot.snapshot_id)
-        if self.provenance != query_provenance(self.provenance.context):
+        if (
+            self.provenance.component_kind is not ComponentKind.DETERMINISTIC
+            or any(
+                type(value) is not str
+                for value in (
+                    self.provenance.component_name,
+                    self.provenance.implementation_version,
+                    self.provenance.policy_version,
+                )
+            )
+            or any(
+                value is not None
+                for value in (
+                    self.provenance.model_provider,
+                    self.provenance.model_id,
+                    self.provenance.model_revision,
+                    self.provenance.prompt_version,
+                    self.provenance.schema_version,
+                )
+            )
+            or self.provenance != query_provenance(self.provenance.context)
+        ):
             raise SourceQueryContractError("source query producer implementation/policy is fixed")
         if self.provenance.context.started_at < self.snapshot.origin.recorded_at:
             raise SourceQueryContractError("source query execution cannot precede source recording")

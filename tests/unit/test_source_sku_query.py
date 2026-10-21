@@ -1,5 +1,6 @@
 from dataclasses import replace
 from datetime import timedelta
+from enum import StrEnum
 from pathlib import Path
 from typing import Any, cast
 
@@ -145,3 +146,50 @@ def test_wrong_typed_predicate_cannot_silently_drop_a_source_row(tmp_path: Path)
     altered = replace(snapshot, assertions=claims)
     with pytest.raises(SourceQueryContractError):
         SourceSkuQuery(altered, query_provenance(execution(altered.snapshot_id)))
+
+
+class ForeignProducer(StrEnum):
+    DETERMINISTIC = "deterministic"
+    COMPONENT = "procurement-source-sku-set"
+    VERSION = "1"
+    POLICY = "source-sku-set/v1"
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"component_kind": "deterministic"},
+        {"component_kind": ForeignProducer.DETERMINISTIC},
+        {"component_name": ForeignProducer.COMPONENT},
+        {"implementation_version": ForeignProducer.VERSION},
+        {"policy_version": ForeignProducer.POLICY},
+        {"model_provider": "unexpected"},
+    ],
+)
+def test_fixed_producer_metadata_rejects_equal_untyped_values(
+    tmp_path: Path, changes: dict[str, Any]
+):
+    snapshot, _ = inputs(tmp_path)
+    p = query_provenance(execution(snapshot.snapshot_id))
+    with pytest.raises(SourceQueryContractError):
+        SourceSkuQuery(snapshot, replace(p, **changes))
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"input_snapshot_ids": ["snapshot"]},
+        {"input_snapshot_ids": (ForeignProducer.VERSION,)},
+        {"environment": []},
+    ],
+)
+def test_execution_pin_and_environment_require_exact_tuple_types(changes: dict[str, Any]):
+    ctx = replace(execution("snapshot"), **changes)
+    # The foreign enum deliberately equals the requested snapshot identity.
+    snapshot_id = (
+        "1"
+        if "input_snapshot_ids" in changes and isinstance(changes["input_snapshot_ids"], tuple)
+        else "snapshot"
+    )
+    with pytest.raises(SourceQueryContractError):
+        validate_execution(ctx, snapshot_id)
