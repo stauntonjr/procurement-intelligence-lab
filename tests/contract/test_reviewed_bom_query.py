@@ -7,6 +7,7 @@ import psycopg
 import pytest
 
 from procurement_intelligence_lab import bootstrap
+from procurement_intelligence_lab.application.reviewed_bom_queries import ReviewedBomQueryService
 from procurement_intelligence_lab.platform.semantics.archive import DocumentSnapshot
 from procurement_intelligence_lab.platform.semantics.document_reviews import ReviewHistory
 from procurement_intelligence_lab.platform.semantics.errors import (
@@ -111,9 +112,6 @@ def test_actual_reviewed_replay_keeps_original_and_retries_after_restart(
 
 
 def test_reviewed_authorization_context_and_selection_fail_before_io():
-    from procurement_intelligence_lab.application.reviewed_bom_queries import (
-        ReviewedBomQueryService,
-    )
     from procurement_intelligence_lab.domains.procurement.reviewed_source_queries import (
         ReviewedSourceSkuQuery,
     )
@@ -280,3 +278,60 @@ def test_registration_cannot_substitute_equal_instant_metadata(archive_dsn: str,
             run_context(p.snapshot_id),
             context=context(p.scope),
         )
+
+
+@pytest.mark.parametrize("mode", ["request", "recorder", "future", "type"])
+def test_registration_retains_command_recorder_and_server_time(
+    archive_dsn: str, tmp_path: Path, mode: str
+):
+    from procurement_intelligence_lab.platform.semantics.dependencies import (
+        DependencyManifest,
+        DependencySnapshot,
+    )
+
+    p, task, _, _ = approved(archive_dsn, tmp_path)
+
+    class SubstituteStore:
+        def append(self, manifest: DependencyManifest, recorder_id: str, recorded_at: datetime):
+            if mode == "request":
+                manifest = replace(manifest, request_id="another-request")
+            elif mode == "recorder":
+                recorder_id = "another-recorder"
+            elif mode == "future":
+                recorded_at += timedelta(seconds=1)
+            elif mode == "type":
+                return None
+            return DependencySnapshot(manifest, recorder_id, recorded_at)
+
+    s = replace(service(archive_dsn), dependencies=cast(Any, SubstituteStore()))
+    with pytest.raises(SourceQueryContractError):
+        s.execute(
+            p.scope,
+            p.snapshot_id,
+            "reviewed",
+            (task.task_id,),
+            AT + timedelta(seconds=4),
+            run_context(p.snapshot_id),
+            context=context(p.scope),
+        )
+
+
+def test_retry_retains_first_receipt_when_server_clock_advances(archive_dsn: str, tmp_path: Path):
+    p, task, _, _ = approved(archive_dsn, tmp_path)
+    s = service(archive_dsn)
+
+    def execute(s: ReviewedBomQueryService):
+        return s.execute(
+            p.scope,
+            p.snapshot_id,
+            "reviewed",
+            (task.task_id,),
+            AT + timedelta(seconds=4),
+            run_context(p.snapshot_id),
+            context=context(p.scope),
+        )
+
+    first = execute(s)
+    retry = execute(replace(s, clock=lambda: AT + timedelta(seconds=9)))
+    assert retry.as_dict() == first.as_dict()
+    assert retry.registration.recorded_at == AT + timedelta(seconds=6)

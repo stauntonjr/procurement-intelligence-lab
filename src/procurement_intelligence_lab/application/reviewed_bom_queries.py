@@ -220,7 +220,15 @@ class ReviewedBomQueryService:
             raise SourceQueryContractError("reviewed registration clock is invalid") from None
         if recorded_at < execution.started_at:
             raise SourceQueryContractError("reviewed registration cannot precede execution")
-        receipt = self.dependencies.append(
-            reviewed_dependency_manifest(query, request_id), context.principal_id, recorded_at
-        )
+        manifest = reviewed_dependency_manifest(query, request_id)
+        receipt = self.dependencies.append(manifest, context.principal_id, recorded_at)
+        if (
+            type(receipt) is not DependencySnapshot
+            or receipt.manifest.digest != manifest.digest
+            or receipt.recorder_id != context.principal_id
+            or receipt.recorded_at > recorded_at
+        ):
+            raise SourceQueryContractError(
+                "reviewed registration must retain command, recorder and server time"
+            )
         return ReviewedQueryExecution(query, receipt)
