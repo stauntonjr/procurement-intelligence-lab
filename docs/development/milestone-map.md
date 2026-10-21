@@ -82,6 +82,12 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
+The next proposed increment is decision #228 (M2, parent #37):
+[completed planned-prefix archive](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md),
+with atomic source/receipt retention and scoped restart reads. ADR-044 is proposed; implementation
+is not scheduled or accepted until its design and a separately scoped plan are reviewed. It does
+not expand stage coverage, create an attempt journal or close broader #13/#35/#36/#37/#12/#75.
+
 Feature #226/approved decision #225/ADR-043 connects the unchanged planner to actual synchronous
 INGEST-through-ASSERT execution, retaining later declarations as NOT_EXECUTED. The
 [bounded execution contract](../architecture/package-execution.md) proves actual registered
