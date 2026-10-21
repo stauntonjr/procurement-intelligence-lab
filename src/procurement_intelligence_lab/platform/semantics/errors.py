@@ -19,6 +19,7 @@ class ErrorCategory(StrEnum):
 class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
+    SOURCE_QUERY_INVALID = "pil.input.source_query_invalid"
     PACKAGE_PLANNING_INVALID = "pil.input.package_planning_invalid"
     ARTIFACT_SOURCE_UNAVAILABLE = "pil.infrastructure.artifact_source_unavailable"
     ARTIFACT_CONTENT_INVALID = "pil.infrastructure.artifact_content_invalid"
@@ -337,3 +338,9 @@ class DependencyUnavailableError(SemanticContractError):
 
     category = ErrorCategory.INFRASTRUCTURE
     code = ErrorCode.DEPENDENCY_UNAVAILABLE
+
+
+class SourceQueryContractError(SemanticContractError):
+    """An archived source query cannot establish its required input contract."""
+
+    code = ErrorCode.SOURCE_QUERY_INVALID

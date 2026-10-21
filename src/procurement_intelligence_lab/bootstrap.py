@@ -323,3 +323,17 @@ def build_correction_impact_service(dsn: str, *, clock: Callable[[], datetime] |
         build_document_review_service(dsn),
         clock or (lambda: datetime.now(UTC)),
     )
+
+
+def build_archived_bom_query_service(dsn: str, *, clock: Callable[[], datetime] | None = None):
+    from procurement_intelligence_lab.application.archived_bom_queries import (
+        ArchivedBomQueryService,
+    )
+    from procurement_intelligence_lab.domains.procurement.source_queries import SourceSkuQuery
+
+    return ArchivedBomQueryService(
+        build_archive_reader(dsn),
+        build_dependency_store(dsn),
+        SourceSkuQuery,
+        clock or (lambda: datetime.now(UTC)),
+    )

@@ -64,6 +64,11 @@ stage or general EvidenceTrace API completion.
 Acceptance includes core diamond/empty/cycle/missing/boundary oracles, real Postgres atomicity/replay,
 actual subprocess and parser paths, and a clean installed archive -> review -> declared SDK fixture
 -> restarted bounded impact probe. Fixtures demonstrate registration/traversal only; existing
-procurement downstream producers have not yet been wired to emit these receipts. Actual producer
-adoption and policy-controlled invalidation/recomputation are the next boundaries. Broader
+procurement downstream producers were not wired by #218 alone. Issue #220 now adopts one real
+source-SKU query; further producer adoption and policy-controlled invalidation/recomputation remain
+next boundaries. Broader
 #13/#35/#37/#41/#56/#63 remain open, with production authentication/HA/UI/deployment separate.
+
+Issue #220 adopts the first [actual source-SKU query producer](../domains/procurement/archived-source-sku-query.md).
+That caller executes a fixed domain query and constructs its own real event/manifest. Generic
+registration still accepts declared receipts and global consumer completeness remains unknown.

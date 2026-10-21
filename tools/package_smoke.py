@@ -520,6 +520,60 @@ def main() -> int:
         ):
             raise RuntimeError("base wheel did not report typed missing dependency storage extra")
 
+        source_query_scope = temporary / "base-query-scope.json"
+        source_query_scope.write_text(
+            json.dumps(
+                {
+                    "tenant_id": "synthetic",
+                    "project_id": "base-query",
+                    "site_id": "lab",
+                    "version": "1",
+                }
+            )
+        )
+        source_query_context = temporary / "base-query-context.json"
+        source_query_context.write_text(
+            json.dumps(
+                {
+                    "run_id": "base-query",
+                    "code_revision": "installed-smoke",
+                    "started_at": "2026-10-21T00:00:00+00:00",
+                }
+            )
+        )
+        missing_query_storage = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "procurement_intelligence_lab.interfaces.archived_bom_query",
+                "--scope",
+                str(source_query_scope),
+                "--snapshot-id",
+                "not-read",
+                "--request-id",
+                "not-recorded",
+                "--context",
+                str(source_query_context),
+            ],
+            cwd=temporary,
+            env={
+                **os.environ,
+                "PIL_ASSERTION_ARCHIVE_DSN": "configured-but-driver-absent",
+                "PIL_DOCUMENT_REVIEWER_ID": "package-smoke-human",
+            },
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if (
+            missing_query_storage.returncode != 2
+            or missing_query_storage.stdout
+            or "storage extra" not in json.loads(missing_query_storage.stderr)["message"]
+            or json.loads(missing_query_storage.stderr)["code"]
+            != "pil.infrastructure.archive_unavailable"
+        ):
+            raise RuntimeError("base wheel did not report typed missing query storage extra")
+
         requirements = temporary / "workflow-requirements.txt"
         subprocess.run(
             [

@@ -71,7 +71,10 @@ with exact-task decisions and separate accepted corrections; other workflows and
 recomputation remain subsequent work. Issue #218 (M2, parent #41) adds
 [declared dependency impact](../architecture/correction-impact.md), retaining supplied producer
 receipts and bounded affected-reference evidence. Global coverage, actual downstream producer
-adoption and controlled recomputation remain open. See the
+adoption and controlled recomputation remain open. Issue #220 (M2, parent #35) now adopts
+[a real archived source-SKU query](../domains/procurement/archived-source-sku-query.md) with actual
+producer receipts and correction-impact proof; canonical queries, result materialization and controlled
+recomputation remain subsequent work. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream

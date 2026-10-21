@@ -8,7 +8,9 @@ BOM, BoQ, Purchase Order, state, reconciliation, and anomaly behavior lives unde
 
 The core also supports [registered dependency impact](docs/architecture/correction-impact.md)
 under Issue #218: immutable producer declarations and a bounded read-only query tied to an exact
-approved correction. Coverage stays explicit; runtime producer adoption and recomputation remain open.
+approved correction. Coverage stays explicit; broader producer adoption and recomputation remain open.
+The [archived source-SKU query](docs/domains/procurement/archived-source-sku-query.md) now executes
+one real producer and registers its evidence; source strings remain distinct from canonical identity.
 
 ## At A Glance
 

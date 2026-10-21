@@ -1,5 +1,19 @@
 # Project handoff
 
+## Actual archived source-SKU producer adoption - 2026-10-21
+
+Issue #220 (M2, parent #35, part of #13/#37/#41) executes a real source-local distinct-SKU
+producer from the immutable archive and registers its actual input/event/output reference through
+the existing dependency port. [Contract](../domains/procurement/archived-source-sku-query.md), ADR-041
+and spec/plan preserve source strings versus canonical identity, unresolved null/partial-known
+sets, exact source/context retries and original evidence. No schema or old wire shape changes.
+Values are replayed from original source, not materialized in a new query-result cache. Approved
+SKU correction impact now identifies a real executed query reference; approval still changes no
+source/query/governed state. Local manifest metadata is caller-pinned, not production attestation.
+Broader #13/#35/#37/#41/#48/#56 remain open; next is explicit controlled invalidation/recomputation
+and further governed/state producer adoption. Pre-slice advisory39597750624 at main82c73cf failed
+Gemini503; deterministic Project audit was reviewed separately. No successful provider report.
+
 ## Declared downstream dependencies and correction impact - 2026-10-20
 
 Issue #218 (M2, parent #41, part of #35/#37/#13) adds immutable dependency declarations and
