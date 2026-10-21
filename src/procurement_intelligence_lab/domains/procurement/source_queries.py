@@ -32,7 +32,7 @@ WORKFLOW = "archived-source-sku-query"
 COMPONENT = "procurement-source-sku-set"
 
 
-def validate_execution(context: ProvenanceContext, snapshot_id: str) -> None:
+def validate_local_execution(context: ProvenanceContext, snapshot_id: str, workflow: str) -> None:
     if type(context) is not ProvenanceContext:
         raise SourceQueryContractError("source query requires a typed local execution context")
     try:
@@ -55,7 +55,7 @@ def validate_execution(context: ProvenanceContext, snapshot_id: str) -> None:
             "source query execution identities/time are invalid"
         ) from None
     if (
-        context.workflow_name != WORKFLOW
+        context.workflow_name != workflow
         or context.workflow_version != "1"
         or type(context.input_snapshot_ids) is not tuple
         or any(type(pin) is not str for pin in context.input_snapshot_ids)
@@ -66,6 +66,10 @@ def validate_execution(context: ProvenanceContext, snapshot_id: str) -> None:
         raise SourceQueryContractError(
             "source query requires its fixed workflow, exact input pin and no raw environment"
         )
+
+
+def validate_execution(context: ProvenanceContext, snapshot_id: str) -> None:
+    validate_local_execution(context, snapshot_id, WORKFLOW)
 
 
 def query_provenance(context: ProvenanceContext) -> DecisionProvenance:
@@ -85,6 +89,32 @@ def execution_digest(provenance: DecisionProvenance) -> str:
         default=lambda value: value.isoformat(),
     )
     return sha256(raw.encode()).hexdigest()
+
+
+def validated_sku_inputs(snapshot: DocumentSnapshot) -> tuple[SourceAssertion, ...]:
+    if type(snapshot) is not DocumentSnapshot:
+        raise SourceQueryContractError("source query requires a typed source snapshot")
+    validate_bom_assertions(snapshot.observations, snapshot.assertions, snapshot.mentions)
+    if any(type(a.predicate) is not AssertionPredicate for a in snapshot.assertions):
+        raise SourceQueryContractError("source query requires typed procurement predicates")
+    claims = tuple(
+        a for a in snapshot.assertions if a.predicate.value == AssertionPredicate.HAS_SKU.value
+    )
+    if not 1 <= len(claims) <= 32:
+        raise SourceQueryContractError("source query requires1..32 source-SKU claims")
+    for claim in claims:
+        if claim.context is None or claim.context.observation.unit is not None:
+            raise SourceQueryContractError("source SKU claims require complete unitless context")
+        if claim.value is not None:
+            if type(claim.value) is not str:
+                raise SourceQueryContractError("source SKU values must be text or unresolved null")
+            try:
+                claim.value.encode("utf-8")
+            except UnicodeError:
+                raise SourceQueryContractError(
+                    "source SKU text must contain Unicode scalars"
+                ) from None
+    return claims
 
 
 @dataclass(frozen=True)
@@ -126,29 +156,7 @@ class SourceSkuQuery:
             raise SourceQueryContractError("source query producer implementation/policy is fixed")
         if self.provenance.context.started_at < self.snapshot.origin.recorded_at:
             raise SourceQueryContractError("source query execution cannot precede source recording")
-        validate_bom_assertions(
-            self.snapshot.observations, self.snapshot.assertions, self.snapshot.mentions
-        )
-        if any(type(a.predicate) is not AssertionPredicate for a in self.snapshot.assertions):
-            raise SourceQueryContractError("source query requires typed procurement predicates")
-        if not 1 <= len(self.inputs) <= 32:
-            raise SourceQueryContractError("source query requires1..32 source-SKU claims")
-        for claim in self.inputs:
-            if claim.context is None or claim.context.observation.unit is not None:
-                raise SourceQueryContractError(
-                    "source SKU claims require complete unitless context"
-                )
-            if claim.value is not None:
-                if type(claim.value) is not str:
-                    raise SourceQueryContractError(
-                        "source SKU values must be text or unresolved null"
-                    )
-                try:
-                    claim.value.encode("utf-8")
-                except UnicodeError:
-                    raise SourceQueryContractError(
-                        "source SKU text must contain Unicode scalars"
-                    ) from None
+        validated_sku_inputs(self.snapshot)
 
     @property
     def inputs(self) -> tuple[SourceAssertion, ...]:
