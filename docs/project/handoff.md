@@ -1,5 +1,16 @@
 # Project handoff
 
+## Proposed planned execution prefix - 2026-10-21
+
+Decision #225 (M9, parent #12) proposes connecting the planner to actual synchronous BOM
+INGEST-through-ASSERT execution. [Written proposal](../superpowers/specs/2026-10-21-planned-prefix-execution-design.md)
+and proposed ADR-043 retain all twelve declarations, exact runtime admission and actual stage
+lineage. Later stages would remain NOT_EXECUTED, including unvisited EMPTY declarations; this
+would not establish full package execution. This is unapproved design work on a separate branch,
+not functionality on main. Implementation planning follows maintainer review of the written spec.
+Current main remains PR224/`07d089b`; post-merge advisory39671302454 failed Gemini503, with
+deterministic Project review/audit recorded separately.
+
 ## Explicit selected-review source-SKU replay - 2026-10-21
 
 Issue #223 (M2, parent #41; approved policy #222/ADR-042) adds a separately invoked
