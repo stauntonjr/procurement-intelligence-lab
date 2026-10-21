@@ -175,6 +175,111 @@ def main() -> int:
         )
         if json.loads(original_again.stdout) != payload:
             raise RuntimeError("human review rewrote original source claims")
+        # Declared SDK producer fixture; this does not claim runtime producer adoption.
+        from datetime import UTC, datetime
+
+        from procurement_intelligence_lab.bootstrap import archive_codec
+        from procurement_intelligence_lab.platform.semantics.dependencies import (
+            ArchivedClaimRef,
+            ClaimDependency,
+            DependencyManifest,
+        )
+        from procurement_intelligence_lab.platform.semantics.provenance import (
+            ComponentKind,
+            DecisionProvenance,
+            ProvenanceContext,
+            ProvenanceEdge,
+            ProvenanceRelation,
+            TransformationEvent,
+        )
+        from procurement_intelligence_lab.platform.semantics.scope import StateScope
+
+        provenance = DecisionProvenance(
+            ProvenanceContext(
+                "installed-dependency-fixture",
+                "declared-producer-fixture",
+                "1",
+                json.loads(Path(sys.argv[2]).read_text())["code_revision"],
+                "local:installed-fixture",
+                "fixture-config",
+                None,
+                (receipt["snapshot_id"],),
+                datetime.now(UTC),
+            ),
+            "installed-declared-fixture",
+            ComponentKind.DETERMINISTIC,
+            "1",
+        )
+
+        def declared(ref: str, input_id: str):
+            return ClaimDependency(
+                ref,
+                TransformationEvent(
+                    "declared-producer-fixture",
+                    provenance,
+                    (ProvenanceEdge(ProvenanceRelation.USED_INPUT, input_id),),
+                    (ref,),
+                ),
+            )
+
+        manifest = DependencyManifest(
+            StateScope(**receipt["scope"]),
+            "installed-dependency",
+            (ArchivedClaimRef(receipt["snapshot_id"], quantity["assertion_id"]),),
+            (
+                declared("fixture-fact", "fixture-state"),
+                declared("fixture-state", quantity["assertion_id"]),
+            ),
+        )
+        manifest_file = Path("dependency-manifest.json").absolute()
+        manifest_file.write_text(archive_codec().dumps(manifest))
+        run("correction_impact", "init")
+        dependency_args = ("register", "--scope", str(scope), "--input", str(manifest_file))
+        registered = run("correction_impact", *dependency_args)
+        if run("correction_impact", *dependency_args).stdout != registered.stdout:
+            raise RuntimeError("installed dependency retry changed identity/time")
+        dependency = json.loads(registered.stdout)
+        inspect_args = (
+            "inspect",
+            "--scope",
+            str(scope),
+            "--snapshot-id",
+            dependency["dependency_snapshot_id"],
+            "--task-id",
+            task["task_id"],
+            "--as-of",
+            datetime.now(UTC).isoformat(),
+        )
+        impact = json.loads(run("correction_impact", *inspect_args, "--max-depth", "1").stdout)
+        if (
+            [x["reference_id"] for x in impact["affected"]] != ["fixture-state"]
+            or impact["frontier"] != ["fixture-fact"]
+            or impact["traversal_complete"]
+            or impact["global_completeness"] != "not_evaluated"
+            or impact["coverage"] != "registered_graph_only"
+            or impact["recomputation_executed"]
+            or impact["review"] != json.loads(accepted.stdout)
+        ):
+            raise RuntimeError(
+                "installed bounded correction impact lost its evidence/coverage boundary"
+            )
+        full = json.loads(run("correction_impact", *inspect_args, "--max-depth", "32").stdout)
+        if len(full["affected"]) != 2 or not full["traversal_complete"]:
+            raise RuntimeError("installed full declared graph traversal failed")
+        if (
+            json.loads(
+                run(
+                    "assertion_archive",
+                    "show",
+                    "--scope",
+                    str(scope),
+                    "--snapshot-id",
+                    receipt["snapshot_id"],
+                ).stdout
+            )
+            != payload
+        ):
+            raise RuntimeError("impact inspection changed original source")
         scope.write_text(json.dumps({**receipt["scope"], "tenant_id": "foreign"}))
         denied = run(
             "assertion_archive",
@@ -192,6 +297,7 @@ def main() -> int:
                 {
                     "storage_package_smoke": "passed",
                     "document_review_smoke": "passed",
+                    "correction_impact_smoke": "passed",
                     "assertions": len(payload["assertion_batch"]["claims"]),
                     "source_deleted": True,
                     "retry_equal": True,

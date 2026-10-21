@@ -74,3 +74,7 @@ source membership. Actual CLI and clean-wheel storage probes check restart, exac
 prospective history and original-source preservation after source deletion. Storage qualification
 requires the dedicated test DSN; skipped storage checks are not durability evidence. Broader
 #13/#37/#41 remain open, with no UI, automatic recomputation, production service or deployment claim.
+
+Issue #218 adds a separate [registered dependency impact query](correction-impact.md). It consumes
+exact approved review lineage without changing this payload or declaring a governing correction.
+Dependency declarations are caller-supplied producer receipts; global coverage remains unknown.

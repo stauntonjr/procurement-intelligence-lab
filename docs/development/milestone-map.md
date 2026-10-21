@@ -68,7 +68,10 @@ by Issue #213 (M2, parent #37): [atomic Postgres archive](../architecture/assert
 including captured bytes and scoped restart reads. This preserves broader #13/#35/#36/#37
 acceptance. Issue #216 (M2, parent #41) adds [document-value review lineage](../architecture/document-review.md),
 with exact-task decisions and separate accepted corrections; other workflows and controlled
-recomputation remain subsequent work. See the
+recomputation remain subsequent work. Issue #218 (M2, parent #41) adds
+[declared dependency impact](../architecture/correction-impact.md), retaining supplied producer
+receipts and bounded affected-reference evidence. Global coverage, actual downstream producer
+adoption and controlled recomputation remain open. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream

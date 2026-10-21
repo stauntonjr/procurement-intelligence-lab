@@ -1,5 +1,18 @@
 # Project handoff
 
+## Declared downstream dependencies and correction impact - 2026-10-20
+
+Issue #218 (M2, parent #41, part of #35/#37/#13) adds immutable dependency declarations and
+read-only impact over an exact approved correction. [Contract](../architecture/correction-impact.md)
+and ADR-040 distinguish caller-supplied producer receipts from verified execution and global
+consumer coverage. Explicit additive dependency schema1 leaves archive1/review1 unchanged.
+Bounded traversal retains shared paths and exposes omitted frontier; empty results never mean
+all consumers are unaffected. No source/state mutation, automatic recomputation or operational-agent
+authority is added. Broader #13/#35/#37/#41/#56/#63 remain open. Next is real downstream producer
+adoption, followed by explicit policy for controlled invalidation/recomputation. Latest pre-slice
+advisory run39514129070 at main8bb6dda failed Gemini503; deterministic Project audit was reviewed
+separately. No successful provider report or production execution is claimed.
+
 ## Document-value correction/review lineage — 2026-10-20
 
 Issue #216 (M2, parent #41, part of #37/#13) adds evidence-bound immutable document-value tasks,
