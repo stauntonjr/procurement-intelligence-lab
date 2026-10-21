@@ -208,7 +208,7 @@ def plan_payload(plan: PhysicalPlan) -> dict[str, Any]:
             raise ValueError
     except (ValueError, KeyError, TypeError, RecursionError):
         raise PackageExecutionError("invalid retained plan payload") from None
-    return cast(dict[str, Any], data)
+    return data
 
 
 def input_snapshots(output: StageOutput) -> tuple[str, ...]:
