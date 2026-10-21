@@ -1,5 +1,18 @@
 # Project handoff
 
+## Explicit selected-review source-SKU replay - 2026-10-21
+
+Issue #223 (M2, parent #41; approved policy #222/ADR-042) adds a separately invoked
+[reviewed view](../domains/procurement/reviewed-source-sku-query.md). Actual row applications consume
+source assertions and validated approved-correction data roots; the set producer consumes at most32
+original/reviewed row references. Explicit approved_correction_roots/v1 initialization adds capability
+tables beside unchanged archive1/review1/dependency1 records. Missing capability/evidence fails closed.
+Exact scope/as-of/selection/context retries retain the first receipt; null remains unresolved, selected
+conflicts fail and original source/query values remain unchanged. No latest winner, canonical/governing
+state, global freshness, automatic scheduler or result cache. Spec/plan retain the policy and delivery
+contract. Broader #13/#35/#37/#41/#46/#48/#56/#63 remain open. Pre-slice advisory39657670491 on
+main `a26d615` failed Gemini HTTP503; deterministic Project audit/review is separate evidence.
+
 ## Actual archived source-SKU producer adoption - 2026-10-21
 
 Issue #220 (M2, parent #35, part of #13/#37/#41) executes a real source-local distinct-SKU

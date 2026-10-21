@@ -73,8 +73,11 @@ recomputation remain subsequent work. Issue #218 (M2, parent #41) adds
 receipts and bounded affected-reference evidence. Global coverage, actual downstream producer
 adoption and controlled recomputation remain open. Issue #220 (M2, parent #35) now adopts
 [a real archived source-SKU query](../domains/procurement/archived-source-sku-query.md) with actual
-producer receipts and correction-impact proof; canonical queries, result materialization and controlled
-recomputation remain subsequent work. See the
+producer receipts and correction-impact proof. Issue #223 (M2, parent #41, policy #222/ADR-042)
+adds [explicit selected-review replay](../domains/procurement/reviewed-source-sku-query.md) with
+actual correction-value roots and row/query producers, alongside explicitly initialized storage
+capability. It preserves original source/query values and leaves governing/canonical queries,
+global freshness, result materialization and general/automatic recomputation open. See the
 [package contract](../domains/procurement/package-v1.md).
 
 ## Ratified horizontal domain-platform workstream

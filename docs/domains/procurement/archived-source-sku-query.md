@@ -74,3 +74,7 @@ archive capture/source deletion -> real producer -> registration -> human correc
 The old declared SDK fixtures still test generic bounded traversal separately. Broader #13/#35/#37/#41,
 canonical query/state producers under #48, UX under #56, producer-result persistence, general
 EvidenceTrace, production authentication/HA/deployment and controlled recomputation remain open.
+
+Issue #223 adds a separate [explicit reviewed view](reviewed-source-sku-query.md). It selects exact
+approved reviews as data inputs and executes new row/query producers. This original-source caller,
+its values and its immutable retry output remain unchanged after approval or reviewed replay.

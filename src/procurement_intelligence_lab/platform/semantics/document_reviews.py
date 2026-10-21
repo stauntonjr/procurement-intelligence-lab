@@ -207,6 +207,12 @@ class ReviewHistory:
                 )
 
     @property
+    def digest(self) -> str:
+        """Bind complete retained task/decision content, including timestamp encoding."""
+        raw = json.dumps(_identity(self), sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+        return sha256(raw.encode()).hexdigest()
+
+    @property
     def correction_id(self) -> str | None:
         if self.decision is None or self.decision.command.outcome is not ReviewOutcome.APPROVE:
             return None

@@ -159,6 +159,7 @@ def archive_codec():
         SourceAssertionContext,
     )
     from procurement_intelligence_lab.platform.semantics.dependencies import (
+        ApprovedCorrectionRef,
         ArchivedClaimRef,
         ClaimDependency,
         DependencyManifest,
@@ -196,6 +197,7 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            ApprovedCorrectionRef,
             ArchivedClaimRef,
             ClaimDependency,
             DependencyManifest,
@@ -312,7 +314,9 @@ def build_dependency_store(dsn: str):
         raise DependencyUnavailableError(
             "dependencies require the installed storage extra"
         ) from None
-    return PostgresDependencyStore(dsn, archive_codec(), build_assertion_archive(dsn))
+    return PostgresDependencyStore(
+        dsn, archive_codec(), build_assertion_archive(dsn), build_document_review_journal(dsn)
+    )
 
 
 def build_correction_impact_service(dsn: str, *, clock: Callable[[], datetime] | None = None):
@@ -335,5 +339,22 @@ def build_archived_bom_query_service(dsn: str, *, clock: Callable[[], datetime] 
         build_archive_reader(dsn),
         build_dependency_store(dsn),
         SourceSkuQuery,
+        clock or (lambda: datetime.now(UTC)),
+    )
+
+
+def build_reviewed_bom_query_service(dsn: str, *, clock: Callable[[], datetime] | None = None):
+    from procurement_intelligence_lab.application.reviewed_bom_queries import (
+        ReviewedBomQueryService,
+    )
+    from procurement_intelligence_lab.domains.procurement.reviewed_source_queries import (
+        ReviewedSourceSkuQuery,
+    )
+
+    return ReviewedBomQueryService(
+        build_archive_reader(dsn),
+        build_document_review_service(dsn),
+        build_dependency_store(dsn),
+        ReviewedSourceSkuQuery,
         clock or (lambda: datetime.now(UTC)),
     )

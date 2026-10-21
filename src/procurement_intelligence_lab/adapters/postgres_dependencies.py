@@ -9,9 +9,11 @@ from typing import Any, LiteralString, cast
 import psycopg
 from psycopg.rows import dict_row
 
+from procurement_intelligence_lab.adapters import postgres_dependency_corrections as corrections
 from procurement_intelligence_lab.adapters.semantic_codec import SemanticCodec
 from procurement_intelligence_lab.platform.semantics.archive import DocumentSnapshot
 from procurement_intelligence_lab.platform.semantics.dependencies import (
+    ArchivedClaimRef,
     DependencyManifest,
     DependencySnapshot,
     aware,
@@ -31,6 +33,7 @@ from procurement_intelligence_lab.platform.semantics.errors import (
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.scope import StateScope
 from procurement_intelligence_lab.ports.assertion_archive import AssertionArchive
+from procurement_intelligence_lab.ports.document_reviews import DocumentReviewJournal
 
 _SCHEMA = (
     "CREATE TABLE pil_dependency_meta (singleton INTEGER PRIMARY KEY CHECK(singleton=1), version INTEGER NOT NULL)",
@@ -53,8 +56,15 @@ def _checksum(raw: str) -> str:
 
 
 class PostgresDependencyStore:
-    def __init__(self, dsn: str, codec: SemanticCodec, archive: AssertionArchive) -> None:
+    def __init__(
+        self,
+        dsn: str,
+        codec: SemanticCodec,
+        archive: AssertionArchive,
+        journal: DocumentReviewJournal | None = None,
+    ) -> None:
         self._dsn, self.codec, self.archive = dsn, codec, archive
+        self.journal = journal
 
     @contextmanager
     def _connection(self) -> Generator[psycopg.Connection[dict[str, Any]]]:
@@ -93,10 +103,18 @@ class PostgresDependencyStore:
                 "SELECT s.scope,s.snapshot_id,s.command_hash,s.content_digest,s.payload,s.payload_sha256,r.source_snapshot_id,r.assertion_id FROM pil_dependency_snapshots s LEFT JOIN pil_dependency_roots r ON (s.scope=r.scope AND s.snapshot_id=r.dependency_snapshot_id) LIMIT 0"
             )
 
+    def initialize_corrections(self) -> None:
+        with self._connection() as conn:
+            conn.execute("SELECT pg_advisory_xact_lock(640725126)")
+            self._check(conn)
+            corrections.initialize(conn)
+
     def _sources(self, snapshot: DependencySnapshot, *, retained: bool) -> None:
         cache: dict[str, DocumentSnapshot] = {}
         try:
             for root in snapshot.manifest.roots:
+                if type(root) is not ArchivedClaimRef:
+                    continue
                 if root.snapshot_id not in cache:
                     cache[root.snapshot_id] = self.archive.load(
                         snapshot.manifest.scope, root.snapshot_id
@@ -150,12 +168,16 @@ class PostgresDependencyStore:
             (_scope(scope), snapshot_id),
         ).fetchall()
         if {(r["source_snapshot_id"], r["assertion_id"]) for r in rows} != {
-            (r.snapshot_id, r.assertion_id) for r in result.manifest.roots
+            (r.snapshot_id, r.assertion_id)
+            for r in result.manifest.roots
+            if type(r) is ArchivedClaimRef
         }:
             raise DependencyIntegrityError(
                 "dependency root membership differs from retained manifest"
             )
+        corrections.verify_memberships(conn, _scope(scope), result)
         self._sources(result, retained=True)
+        corrections.verify_sources(result, self.journal, retained=True)
         return result
 
     def append(
@@ -179,7 +201,10 @@ class PostgresDependencyStore:
                     )
                 return self._get(conn, manifest.scope, snapshot_id)
             snapshot = DependencySnapshot(manifest, recorder_id, recorded_at)
+            if corrections.roots(snapshot):
+                corrections.check_capability(conn)
             self._sources(snapshot, retained=False)
+            corrections.verify_sources(snapshot, self.journal, retained=False)
             payload = self.codec.dumps(snapshot)
             conn.execute(
                 "INSERT INTO pil_dependency_snapshots VALUES (%s,%s,%s,%s,%s,%s)",
@@ -193,9 +218,16 @@ class PostgresDependencyStore:
                 ),
             )
             for root in manifest.roots:
+                if type(root) is not ArchivedClaimRef:
+                    continue
                 conn.execute(
                     "INSERT INTO pil_dependency_roots VALUES (%s,%s,%s,%s)",
                     (_scope(manifest.scope), snapshot_id, root.snapshot_id, root.assertion_id),
+                )
+            for root in corrections.roots(snapshot):
+                conn.execute(
+                    "INSERT INTO pil_dependency_correction_roots VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (_scope(manifest.scope), snapshot_id, *corrections.membership(root)),
                 )
             return snapshot
 
