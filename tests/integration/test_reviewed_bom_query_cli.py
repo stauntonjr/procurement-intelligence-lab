@@ -154,3 +154,35 @@ def test_missing_identity_and_parser_errors_are_typed(archive_dsn: str, tmp_path
     )
     assert denied.returncode == 2 and not denied.stdout
     assert json.loads(denied.stderr)["code"] == "pil.authorization.request_scope_denied"
+
+
+def test_actual_cli_corrects_only_one_duplicate_source_row(archive_dsn: str, tmp_path: Path):
+    from tests.bom_stage_fixtures import HEADER, ROW
+
+    p, task, archive, _ = approved(archive_dsn, tmp_path, rows=HEADER + ROW + ROW.replace("7", "8"))
+    scope, context = files(tmp_path, asdict(p.scope))
+    selection = tmp_path / "duplicate-selection.json"
+    selection.write_text(json.dumps({"task_ids": [task.task_id]}))
+    result = run_cli(
+        archive_dsn,
+        "--scope",
+        str(scope),
+        "--snapshot-id",
+        p.snapshot_id,
+        "--request-id",
+        "duplicate-row-replay",
+        "--reviews",
+        str(selection),
+        "--as-of",
+        (AT + timedelta(seconds=4)).isoformat(),
+        "--context",
+        str(context),
+    )
+    assert result.returncode == 0, result.stderr
+    query = json.loads(result.stdout)["reviewed_query"]
+    assert query["value"] == ["GPU-A", "GPU-B"] and len(query["reviewed_rows"]) == 1
+    snapshot = archive.load(p.scope, p.snapshot_id)[1]
+    assert [a.value for a in snapshot.assertions if a.predicate.value == "has_sku"] == [
+        "GPU-A",
+        "GPU-A",
+    ]

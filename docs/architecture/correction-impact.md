@@ -72,3 +72,8 @@ next boundaries. Broader
 Issue #220 adopts the first [actual source-SKU query producer](../domains/procurement/archived-source-sku-query.md).
 That caller executes a fixed domain query and constructs its own real event/manifest. Generic
 registration still accepts declared receipts and global consumer completeness remains unknown.
+
+Issue #223 adds explicit [selected-review source-SKU replay](../domains/procurement/reviewed-source-sku-query.md).
+Its approved-correction roots are data inputs, admitted only with the explicit versioned storage
+capability and retained journal validation. Original archive-only records stay readable and generic
+impact stays conservative; this does not mark incorporated reviews globally fresh.

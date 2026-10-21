@@ -23,8 +23,10 @@ from tests.unit.test_source_sku_query import execution
 pytestmark = pytest.mark.contract
 
 
-def approved(dsn: str, tmp_path: Path, *, capability: bool = True):
-    journal, archive, p, content = setup(dsn, tmp_path)
+def approved(dsn: str, tmp_path: Path, *, capability: bool = True, rows: str | None = None):
+    journal, archive, p, content = (
+        setup(dsn, tmp_path) if rows is None else setup(dsn, tmp_path, rows)
+    )
     snapshot = archive.load(p.scope, p.snapshot_id)[1]
     sku = next(a for a in snapshot.assertions if a.predicate.value == "has_sku")
     task = journal.propose(

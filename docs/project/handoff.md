@@ -1,16 +1,17 @@
 # Project handoff
 
-## Approved controlled reviewed-SKU replay policy - 2026-10-21
+## Explicit selected-review source-SKU replay - 2026-10-21
 
-Issue #222 (M2, parent #41) records the approved next policy after merged #220/PR221. The
-[written specification](../superpowers/specs/2026-10-21-reviewed-sku-replay-design.md) and accepted
-ADR-042 describe an explicit selected-review source-local view with actual correction data roots,
-row-application events, original-source preservation and no latest/governing/global-freshness claim.
-The [implementation plan](../superpowers/plans/2026-10-21-reviewed-sku-replay.md) is in progress under the maintainer's approval;
-the replay is not implemented on main. The plan defines an explicitly initialized versioned
-correction-root capability alongside unchanged dependency schema1 rather than rewriting its immutable meta.
-The existing impact API already flags potentially stale registered references. Broader M2/M4/M5
-acceptance and automatic/general recomputation remain open.
+Issue #223 (M2, parent #41; approved policy #222/ADR-042) adds a separately invoked
+[reviewed view](../domains/procurement/reviewed-source-sku-query.md). Actual row applications consume
+source assertions and validated approved-correction data roots; the set producer consumes at most32
+original/reviewed row references. Explicit approved_correction_roots/v1 initialization adds capability
+tables beside unchanged archive1/review1/dependency1 records. Missing capability/evidence fails closed.
+Exact scope/as-of/selection/context retries retain the first receipt; null remains unresolved, selected
+conflicts fail and original source/query values remain unchanged. No latest winner, canonical/governing
+state, global freshness, automatic scheduler or result cache. Spec/plan retain the policy and delivery
+contract. Broader #13/#35/#37/#41/#46/#48/#56/#63 remain open. Pre-slice advisory39657670491 on
+main `a26d615` failed Gemini HTTP503; deterministic Project audit/review is separate evidence.
 
 ## Actual archived source-SKU producer adoption - 2026-10-21
 

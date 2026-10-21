@@ -370,6 +370,20 @@ def main() -> int:
             )
         if run("archived_bom_query", *query_args).stdout != queried.stdout:
             raise RuntimeError("approval silently changed an original-source query")
+        subprocess.run(
+            [
+                sys.executable,
+                str(Path(__file__).with_name("reviewed_query_package_probe.py")),
+                str(scope),
+                receipt["snapshot_id"],
+                sku_task["task_id"],
+                str(query_context),
+                json.loads(Path(sys.argv[2]).read_text())["code_revision"],
+            ],
+            env=env,
+            check=True,
+            text=True,
+        )
         scope.write_text(json.dumps({**receipt["scope"], "tenant_id": "foreign"}))
         denied = run(
             "assertion_archive",
@@ -389,6 +403,7 @@ def main() -> int:
                     "document_review_smoke": "passed",
                     "correction_impact_smoke": "passed",
                     "actual_source_query_smoke": "passed",
+                    "reviewed_source_query_smoke": "passed",
                     "assertions": len(payload["assertion_batch"]["claims"]),
                     "source_deleted": True,
                     "retry_equal": True,

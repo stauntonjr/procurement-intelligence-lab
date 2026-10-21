@@ -574,6 +574,47 @@ def main() -> int:
         ):
             raise RuntimeError("base wheel did not report typed missing query storage extra")
 
+        selected_reviews = temporary / "base-selected-reviews.json"
+        selected_reviews.write_text(json.dumps({"task_ids": ["not-read"]}))
+        missing_reviewed_storage = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "procurement_intelligence_lab.interfaces.reviewed_bom_query",
+                "--scope",
+                str(source_query_scope),
+                "--snapshot-id",
+                "not-read",
+                "--request-id",
+                "not-recorded",
+                "--reviews",
+                str(selected_reviews),
+                "--as-of",
+                "2026-10-20T00:00:00+00:00",
+                "--context",
+                str(source_query_context),
+            ],
+            cwd=temporary,
+            env={
+                **os.environ,
+                "PIL_ASSERTION_ARCHIVE_DSN": "configured-but-driver-absent",
+                "PIL_DOCUMENT_REVIEWER_ID": "package-smoke-human",
+            },
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if (
+            missing_reviewed_storage.returncode != 2
+            or missing_reviewed_storage.stdout
+            or "storage extra" not in json.loads(missing_reviewed_storage.stderr)["message"]
+            or json.loads(missing_reviewed_storage.stderr)["code"]
+            != "pil.infrastructure.archive_unavailable"
+        ):
+            raise RuntimeError(
+                "base wheel did not report typed missing reviewed-query storage extra"
+            )
+
         requirements = temporary / "workflow-requirements.txt"
         subprocess.run(
             [
