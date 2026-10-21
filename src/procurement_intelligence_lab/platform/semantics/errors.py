@@ -38,6 +38,11 @@ class ErrorCode(StrEnum):
     DOCUMENT_REVIEW_CONFLICT = "pil.policy.document_review_conflict"
     DOCUMENT_REVIEW_INTEGRITY_INVALID = "pil.infrastructure.document_review_integrity_invalid"
     DOCUMENT_REVIEW_UNAVAILABLE = "pil.infrastructure.document_review_unavailable"
+    DEPENDENCY_CONTRACT_INVALID = "pil.input.dependency_contract_invalid"
+    DEPENDENCY_NOT_FOUND = "pil.input.dependency_not_found"
+    DEPENDENCY_CONFLICT = "pil.policy.dependency_conflict"
+    DEPENDENCY_INTEGRITY_INVALID = "pil.infrastructure.dependency_integrity_invalid"
+    DEPENDENCY_UNAVAILABLE = "pil.infrastructure.dependency_unavailable"
     SOURCE_ASSERTION_INVALID = "pil.interpretation.source_assertion_invalid"
     DOMAIN_PACKAGE_INVALID = "pil.input.domain_package_invalid"
     BRIEF_NOT_FOUND = "pil.input.brief_not_found"
@@ -297,3 +302,38 @@ class ReviewUnavailableError(SemanticContractError):
 
     category = ErrorCategory.INFRASTRUCTURE
     code = ErrorCode.DOCUMENT_REVIEW_UNAVAILABLE
+
+
+class DependencyContractError(SemanticContractError):
+    """Typed dependency contract failure."""
+
+    category = ErrorCategory.INPUT
+    code = ErrorCode.DEPENDENCY_CONTRACT_INVALID
+
+
+class DependencyNotFoundError(SemanticContractError):
+    """Typed dependency notfound failure."""
+
+    category = ErrorCategory.INPUT
+    code = ErrorCode.DEPENDENCY_NOT_FOUND
+
+
+class DependencyConflictError(SemanticContractError):
+    """Typed dependency conflict failure."""
+
+    category = ErrorCategory.POLICY
+    code = ErrorCode.DEPENDENCY_CONFLICT
+
+
+class DependencyIntegrityError(SemanticContractError):
+    """Typed dependency integrity failure."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.DEPENDENCY_INTEGRITY_INVALID
+
+
+class DependencyUnavailableError(SemanticContractError):
+    """Typed dependency unavailable failure."""
+
+    category = ErrorCategory.INFRASTRUCTURE
+    code = ErrorCode.DEPENDENCY_UNAVAILABLE

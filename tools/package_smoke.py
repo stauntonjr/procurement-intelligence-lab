@@ -498,6 +498,28 @@ def main() -> int:
         ):
             raise RuntimeError("base wheel did not report typed missing review storage extra")
 
+        missing_dependency_storage = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "procurement_intelligence_lab.interfaces.correction_impact",
+                "init",
+            ],
+            cwd=temporary,
+            env={**os.environ, "PIL_ASSERTION_ARCHIVE_DSN": "configured-but-driver-absent"},
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if (
+            missing_dependency_storage.returncode != 2
+            or missing_dependency_storage.stdout
+            or "storage extra" not in json.loads(missing_dependency_storage.stderr)["message"]
+            or json.loads(missing_dependency_storage.stderr)["code"]
+            != "pil.infrastructure.dependency_unavailable"
+        ):
+            raise RuntimeError("base wheel did not report typed missing dependency storage extra")
+
         requirements = temporary / "workflow-requirements.txt"
         subprocess.run(
             [

@@ -6,6 +6,10 @@ Reusable semantic contracts and DomainPackage compilation live under `platform/`
 BOM, BoQ, Purchase Order, state, reconciliation, and anomaly behavior lives under
 `domains/procurement/`. See [platform semantics and vertical ownership](docs/architecture/platform-semantics.md).
 
+The core also supports [registered dependency impact](docs/architecture/correction-impact.md)
+under Issue #218: immutable producer declarations and a bounded read-only query tied to an exact
+approved correction. Coverage stays explicit; runtime producer adoption and recomputation remain open.
+
 ## At A Glance
 
 ![Procurement Intelligence Lab evidence-to-action architecture: source understanding, identity and governed state, and intelligence and execution, with gold data at every boundary and human review across the pipeline. Current procurement behavior is distinguished from contracts and future execution.](docs/assets/procurement-architecture.svg)

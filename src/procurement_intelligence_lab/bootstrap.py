@@ -158,6 +158,12 @@ def archive_codec():
         SourceAssertion,
         SourceAssertionContext,
     )
+    from procurement_intelligence_lab.platform.semantics.dependencies import (
+        ArchivedClaimRef,
+        ClaimDependency,
+        DependencyManifest,
+        DependencySnapshot,
+    )
     from procurement_intelligence_lab.platform.semantics.document_reviews import (
         DocumentReviewDecision,
         DocumentReviewTask,
@@ -190,6 +196,10 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            ArchivedClaimRef,
+            ClaimDependency,
+            DependencyManifest,
+            DependencySnapshot,
             ArchiveReceipt,
             DocumentSnapshot,
             ReviewProposal,
@@ -287,5 +297,29 @@ def build_document_review_service(dsn: str, *, clock: Callable[[], datetime] | N
         build_assertion_archive(dsn),
         build_document_review_journal(dsn),
         validate_bom_review,
+        clock or (lambda: datetime.now(UTC)),
+    )
+
+
+def build_dependency_store(dsn: str):
+    from procurement_intelligence_lab.platform.semantics.errors import DependencyUnavailableError
+
+    try:
+        from procurement_intelligence_lab.adapters.postgres_dependencies import (
+            PostgresDependencyStore,
+        )
+    except ImportError:
+        raise DependencyUnavailableError(
+            "dependencies require the installed storage extra"
+        ) from None
+    return PostgresDependencyStore(dsn, archive_codec(), build_assertion_archive(dsn))
+
+
+def build_correction_impact_service(dsn: str, *, clock: Callable[[], datetime] | None = None):
+    from procurement_intelligence_lab.application.correction_impact import CorrectionImpactService
+
+    return CorrectionImpactService(
+        build_dependency_store(dsn),
+        build_document_review_service(dsn),
         clock or (lambda: datetime.now(UTC)),
     )

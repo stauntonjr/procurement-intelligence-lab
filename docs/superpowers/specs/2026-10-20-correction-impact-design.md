@@ -9,7 +9,7 @@ producer receipts, not verified executions or downstream values. Broader #13/#35
 remain open. No numeric algorithm, new logical stage, automatic invalidation/recompute or UI.
 
 ## Inputs, output and policy
-DependencyManifest(scope, request_id, recorder_id, roots, claims) is immutable. Roots are exact
+DependencyManifest(scope, request_id, roots, claims) is immutable. Roots are exact
 (snapshot_id, assertion_id) pairs. Claims bind a reference_id to a supplied TransformationEvent
 which produces it. Canonically ordered root/claim tuples have unique reference IDs; data inputs
 must be roots or registered claims. USED_INPUT/DERIVED_FROM are data links; USED_SCHEMA/USED_MODEL
@@ -20,7 +20,7 @@ portable fixed-offset/aware, bounded Unicode text, complete implementation/conte
 environment entries are unsupported. Every producer pins nonempty input snapshot IDs from roots.
 All metadata must be typed before any storage write.
 
-DependencySnapshot binds the manifest, server recorded_at and policy declared-dependencies/v1.
+DependencySnapshot binds the manifest, server-owned recorder_id and recorded_at and policy declared-dependencies/v1.
 Its identity uses scope/request ID and its full-content SHA256 includes all producer metadata.
 Root/claim order is canonical; producer edge/output order retains original receipt identity.
 A separate port append/get retains exact retries, fails changed commands, and checks source
