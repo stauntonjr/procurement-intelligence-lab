@@ -1,12 +1,12 @@
 # ADR-042: Explicit reviewed source-SKU replay and correction inputs
 
-Status: proposed; not ratified or implemented.
+Status: accepted policy, approved by the maintainer on 2026-10-21; implementation planned.
 
 Issue #222 follows ADR-039/040/041. The original source query executes and retains dependencies;
 read-only impact already flags registered references as potentially stale. Controlled replay needs
 an explicit selection and correction-input policy rather than another stale flag.
 
-Propose a separately invoked source-local reviewed view over one exact archive and an explicit
+Use a separately invoked source-local reviewed view over one exact archive and an explicit
 bounded set of approved SKU review tasks at an inclusive as-of. Apply selected proposals by source
 assertion identity, reject conflicting selected tasks, and retain original source/query values.
 Missing/proposed-null values remain unresolved. No latest-winner, governing state or globally fresh
@@ -27,5 +27,5 @@ evidence, not execution attestation. No new result cache or automatic approval-t
 
 The alternative of latest-approved replay invents precedence absent from the review contract.
 A general scheduler/executor is premature before one honest correction-data contract. The
-[proposed specification](../superpowers/specs/2026-10-21-reviewed-sku-replay-design.md) defines the
-decision and required scenarios; implementation planning follows its review and approval.
+[approved specification](../superpowers/specs/2026-10-21-reviewed-sku-replay-design.md) defines the
+decision and required scenarios; the native implementation plan carries the maintainer's authorization to proceed.

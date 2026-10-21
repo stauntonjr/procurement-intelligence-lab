@@ -1,13 +1,14 @@
 # Project handoff
 
-## Proposed controlled reviewed-SKU replay policy - 2026-10-21
+## Approved controlled reviewed-SKU replay policy - 2026-10-21
 
-Issue #222 (M2, parent #41) proposes the next policy after merged #220/PR221. The
-[written specification](../superpowers/specs/2026-10-21-reviewed-sku-replay-design.md) and proposed
+Issue #222 (M2, parent #41) records the approved next policy after merged #220/PR221. The
+[written specification](../superpowers/specs/2026-10-21-reviewed-sku-replay-design.md) and accepted
 ADR-042 describe an explicit selected-review source-local view with actual correction data roots,
 row-application events, original-source preservation and no latest/governing/global-freshness claim.
-Policy review is pending; this is not implemented or accepted on main. Implementation planning
-must follow policy approval and make the dependency storage capability transition explicit.
+The [implementation plan](../superpowers/plans/2026-10-21-reviewed-sku-replay.md) is in progress under the maintainer's approval;
+the replay is not implemented on main. The plan defines an explicitly initialized versioned
+correction-root capability alongside unchanged dependency schema1 rather than rewriting its immutable meta.
 The existing impact API already flags potentially stale registered references. Broader M2/M4/M5
 acceptance and automatic/general recomputation remain open.
 

@@ -1,7 +1,7 @@
 # Controlled reviewed source-SKU replay
 
-Status: proposed; policy approval required before implementation planning.
-Issue: #222, M2, parent #41; proposed ADR-042.
+Status: policy approved by the maintainer on 2026-10-21; implementation authorized; native plan in progress.
+Issue: #222, M2, parent #41; ADR-042.
 Baseline: main `a26d61510622121570a5eefbf8b056451601264b` / PR #221.
 
 ## Purpose and current boundary
@@ -158,9 +158,10 @@ does not itself constitute a shipped defect; any discovered shipped defect follo
 
 ## Decision and handoff
 
-Approve or revise the explicit selected-review policy before implementation planning. ADR-042
-remains proposed until then. The following plan must make the root/store capability transition,
-public caller, independent review and acceptance concrete; this specification is not that plan.
+The maintainer approved the explicit selected-review policy on 2026-10-21. ADR-042 is accepted
+as a policy decision, not an implementation claim. The
+[implementation plan](../plans/2026-10-21-reviewed-sku-replay.md) makes the root/store capability
+transition, public caller, independent review and acceptance concrete; native execution follows the maintainer's approval to proceed.
 Broader #13/#35/#37/#41/#46/#48/#56/#63, canonical/governing policy, scheduling, persistent result
 materialization, production authentication/HA, operational tools, UI and deployment remain open.
 

@@ -67,6 +67,42 @@ class ArchivedClaimRef:
         text(self.snapshot_id)
         text(self.assertion_id)
 
+    @property
+    def reference_id(self) -> str:
+        return self.assertion_id
+
+
+@dataclass(frozen=True)
+class ApprovedCorrectionRef:
+    source: ArchivedClaimRef
+    task_id: str
+    task_digest: str
+    decision_id: str
+    correction_id: str
+
+    def __post_init__(self) -> None:
+        if type(self.source) is not ArchivedClaimRef:
+            raise DependencyContractError("correction root requires a typed archived source")
+        for value in (self.task_id, self.decision_id, self.correction_id):
+            text(value)
+        if (
+            type(self.task_digest) is not str
+            or len(self.task_digest) != 64
+            or any(c not in "0123456789abcdef" for c in self.task_digest)
+        ):
+            raise DependencyContractError("correction root requires exact SHA256 task digest")
+
+    @property
+    def reference_id(self) -> str:
+        return self.correction_id
+
+    @property
+    def snapshot_id(self) -> str:
+        return self.source.snapshot_id
+
+
+type DependencyRoot = ArchivedClaimRef | ApprovedCorrectionRef
+
 
 @dataclass(frozen=True)
 class ClaimDependency:
@@ -150,7 +186,7 @@ class DependencyImpact:
 class DependencyManifest:
     scope: StateScope
     request_id: str
-    roots: tuple[ArchivedClaimRef, ...]
+    roots: tuple[DependencyRoot, ...]
     claims: tuple[ClaimDependency, ...]
 
     def __post_init__(self) -> None:
@@ -167,13 +203,13 @@ class DependencyManifest:
         if (
             type(self.roots) is not tuple
             or not 1 <= len(self.roots) <= 128
-            or any(type(r) is not ArchivedClaimRef for r in self.roots)
+            or any(type(r) not in (ArchivedClaimRef, ApprovedCorrectionRef) for r in self.roots)
             or type(self.claims) is not tuple
             or len(self.claims) > 256
             or any(type(c) is not ClaimDependency for c in self.claims)
         ):
             raise DependencyContractError("dependency manifest requires bounded typed roots/claims")
-        roots = tuple(r.assertion_id for r in self.roots)
+        roots = tuple(r.reference_id for r in self.roots)
         refs = tuple(c.reference_id for c in self.claims)
         if (
             roots != tuple(sorted(set(roots)))
@@ -183,6 +219,9 @@ class DependencyManifest:
             raise DependencyContractError(
                 "root/output identities must be unique and canonically ordered"
             )
+        archived = {r for r in self.roots if type(r) is ArchivedClaimRef}
+        if any(type(r) is ApprovedCorrectionRef and r.source not in archived for r in self.roots):
+            raise DependencyContractError("correction root requires its original archive root")
         known = set(roots) | set(refs)
         snapshots = {r.snapshot_id for r in self.roots}
         if any(
@@ -213,7 +252,7 @@ class DependencyManifest:
     def impact(self, source_id: str, max_depth: int) -> DependencyImpact:
         if type(max_depth) is not int or not 1 <= max_depth <= 32:
             raise DependencyContractError("impact depth must be an integer from1 through32")
-        if source_id not in {r.assertion_id for r in self.roots}:
+        if source_id not in {r.reference_id for r in self.roots}:
             raise DependencyContractError("impact source must be a declared root")
         edges = {(i, c.reference_id) for c in self.claims for i in c.inputs}
         downstream: dict[str, list[str]] = {}

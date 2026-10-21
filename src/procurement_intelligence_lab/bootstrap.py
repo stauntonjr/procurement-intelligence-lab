@@ -159,6 +159,7 @@ def archive_codec():
         SourceAssertionContext,
     )
     from procurement_intelligence_lab.platform.semantics.dependencies import (
+        ApprovedCorrectionRef,
         ArchivedClaimRef,
         ClaimDependency,
         DependencyManifest,
@@ -196,6 +197,7 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            ApprovedCorrectionRef,
             ArchivedClaimRef,
             ClaimDependency,
             DependencyManifest,
