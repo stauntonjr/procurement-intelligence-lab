@@ -20,6 +20,8 @@ class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
     SOURCE_QUERY_INVALID = "pil.input.source_query_invalid"
+    PACKAGE_EXECUTION_INVALID = "pil.input.package_execution_invalid"
+    PACKAGE_EXECUTION_CONTRACT_INVALID = "pil.interpretation.package_execution_contract_invalid"
     PACKAGE_PLANNING_INVALID = "pil.input.package_planning_invalid"
     ARTIFACT_SOURCE_UNAVAILABLE = "pil.infrastructure.artifact_source_unavailable"
     ARTIFACT_CONTENT_INVALID = "pil.infrastructure.artifact_content_invalid"
@@ -344,3 +346,16 @@ class SourceQueryContractError(SemanticContractError):
     """An archived source query cannot establish its required input contract."""
 
     code = ErrorCode.SOURCE_QUERY_INVALID
+
+
+class PackageExecutionError(SemanticContractError):
+    """An execution request or runtime selection cannot be admitted."""
+
+    code = ErrorCode.PACKAGE_EXECUTION_INVALID
+
+
+class PackageExecutionContractError(SemanticContractError):
+    """Invoked executor returned incompatible or substituted evidence."""
+
+    category = ErrorCategory.INTERPRETATION
+    code = ErrorCode.PACKAGE_EXECUTION_CONTRACT_INVALID

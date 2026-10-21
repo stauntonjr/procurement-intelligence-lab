@@ -82,6 +82,11 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
+Feature #226/approved decision #225/ADR-043 connects the unchanged planner to actual synchronous
+INGEST-through-ASSERT execution, retaining later declarations as NOT_EXECUTED. The
+[bounded execution contract](../architecture/package-execution.md) proves actual registered
+adapters through a separate caller, without full-package, neutral-stage or governed-state acceptance.
+
 This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the contract.
 
 | Step | Primary milestone alignment | Deliverable | Acceptance boundary |
@@ -89,7 +94,7 @@ This workstream cuts across the existing M0-M9 delivery taxonomy; it does not cr
 | Platform contracts | M0 Engineering and architecture harness | Ratified stage definitions, fixed meta-schema, neutral modes, reusable semantic/strategy contracts, dependency rules, and conformance/versioning rules | Stage contract ratified by M0.33; compiler delivered by M0.34; ownership correction delivered by #149 / PR #150; complete typed topology and contract registry delivered by M0.36 / #151 / PR #152 |
 | Procurement extraction | M1-M4 semantic pipeline | Procurement package, BOM/BoQ/PO records, source profiles, policy/config refs, and evaluation refs | Initial BoQ/PO pressure-test records were delivered by Issue #149 / PR #150; complete package extraction still requires no observable semantic or provenance regression |
 | Compiler and manifest | M0 Engineering and architecture harness | Deterministic compiler, validator, manifest hash, compatibility tests under `platform/domain_packages` | Delivered by M0.34; equivalent authoring data yields byte-equivalent canonical JSON |
-| Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | #205 delivers immutable descriptors/config, compatibility checks, deterministic plan and installed CLI without domain-name branching; semantic execution traces and executors remain open |
+| Runtime loading and planning | M9 Integrated demo | Implementation descriptors, capability validation, runtime config, physical plan, semantic trace | #205 delivers deterministic planning; #226 adds exact runtime admission and actual five-stage prefix events/receipt without domain-name branching. Full-stage and neutral execution remain open |
 | SME/MCP authoring | M8 Guarded agent tools | Schema-aware declarative authoring and validation interfaces | Import remains side-effect-free; writes are reviewable and policy constrained |
 | Second-vertical proof | M9 Integrated demo | Another domain package plus shared conformance and swap benchmarks | Demonstrates reuse without changing platform topology for domain convenience |
 

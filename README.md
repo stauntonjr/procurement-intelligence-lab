@@ -16,6 +16,10 @@ approved SKU corrections to a new traced view while preserving the original sour
 
 ## At A Glance
 
+The [planned execution caller](docs/architecture/package-execution.md) now runs the five real
+BOM source-to-assertion stages selected by a validated full package plan. It retains twelve logical
+entries and marks later stages NOT_EXECUTED; prefix completion does not imply full package execution.
+
 ![Procurement Intelligence Lab evidence-to-action architecture: source understanding, identity and governed state, and intelligence and execution, with gold data at every boundary and human review across the pipeline. Current procurement behavior is distinguished from contracts and future execution.](docs/assets/procurement-architecture.svg)
 
 **Who and why:** procurement analysts need to understand what is required, what

@@ -1,5 +1,19 @@
 # Project handoff
 
+## Actual explicit planned execution prefix - 2026-10-21
+
+Feature #226 (M9, parent #12; approved decision #225/ADR-043) connects full planning to actual
+synchronous BOM INGEST-through-ASSERT execution through an explicit runtime registry. The
+[public contract](../architecture/package-execution.md) retains typed payloads, shared source/
+scope/lineage guards, resolved declaration/instance/content identities and real producer events.
+All twelve declarations remain visible; later entries are NOT_EXECUTED, including unvisited EMPTY
+declarations. Prefix completion is distinct from package completion. Existing planner and legacy
+BOM/archive/review/replay callers remain separate and compatible. No durable attempt journal,
+result cache, neutral executor, governing state, general recompute, authority or deployment is added.
+Broader #12/#7/#20/#35/#36/#75 remain open. Pre-slice advisory39671302454 on baseline07d089b failed
+Gemini503; deterministic Project audit/direct review are separate. The M9 description's historical
+demo-priority wording is recorded drift, not authority to resume demo work.
+
 ## Explicit selected-review source-SKU replay - 2026-10-21
 
 Issue #223 (M2, parent #41; approved policy #222/ADR-042) adds a separately invoked

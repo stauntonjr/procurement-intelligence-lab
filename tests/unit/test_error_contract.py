@@ -9,6 +9,8 @@ from procurement_intelligence_lab.platform.semantics.errors import (
     ErrorCategory,
     ErrorCode,
     IdempotencyContractError,
+    PackageExecutionContractError,
+    PackageExecutionError,
     PolicyContractError,
     ScopeAuthorizationError,
     ScopeContractError,
@@ -52,6 +54,8 @@ def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
         "pil.infrastructure.dependency_unavailable",
         "pil.input.source_query_invalid",
         "pil.input.package_planning_invalid",
+        "pil.input.package_execution_invalid",
+        "pil.interpretation.package_execution_contract_invalid",
         "pil.infrastructure.artifact_source_unavailable",
         "pil.infrastructure.artifact_content_invalid",
         "pil.input.source_reference_unsupported",
@@ -104,6 +108,18 @@ def test_platform_semantic_errors_require_specific_failure_evidence() -> None:
 @pytest.mark.parametrize(
     ("error_type", "base_type", "category", "code"),
     (
+        (
+            PackageExecutionError,
+            ValueError,
+            ErrorCategory.INPUT,
+            ErrorCode.PACKAGE_EXECUTION_INVALID,
+        ),
+        (
+            PackageExecutionContractError,
+            ValueError,
+            ErrorCategory.INTERPRETATION,
+            ErrorCode.PACKAGE_EXECUTION_CONTRACT_INVALID,
+        ),
         (
             SourceAssertionError,
             ValueError,

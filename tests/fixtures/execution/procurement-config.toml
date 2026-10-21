@@ -1,0 +1,63 @@
+# First five selections have real executors. Later fixture.* entries advertise planning compatibility only.
+schema_version = "1.0"
+source_profile = "bom-table"
+source_profile_version = "1.0.0"
+application_version = "test-revision"
+
+[[selections]]
+stage = "INGEST"
+implementation_id = "local-file-capture"
+config_schema_version = "1.0"
+settings = {}
+
+[[selections]]
+stage = "STRUCTURE"
+implementation_id = "xlsx-cell-structure"
+config_schema_version = "1.0"
+settings = {}
+
+[[selections]]
+stage = "MAP"
+implementation_id = "bom-table-map"
+config_schema_version = "1.0"
+settings = {}
+
+[[selections]]
+stage = "NORMALIZE"
+implementation_id = "bom-value-normalization"
+config_schema_version = "1.0"
+settings = {}
+
+[[selections]]
+stage = "ASSERT"
+implementation_id = "bom-source-assertions"
+config_schema_version = "1.0"
+settings = {}
+
+[[selections]]
+stage = "RESOLVE"
+implementation_id = "fixture.resolve"
+config_schema_version = "1.0"
+[selections.settings]
+endpoint_ref = "fixture://offline"
+
+[[selections]]
+stage = "RECONCILE"
+implementation_id = "fixture.reconcile"
+config_schema_version = "1.0"
+[selections.settings]
+endpoint_ref = "fixture://offline"
+
+[[selections]]
+stage = "DERIVE"
+implementation_id = "fixture.derive"
+config_schema_version = "1.0"
+[selections.settings]
+endpoint_ref = "fixture://offline"
+
+[[selections]]
+stage = "DETECT"
+implementation_id = "fixture.detect"
+config_schema_version = "1.0"
+[selections.settings]
+endpoint_ref = "fixture://offline"
