@@ -152,3 +152,32 @@ def test_missing_identity_and_unavailable_backend_are_typed(archive_dsn: str, tm
     assert unavailable.returncode == 2 and not unavailable.stdout
     assert json.loads(unavailable.stderr)["code"] == "pil.infrastructure.dependency_unavailable"
     assert "secret" not in unavailable.stderr
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        (
+            "inspect",
+            "--scope",
+            "unused",
+            "--snapshot-id",
+            "unused",
+            "--task-id",
+            "unused",
+            "--as-of",
+            "2026-10-20T00:00:00+00:00",
+            "--max-depth",
+            "private-invalid",
+        ),
+        ("register", "--scope", "private-invalid"),
+        ("init", "--unknown", "private-invalid"),
+    ],
+    ids=["noninteger-depth", "missing-required", "unknown-argument"],
+)
+def test_argument_parse_failures_use_sanitized_json(arguments: tuple[str, ...]):
+    result = run_cli("configured-not-read", *arguments)
+    assert result.returncode == 2 and not result.stdout
+    payload = json.loads(result.stderr)
+    assert payload["code"] == "pil.input.dependency_contract_invalid"
+    assert "private-invalid" not in result.stderr

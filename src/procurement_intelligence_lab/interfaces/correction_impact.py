@@ -6,6 +6,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import NoReturn
 
 from procurement_intelligence_lab.application.correction_impact import snapshot_payload
 from procurement_intelligence_lab.bootstrap import (
@@ -64,8 +65,13 @@ def human_context(scope: StateScope, *, write: bool) -> RequestContext:
     )
 
 
+class Parser(argparse.ArgumentParser):
+    def error(self, message: str) -> NoReturn:
+        raise DependencyContractError("invalid correction-impact command arguments")
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = Parser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("init")
     register = commands.add_parser("register")
@@ -77,8 +83,8 @@ def main() -> int:
     inspect.add_argument("--task-id", required=True)
     inspect.add_argument("--as-of", required=True)
     inspect.add_argument("--max-depth", type=int, default=8)
-    args = parser.parse_args()
     try:
+        args = parser.parse_args()
         dsn = configured_dsn()
         if args.command == "init":
             build_dependency_store(dsn).initialize()
