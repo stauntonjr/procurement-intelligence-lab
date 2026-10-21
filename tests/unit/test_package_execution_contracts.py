@@ -296,3 +296,54 @@ def test_output_rejects_mutable_nested_collections(tmp_path: Path, mode: str):
             replace(c, artifact=replace(c.artifact, provenance=p))
         else:
             replace(c, event=replace(c.event, input_edges=cast(Any, list(c.event.input_edges))))
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"input_snapshot_ids": ["source"]},
+        {"input_snapshot_ids": ("source", "source")},
+        {"environment": [("mode", "local")]},
+        {"environment": (("mode",),)},
+        {"environment": (["mode", "local"],)},
+        {"environment": (("mode", "local"), ("mode", "other"))},
+        {"environment": (("mode", ""),)},
+        {"parent_run_id": ""},
+        {"dependency_lock_digest": ""},
+    ],
+    ids=[
+        "mutable-snapshots",
+        "duplicate-snapshots",
+        "mutable-environment",
+        "short-pair",
+        "mutable-pair",
+        "duplicate-keys",
+        "empty-value",
+        "empty-parent",
+        "empty-lock",
+    ],
+)
+def test_request_rejects_ambiguous_or_mutable_context_metadata(
+    tmp_path: Path, changes: dict[str, Any]
+):
+    from procurement_intelligence_lab.platform.semantics.errors import PackageExecutionError
+
+    a = output(tmp_path)
+    context = replace(provenance().context, **changes)
+    with pytest.raises(PackageExecutionError):
+        ExecutionRequest(a.source, context, AT, StageId.ASSERT)
+
+
+def test_request_keeps_explicit_immutable_environment_and_parent_identity(tmp_path: Path):
+    a = output(tmp_path)
+    context = replace(
+        provenance().context,
+        environment=(("mode", "local"), ("region", "synthetic")),
+        parent_run_id="parent",
+        dependency_lock_digest="lock",
+    )
+    request = ExecutionRequest(a.source, context, AT, StageId.ASSERT)
+    assert request.context is context
+    assert digest(request) != digest(
+        replace(request, context=replace(context, parent_run_id="other-parent"))
+    )
