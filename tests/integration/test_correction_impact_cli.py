@@ -181,3 +181,30 @@ def test_argument_parse_failures_use_sanitized_json(arguments: tuple[str, ...]):
     payload = json.loads(result.stderr)
     assert payload["code"] == "pil.input.dependency_contract_invalid"
     assert "private-invalid" not in result.stderr
+
+
+def test_non_utf8_task_argument_is_sanitized_before_driver_encoding(
+    archive_dsn: str, tmp_path: Path
+):
+    from tests.bom_stage_fixtures import AT
+    from tests.contract.test_dependency_store import store
+
+    _, _, p, _ = setup(archive_dsn, tmp_path)
+    saved = store(archive_dsn).append(declaration(p), "recorder", AT)
+    scope = tmp_path / "scope.json"
+    scope.write_text(json.dumps(asdict(p.scope)))
+    result = run_cli(
+        archive_dsn,
+        "inspect",
+        "--scope",
+        str(scope),
+        "--snapshot-id",
+        saved.snapshot_id,
+        "--task-id",
+        "private\udcffidentity",
+        "--as-of",
+        AT.isoformat(),
+    )
+    assert result.returncode == 2 and not result.stdout
+    assert json.loads(result.stderr)["code"] == "pil.input.dependency_contract_invalid"
+    assert "private" not in result.stderr

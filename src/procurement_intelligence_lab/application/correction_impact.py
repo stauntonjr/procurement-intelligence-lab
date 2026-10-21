@@ -15,6 +15,7 @@ from procurement_intelligence_lab.platform.semantics.dependencies import (
     DependencyManifest,
     DependencySnapshot,
     aware,
+    text,
 )
 from procurement_intelligence_lab.platform.semantics.document_reviews import ReviewOutcome
 from procurement_intelligence_lab.platform.semantics.errors import (
@@ -73,6 +74,8 @@ class CorrectionImpactService:
     ) -> dict[str, Any]:
         authorize(context, scope, Permission.READ_EVIDENCE)
         aware(as_of)
+        text(snapshot_id)
+        text(task_id)
         snapshot = self.dependencies.get(scope, snapshot_id)
         if snapshot.recorded_at > as_of:
             raise DependencyNotFoundError("dependency snapshot was not recorded at requested as-of")

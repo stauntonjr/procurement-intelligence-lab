@@ -321,3 +321,19 @@ def test_impact_reuses_domain_review_admission_instead_of_only_journal_storage(
         service.inspect(
             p.scope, saved.snapshot_id, task.task_id, as_of=AT, max_depth=2, context=ctx
         )
+
+
+def test_nonportable_impact_task_identity_fails_typed_before_query(
+    archive_dsn: str, tmp_path: Path
+):
+    from procurement_intelligence_lab.platform.semantics.errors import DependencyContractError
+
+    _, _, p, _ = setup(archive_dsn, tmp_path)
+    store(archive_dsn)
+    service = bootstrap.build_correction_impact_service(archive_dsn, clock=lambda: AT)
+    ctx = context(p.scope, [Permission.REVIEW, Permission.READ_EVIDENCE])
+    saved = service.register(declaration(p), context=ctx)
+    with pytest.raises(DependencyContractError):
+        service.inspect(
+            p.scope, saved.snapshot_id, "private\ud800identity", as_of=AT, max_depth=1, context=ctx
+        )
