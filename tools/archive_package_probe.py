@@ -280,6 +280,96 @@ def main() -> int:
             != payload
         ):
             raise RuntimeError("impact inspection changed original source")
+        # Execute the adopted domain producer rather than supplying its graph from this probe.
+        query_context = Path("source-query-context.json").absolute()
+        query_context.write_text(
+            json.dumps(
+                {
+                    "run_id": "installed-source-sku-query",
+                    "code_revision": json.loads(Path(sys.argv[2]).read_text())["code_revision"],
+                    "started_at": datetime.now(UTC).isoformat(),
+                }
+            )
+        )
+        query_args = (
+            "--scope",
+            str(scope),
+            "--snapshot-id",
+            receipt["snapshot_id"],
+            "--request-id",
+            "installed-source-skus",
+            "--context",
+            str(query_context),
+        )
+        queried = run("archived_bom_query", *query_args)
+        if run("archived_bom_query", *query_args).stdout != queried.stdout:
+            raise RuntimeError("installed actual producer replay changed query/receipt")
+        produced = json.loads(queried.stdout)
+        if (
+            produced["query"]["value"] != ["CPU-A", "GPU-A"]
+            or produced["query"]["status"] != "observed"
+            or produced["producer_execution"] != "synchronous_local_query"
+            or produced["query_result_materialized"]
+            or produced["query"]["canonical_identity_established"]
+        ):
+            raise RuntimeError("installed actual source-SKU producer result/boundary differs")
+        sku_input = next(x for x in produced["query"]["inputs"] if x["value"] == "GPU-A")
+        sku_proposal = Path("source-sku-review.json").absolute()
+        sku_proposal.write_text(
+            json.dumps(
+                {
+                    "request_id": "installed-sku-correction",
+                    "snapshot_id": receipt["snapshot_id"],
+                    "assertion_id": sku_input["assertion_id"],
+                    "workflow": "document_value",
+                    "proposed_value": {"type": "str", "value": "GPU-CHANGED"},
+                    "reason": "Check source SKU transcription",
+                }
+            )
+        )
+        sku_task = json.loads(
+            run(
+                "document_review", "propose", "--scope", str(scope), "--input", str(sku_proposal)
+            ).stdout
+        )["task"]
+        sku_decision = Path("source-sku-decision.json").absolute()
+        sku_decision.write_text(
+            json.dumps(
+                {
+                    "request_id": "installed-sku-approval",
+                    "task_id": sku_task["task_id"],
+                    "task_digest": sku_task["digest"],
+                    "outcome": "approve",
+                    "reason": "Checked retained source",
+                }
+            )
+        )
+        run("document_review", "decide", "--scope", str(scope), "--input", str(sku_decision))
+        actual_impact = json.loads(
+            run(
+                "correction_impact",
+                "inspect",
+                "--scope",
+                str(scope),
+                "--snapshot-id",
+                produced["dependency_snapshot"]["dependency_snapshot_id"],
+                "--task-id",
+                sku_task["task_id"],
+                "--as-of",
+                datetime.now(UTC).isoformat(),
+            ).stdout
+        )
+        if (
+            [x["reference_id"] for x in actual_impact["affected"]]
+            != [produced["query"]["reference_id"]]
+            or actual_impact["recomputation_executed"]
+            or actual_impact["governing_state_updated"]
+        ):
+            raise RuntimeError(
+                "actual source producer correction impact lost exact reference/boundary"
+            )
+        if run("archived_bom_query", *query_args).stdout != queried.stdout:
+            raise RuntimeError("approval silently changed an original-source query")
         scope.write_text(json.dumps({**receipt["scope"], "tenant_id": "foreign"}))
         denied = run(
             "assertion_archive",
@@ -298,6 +388,7 @@ def main() -> int:
                     "storage_package_smoke": "passed",
                     "document_review_smoke": "passed",
                     "correction_impact_smoke": "passed",
+                    "actual_source_query_smoke": "passed",
                     "assertions": len(payload["assertion_batch"]["claims"]),
                     "source_deleted": True,
                     "retry_equal": True,

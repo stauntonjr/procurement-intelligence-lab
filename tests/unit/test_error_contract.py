@@ -50,6 +50,7 @@ def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
         "pil.policy.dependency_conflict",
         "pil.infrastructure.dependency_integrity_invalid",
         "pil.infrastructure.dependency_unavailable",
+        "pil.input.source_query_invalid",
         "pil.input.package_planning_invalid",
         "pil.infrastructure.artifact_source_unavailable",
         "pil.infrastructure.artifact_content_invalid",

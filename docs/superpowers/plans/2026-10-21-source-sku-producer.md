@@ -24,3 +24,7 @@ Use one source-local existing set calculation rather than introducing canonical 
 a new result store. Producer values are replayed from the immutable archive, with durable dependency
 receipts only. User's proceed continues the established inline delivery loop; implementation and
 review evidence are retained in PR/Issue closeout rather than transient conversation.
+
+The direct producer is bounded to32 SKU inputs by the existing per-event data-input contract,
+which is stricter than the128-root manifest bound. Larger inputs fail before registration; this
+slice does not invent batching or silently truncate dependencies.

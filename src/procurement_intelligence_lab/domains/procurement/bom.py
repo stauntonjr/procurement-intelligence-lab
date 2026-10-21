@@ -1,5 +1,6 @@
 """Evidence-preserving BOM domain objects and deterministic queries."""
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 from decimal import Decimal
 
@@ -29,10 +30,15 @@ class Bom:
 QueryResult = EvidenceBackedResult
 
 
+def distinct_sku_values(values: Iterable[str]) -> tuple[str, ...]:
+    """Stable source-string set operation, without canonical identity inference."""
+    return tuple(sorted(set(values)))
+
+
 def distinct_skus(bom: Bom) -> EvidenceBackedResult[tuple[str, ...]]:
     lines = tuple(line for line in bom.lines if line.status is not EpistemicStatus.UNRESOLVED)
     return QueryResult(
-        tuple(sorted({line.sku for line in lines})),
+        distinct_sku_values(line.sku for line in lines),
         tuple(line.evidence for line in lines),
         EpistemicStatus.OBSERVED,
     )
