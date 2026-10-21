@@ -258,3 +258,41 @@ def test_retained_plan_shape_fails_typed_even_with_matching_hash(tmp_path: Path,
         replace(
             r, plan=replace(r.plan, canonical_json=content, plan_hash=sha256(content).hexdigest())
         )
+
+
+@pytest.mark.parametrize(
+    "mode", ["elements", "fields", "cells", "mention-claims", "context-snapshots", "event-edges"]
+)
+def test_output_rejects_mutable_nested_collections(tmp_path: Path, mode: str):
+    a = output(tmp_path)
+    m = a.previous.previous
+    s = m.previous
+    c = s.previous
+    with pytest.raises(SemanticContractError):
+        if mode == "elements":
+            replace(s, document=replace(s.document, elements=cast(Any, list(s.document.elements))))
+        elif mode == "fields":
+            replace(m, document=replace(m.document, fields=cast(Any, list(m.document.fields))))
+        elif mode == "cells":
+            element = s.document.elements[0]
+            location = element.evidence.location
+            evidence = replace(
+                element.evidence,
+                location=replace(cast(Any, location), cells=list(element.evidence.cells)),
+            )
+            element = replace(element, evidence=evidence)
+            replace(s, document=replace(s.document, elements=(element, *s.document.elements[1:])))
+        elif mode == "mention-claims":
+            mention = replace(a.mentions[0], assertions=cast(Any, list(a.mentions[0].assertions)))
+            replace(a, mentions=(mention, *a.mentions[1:]))
+        elif mode == "context-snapshots":
+            p = c.artifact.provenance
+            p = replace(
+                p,
+                context=replace(
+                    p.context, input_snapshot_ids=cast(Any, list(p.context.input_snapshot_ids))
+                ),
+            )
+            replace(c, artifact=replace(c.artifact, provenance=p))
+        else:
+            replace(c, event=replace(c.event, input_edges=cast(Any, list(c.event.input_edges))))

@@ -1,6 +1,10 @@
 """Stage-specific immutable values and actual transformation evidence."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, is_dataclass
+from datetime import date, datetime
+from decimal import Decimal
+from enum import Enum
+from typing import cast
 
 from procurement_intelligence_lab.platform.domain_packages.package import StageId
 from procurement_intelligence_lab.platform.execution.identity import canonical, same, text
@@ -19,7 +23,9 @@ from procurement_intelligence_lab.platform.semantics.document_lineage import (
 )
 from procurement_intelligence_lab.platform.semantics.documents import (
     MappedDocument,
+    MappedField,
     StructuredDocument,
+    StructuredElement,
 )
 from procurement_intelligence_lab.platform.semantics.errors import (
     DocumentStageError,
@@ -42,6 +48,30 @@ def require(condition: bool) -> None:
         )
 
 
+def immutable(value: object) -> None:
+    """Reject mutable nested transport values before deriving any output identity."""
+    if value is None or type(value) in (str, int, bool, bytes, date, datetime, Decimal):
+        return
+    if isinstance(value, Enum):
+        return
+    if type(value) is tuple:
+        for item in cast(tuple[object, ...], value):
+            immutable(item)
+        return
+    require(is_dataclass(value) and not isinstance(value, type))
+    require(getattr(getattr(value, "__dataclass_params__", None), "frozen", False))
+    assert is_dataclass(value) and not isinstance(value, type)
+    for field in fields(value):
+        immutable(getattr(value, field.name))
+
+
+def immutable_output(value: object) -> None:
+    try:
+        immutable(value)
+    except RecursionError:
+        require(False)
+
+
 def event(
     kind: str,
     provenance: DecisionProvenance,
@@ -62,6 +92,7 @@ class CapturedOutput:
     event: TransformationEvent
 
     def __post_init__(self) -> None:
+        immutable_output(self)
         require(type(self.artifact) is Artifact and type(self.event) is TransformationEvent)
         require(
             same(
@@ -97,11 +128,13 @@ class StructuredOutput:
     event: TransformationEvent
 
     def __post_init__(self) -> None:
+        immutable_output(self)
         require(
             type(self.previous) is CapturedOutput
             and type(self.document) is StructuredDocument
             and type(self.event) is TransformationEvent
         )
+        require(all(type(x) is StructuredElement for x in self.document.elements))
         require(same(self.document.artifact, self.previous.artifact))
         require(
             same(
@@ -141,11 +174,13 @@ class MappedOutput:
     event: TransformationEvent
 
     def __post_init__(self) -> None:
+        immutable_output(self)
         require(
             type(self.previous) is StructuredOutput
             and type(self.document) is MappedDocument
             and type(self.event) is TransformationEvent
         )
+        require(all(type(x) is MappedField for x in self.document.fields))
         require(same(self.document.source_document, self.previous.document))
         require(
             same(
@@ -187,6 +222,7 @@ class NormalizedOutput:
     policy_reference: str
 
     def __post_init__(self) -> None:
+        immutable_output(self)
         require(
             type(self.previous) is MappedOutput
             and type(self.observations) is tuple
@@ -254,6 +290,7 @@ class AssertedOutput:
     provenance: DecisionProvenance
 
     def __post_init__(self) -> None:
+        immutable_output(self)
         require(
             type(self.previous) is NormalizedOutput
             and type(self.assertions) is tuple
@@ -288,6 +325,13 @@ class AssertedOutput:
                 same(claim.context.observation, observation)
                 and same(claim.context.origin, self.origin)
                 and same(claim.context.provenance, self.provenance)
+            )
+        claims = {claim.assertion_id: claim for claim in self.assertions}
+        for mention in self.mentions:
+            require(
+                same(mention.scope, self.source.scope)
+                and same(mention.observed_at, self.source.observed_at)
+                and all(same(claims.get(claim.assertion_id), claim) for claim in mention.assertions)
             )
         canonical(self)
 

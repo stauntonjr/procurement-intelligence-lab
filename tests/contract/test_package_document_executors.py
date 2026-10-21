@@ -1,7 +1,7 @@
 from dataclasses import dataclass, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import NoReturn
+from typing import Any, NoReturn, cast
 
 import pytest
 
@@ -19,7 +19,9 @@ from procurement_intelligence_lab.platform.execution.contracts import (
 )
 from procurement_intelligence_lab.platform.execution.executors import StageExecutor
 from procurement_intelligence_lab.platform.execution.outputs import (
+    AssertedOutput,
     CapturedOutput,
+    MappedOutput,
     StageInput,
     StageOutput,
     StructuredOutput,
@@ -291,3 +293,71 @@ def test_service_rejects_untyped_request_before_factory_io():
 
     with pytest.raises(SemanticContractError):
         service().execute(cast(Any, None))
+
+
+@pytest.mark.parametrize("mode", ["mention-offset", "mention-claim-offset", "mutable-map"])
+def test_real_runtime_rejects_inexact_or_mutable_executor_output(tmp_path: Path, mode: str):
+    s = service()
+    factory = s.executor_factory
+    calls: list[StageId] = []
+
+    @dataclass
+    class CorruptingExecutor:
+        actual: StageExecutor
+
+        def invoke(self, inputs: StageInput, *, invocation: StageInvocation) -> StageOutput:
+            calls.append(invocation.stage)
+            result = self.actual.invoke(inputs, invocation=invocation)
+            if mode.startswith("mention-") and type(result) is AssertedOutput:
+                mention = result.mentions[0]
+                if mode == "mention-offset":
+                    mention = replace(
+                        mention,
+                        observed_at=mention.observed_at.astimezone(timezone(timedelta(hours=2))),
+                    )
+                else:
+                    claim = mention.assertions[0]
+                    assert claim.context is not None
+                    p = claim.context.provenance
+                    p = replace(
+                        p,
+                        context=replace(
+                            p.context,
+                            started_at=p.context.started_at.astimezone(
+                                timezone(timedelta(hours=2))
+                            ),
+                        ),
+                    )
+                    claim = replace(claim, context=replace(claim.context, provenance=p))
+                    assert claim.assertion_id == mention.assertions[0].assertion_id
+                    mention = replace(mention, assertions=(claim, *mention.assertions[1:]))
+                return replace(result, mentions=(mention, *result.mentions[1:]))
+            if mode == "mutable-map" and type(result) is MappedOutput:
+                return replace(
+                    result,
+                    document=replace(
+                        result.document, fields=cast(Any, list(result.document.fields))
+                    ),
+                )
+            return result
+
+    def corrupt(at: datetime):
+        registry = factory(at)
+        return replace(
+            registry,
+            registrations=tuple(
+                replace(x, executor=CorruptingExecutor(x.executor)) for x in registry.registrations
+            ),
+        )
+
+    s = replace(s, executor_factory=corrupt)
+    with pytest.raises(PackageExecutionContractError):
+        s.execute(
+            ExecutionRequest(
+                source(workbook(tmp_path / "source.xlsx", HEADER + ROW)),
+                provenance().context,
+                AT,
+                StageId.ASSERT,
+            )
+        )
+    assert calls == list(StageId)[: (5 if mode.startswith("mention-") else 3)]
