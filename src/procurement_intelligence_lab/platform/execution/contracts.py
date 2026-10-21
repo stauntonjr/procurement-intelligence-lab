@@ -1,11 +1,8 @@
 """Validated request, invocation and positively evidenced partial-run receipts."""
 
-import json
 from dataclasses import dataclass, replace
 from datetime import datetime
 from enum import StrEnum
-from hashlib import sha256
-from typing import Any, cast
 
 from procurement_intelligence_lab.platform.domain_packages.package import StageId, StageMode
 from procurement_intelligence_lab.platform.execution.identity import (
@@ -21,6 +18,7 @@ from procurement_intelligence_lab.platform.execution.outputs import (
     StageOutput,
     require,
 )
+from procurement_intelligence_lab.platform.execution.plan_validation import plan_payload
 from procurement_intelligence_lab.platform.planning.contracts import PhysicalPlan
 from procurement_intelligence_lab.platform.semantics.artifacts import SourceReference
 from procurement_intelligence_lab.platform.semantics.errors import PackageExecutionError
@@ -191,27 +189,6 @@ class StageExecutionEntry:
             )
             text(self.implementation_id)
             text(self.event_id)
-
-
-def plan_payload(plan: PhysicalPlan) -> dict[str, Any]:
-    if type(plan) is not PhysicalPlan or type(plan.canonical_json) is not bytes:
-        raise PackageExecutionError("receipt requires a typed canonical plan")
-    if sha256(plan.canonical_json).hexdigest() != plan.plan_hash:
-        raise PackageExecutionError("plan digest does not match retained bytes")
-    try:
-        raw: object = json.loads(plan.canonical_json)
-        if not isinstance(raw, dict):
-            raise TypeError
-        data = cast(dict[str, Any], raw)
-        if canonical(data) != plan.canonical_json:
-            raise ValueError
-        if len(data["stages"]) != 12 or tuple(x["stage"] for x in data["stages"]) != tuple(
-            s.value for s in StageId
-        ):
-            raise ValueError
-    except (ValueError, KeyError, TypeError, RecursionError):
-        raise PackageExecutionError("invalid retained plan payload") from None
-    return data
 
 
 def input_snapshots(output: StageOutput) -> tuple[str, ...]:

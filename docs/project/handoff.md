@@ -1,15 +1,18 @@
 # Project handoff
 
-## Approved planned execution prefix design - 2026-10-21
+## Actual explicit planned execution prefix - 2026-10-21
 
-Decision #225 (M9, parent #12) approves connecting the planner to actual synchronous BOM
-INGEST-through-ASSERT execution. [Written proposal](../superpowers/specs/2026-10-21-planned-prefix-execution-design.md)
-and accepted ADR-043 retain all twelve declarations, exact runtime admission and actual stage
-lineage. Later stages would remain NOT_EXECUTED, including unvisited EMPTY declarations; this
-would not establish full package execution. Feature #226 owns implementation acceptance. The
-written implementation plan awaits review; no runtime implementation or functionality on main.
-Current main remains PR224/`07d089b`; post-merge advisory39671302454 failed Gemini503, with
-deterministic Project review/audit recorded separately.
+Feature #226 (M9, parent #12; approved decision #225/ADR-043) connects full planning to actual
+synchronous BOM INGEST-through-ASSERT execution through an explicit runtime registry. The
+[public contract](../architecture/package-execution.md) retains typed payloads, shared source/
+scope/lineage guards, resolved declaration/instance/content identities and real producer events.
+All twelve declarations remain visible; later entries are NOT_EXECUTED, including unvisited EMPTY
+declarations. Prefix completion is distinct from package completion. Existing planner and legacy
+BOM/archive/review/replay callers remain separate and compatible. No durable attempt journal,
+result cache, neutral executor, governing state, general recompute, authority or deployment is added.
+Broader #12/#7/#20/#35/#36/#75 remain open. Pre-slice advisory39671302454 on baseline07d089b failed
+Gemini503; deterministic Project audit/direct review are separate. The M9 description's historical
+demo-priority wording is recorded drift, not authority to resume demo work.
 
 ## Explicit selected-review source-SKU replay - 2026-10-21
 

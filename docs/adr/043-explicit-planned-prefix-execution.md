@@ -1,7 +1,7 @@
 # ADR-043: Execute an explicitly bounded prefix of a validated package plan
 
-Status: accepted by maintainer as a policy decision on 2026-10-21; implementation remains
-undelivered. Decision [#225](https://github.com/stauntonjr/procurement-intelligence-lab/issues/225), feature #226.
+Status: accepted. Decision [#225](https://github.com/stauntonjr/procurement-intelligence-lab/issues/225),
+bounded implementation #226; [public contract](../architecture/package-execution.md).
 
 ## Context
 
@@ -40,5 +40,6 @@ existing planner contract but must be labeled honestly in examples. Neutral exec
 boundaries need later acceptance rather than fabricated no-op results.
 
 The [written specification](../superpowers/specs/2026-10-21-planned-prefix-execution-design.md)
-defines required scenarios and the delivery boundary. Written implementation-plan review remains
-pending; approval of the policy does not establish an implemented runner or completed milestone.
+defines required scenarios and the delivery boundary. The written spec and plan were approved;
+implementation evidence remains revision-bound to normal review/qualification and delivery.
+The bounded implementation does not complete the broader runtime or integrated-demo milestone.

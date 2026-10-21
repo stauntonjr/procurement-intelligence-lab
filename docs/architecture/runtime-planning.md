@@ -4,7 +4,9 @@ Issue [#205](https://github.com/stauntonjr/procurement-intelligence-lab/issues/2
 ADR-022's deployment admission and physical planning boundary. It does not implement an executor,
 check service availability, load policy parameters, materialize state, or authorize an action.
 The shipped procurement manifest uses planning-only descriptors in acceptance fixtures; existing
-BOM services still compose directly in `bootstrap.py`.
+BOM services still compose directly in `bootstrap.py`. Feature #226 adds a separate
+[explicit planned prefix](package-execution.md) using five actual registered implementations.
+The full planner remains unchanged and its output alone remains no execution proof.
 
 ## Contract and ownership
 

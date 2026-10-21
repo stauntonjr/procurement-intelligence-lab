@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 import venv
 from pathlib import Path
 from zipfile import ZipFile
@@ -77,6 +78,32 @@ def main() -> int:
                 raise RuntimeError("wheel includes evaluator-only material")
 
         probe = ROOT / "tools/order_package_probe.py"
+        execution_fixture = ROOT / "tests/fixtures/execution"
+        execution_context = temporary / "prefix-context.json"
+        context = json.loads((ROOT / "tests/fixtures/bom-stages/context.json").read_text())
+        context["code_revision"] = tomllib.loads(
+            (execution_fixture / "procurement-config.toml").read_text()
+        )["application_version"]
+        execution_context.write_text(json.dumps(context))
+        prefix_outputs: list[str] = []
+
+        def prefix_probe(python: Path):
+            return subprocess.run(
+                [
+                    str(python),
+                    str(ROOT / "tools/package_execution_probe.py"),
+                    str(stage_source),
+                    str(execution_context),
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                    str(execution_fixture / "procurement-registry.json"),
+                    str(execution_fixture / "procurement-config.toml"),
+                ],
+                cwd=temporary,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
         probe_outputs: list[str] = []
         pythons: list[Path] = []
         for index in (1, 2):
@@ -401,6 +428,9 @@ def main() -> int:
                 raise RuntimeError(
                     "installed shared stages did not report typed unsupported-source failure"
                 )
+            prefix_run = prefix_probe(python)
+            prefix_outputs.append(prefix_run.stdout.strip())
+            print(prefix_run.stdout.strip())
             probe_outputs.append(
                 probe_run.stdout.strip()
                 + corpus_probe.stdout.strip()
@@ -409,6 +439,7 @@ def main() -> int:
                 + stage_run.stdout.strip()
                 + normalized.stdout.strip()
                 + asserted.stdout.strip()
+                + prefix_run.stdout.strip()
             )
         if probe_outputs[0] != probe_outputs[1]:
             raise RuntimeError("semantic identities changed across clean installation paths")
@@ -679,6 +710,11 @@ def main() -> int:
             capture_output=True,
             text=True,
         )
+
+        storage_prefix = prefix_probe(python)
+        if storage_prefix.stdout.strip() != prefix_outputs[0]:
+            raise RuntimeError("optional workflow/storage install changed prefix computation")
+        print(storage_prefix.stdout.strip())
 
         subprocess.run(
             [

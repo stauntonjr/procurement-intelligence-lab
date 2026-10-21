@@ -223,3 +223,38 @@ def test_request_rejects_untyped_scope_without_raw_python_failure(tmp_path: Path
         ExecutionRequest(
             replace(a.source, scope=cast(Any, "scope")), provenance().context, AT, StageId.ASSERT
         )
+
+
+@pytest.mark.parametrize(
+    "mode",
+    [
+        "missing-revision",
+        "missing-mode",
+        "missing-implementation",
+        "wrong-schema",
+        "capability-int",
+    ],
+)
+def test_retained_plan_shape_fails_typed_even_with_matching_hash(tmp_path: Path, mode: str):
+    import json
+    from hashlib import sha256
+
+    from procurement_intelligence_lab.platform.execution.identity import canonical
+
+    r = receipt(tmp_path)
+    data = json.loads(r.plan.canonical_json)
+    if mode == "missing-revision":
+        del data["application_version"]
+    elif mode == "missing-mode":
+        del data["stages"][0]["mode"]
+    elif mode == "missing-implementation":
+        data["stages"][0]["implementation"] = None
+    elif mode == "capability-int":
+        data["stages"][1]["capability_checks"][0]["satisfied"] = 1
+    else:
+        data["plan_schema_version"] = "999"
+    content = canonical(data)
+    with pytest.raises(SemanticContractError):
+        replace(
+            r, plan=replace(r.plan, canonical_json=content, plan_hash=sha256(content).hexdigest())
+        )
