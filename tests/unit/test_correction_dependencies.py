@@ -6,8 +6,8 @@ import pytest
 
 from procurement_intelligence_lab import bootstrap
 from procurement_intelligence_lab.platform.semantics.dependencies import (
-    ArchivedClaimRef,
     ApprovedCorrectionRef,
+    ArchivedClaimRef,
     DependencyManifest,
     DependencySnapshot,
 )

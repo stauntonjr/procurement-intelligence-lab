@@ -314,7 +314,9 @@ def build_dependency_store(dsn: str):
         raise DependencyUnavailableError(
             "dependencies require the installed storage extra"
         ) from None
-    return PostgresDependencyStore(dsn, archive_codec(), build_assertion_archive(dsn))
+    return PostgresDependencyStore(
+        dsn, archive_codec(), build_assertion_archive(dsn), build_document_review_journal(dsn)
+    )
 
 
 def build_correction_impact_service(dsn: str, *, clock: Callable[[], datetime] | None = None):

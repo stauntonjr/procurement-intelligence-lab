@@ -39,7 +39,7 @@
 - `interfaces/reviewed_bom_query.py`, `interfaces/correction_impact.py`, `bootstrap.py`: strict public caller, explicit capability init and composition.
 - Tests in `tests/unit/test_correction_dependencies.py`, `tests/contract/test_reviewed_dependency_store.py`, `tests/unit/test_reviewed_source_queries.py`, `tests/contract/test_reviewed_bom_query.py`, `tests/integration/test_reviewed_bom_query_cli.py`; package probe in `tools/reviewed_query_package_probe.py`.
 
-### Task1: Typed correction roots and old-wire compatibility
+### Task 1: Typed correction roots and old-wire compatibility
 
 **Consumes:** existing `ArchivedClaimRef`, `DependencyManifest`, `DependencySnapshot`, `SemanticCodec`.
 **Produces:** `ApprovedCorrectionRef(source: ArchivedClaimRef, task_id: str, task_digest: str, decision_id: str, correction_id: str)`; property `reference_id -> str` returns correction_id and `snapshot_id -> str` returns source.snapshot_id. `ArchivedClaimRef.reference_id` returns its existing assertion_id without adding serialized fields. `DependencyRoot = ArchivedClaimRef | ApprovedCorrectionRef`.
@@ -51,19 +51,19 @@
 - [x] Implement exact typed/bounded IDs and SHA256 digest validation. Require a correction's source ArchivedClaimRef among manifest roots. Canonically order and deduplicate all roots by reference_id; validate known-input membership and impact using that ID. Preserve old serialized fields, limits, policy and graph rules. Register only the new neutral record in `bootstrap.archive_codec()`.
 - [x] Run new unit tests plus `tests/unit/test_dependencies.py`; all pass and old fixture is byte-identical. Commit the coherent root/codec/test change.
 
-### Task2: Explicit correction-root storage capability
+### Task 2: Explicit correction-root storage capability
 
 **Consumes:** Task1 roots; existing `DocumentReviewJournal.get(scope,task_id,as_of) -> ReviewHistory` and `AssertionArchive`.
 **Produces:** optional injected journal on `PostgresDependencyStore`; concrete `initialize_corrections() -> None`. Existing `DependencyStore.append/get` signatures remain unchanged.
 
-- [ ] Write RED real-Postgres tests `test_capability_is_explicit_and_old_rows_unchanged`, `test_missing_capability_and_reader_fail_closed`, `test_correction_roots_retry_restart_and_atomic_rollback`, `test_root_requires_exact_approved_journal_binding`, `test_retained_root_corruption_is_integrity_failure`.
-- [ ] Run new contract file with a task-owned disposable Postgres DSN; observe missing API/capability failures.
-- [ ] Keep archive1/review1/dependency1 meta and existing tables untouched. Explicitly create `pil_dependency_correction_meta(singleton,version)` with version1 and `pil_dependency_correction_roots(scope,dependency_snapshot_id,correction_id,source_snapshot_id,assertion_id,task_id,task_digest,decision_id)`. Add immutable guards and foreign keys to dependency snapshot, archive membership, task and decision. Acquire the existing dependency advisory init lock; require initialized archive1/review1/dependency1; make exact capability initialization idempotent. Ordinary reads/appends never initialize it.
-- [ ] Split source and correction membership rows. Resolve every correction root through the injected journal, checking exact task digest, decision/correction IDs, APPROVE, scope/source/previous assertion and approval no later than registration. Preserve immutable source checks. Missing capability/reader is DependencyUnavailableError; unsupported/corrupt capability or retained evidence is DependencyIntegrityError; new missing evidence is DependencyNotFoundError; invalid new selection is DependencyContractError. Translate review infrastructure errors into dependency envelopes without raw backend text.
-- [ ] Read back and compare exact archived and correction membership sets, payload/hash/command identities and journal evidence. Check unexpected correction membership for old records when capability exists. Use the existing append transaction/lock so a mid-write failure leaves neither snapshot nor partial memberships.
-- [ ] Run new contracts plus `tests/contract/test_dependency_store.py` and `tests/contract/test_document_review_journal.py`. Assert concurrent exact commands converge, changed actor/selection conflicts, SQL immutable guards hold and archive-only reads/appends still work without review tables. Commit.
+- [x] Write RED real-Postgres tests `test_capability_is_explicit_and_old_rows_unchanged`, `test_missing_capability_and_reader_fail_closed`, `test_correction_roots_retry_restart_and_atomic_rollback`, `test_root_requires_exact_approved_journal_binding`, `test_retained_root_corruption_is_integrity_failure`.
+- [x] Run new contract file with a task-owned disposable Postgres DSN; observe missing API/capability failures.
+- [x] Keep archive1/review1/dependency1 meta and existing tables untouched. Explicitly create `pil_dependency_correction_meta(singleton,version)` with version1 and `pil_dependency_correction_roots(scope,dependency_snapshot_id,correction_id,source_snapshot_id,assertion_id,task_id,task_digest,decision_id)`. Add immutable guards and foreign keys to dependency snapshot, archive membership, task and decision. Acquire the existing dependency advisory init lock; require initialized archive1/review1/dependency1; make exact capability initialization idempotent. Ordinary reads/appends never initialize it.
+- [x] Split source and correction membership rows. Resolve every correction root through the injected journal, checking exact task digest, decision/correction IDs, APPROVE, scope/source/previous assertion and approval no later than registration. Preserve immutable source checks. Missing capability/reader is DependencyUnavailableError; unsupported/corrupt capability or retained evidence is DependencyIntegrityError; new missing evidence is DependencyNotFoundError; invalid new selection is DependencyContractError. Translate review infrastructure errors into dependency envelopes without raw backend text.
+- [x] Read back and compare exact archived and correction membership sets, payload/hash/command identities and journal evidence. Check unexpected correction membership for old records when capability exists. Use the existing append transaction/lock so a mid-write failure leaves neither snapshot nor partial memberships.
+- [x] Run new contracts plus `tests/contract/test_dependency_store.py` and `tests/contract/test_document_review_journal.py`. Assert concurrent exact commands converge, changed actor/selection conflicts, SQL immutable guards hold and archive-only reads/appends still work without review tables. Commit.
 
-### Task3: Actual reviewed-row and set-query producers
+### Task 3: Actual reviewed-row and set-query producers
 
 **Consumes:** exact DocumentSnapshot and canonical tuple[ReviewHistory,...], approved as-of and ProvenanceContext; Task1 root graph.
 **Produces:** frozen `ReviewedSkuRow(source:SourceAssertion, review:ReviewHistory, as_of:datetime, provenance:DecisionProvenance)` and `ReviewedSourceSkuQuery(snapshot:DocumentSnapshot, reviews:tuple[ReviewHistory,...], as_of:datetime, provenance:DecisionProvenance)`. Query properties: `rows`, `value`, `known_skus`, `status`, `missing_reference_ids`, `reference_id`, `event`, `execution_digest`; row properties: `reference_id`, `value`, `event`. `reviewed_dependency_manifest(query,request_id) -> DependencyManifest` includes every source SKU root and selected correction root. Factories `reviewed_query_provenance(context)` and `reviewed_row_provenance(context)` return fixed typed DecisionProvenance.
@@ -74,7 +74,7 @@
 - [ ] Execute one row producer per selected original assertion; preserve source order in the final input view, canonicalize graph/event IDs. Derive reviewed value from exact proposed values without altering source objects. Complete reviewed results use EpistemicStatus.INFERRED with the explicit selected-review basis; incomplete results use UNRESOLVED/null. Never claim the new value was observed in the source or is canonical. Bind source, exact review selection/content, as-of encoding, full execution metadata and result to identities. Include original/assertion evidence and review decision evidence separately.
 - [ ] Run new unit tests plus original `tests/unit/test_source_sku_query.py` and `tests/unit/test_bom.py`. Verify64 roots/33 references at32 corrected rows, each data event within its bound. Commit.
 
-### Task4: Authorized application, explicit caller and capability init
+### Task 4: Authorized application, explicit caller and capability init
 
 **Consumes:** ArchiveReader, DocumentReviewService, DependencyStore, actual reviewed producer and server clock.
 **Produces:** `ReviewedBomQueryService.execute(scope,snapshot_id,request_id,task_ids:tuple[str,...],as_of,execution,*,context) -> ReviewedQueryExecution`; `ReviewedQueryExecution.as_dict()` returns reviewed_query/selected_reviews/dependency_snapshot and explicit selection/completeness/no-governing flags. `bootstrap.build_reviewed_bom_query_service(dsn,*,clock=None)` composes these ports.
@@ -86,7 +86,7 @@
 - [ ] Implement `interfaces.reviewed_bom_query` with the approved argv. Reviews JSON has exactly task_ids, strict UTF-8/duplicate-key/depth/32768-byte checks; context has exactly run_id/code_revision/started_at and the same bounds. Canonically sort valid unique selections and bind selection+as-of to config/command identity. Use trusted human env/config conventions; sanitized JSON exit2/no stdout on every typed or argument failure. Reuse existing SourceQueryContractError and dependency/review/scope envelopes; do not add a vocabulary code without a demonstrated need.
 - [ ] Run new contract/subprocess tests plus original query/impact CLI tests. Verify output says explicit_selected_set/unselected_reviews:not_evaluated, recomputation_executed:true for this caller, governing_state_updated:false, original_source_updated:false, no global-freshness claim. Generic impact stays conservative. Commit.
 
-### Task5: Installed artifact, evidence and delivery
+### Task 5: Installed artifact, evidence and delivery
 
 **Consumes:** all prior task interfaces; approved spec, Issue #222, semantic evidence schema and existing delivery harness.
 **Produces:** qualified source/installed caller, latest-revision semantic evidence, synchronized documentation and precise Issue closeout.
