@@ -1,6 +1,7 @@
 # ADR-043: Execute an explicitly bounded prefix of a validated package plan
 
-Status: proposed; decision [#225](https://github.com/stauntonjr/procurement-intelligence-lab/issues/225).
+Status: accepted by maintainer as a policy decision on 2026-10-21; implementation remains
+undelivered. Decision [#225](https://github.com/stauntonjr/procurement-intelligence-lab/issues/225), feature #226.
 
 ## Context
 
@@ -9,7 +10,7 @@ The existing planner admits a complete twelve-stage package while real BOM proce
 direct composition through ASSERT. Executing all advertised stages now would require additional
 resolver/reconciler policy adoption; converting them to EMPTY would misstate the declaration.
 
-## Proposed decision
+## Decision
 
 Introduce a synchronous runtime with an explicit INGEST-through-ASSERT execution boundary over
 the unchanged complete plan. Composition injects exact stage executor registrations and resolved
@@ -39,5 +40,5 @@ existing planner contract but must be labeled honestly in examples. Neutral exec
 boundaries need later acceptance rather than fabricated no-op results.
 
 The [written specification](../superpowers/specs/2026-10-21-planned-prefix-execution-design.md)
-defines required scenarios and the approval boundary. This proposal does not implement a runner
-or ratify the decision.
+defines required scenarios and the delivery boundary. Written implementation-plan review remains
+pending; approval of the policy does not establish an implemented runner or completed milestone.

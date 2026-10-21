@@ -1,6 +1,6 @@
 # Explicit planned execution through source assertions
 
-Status: proposed for maintainer review, not approved or implemented.
+Status: approved by maintainer on 2026-10-21; implementation not yet delivered.
 Decision Issue: [#225](https://github.com/stauntonjr/procurement-intelligence-lab/issues/225).
 Primary M9; parent #12; part of #7/#20/#35/#75. Baseline: main `07d089b` / PR #224.
 
@@ -17,7 +17,7 @@ placeholder. An advertised descriptor is neither a registered executor nor execu
 
 The intended outcome is grounded in the user's core-architecture direction. Selecting the
 five-stage boundary, leaving later stages unvisited, and initially rejecting neutral execution
-are proposals in this document, not decisions inferred from an existing implementation.
+are now ratified design decisions, rather than behavior inferred from an existing implementation.
 
 ## Alternatives and recommendation
 
@@ -157,9 +157,10 @@ semantic defect actually found during implementation; do not invent a historical
 
 ## Delivery and review boundary
 
-This proposed spec and [ADR-043](../../adr/043-explicit-planned-prefix-execution.md) need maintainer
-ratification before an implementation plan. Issue #225 tracks that decision, not delivered code.
-After approval, scope a feature Issue and plan covering typed contracts, runtime admission,
+The maintainer approved this spec and [ADR-043](../../adr/043-explicit-planned-prefix-execution.md)
+and instructed proceed. Issue #225 tracks the approved decision artifacts, not delivered code;
+feature #226 owns implementation acceptance. The [written plan](../plans/2026-10-21-planned-prefix-execution.md)
+awaits its execution-handoff review. It covers typed contracts, runtime admission,
 actual five-stage adapters, public/installed acceptance, independent semantic/architecture review,
 exact-head full coverage/ratchet/challenges and normal protected PR delivery. One inline implementer
 and a fresh final reviewer are recommended; shared contracts make parallel implementers wasteful.

@@ -82,10 +82,10 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
-Proposed decision #225/ADR-043 would connect the existing planner to actual synchronous
+Approved design decision #225/ADR-043 would connect the existing planner to actual synchronous
 INGEST-through-ASSERT execution, retaining later declarations as NOT_EXECUTED. The
-[written proposal](../superpowers/specs/2026-10-21-planned-prefix-execution-design.md) is unapproved
-design work; no runtime execution milestone or neutral-stage acceptance is complete from it.
+[written spec](../superpowers/specs/2026-10-21-planned-prefix-execution-design.md) is approved;
+feature #226 and its written plan remain undelivered. No runtime execution milestone or neutral-stage acceptance is complete from the design approval.
 
 This workstream cuts across the existing M0-M9 delivery taxonomy; it does not create a competing milestone scheme. [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md) and [the architecture specification](../architecture/domain-package-and-stage-planning.md) define the contract.
 
