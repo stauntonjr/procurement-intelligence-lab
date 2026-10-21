@@ -29,6 +29,7 @@ from procurement_intelligence_lab.platform.semantics.provenance import (
     DecisionProvenance,
     ProvenanceContext,
 )
+from procurement_intelligence_lab.platform.semantics.scope import StateScope
 
 PREFIX = tuple(StageId)[:5]
 
@@ -79,6 +80,8 @@ class ExecutionRequest:
             or self.stop_after is not StageId.ASSERT
         ):
             raise PackageExecutionError("execution supports one source through ASSERT only")
+        if type(self.source.scope) is not StateScope:
+            raise PackageExecutionError("execution source requires an exact typed scope")
         validate_context(self.context)
         aware(self.captured_at)
         aware(self.source.observed_at)
@@ -244,6 +247,36 @@ class PrefixExecutionReceipt:
         require(self.completed_at >= self.context.started_at)
         payload = plan_payload(self.plan)
         require(payload["application_version"] == self.context.code_revision)
+        expected_refs = {
+            ref
+            for b in payload["stages"][:5]
+            for ref in (
+                *b["policy_refs"],
+                *((b["domain_config_ref"],) if b["domain_config_ref"] else ()),
+            )
+        }
+        require({r.declaration_ref for r in self.references} == expected_refs)
+        by_ref = {r.declaration_ref: r for r in self.references}
+        for i in (2, 3, 4):
+            binding = payload["stages"][i]
+            if i == 2:
+                require(
+                    by_ref[binding["domain_config_ref"]].reference_id
+                    == self.output.previous.previous.document.mapping_schema
+                )
+            else:
+                require(len(binding["policy_refs"]) == 1)
+                require(
+                    by_ref[binding["policy_refs"][0]].reference_id
+                    == self.output.chain[i].event.provenance.policy_version
+                )
+        require(same(self.output.chain[0].source, self.source))
+        captured = self.output.previous.previous.previous.previous
+        require(
+            same(captured.artifact.captured_at, self.context.started_at)
+            and same(self.output.origin.recorded_at, self.context.started_at)
+        )
+
         for i, (entry, binding) in enumerate(zip(self.entries, payload["stages"], strict=True)):
             require(entry.mode.value == binding["mode"])
             if i >= 5:

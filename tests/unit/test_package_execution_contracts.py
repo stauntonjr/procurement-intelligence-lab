@@ -9,6 +9,7 @@ from procurement_intelligence_lab.bootstrap import (
     build_bom_assertion_service,
     compile_procurement_manifest,
 )
+from procurement_intelligence_lab.domains.procurement.source_schema import BOM_TABLE_SCHEMA
 from procurement_intelligence_lab.platform.domain_packages.package import StageId, StageMode
 from procurement_intelligence_lab.platform.execution.contracts import (
     ExecutionRequest,
@@ -17,6 +18,7 @@ from procurement_intelligence_lab.platform.execution.contracts import (
     ResolvedReference,
     StageExecutionEntry,
 )
+from procurement_intelligence_lab.platform.execution.identity import digest
 from procurement_intelligence_lab.platform.execution.outputs import (
     AssertedOutput,
     CapturedOutput,
@@ -83,8 +85,28 @@ def receipt(tmp_path: Path):
         )
         for i, stage in enumerate(StageId)
     )
+    refs = tuple(
+        sorted(
+            (
+                ResolvedReference(
+                    BOM_TABLE_SCHEMA.reference_id,
+                    BOM_TABLE_SCHEMA.reference_id,
+                    digest(BOM_TABLE_SCHEMA),
+                ),
+                ResolvedReference(
+                    "procurement.normalize/bom-decimal@1", POLICY.reference_id, digest(POLICY)
+                ),
+                ResolvedReference(
+                    "procurement.assert/bom-claims@1",
+                    "bom-assertions@1",
+                    digest(("bom-assertions@1", "1")),
+                ),
+            ),
+            key=lambda r: r.declaration_ref,
+        )
+    )
     return PrefixExecutionReceipt(
-        plan, provenance().context, a.source, (), a, entries, AT + timedelta(seconds=1)
+        plan, provenance().context, a.source, refs, a, entries, AT + timedelta(seconds=1)
     )
 
 
@@ -193,3 +215,11 @@ def test_payload_containers_and_origin_cannot_be_substituted(tmp_path: Path):
         replace(a, origin=replace(a.origin, recorded_at=AT + timedelta(seconds=1)))
     with pytest.raises(SemanticContractError):
         replace(a.previous, observations=tuple(reversed(a.previous.observations)))
+
+
+def test_request_rejects_untyped_scope_without_raw_python_failure(tmp_path: Path):
+    a = output(tmp_path)
+    with pytest.raises(SemanticContractError):
+        ExecutionRequest(
+            replace(a.source, scope=cast(Any, "scope")), provenance().context, AT, StageId.ASSERT
+        )

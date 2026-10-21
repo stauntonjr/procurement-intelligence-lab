@@ -2,6 +2,17 @@
 
 from collections.abc import Callable
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from procurement_intelligence_lab.application.planned_bom_execution import (
+        PlannedBomExecutionService,
+    )
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ImplementationConfig,
+        ImplementationDescriptor,
+        ImplementationRegistry,
+    )
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
     LocalFileIngest,
@@ -358,3 +369,113 @@ def build_reviewed_bom_query_service(dsn: str, *, clock: Callable[[], datetime] 
         ReviewedSourceSkuQuery,
         clock or (lambda: datetime.now(UTC)),
     )
+
+
+def bom_execution_descriptors() -> tuple["ImplementationDescriptor", ...]:
+    """Actual supported adapter advertisements; later plan stages are deliberately absent."""
+    from procurement_intelligence_lab.platform.domain_packages.package import STAGE_CATALOG, StageId
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ContractRef,
+        ImplementationDescriptor,
+    )
+
+    ids = (
+        "local-file-capture",
+        "xlsx-cell-structure",
+        "bom-table-map",
+        "bom-value-normalization",
+        "bom-source-assertions",
+    )
+    return tuple(
+        ImplementationDescriptor(
+            name,
+            "1.0",
+            "1",
+            d.stage,
+            ContractRef(d.input_contract, "1.0"),
+            ContractRef(d.output_contract, "1.0"),
+            ("tables",) if d.stage is StageId.STRUCTURE else (),
+            "1.0",
+        )
+        for name, d in zip(ids, STAGE_CATALOG[:5], strict=True)
+    )
+
+
+def build_planned_bom_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    policy: BomNormalizationPolicy,
+    clock: Callable[[], datetime],
+    content_store: ArtifactContentStore | None = None,
+) -> "PlannedBomExecutionService":
+    """Assemble actual strategy executors explicitly; execution itself performs no lookup by domain."""
+    from procurement_intelligence_lab.adapters.package_document_executors import (
+        AssertExecutor,
+        CaptureExecutor,
+        MapExecutor,
+        NormalizeExecutor,
+        StructureExecutor,
+    )
+    from procurement_intelligence_lab.application.planned_bom_execution import (
+        PlannedBomExecutionService,
+    )
+    from procurement_intelligence_lab.platform.execution.contracts import ResolvedReference
+    from procurement_intelligence_lab.platform.execution.executors import (
+        ExecutorRegistration,
+        ExecutorRegistry,
+    )
+    from procurement_intelligence_lab.platform.execution.identity import digest
+
+    store = content_store if content_store is not None else MemoryArtifactContent()
+    descriptors = bom_execution_descriptors()
+    schema = ResolvedReference(
+        BOM_TABLE_SCHEMA.reference_id, BOM_TABLE_SCHEMA.reference_id, digest(BOM_TABLE_SCHEMA)
+    )
+    normal = ResolvedReference(
+        "procurement.normalize/bom-decimal@1", policy.reference_id, digest(policy)
+    )
+    assertion = ResolvedReference(
+        "procurement.assert/bom-claims@1", "bom-assertions@1", digest(("bom-assertions@1", "1"))
+    )
+
+    def factory(captured_at: datetime) -> ExecutorRegistry:
+        return ExecutorRegistry(
+            (
+                ExecutorRegistration(
+                    descriptors[0], (), (), CaptureExecutor(LocalFileIngest(store, captured_at))
+                ),
+                ExecutorRegistration(
+                    descriptors[1],
+                    (),
+                    (),
+                    StructureExecutor(XlsxStructure(store, BOM_TABLE_SCHEMA.sheet_name)),
+                    schema_version="xlsx-cells@1",
+                ),
+                ExecutorRegistration(
+                    descriptors[2],
+                    (),
+                    (schema,),
+                    MapExecutor(BomTableMap(), BOM_TABLE_SCHEMA.reference_id),
+                    schema_version=BOM_TABLE_SCHEMA.schema_id,
+                ),
+                ExecutorRegistration(
+                    descriptors[3],
+                    (),
+                    (normal,),
+                    NormalizeExecutor(BomNormalize(policy), policy.reference_id),
+                    policy_version=policy.reference_id,
+                    schema_version="bom-decimal@1",
+                ),
+                ExecutorRegistration(
+                    descriptors[4],
+                    (),
+                    (assertion,),
+                    AssertExecutor(BomAssert, validate_bom_assertions),
+                    policy_version="bom-assertions@1",
+                ),
+            )
+        )
+
+    return PlannedBomExecutionService(manifest, registry, config, factory, clock)

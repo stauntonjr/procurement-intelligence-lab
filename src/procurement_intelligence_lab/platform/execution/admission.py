@@ -83,7 +83,7 @@ class PreparedPrefix:
                 reject(reg.policy_version is None)
             if stage is StageId.MAP:
                 reject(binding["domain_config_ref"] is not None and reg.schema_version is not None)
-            elif stage is not StageId.STRUCTURE:
+            elif stage in (StageId.INGEST, StageId.ASSERT):
                 reject(reg.schema_version is None)
             for r in reg.references:
                 reject(r.declaration_ref not in all_refs or same(r, all_refs[r.declaration_ref]))
