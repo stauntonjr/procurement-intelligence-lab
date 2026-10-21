@@ -31,7 +31,7 @@ class Parser(argparse.ArgumentParser):
         raise SourceQueryContractError("invalid archived source query command arguments")
 
 
-def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+def unique_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     result: dict[str, Any] = {}
     for key, value in pairs:
         if key in result:
@@ -46,7 +46,7 @@ def load_execution(path: Path, snapshot_id: str) -> ProvenanceContext:
             raw = stream.read(32769)
         if len(raw) > 32768:
             raise ValueError("context size")
-        candidate: object = json.loads(raw.decode("utf-8"), object_pairs_hook=_pairs)
+        candidate: object = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_pairs)
         if not isinstance(candidate, dict):
             raise TypeError("context object")
         data = cast(dict[str, Any], candidate)

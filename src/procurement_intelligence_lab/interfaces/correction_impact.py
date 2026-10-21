@@ -74,6 +74,7 @@ def main() -> int:
     parser = Parser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("init")
+    commands.add_parser("init-reviewed")
     register = commands.add_parser("register")
     register.add_argument("--scope", type=Path, required=True)
     register.add_argument("--input", type=Path, required=True)
@@ -89,6 +90,9 @@ def main() -> int:
         if args.command == "init":
             build_dependency_store(dsn).initialize()
             payload = {"dependency_schema_version": 1, "initialized": True}
+        elif args.command == "init-reviewed":
+            build_dependency_store(dsn).initialize_corrections()
+            payload = {"capability": "approved_correction_roots/v1", "initialized": True}
         else:
             scope = load_scope(args.scope)
             context = human_context(scope, write=args.command == "register")

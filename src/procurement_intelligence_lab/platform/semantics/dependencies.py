@@ -48,7 +48,7 @@ def _strings(values: tuple[str, ...], *, allow_empty: bool = False) -> None:
         raise DependencyContractError("dependency identities must be unique")
 
 
-def _content(value: "TransformationEvent | DependencySnapshot") -> str:
+def _content(value: "TransformationEvent | DependencySnapshot | DependencyManifest") -> str:
     return json.dumps(
         asdict(value),
         ensure_ascii=True,
@@ -248,6 +248,10 @@ class DependencyManifest:
                 raise DependencyContractError("dependency graph must be acyclic")
             reached.update(c.reference_id for c in ready)
             pending = [c for c in pending if c not in ready]
+
+    @property
+    def digest(self) -> str:
+        return sha256(_content(self).encode()).hexdigest()
 
     def impact(self, source_id: str, max_depth: int) -> DependencyImpact:
         if type(max_depth) is not int or not 1 <= max_depth <= 32:
