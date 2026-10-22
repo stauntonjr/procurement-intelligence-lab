@@ -1,7 +1,8 @@
 # ADR-044: Atomically retain completed planned prefixes with their source evidence
 
-Status: proposed, decision [#228](https://github.com/stauntonjr/procurement-intelligence-lab/issues/228),
-primary M2, parent #37. Implementation is not authorized by this proposal.
+Status: accepted by the owner after review of written design50a204c; decision
+[#228](https://github.com/stauntonjr/procurement-intelligence-lab/issues/228), primary M2,
+parent #37. Implementation #229 awaits review of its written plan before product changes.
 
 ## Context
 
@@ -11,7 +12,7 @@ DocumentSnapshot/source bytes, but that snapshot does not retain the physical pl
 receipt. Calling the current archive alone would lose the distinction between planning metadata,
 actual prefix execution and later NOT_EXECUTED declarations.
 
-## Proposed decision
+## Decision
 
 Add a separately invoked completed-prefix archive capability, `planned_prefix_archive/v1`, beside
 unchanged source/review/dependency storage. A neutral frozen record binds the actual
@@ -51,9 +52,9 @@ remain confined to the new capability. No pickle or class imports driven by stor
 - Store a receipt sidecar in a second transaction: rejected because it can expose an archive
   without its execution binding or vice versa.
 
-The recommendation reuses existing source history while adding a port, codec support, capability
+The decision reuses existing source history while adding a port, codec support, capability
 and public read boundary. First-retention semantics must be visible: a later successful execution
 can have a different current receipt digest while referencing the same retained receipt.
 Broader #13/#35/#36/#37/#12/#75 acceptance, later stages and production operations remain open.
-The [written proposal](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md) defines
+The [approved written design](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md) defines
 the exact scope and evidence required before a separately reviewed implementation plan.

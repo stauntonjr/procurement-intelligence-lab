@@ -1,7 +1,8 @@
 # Completed planned-prefix archive design
 
-Status: proposed for maintainer review; not an accepted policy or implementation plan.
-Decision [#228](https://github.com/stauntonjr/procurement-intelligence-lab/issues/228), proposed
+Status: approved by the owner after written-design review at50a204c; implementation planning
+is authorized. Product changes await written-plan review under #229.
+Decision [#228](https://github.com/stauntonjr/procurement-intelligence-lab/issues/228), accepted
 [ADR-044](../../adr/044-atomic-planned-prefix-archive.md), primary M2, parent #37,
 Part of #13/#35/#36/#12/#75. Baseline main `8e72f8730730c93bdfbd56c646f67ca65a6bec83`.
 
@@ -11,8 +12,8 @@ The owner resumed foundational architecture after demo cycles and instructed con
 The proposed next slice connects real package execution to durable evidence before expanding
 stage coverage. Success means a fresh process can recover the exact admitted plan, actual
 five-stage result, twelve dispositions and original source bytes after the source disappears.
-This proposal assumes completed-result durability is the next priority; no wider-stage policy
-or implementation authorization is inferred from the instruction to proceed.
+The owner approved completed-result durability as the next priority. No wider-stage policy is
+chosen, and no product implementation is authorized before review of the written plan.
 
 PR #227 / ADR-043 supplies actual synchronous INGEST-through-ASSERT execution. ADR-038 / #213
 supplies atomic source snapshots and content through AssertionArchive. The current
@@ -194,7 +195,8 @@ No later-stage execution, neutral semantics, jobs/attempt states, queue/listener
 governing state, correction-triggered work, new model/algorithm, production auth/deployment,
 backup/HA or full milestone acceptance. Original claims and old callers remain authoritative.
 
-This is the concrete proposed design for owner review. After ratification, create a separately
-scoped implementation Issue and written plan; review that plan before product changes. Decision
-#228 remains open until approved decision artifacts merge. Do not mark any runtime, storage,
-public-caller or artifact acceptance complete based on this documentation proposal.
+The owner approved this concrete written design and instructed implementation planning.
+Implementation #229 and the [written plan](../plans/2026-10-21-planned-prefix-archive.md)
+carry the next review gate; review the plan before product changes. Decision #228 remains open
+until approved decision artifacts merge. Do not mark any runtime, storage, public-caller or
+artifact acceptance complete based on these planning artifacts.

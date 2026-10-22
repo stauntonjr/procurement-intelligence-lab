@@ -1,14 +1,16 @@
 # Project handoff
 
-## Proposed completed planned-prefix archive - 2026-10-21
+## Approved completed planned-prefix archive design - 2026-10-21
 
-Decision #228 (M2, parent #37) proposes the next core increment after PR #227/main8e72f87:
+Decision #228 (M2, parent #37) defines the approved next core increment after PR #227/main8e72f87:
 atomically retain the actual planned-prefix receipt with existing source snapshots/bytes,
-then support exact scoped restart reads without executors or source access. Proposed ADR-044
+then support exact scoped restart reads without executors or source access. Accepted ADR-044
 and the [written design](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md)
 specify first-retention semantics, an additive storage capability and preservation of every
-legacy caller. This is a proposal awaiting owner review; no runtime implementation is authorized
-or delivered by these docs. Wider execution and general jobs/recomputation remain separate.
+legacy caller. The owner approved the written spec at50a204c; implementation #229 now has a
+[six-task plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md) awaiting review before
+product changes. Preserve inline execution with one final fresh reviewer. No runtime/storage
+acceptance is delivered by these docs. Wider execution and general jobs/recomputation remain separate.
 The same-baseline post-merge advisory39691201487 succeeded with a valid bounded Gemini report;
 direct tracker reconciliation updated M9/#12 priority and #109 closed-child checkboxes.
 The duplicate ADR-033 numbering remains a separate documentation follow-up.
