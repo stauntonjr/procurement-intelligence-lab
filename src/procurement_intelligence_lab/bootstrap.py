@@ -516,3 +516,13 @@ def build_planned_bom_service(
         )
 
     return PlannedBomExecutionService(manifest, registry, config, factory, clock)
+
+
+def build_planned_execution_archive(dsn: str):
+    """Construct storage lazily using the existing optional-driver failure boundary."""
+    source = build_assertion_archive(dsn)
+    from procurement_intelligence_lab.adapters.postgres_planned_execution_archive import (
+        PostgresPlannedExecutionArchive,
+    )
+
+    return PostgresPlannedExecutionArchive(source, source.codec)

@@ -108,64 +108,69 @@ class PostgresAssertionArchive:
             or sha256(content).hexdigest() != snapshot.artifact.content_hash
         ):
             raise ArchiveContractError("archive requires the exact captured bytes and metadata")
+        with self._connection() as conn:
+            return self._append_in_transaction(conn, snapshot, content)
+
+    def _append_in_transaction(
+        self, conn: psycopg.Connection[dict[str, Any]], snapshot: DocumentSnapshot, content: bytes
+    ) -> ArchiveReceipt:
+        if (
+            type(content) is not bytes
+            or len(content) != snapshot.artifact.byte_length
+            or sha256(content).hexdigest() != snapshot.artifact.content_hash
+        ):
+            raise ArchiveContractError("archive requires the exact captured bytes and metadata")
         payload = self.codec.dumps(snapshot)
         checksum = sha256(payload.encode()).hexdigest()
         scope = _scope(snapshot.artifact.source.scope)
-        with self._connection() as conn:
-            self._check(conn)
-            conn.execute("LOCK TABLE pil_archive_batches IN SHARE ROW EXCLUSIVE MODE")
-            existing = conn.execute(
-                "SELECT sequence,payload,payload_sha256 FROM pil_archive_batches WHERE scope=%s AND snapshot_id=%s",
-                (scope, snapshot.snapshot_id),
-            ).fetchone()
-            if existing is not None:
-                if existing["payload"] != payload or existing["payload_sha256"] != checksum:
-                    raise ArchiveConflictError("snapshot identity conflicts with retained content")
-                receipt, retained = self._load(
-                    conn, snapshot.artifact.source.scope, snapshot.snapshot_id
-                )
-                if retained != snapshot:
-                    raise ArchiveConflictError("snapshot replay differs from retained records")
-                return receipt
-            conn.execute(
-                "INSERT INTO pil_archive_content VALUES (%s,%s,%s) ON CONFLICT DO NOTHING",
-                (snapshot.artifact.content_hash, len(content), content),
+        self._check(conn)
+        conn.execute("LOCK TABLE pil_archive_batches IN SHARE ROW EXCLUSIVE MODE")
+        existing = conn.execute(
+            "SELECT sequence,payload,payload_sha256 FROM pil_archive_batches WHERE scope=%s AND snapshot_id=%s",
+            (scope, snapshot.snapshot_id),
+        ).fetchone()
+        if existing is not None:
+            if existing["payload"] != payload or existing["payload_sha256"] != checksum:
+                raise ArchiveConflictError("snapshot identity conflicts with retained content")
+            receipt, retained = self._load(
+                conn, snapshot.artifact.source.scope, snapshot.snapshot_id
             )
-            stored = conn.execute(
-                "SELECT byte_length,content FROM pil_archive_content WHERE content_hash=%s",
-                (snapshot.artifact.content_hash,),
+            if retained != snapshot:
+                raise ArchiveConflictError("snapshot replay differs from retained records")
+            return receipt
+        conn.execute(
+            "INSERT INTO pil_archive_content VALUES (%s,%s,%s) ON CONFLICT DO NOTHING",
+            (snapshot.artifact.content_hash, len(content), content),
+        )
+        stored = conn.execute(
+            "SELECT byte_length,content FROM pil_archive_content WHERE content_hash=%s",
+            (snapshot.artifact.content_hash,),
+        ).fetchone()
+        if stored is None or stored["byte_length"] != len(content) or stored["content"] != content:
+            raise ArchiveIntegrityError("captured byte identity conflicts with retained content")
+        row = conn.execute(
+            "INSERT INTO pil_archive_batches(scope,snapshot_id,payload,payload_sha256,content_hash) VALUES (%s,%s,%s,%s,%s) RETURNING sequence",
+            (scope, snapshot.snapshot_id, payload, checksum, snapshot.artifact.content_hash),
+        ).fetchone()
+        if row is None:
+            raise ArchiveIntegrityError("archive insert produced no receipt")
+        for ordinal, claim in enumerate(snapshot.assertions):
+            node = self.codec.node_digest(claim)
+            conn.execute(
+                "INSERT INTO pil_archive_claims VALUES (%s,%s,%s) ON CONFLICT DO NOTHING",
+                (scope, claim.assertion_id, node),
+            )
+            stored_claim = conn.execute(
+                "SELECT node_digest FROM pil_archive_claims WHERE scope=%s AND assertion_id=%s",
+                (scope, claim.assertion_id),
             ).fetchone()
-            if (
-                stored is None
-                or stored["byte_length"] != len(content)
-                or stored["content"] != content
-            ):
-                raise ArchiveIntegrityError(
-                    "captured byte identity conflicts with retained content"
-                )
-            row = conn.execute(
-                "INSERT INTO pil_archive_batches(scope,snapshot_id,payload,payload_sha256,content_hash) VALUES (%s,%s,%s,%s,%s) RETURNING sequence",
-                (scope, snapshot.snapshot_id, payload, checksum, snapshot.artifact.content_hash),
-            ).fetchone()
-            if row is None:
-                raise ArchiveIntegrityError("archive insert produced no receipt")
-            for ordinal, claim in enumerate(snapshot.assertions):
-                node = self.codec.node_digest(claim)
-                conn.execute(
-                    "INSERT INTO pil_archive_claims VALUES (%s,%s,%s) ON CONFLICT DO NOTHING",
-                    (scope, claim.assertion_id, node),
-                )
-                stored_claim = conn.execute(
-                    "SELECT node_digest FROM pil_archive_claims WHERE scope=%s AND assertion_id=%s",
-                    (scope, claim.assertion_id),
-                ).fetchone()
-                if stored_claim is None or stored_claim["node_digest"] != node:
-                    raise ArchiveConflictError("assertion identity conflicts with retained content")
-                conn.execute(
-                    "INSERT INTO pil_archive_members VALUES (%s,%s,%s,%s)",
-                    (scope, snapshot.snapshot_id, ordinal, claim.assertion_id),
-                )
-            return _receipt(row["sequence"], snapshot)
+            if stored_claim is None or stored_claim["node_digest"] != node:
+                raise ArchiveConflictError("assertion identity conflicts with retained content")
+            conn.execute(
+                "INSERT INTO pil_archive_members VALUES (%s,%s,%s,%s)",
+                (scope, snapshot.snapshot_id, ordinal, claim.assertion_id),
+            )
+        return _receipt(row["sequence"], snapshot)
 
     def _load(
         self, conn: psycopg.Connection[dict[str, Any]], scope: StateScope, snapshot_id: str
