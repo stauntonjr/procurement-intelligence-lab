@@ -172,7 +172,7 @@ def test_actual_five_stages_run_on_every_invocation_and_recovery_is_source_free(
     [
         HEADER,
         HEADER + ROW + ROW.replace("7", "8"),
-        HEADER + ROW.replace("0.5", "0"),
+        HEADER + ROW.replace("<v>0.5</v>", "<v>0</v>"),
         HEADER + ROW.replace("<v>0.5</v>", "<v>-2</v>"),
         HEADER + ROW.replace('<c r="C7"><v>0.5</v></c>', ""),
     ],
@@ -182,12 +182,18 @@ def test_empty_duplicate_unknown_zero_negative_and_fractional_values_preserved(
 ):
     service, _, q, _ = setup(tmp_path, rows)
     result = service.execute(q)
-    expected = (
-        bootstrap.build_bom_assertion_service(captured_at=AT, context=q.context, policy=POLICY)
-        .run(q.source)
-        .as_dict()
-    )
-    assert result.as_dict()["assertion_batch"] == expected["assertion_batch"]
+    expected = bootstrap.build_bom_assertion_service(
+        captured_at=AT, context=q.context, policy=POLICY
+    ).run(q.source)
+    assert [(a.predicate, a.value) for a in result.current.execution.output.assertions] == [
+        (a.predicate, a.value) for a in expected.assertions
+    ]
+    actual_obs = result.current.execution.output.previous.observations
+    assert [(x.observation_key, x.value, x.unit, x.status) for x in actual_obs] == [
+        (x.observation_key, x.value, x.unit, x.status) for x in expected.normalized.observations
+    ]
+    ephemeral = service.executions.execute(q).as_dict()
+    assert result.as_dict()["assertion_batch"] == ephemeral["assertion_batch"]
     assert result.retained.completed.snapshot.normalization_policy_parameters == parameters()
 
 

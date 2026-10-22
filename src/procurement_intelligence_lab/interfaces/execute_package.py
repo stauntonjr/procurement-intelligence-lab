@@ -7,11 +7,16 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, NoReturn, cast
 
-from procurement_intelligence_lab.bootstrap import build_planned_bom_service
+from procurement_intelligence_lab.bootstrap import (
+    build_planned_bom_archive_service,
+    build_planned_bom_service,
+    build_planned_execution_archive,
+)
 from procurement_intelligence_lab.domains.procurement.normalization import (
     BomNormalizationPolicy,
     CountUnit,
 )
+from procurement_intelligence_lab.interfaces.archive_config import configured_dsn
 from procurement_intelligence_lab.platform.domain_packages.package import StageId
 from procurement_intelligence_lab.platform.execution.contracts import ExecutionRequest
 from procurement_intelligence_lab.platform.execution.identity import aware, digest, text
@@ -145,6 +150,11 @@ def main() -> int:
     for name in ("manifest", "registry", "config", "context", "normalization-policy"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--stop-after", choices=("ASSERT",), required=True)
+    parser.add_argument(
+        "--archive",
+        action="store_true",
+        help="Atomically retain the completed prefix and source evidence",
+    )
     try:
         args = parser.parse_args()
         manifest = read(args.manifest, 1048576)
@@ -152,13 +162,23 @@ def main() -> int:
         config = load_config(read(args.config, 1048576))
         q = request(args.source, read(args.context, 32768))
         parameters = policy(read(args.normalization_policy, 32768))
-        service = build_planned_bom_service(
-            manifest=manifest,
-            registry=registry,
-            config=config,
-            policy=parameters,
-            clock=lambda: datetime.now(UTC),
-        )
+        if args.archive:
+            service = build_planned_bom_archive_service(
+                manifest=manifest,
+                registry=registry,
+                config=config,
+                policy=parameters,
+                clock=lambda: datetime.now(UTC),
+                archive_factory=lambda: build_planned_execution_archive(configured_dsn()),
+            )
+        else:
+            service = build_planned_bom_service(
+                manifest=manifest,
+                registry=registry,
+                config=config,
+                policy=parameters,
+                clock=lambda: datetime.now(UTC),
+            )
         result = service.execute(q).as_dict()
     except (SemanticContractError, SemanticTypeContractError) as exc:
         error: dict[str, object] = dict(exc.as_dict())
