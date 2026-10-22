@@ -201,5 +201,5 @@ old source payloads retain their root type, and read validators cover policy con
 Native/inline execution with one independent final review preserves the established workflow.
 The six tasks share contracts and transaction/projection boundaries; separate implementer forks
 would repeat context without making these dependencies independent. Owner approval of the written
-spec authorizes this plan; review this plan before product implementation. No new runtime or
+spec authorizes this plan; the owner approved this plan and authorized implementation. No new runtime or
 storage capability is delivered by the planning commit.

@@ -1,5 +1,16 @@
 # Project handoff
 
+## Planned-prefix archive implementation branch - 2026-10-21
+
+Owner approved the six-task plan at9f27e2f. Implementation #229 is underway on
+`codex/planned-prefix-archive-design`, based on main8e72f87. The frozen binding,
+portable bytes codec, additive atomic PostgreSQL capability, injected coordinator
+and opt-in CLI/recovery are implemented. Focused core, storage and public tests
+have run; complete artifact/coverage/challenge qualification and final fresh review
+are still pending. This is branch state, not delivered-main acceptance. See the
+[archive contract](../architecture/planned-execution-archive.md). Preserve original
+source/review/replay formats and wider open milestone criteria.
+
 ## Approved completed planned-prefix archive design - 2026-10-21
 
 Decision #228 (M2, parent #37) defines the approved next core increment after PR #227/main8e72f87:

@@ -286,3 +286,11 @@ effective time preserves historical assessments; winning and losing assertions a
 retained. ADR-034 and C028 define and guard the boundary. The replacement browser recording,
 latest-revision reviews, CI, merge, deployment, human timing, full release, and second-vertical proof
 remain open.
+
+## Approved planned-prefix archive increment - 2026-10-21
+
+M2/#229, decision #228/ADR-044, extends main8e72f87 with opt-in atomic completed-prefix
+retention and source-free recovery. Owner-approved implementation is on the isolated
+branch; full qualification, fresh final review and protected delivery remain pending.
+Existing source/review/dependency capabilities and broader #13/#35/#36/#37/#12/#75
+acceptance remain unchanged. [Contract](../architecture/planned-execution-archive.md).

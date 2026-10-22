@@ -45,10 +45,27 @@ def execution_key(value: str) -> None:
         require(False)
 
 
+def _parameters(parameters: tuple[tuple[str, str], ...]) -> None:
+    try:
+        require(type(parameters) is tuple)
+        for pair in parameters:
+            require(type(pair) is tuple and len(pair) == 2)
+            for value in pair:
+                text(value)
+        require(
+            tuple(sorted(parameters)) == parameters and len(dict(parameters)) == len(parameters)
+        )
+    except SemanticContractError:
+        raise ArchiveContractError(
+            "planned archive requires canonical immutable policy parameters"
+        ) from None
+
+
 def _snapshot(
     execution: PrefixExecutionReceipt, parameters: tuple[tuple[str, str], ...]
 ) -> DocumentSnapshot:
     require(type(execution) is PrefixExecutionReceipt)
+    _parameters(parameters)
     a = execution.output
     n = a.previous
     m = n.previous
@@ -79,14 +96,7 @@ class CompletedPrefixSnapshot:
                 and type(self.snapshot) is DocumentSnapshot
             )
             parameters = self.snapshot.normalization_policy_parameters
-            require(type(parameters) is tuple)
-            for pair in parameters:
-                require(type(pair) is tuple and len(pair) == 2)
-                for value in pair:
-                    text(value)
-            require(
-                tuple(sorted(parameters)) == parameters and len(dict(parameters)) == len(parameters)
-            )
+            _parameters(parameters)
             require(canonical(self.snapshot) == canonical(_snapshot(self.execution, parameters)))
         except SemanticContractError:
             raise ArchiveContractError(

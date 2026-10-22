@@ -177,3 +177,22 @@ def test_history_bounds_and_cursor(tmp_path: Path):
     ):
         with pytest.raises(ArchiveContractError):
             ExecutionHistoryPage(**cast(Any, valid | change))
+
+
+@pytest.mark.parametrize(
+    "parameters",
+    [
+        None,
+        1,
+        [["currency", "USD"]],
+        (("currency",),),
+        ((1, "USD"),),
+        (("a", ""),),
+        (("z", "1"), ("a", "2")),
+        (("a", "1"), ("a", "2")),
+    ],
+)
+def test_projection_rejects_all_malformed_policy_parameters_typed(tmp_path: Path, parameters: Any):
+    r, _ = executed(tmp_path / "source.xlsx")
+    with pytest.raises(ArchiveContractError):
+        CompletedPrefixSnapshot.from_execution(r, parameters)

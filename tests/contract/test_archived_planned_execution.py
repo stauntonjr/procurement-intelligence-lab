@@ -245,3 +245,29 @@ def test_retained_policy_full_content_digest_and_declaration_are_verified(tmp_pa
         changed = replace(c, snapshot=replace(c.snapshot, normalization_policy_parameters=p))
         with pytest.raises(SemanticContractError):
             service.validate_completed(changed)
+
+
+def test_alternate_units_currency_and_policy_content_are_retained(tmp_path: Path):
+    from procurement_intelligence_lab.domains.procurement.normalization import CountUnit
+
+    policy = BomNormalizationPolicy(CountUnit.DOZEN, "GBP", CountUnit.DOZEN)
+    service, _, q, _ = setup(tmp_path, policy=policy)
+    result = service.execute(q)
+    observations = result.current.execution.output.previous.observations
+    quantity = next(x for x in observations if x.source_field.field_name == "quantity")
+    price = next(x for x in observations if x.source_field.field_name == "unit_price")
+    assert str(quantity.value) == "6.0" and quantity.unit == "each"
+    assert str(price.value) == "100.50" and price.unit == "GBP/dozen"
+    assert result.retained.completed.snapshot.normalization_policy_parameters == tuple(
+        sorted(policy.as_dict().items())
+    )
+    c = result.retained.completed
+    references = tuple(
+        replace(r, content_digest="a" * 64)
+        if r.declaration_ref == "procurement.normalize/bom-decimal@1"
+        else r
+        for r in c.execution.references
+    )
+    changed = replace(c, execution=replace(c.execution, references=references))
+    with pytest.raises(SemanticContractError):
+        service.validate_completed(changed)

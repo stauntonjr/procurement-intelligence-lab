@@ -197,6 +197,6 @@ backup/HA or full milestone acceptance. Original claims and old callers remain a
 
 The owner approved this concrete written design and instructed implementation planning.
 Implementation #229 and the [written plan](../plans/2026-10-21-planned-prefix-archive.md)
-carry the next review gate; review the plan before product changes. Decision #228 remains open
+carry the owner-approved implementation contract; inline implementation is authorized. Decision #228 remains open
 until approved decision artifacts merge. Do not mark any runtime, storage, public-caller or
 artifact acceptance complete based on these planning artifacts.

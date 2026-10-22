@@ -280,3 +280,5 @@ governing source.
 Document-value correction/review is a separate trusted local workflow over the durable archive;
 see [the journal contract](docs/architecture/document-review.md). Exact human decisions preserve
 original source facts and signal recomputation requirements without changing governing state.
+
+The approved [completed-prefix archive](docs/architecture/planned-execution-archive.md) adds opt-in atomic retention and scoped source-free recovery under #229; default planned execution and legacy source archive contracts remain compatible. See its delivery evidence for branch versus main status.
