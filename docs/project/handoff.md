@@ -1,5 +1,25 @@
 # Project handoff
 
+## Completed planned-prefix archive - 2026-10-21
+
+PR #230 contains implementation #229 (M2, parent #37), approved decision #228/ADR-044,
+and the owner-approved [spec](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md)
+and [six-task plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md).
+Opt-in archival binds actual execution to original source evidence in one transaction;
+exact scoped recovery needs no original source, executor or current configuration.
+Every invocation still executes five stages; first retention remains distinct from the
+current completion, and all seven later stages remain NOT_EXECUTED. Default execution
+and original source/review/replay formats remain compatible. See the
+[archive contract](../architecture/planned-execution-archive.md).
+
+The PR and [Issue #229 delivery receipt](https://github.com/stauntonjr/procurement-intelligence-lab/issues/229)
+record exact revisions, independent review, full qualification, required-check and
+merged-main public-probe results. Use their actual status to distinguish branch from
+main. Broader #13/#35/#36/#37/#12/#75 and production operations remain open; no attempt
+journal, cache, automatic recomputation or authority policy is added. Same-baseline
+pre-slice advisory39691201487 succeeded; demo priority and #109 closed-child boxes
+were reconciled separately. Duplicate ADR-033 numbering remains a documentation follow-up.
+
 ## Actual explicit planned execution prefix - 2026-10-21
 
 Feature #226 (M9, parent #12; approved decision #225/ADR-043) connects full planning to actual

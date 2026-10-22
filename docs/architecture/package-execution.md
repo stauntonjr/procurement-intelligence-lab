@@ -130,3 +130,5 @@ production authentication, browser or deployment. Archive durability/retry stays
 Full checks, coverage/ratchet, challenge compatibility, independent review and protected delivery
 belong to the latest-revision semantic evidence in the implementation PR. Broader #12/#7/#20/#35/
 #36/#75 and neutral/full-stage/governing-policy acceptance remain open.
+
+The approved [completed-prefix archive](planned-execution-archive.md) adds opt-in atomic retention and scoped source-free recovery under #229; default planned execution and legacy source archive contracts remain compatible. See its delivery evidence for branch versus main status.

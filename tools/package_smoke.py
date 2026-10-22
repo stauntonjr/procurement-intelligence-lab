@@ -429,6 +429,23 @@ def main() -> int:
                     "installed shared stages did not report typed unsupported-source failure"
                 )
             prefix_run = prefix_probe(python)
+            missing_planned_archive = subprocess.run(
+                [
+                    str(python),
+                    str(ROOT / "tools/package_planned_execution_archive_probe.py"),
+                    str(stage_source),
+                    str(execution_context),
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                    str(execution_fixture / "procurement-registry.json"),
+                    str(execution_fixture / "procurement-config.toml"),
+                ],
+                cwd=temporary,
+                env={**os.environ, "PIL_PLANNED_ARCHIVE_EXPECT_MISSING_DRIVER": "1"},
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            print(missing_planned_archive.stdout.strip())
             prefix_outputs.append(prefix_run.stdout.strip())
             print(prefix_run.stdout.strip())
             probe_outputs.append(
@@ -715,6 +732,45 @@ def main() -> int:
         if storage_prefix.stdout.strip() != prefix_outputs[0]:
             raise RuntimeError("optional workflow/storage install changed prefix computation")
         print(storage_prefix.stdout.strip())
+
+        if base := os.environ.get("PIL_TEST_POSTGRES_DSN"):
+            from uuid import uuid4
+
+            import psycopg
+            from psycopg import sql
+            from psycopg.conninfo import make_conninfo
+
+            schema = "pil_planned_package_" + uuid4().hex
+            with psycopg.connect(base, autocommit=True) as connection:
+                connection.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(schema)))
+            try:
+                subprocess.run(
+                    [
+                        str(python),
+                        str(ROOT / "tools/package_planned_execution_archive_probe.py"),
+                        str(stage_source),
+                        str(execution_context),
+                        str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                        str(execution_fixture / "procurement-registry.json"),
+                        str(execution_fixture / "procurement-config.toml"),
+                    ],
+                    cwd=temporary,
+                    env={
+                        **os.environ,
+                        "PIL_ASSERTION_ARCHIVE_DSN": make_conninfo(
+                            base, options=f"-c search_path={schema}"
+                        ),
+                    },
+                    check=True,
+                    text=True,
+                )
+            finally:
+                with psycopg.connect(base, autocommit=True) as connection:
+                    connection.execute(
+                        sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(schema))
+                    )
+        else:
+            print("planned archive storage qualification not requested: set PIL_TEST_POSTGRES_DSN")
 
         subprocess.run(
             [

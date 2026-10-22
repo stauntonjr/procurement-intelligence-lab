@@ -87,3 +87,5 @@ reports storage qualification not requested; that is not durable-storage accepta
 qualification. #35 owns general bounded EvidenceTrace traversal; #36 owns listener/job/attempt/queue
 processing; #38/#41 govern temporal decisions and human correction policy. Issue #216 adds [document-value review lineage](document-review.md) as a separate append-only journal.
 Other review workflows and controlled downstream recomputation remain subsequent work.
+
+The approved [completed-prefix archive](planned-execution-archive.md) adds opt-in atomic retention and scoped source-free recovery under #229; default planned execution and legacy source archive contracts remain compatible. See its delivery evidence for branch versus main status.

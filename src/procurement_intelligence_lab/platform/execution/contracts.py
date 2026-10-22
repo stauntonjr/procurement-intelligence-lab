@@ -3,6 +3,7 @@
 from dataclasses import dataclass, replace
 from datetime import datetime
 from enum import StrEnum
+from hashlib import sha256
 
 from procurement_intelligence_lab.platform.domain_packages.package import StageId, StageMode
 from procurement_intelligence_lab.platform.execution.identity import (
@@ -290,10 +291,14 @@ class PrefixExecutionReceipt:
         return False
 
     @property
-    def execution_digest(self) -> str:
-        return digest(
+    def computation_payload(self) -> bytes:
+        return canonical(
             (self.plan, self.context, self.source, self.references, self.output, self.entries)
         )
+
+    @property
+    def execution_digest(self) -> str:
+        return sha256(self.computation_payload).hexdigest()
 
     @property
     def receipt_digest(self) -> str:
