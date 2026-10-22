@@ -1,6 +1,7 @@
 """Versioned typed JSON DAG; only explicitly registered immutable records are admitted."""
 
 import json
+import re
 from dataclasses import fields, is_dataclass
 from datetime import date, datetime, timezone
 from decimal import Decimal
@@ -50,7 +51,7 @@ def _matches(value: object, hint: Any) -> bool:
         return len(members) == len(args) and all(
             _matches(v, t) for v, t in zip(members, args, strict=True)
         )
-    if hint in (str, int, bool, Decimal, datetime, date, type(None)):
+    if hint in (str, int, bool, bytes, Decimal, datetime, date, type(None)):
         return type(value) is hint
     return isinstance(value, hint)
 
@@ -89,6 +90,8 @@ class SemanticCodec:
                 return ["null"]
             if type(item) in (str, bool, int):
                 return [type(item).__name__, item]
+            if type(item) is bytes:
+                return ["bytes-hex", item.hex()]
             if type(item) is Decimal:
                 if not item.is_finite():
                     raise ValueError("nonfinite decimal")
@@ -175,6 +178,10 @@ class SemanticCodec:
                     if type(parts[1]) is not {"str": str, "int": int, "bool": bool}[tag]:
                         raise ValueError("scalar type")
                     return parts[1]
+                if tag == "bytes-hex" and len(parts) == 2:
+                    if type(parts[1]) is not str or not re.fullmatch("(?:[0-9a-f]{2})*", parts[1]):
+                        raise ValueError("invalid bytes encoding")
+                    return bytes.fromhex(parts[1])
                 if (
                     tag in ("decimal", "date", "datetime")
                     and len(parts) == 2

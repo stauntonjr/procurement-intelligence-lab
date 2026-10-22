@@ -159,6 +159,27 @@ def archive_codec():
     """Only the composition root registers concrete predicate enums for portable persistence."""
     from procurement_intelligence_lab.adapters.semantic_codec import SemanticCodec
     from procurement_intelligence_lab.domains.procurement.assertions import AssertionPredicate
+    from procurement_intelligence_lab.platform.domain_packages.package import StageId, StageMode
+    from procurement_intelligence_lab.platform.execution.archive import (
+        ArchivedPrefix,
+        CompletedPrefixSnapshot,
+        ExecutionArchiveReceipt,
+        ExecutionHistoryPage,
+    )
+    from procurement_intelligence_lab.platform.execution.contracts import (
+        ExecutionStatus,
+        PrefixExecutionReceipt,
+        ResolvedReference,
+        StageExecutionEntry,
+    )
+    from procurement_intelligence_lab.platform.execution.outputs import (
+        AssertedOutput,
+        CapturedOutput,
+        MappedOutput,
+        NormalizedOutput,
+        StructuredOutput,
+    )
+    from procurement_intelligence_lab.platform.planning.contracts import PhysicalPlan
     from procurement_intelligence_lab.platform.semantics.archive import (
         ArchiveReceipt,
         DocumentSnapshot,
@@ -208,6 +229,19 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            CompletedPrefixSnapshot,
+            ExecutionArchiveReceipt,
+            ArchivedPrefix,
+            ExecutionHistoryPage,
+            PrefixExecutionReceipt,
+            ResolvedReference,
+            StageExecutionEntry,
+            PhysicalPlan,
+            CapturedOutput,
+            StructuredOutput,
+            MappedOutput,
+            NormalizedOutput,
+            AssertedOutput,
             ApprovedCorrectionRef,
             ArchivedClaimRef,
             ClaimDependency,
@@ -241,6 +275,9 @@ def archive_codec():
             StateScope,
         ),
         (
+            StageId,
+            StageMode,
+            ExecutionStatus,
             AssertionPredicate,
             EpistemicStatus,
             ComponentKind,
