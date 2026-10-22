@@ -1,29 +1,24 @@
 # Project handoff
 
-## Planned-prefix archive implementation branch - 2026-10-21
+## Completed planned-prefix archive - 2026-10-21
 
-Owner approved the six-task plan at9f27e2f. Implementation #229 is underway on
-`codex/planned-prefix-archive-design`, based on main8e72f87. The frozen binding,
-portable bytes codec, additive atomic PostgreSQL capability, injected coordinator
-and opt-in CLI/recovery are implemented. Focused core, storage and public tests
-have run; complete artifact/coverage/challenge qualification and final fresh review
-are still pending. This is branch state, not delivered-main acceptance. See the
-[archive contract](../architecture/planned-execution-archive.md). Preserve original
-source/review/replay formats and wider open milestone criteria.
+PR #230 contains implementation #229 (M2, parent #37), approved decision #228/ADR-044,
+and the owner-approved [spec](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md)
+and [six-task plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md).
+Opt-in archival binds actual execution to original source evidence in one transaction;
+exact scoped recovery needs no original source, executor or current configuration.
+Every invocation still executes five stages; first retention remains distinct from the
+current completion, and all seven later stages remain NOT_EXECUTED. Default execution
+and original source/review/replay formats remain compatible. See the
+[archive contract](../architecture/planned-execution-archive.md).
 
-## Approved completed planned-prefix archive design - 2026-10-21
-
-Decision #228 (M2, parent #37) defines the approved next core increment after PR #227/main8e72f87:
-atomically retain the actual planned-prefix receipt with existing source snapshots/bytes,
-then support exact scoped restart reads without executors or source access. Accepted ADR-044
-and the [written design](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md)
-specify first-retention semantics, an additive storage capability and preservation of every
-legacy caller. The owner approved the written spec at50a204c; implementation #229 now has a
-[six-task plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md) approved by the owner; inline implementation is underway. Preserve inline execution with one final fresh reviewer. No runtime/storage
-acceptance is delivered by these docs. Wider execution and general jobs/recomputation remain separate.
-The same-baseline post-merge advisory39691201487 succeeded with a valid bounded Gemini report;
-direct tracker reconciliation updated M9/#12 priority and #109 closed-child checkboxes.
-The duplicate ADR-033 numbering remains a separate documentation follow-up.
+The PR and [Issue #229 delivery receipt](https://github.com/stauntonjr/procurement-intelligence-lab/issues/229)
+record exact revisions, independent review, full qualification, required-check and
+merged-main public-probe results. Use their actual status to distinguish branch from
+main. Broader #13/#35/#36/#37/#12/#75 and production operations remain open; no attempt
+journal, cache, automatic recomputation or authority policy is added. Same-baseline
+pre-slice advisory39691201487 succeeded; demo priority and #109 closed-child boxes
+were reconciled separately. Duplicate ADR-033 numbering remains a documentation follow-up.
 
 ## Actual explicit planned execution prefix - 2026-10-21
 

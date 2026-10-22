@@ -85,8 +85,9 @@ global freshness, result materialization and general/automatic recomputation ope
 The next approved design is decision #228 (M2, parent #37), implementation #229:
 [completed planned-prefix archive](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md),
 with atomic source/receipt retention and scoped restart reads. ADR-044/spec are owner-approved;
-the [implementation plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md) awaits review
-before product changes. No implementation acceptance is claimed. It does
+the [implementation plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md) is owner-approved
+and implemented in PR #230. Exact qualification, independent review, required-check and
+merged-main receipts live in #229/PR #230; their actual status defines delivery. It does
 not expand stage coverage, create an attempt journal or close broader #13/#35/#36/#37/#12/#75.
 
 Feature #226/approved decision #225/ADR-043 connects the unchanged planner to actual synchronous
@@ -290,7 +291,7 @@ remain open.
 ## Approved planned-prefix archive increment - 2026-10-21
 
 M2/#229, decision #228/ADR-044, extends main8e72f87 with opt-in atomic completed-prefix
-retention and source-free recovery. Owner-approved implementation is on the isolated
-branch; full qualification, fresh final review and protected delivery remain pending.
+retention and source-free recovery. PR #230 contains the owner-approved implementation; #229 and the PR retain exact
+qualification, independent review, required-check and merged-main delivery receipts.
 Existing source/review/dependency capabilities and broader #13/#35/#36/#37/#12/#75
 acceptance remain unchanged. [Contract](../architecture/planned-execution-archive.md).
