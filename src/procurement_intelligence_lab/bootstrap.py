@@ -8,11 +8,13 @@ if TYPE_CHECKING:
     from procurement_intelligence_lab.application.planned_bom_execution import (
         PlannedBomExecutionService,
     )
+    from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
     from procurement_intelligence_lab.platform.planning.contracts import (
         ImplementationConfig,
         ImplementationDescriptor,
         ImplementationRegistry,
     )
+    from procurement_intelligence_lab.ports.planned_execution_archive import PlannedExecutionArchive
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
     LocalFileIngest,
@@ -526,3 +528,86 @@ def build_planned_execution_archive(dsn: str):
     )
 
     return PostgresPlannedExecutionArchive(source, source.codec)
+
+
+def validate_completed_bom_prefix(completed: "CompletedPrefixSnapshot") -> None:
+    """Validate retained policy content without a current planner, executor or source URI."""
+    from procurement_intelligence_lab.domains.procurement.normalization import CountUnit
+    from procurement_intelligence_lab.platform.execution.contracts import ResolvedReference
+    from procurement_intelligence_lab.platform.execution.identity import digest
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveContractError
+
+    s = completed.snapshot
+    validate_bom_assertions(s.observations, s.assertions, s.mentions)
+    validate_bom_policy_declaration(
+        s.normalization_policy_parameters, s.normalization_policy_reference
+    )
+    parameters = dict(s.normalization_policy_parameters)
+    policy = BomNormalizationPolicy(
+        CountUnit(parameters["quantity_unit"]),
+        parameters["currency"],
+        CountUnit(parameters["price_unit"]),
+    )
+    expected = tuple(
+        sorted(
+            (
+                ResolvedReference(
+                    BOM_TABLE_SCHEMA.reference_id,
+                    BOM_TABLE_SCHEMA.reference_id,
+                    digest(BOM_TABLE_SCHEMA),
+                ),
+                ResolvedReference(
+                    "procurement.normalize/bom-decimal@1", policy.reference_id, digest(policy)
+                ),
+                ResolvedReference(
+                    "procurement.assert/bom-claims@1",
+                    "bom-assertions@1",
+                    digest(("bom-assertions@1", "1")),
+                ),
+            ),
+            key=lambda r: r.declaration_ref,
+        )
+    )
+    if completed.execution.references != expected:
+        raise ArchiveContractError("completed prefix requires supported exact policy content")
+
+
+def build_planned_bom_archive_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    policy: BomNormalizationPolicy,
+    clock: Callable[[], datetime],
+    archive_factory: Callable[[], "PlannedExecutionArchive"],
+):
+    from procurement_intelligence_lab.application.archived_planned_execution import (
+        ArchivedPlannedBomService,
+    )
+
+    store = MemoryArtifactContent()
+    executions = build_planned_bom_service(
+        manifest=manifest,
+        registry=registry,
+        config=config,
+        policy=policy,
+        clock=clock,
+        content_store=store,
+    )
+    return ArchivedPlannedBomService(
+        executions,
+        store,
+        archive_factory,
+        tuple(sorted(policy.as_dict().items())),
+        validate_completed_bom_prefix,
+    )
+
+
+def build_planned_execution_archive_reader(dsn: str):
+    from procurement_intelligence_lab.application.archived_planned_execution import (
+        PlannedExecutionArchiveReader,
+    )
+
+    return PlannedExecutionArchiveReader(
+        build_planned_execution_archive(dsn), validate_completed_bom_prefix
+    )

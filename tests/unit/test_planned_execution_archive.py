@@ -1,6 +1,7 @@
 from dataclasses import replace
 from datetime import timedelta, timezone
 from hashlib import sha256
+from pathlib import Path
 from typing import Any, cast
 
 import pytest
@@ -19,7 +20,7 @@ from tests.bom_stage_fixtures import HEADER, ROW
 from tests.planned_execution_archive_fixtures import executed, parameters
 
 
-def source_receipt(completed):
+def source_receipt(completed: CompletedPrefixSnapshot):
     s = completed.snapshot
     return ArchiveReceipt(
         1,
@@ -32,7 +33,7 @@ def source_receipt(completed):
     )
 
 
-def archived(completed, sequence=1):
+def archived(completed: CompletedPrefixSnapshot, sequence: Any = 1):
     return ArchivedPrefix(
         completed,
         ExecutionArchiveReceipt(
@@ -45,7 +46,7 @@ def archived(completed, sequence=1):
 
 
 @pytest.mark.parametrize("rows", [HEADER, HEADER + ROW, HEADER + ROW + ROW.replace("7", "8")])
-def test_actual_completed_binding_and_identity(tmp_path, rows):
+def test_actual_completed_binding_and_identity(tmp_path: Path, rows: str):
     receipt, _ = executed(tmp_path / "source.xlsx", rows)
     completed = CompletedPrefixSnapshot.from_execution(receipt, parameters())
     assert completed.snapshot.transformations == tuple(x.event for x in receipt.output.chain)
@@ -67,7 +68,7 @@ def test_actual_completed_binding_and_identity(tmp_path, rows):
     assert archived(completed).receipt.snapshot_id == completed.snapshot.snapshot_id
 
 
-def test_first_completion_is_the_only_ignored_computation_field(tmp_path):
+def test_first_completion_is_the_only_ignored_computation_field(tmp_path: Path):
     r, _ = executed(tmp_path / "source.xlsx")
     first = CompletedPrefixSnapshot.from_execution(r, parameters())
     for at in (
@@ -91,7 +92,7 @@ def test_first_completion_is_the_only_ignored_computation_field(tmp_path):
         )
 
 
-def test_completed_binding_rejects_foreign_snapshot_policy_and_mention_encoding(tmp_path):
+def test_completed_binding_rejects_foreign_snapshot_policy_and_mention_encoding(tmp_path: Path):
     r, _ = executed(tmp_path / "source.xlsx")
     c = CompletedPrefixSnapshot.from_execution(r, parameters())
     with pytest.raises(ArchiveContractError):
@@ -131,27 +132,27 @@ def test_completed_binding_rejects_foreign_snapshot_policy_and_mention_encoding(
 
 
 @pytest.mark.parametrize("sequence", [0, -1, True, 1.5, "1"])
-def test_receipt_rejects_invalid_sequence(tmp_path, sequence):
+def test_receipt_rejects_invalid_sequence(tmp_path: Path, sequence: Any):
     r, _ = executed(tmp_path / "source.xlsx")
     with pytest.raises(ArchiveContractError):
         archived(CompletedPrefixSnapshot.from_execution(r, parameters()), sequence)
 
 
 @pytest.mark.parametrize("digest", ["", "A" * 64, "a" * 63, None])
-def test_receipt_rejects_invalid_digest(tmp_path, digest):
+def test_receipt_rejects_invalid_digest(tmp_path: Path, digest: Any):
     r, _ = executed(tmp_path / "source.xlsx")
     c = CompletedPrefixSnapshot.from_execution(r, parameters())
     with pytest.raises(ArchiveContractError):
         ExecutionArchiveReceipt(1, digest, r.receipt_digest, source_receipt(c))
 
 
-def test_history_bounds_and_cursor(tmp_path):
+def test_history_bounds_and_cursor(tmp_path: Path):
     r, _ = executed(tmp_path / "source.xlsx")
     c = CompletedPrefixSnapshot.from_execution(r, parameters())
     a = archived(c).receipt
     assert ExecutionHistoryPage(c.scope, 0, 1, (a,), True, 1).has_more
     assert not ExecutionHistoryPage(c.scope, 0, 1, (a,), False, None).has_more
-    valid = {
+    valid: dict[str, Any] = {
         "scope": c.scope,
         "after_sequence": 0,
         "limit": 1,
@@ -175,4 +176,4 @@ def test_history_bounds_and_cursor(tmp_path):
         {"receipts": (), "has_more": True, "next_after_sequence": 1},
     ):
         with pytest.raises(ArchiveContractError):
-            ExecutionHistoryPage(**(valid | change))
+            ExecutionHistoryPage(**cast(Any, valid | change))

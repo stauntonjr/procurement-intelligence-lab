@@ -1,4 +1,6 @@
 """Additive planned-prefix capability sharing the source archive's atomic transaction."""
+# Cooperating storage adapters intentionally share the source transaction helpers.
+# pyright: reportPrivateUsage=false
 
 from hashlib import sha256
 from typing import Any, LiteralString, cast

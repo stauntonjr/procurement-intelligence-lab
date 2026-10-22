@@ -2,7 +2,8 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from dataclasses import replace
 from datetime import timedelta
-from typing import LiteralString, cast
+from pathlib import Path
+from typing import Any, LiteralString, cast
 
 import psycopg
 import pytest
@@ -23,7 +24,7 @@ from tests.planned_execution_archive_fixtures import executed, parameters
 pytestmark = pytest.mark.contract
 
 
-def setup(dsn):
+def setup(dsn: str):
     source = bootstrap.build_assertion_archive(dsn)
     source.initialize()
     assert hasattr(bootstrap, "build_planned_execution_archive"), "planned archive adapter absent"
@@ -32,12 +33,12 @@ def setup(dsn):
     return source, archive
 
 
-def completed(tmp_path, name="source.xlsx"):
+def completed(tmp_path: Path, name: str = "source.xlsx"):
     r, content = executed(tmp_path / name)
     return CompletedPrefixSnapshot.from_execution(r, parameters()), content
 
 
-def test_restart_first_retention_exact_bytes_and_legacy_reader(archive_dsn, tmp_path):
+def test_restart_first_retention_exact_bytes_and_legacy_reader(archive_dsn: str, tmp_path: Path):
     source, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
     retained = archive.append(first, content)
@@ -58,7 +59,7 @@ def test_restart_first_retention_exact_bytes_and_legacy_reader(archive_dsn, tmp_
     assert source.history(first.scope) == (receipt,)
     for invalid in (b"", content + b"x", bytearray(content)):
         with pytest.raises(ArchiveContractError):
-            fresh.append(later, invalid)
+            fresh.append(later, cast(Any, invalid))
     foreign = replace(first.scope, version="foreign")
     assert fresh.history(foreign).receipts == ()
     for read in (fresh.load, fresh.content):
@@ -66,11 +67,11 @@ def test_restart_first_retention_exact_bytes_and_legacy_reader(archive_dsn, tmp_
             read(foreign, first.execution_digest)
 
 
-def test_concurrent_sixteen_appends_converge(archive_dsn, tmp_path):
+def test_concurrent_sixteen_appends_converge(archive_dsn: str, tmp_path: Path):
     _, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
     with ThreadPoolExecutor(max_workers=8) as pool:
-        results = list(pool.map(lambda _: archive.append(first, content), range(16)))
+        results = list(pool.map(archive.append, [first] * 16, [content] * 16))
     assert all(canonical(x) == canonical(results[0]) for x in results)
     with psycopg.connect(archive_dsn) as c:
         for table, count in [
@@ -85,7 +86,7 @@ def test_concurrent_sixteen_appends_converge(archive_dsn, tmp_path):
             ).fetchone() == (count,)
 
 
-def test_source_and_binding_roll_back_together(archive_dsn, tmp_path):
+def test_source_and_binding_roll_back_together(archive_dsn: str, tmp_path: Path):
     _, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
     with psycopg.connect(archive_dsn) as c:
@@ -110,10 +111,12 @@ def test_source_and_binding_roll_back_together(archive_dsn, tmp_path):
             ).fetchone() == (0,)
 
 
-def test_lost_acknowledgement_does_not_imply_rollback(archive_dsn, tmp_path, monkeypatch):
+def test_lost_acknowledgement_does_not_imply_rollback(
+    archive_dsn: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     _, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
-    original = archive.source._connection
+    original = archive.source._connection  # pyright: ignore[reportPrivateUsage]
 
     @contextmanager
     def lose_ack():
@@ -130,7 +133,9 @@ def test_lost_acknowledgement_does_not_imply_rollback(archive_dsn, tmp_path, mon
     assert len(fresh.history(first.scope).receipts) == 1
 
 
-def test_digest_collision_cannot_hide_changed_snapshot_policy(archive_dsn, tmp_path, monkeypatch):
+def test_digest_collision_cannot_hide_changed_snapshot_policy(
+    archive_dsn: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     _, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
     retained = archive.append(first, content)
@@ -151,7 +156,7 @@ def test_digest_collision_cannot_hide_changed_snapshot_policy(archive_dsn, tmp_p
         archive.append(other, content2)
 
 
-def test_explicit_capability_and_supported_base(archive_dsn, tmp_path):
+def test_explicit_capability_and_supported_base(archive_dsn: str, tmp_path: Path):
     assert hasattr(bootstrap, "build_planned_execution_archive")
     archive = bootstrap.build_planned_execution_archive(archive_dsn)
     with pytest.raises(ArchiveUnavailableError):
@@ -169,14 +174,16 @@ def test_explicit_capability_and_supported_base(archive_dsn, tmp_path):
 @pytest.mark.parametrize(
     "limit,after", [(0, 0), (201, 0), (True, 0), (1.5, 0), (1, -1), (1, True), (1, 0.5)]
 )
-def test_history_rejects_bad_bounds_before_storage(archive_dsn, tmp_path, limit, after):
+def test_history_rejects_bad_bounds_before_storage(
+    archive_dsn: str, tmp_path: Path, limit: Any, after: Any
+):
     _, archive = setup(archive_dsn)
     first, _ = completed(tmp_path)
     with pytest.raises(ArchiveContractError):
         archive.history(first.scope, limit=limit, after_sequence=after)
 
 
-def test_history_pages_use_actual_extra_row_and_exclusive_cursor(archive_dsn, tmp_path):
+def test_history_pages_use_actual_extra_row_and_exclusive_cursor(archive_dsn: str, tmp_path: Path):
     _, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
     a = archive.append(first, content).receipt
@@ -194,7 +201,7 @@ def test_history_pages_use_actual_extra_row_and_exclusive_cursor(archive_dsn, tm
 
 @pytest.mark.parametrize("table", ["pil_planned_execution_meta", "pil_planned_executions"])
 @pytest.mark.parametrize("operation", ["UPDATE", "DELETE", "TRUNCATE"])
-def test_new_sql_records_are_immutable(archive_dsn, table, operation):
+def test_new_sql_records_are_immutable(archive_dsn: str, table: str, operation: str):
     setup(archive_dsn)
     statement = (
         f"UPDATE {table} SET " + ("version=1" if table.endswith("meta") else "scope=scope")
@@ -219,7 +226,7 @@ def test_new_sql_records_are_immutable(archive_dsn, table, operation):
         "UPDATE pil_archive_content SET content=decode('00','hex')",
     ],
 )
-def test_corruption_is_never_success(archive_dsn, tmp_path, mutation):
+def test_corruption_is_never_success(archive_dsn: str, tmp_path: Path, mutation: str):
     _, archive = setup(archive_dsn)
     first, content = completed(tmp_path)
     archive.append(first, content)
