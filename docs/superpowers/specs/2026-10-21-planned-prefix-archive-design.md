@@ -1,7 +1,7 @@
 # Completed planned-prefix archive design
 
 Status: approved by the owner after written-design review at50a204c; implementation planning
-is authorized. Product changes await written-plan review under #229.
+is authorized. The owner approved the written plan under #229; implementation is authorized.
 Decision [#228](https://github.com/stauntonjr/procurement-intelligence-lab/issues/228), accepted
 [ADR-044](../../adr/044-atomic-planned-prefix-archive.md), primary M2, parent #37,
 Part of #13/#35/#36/#12/#75. Baseline main `8e72f8730730c93bdfbd56c646f67ca65a6bec83`.

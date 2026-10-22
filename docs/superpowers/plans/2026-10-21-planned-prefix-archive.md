@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python3.12+, frozen stdlib dataclasses/Protocols, existing typed graph codec, optional psycopg/Postgres16, pytest/ruff/pyright. No new runtime dependency, ORM, queue or orchestration framework.
 
-**Spec:** [Approved design](../specs/2026-10-21-planned-prefix-archive-design.md), approved decision #228/ADR-044; implementation #229, primary M2, parent #37. Design approved at `50a204c`; baseline main `8e72f87`. This written plan awaits review before product changes. Preserve native/inline execution with one fresh final reviewer.
+**Spec:** [Approved design](../specs/2026-10-21-planned-prefix-archive-design.md), approved decision #228/ADR-044; implementation #229, primary M2, parent #37. Design approved at `50a204c`; baseline main `8e72f87`. The owner approved this written plan; implementation is authorized. Preserve native/inline execution with one fresh final reviewer.
 
 ## Global Constraints
 

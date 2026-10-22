@@ -2,7 +2,7 @@
 
 Status: accepted by the owner after review of written design50a204c; decision
 [#228](https://github.com/stauntonjr/procurement-intelligence-lab/issues/228), primary M2,
-parent #37. Implementation #229 awaits review of its written plan before product changes.
+parent #37. Implementation #229 is authorized by owner approval of the written plan.
 
 ## Context
 
