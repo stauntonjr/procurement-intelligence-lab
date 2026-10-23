@@ -82,6 +82,14 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
+
+The next proposed increment is M1 decision #231, native child of #36: a
+[durable local prefix job/attempt lifecycle](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md).
+It uses the qualified completed-prefix archive but adds separately reviewed request identity,
+explicit attempt/fencing policy and an atomic success journal. ADR045 is proposed; owner
+approval of the written design precedes implementation planning. No queue/worker deployment,
+automatic retry/recompute, new operational authority or broader #36 completion is implied.
+
 The next approved design is decision #228 (M2, parent #37), implementation #229:
 [completed planned-prefix archive](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md),
 with atomic source/receipt retention and scoped restart reads. ADR-044/spec are owner-approved;

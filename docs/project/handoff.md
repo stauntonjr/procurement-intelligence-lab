@@ -1,5 +1,18 @@
 # Project handoff
 
+## Proposed local prefix job lifecycle - 2026-10-23
+
+Decision #231 (M1, parent #36) proposes the next core increment after main87cc5cc/PR230:
+durable local submission/attempt evidence, exact scoped request idempotency, explicit retries
+and fenced abandonment around the qualified five-stage prefix. The [written design](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md)
+and proposed ADR045 separate semantic computation identity from attempt lifecycle, require
+expected captured-byte verification and atomic source/archive/current-attempt success, and keep
+legacy callers compatible. Owner instructed develop this design; new lifecycle policy awaits
+written-design approval and a builder check. No job runtime, capability, queue, worker or
+implementation acceptance is delivered. Wider #36 and operational-agent authority remain open.
+Pre-slice stewardship uses the identical-baseline Gemini503 receipt39715621577 plus current
+direct Codex review of repository/Issues/Project; provider availability is not roadmap authority.
+
 ## Completed planned-prefix archive - 2026-10-21
 
 PR #230 contains implementation #229 (M2, parent #37), approved decision #228/ADR-044,
