@@ -7,9 +7,10 @@ durable local submission/attempt evidence, exact scoped request idempotency, exp
 and fenced abandonment around the qualified five-stage prefix. The [written design](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md)
 and proposed ADR045 separate semantic computation identity from attempt lifecycle, require
 expected captured-byte verification and atomic source/archive/current-attempt success, and keep
-legacy callers compatible. Owner instructed develop this design; new lifecycle policy awaits
-written-design approval and a builder check. No job runtime, capability, queue, worker or
-implementation acceptance is delivered. Wider #36 and operational-agent authority remain open.
+legacy callers compatible. The owner instructed development of this design; new lifecycle policy awaits
+written-design approval. A fresh builder check reported "nothing important left"; documentation
+`make check-fast` passed. No job runtime, capability, queue, worker or implementation acceptance
+is delivered. Wider #36 and operational-agent authority remain open.
 Pre-slice stewardship uses the identical-baseline Gemini503 receipt39715621577 plus current
 direct Codex review of repository/Issues/Project; provider availability is not roadmap authority.
 

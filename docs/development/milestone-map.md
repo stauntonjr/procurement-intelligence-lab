@@ -90,7 +90,7 @@ explicit attempt/fencing policy and an atomic success journal. ADR045 is propose
 approval of the written design precedes implementation planning. No queue/worker deployment,
 automatic retry/recompute, new operational authority or broader #36 completion is implied.
 
-The next approved design is decision #228 (M2, parent #37), implementation #229:
+The preceding completed design is decision #228 (M2, parent #37), implementation #229:
 [completed planned-prefix archive](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md),
 with atomic source/receipt retention and scoped restart reads. ADR-044/spec are owner-approved;
 the [implementation plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md) is owner-approved
