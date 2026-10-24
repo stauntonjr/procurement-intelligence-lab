@@ -76,6 +76,10 @@ def validate_completion(
         and same(r.plan, d.plan)
         and same(r.context, d.effective_context)
     )
+    for actual, metadata in zip(r.output.chain, d.stage_metadata, strict=True):
+        provenance = actual.event.provenance
+        require(same(provenance.policy_version, metadata.policy_version))
+        require(same(provenance.schema_version, metadata.schema_version))
     expected_refs = {r.declaration_ref: r for m in d.stage_metadata for r in m.references}
     require(same(r.references, tuple(expected_refs[k] for k in sorted(expected_refs))))
     require(same(completed.snapshot.normalization_policy_parameters, d.normalization_parameters))

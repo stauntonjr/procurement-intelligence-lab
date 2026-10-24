@@ -65,3 +65,29 @@ def test_source_and_scope_cannot_be_substituted(tmp_path: Path) -> None:
         )
     with pytest.raises(JobContractError):
         replace(job.arrival, scope=replace(job.scope, project_id="foreign"))
+
+
+def test_completion_compares_metadata_not_just_effective_digest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
+    from procurement_intelligence_lab.platform.execution.runner import run_prefix
+    from procurement_intelligence_lab.platform.processing.binding import validate_completion
+    from procurement_intelligence_lab.platform.processing.contracts import PinnedPrefixDefinition
+    from tests.local_prefix_job_fixtures import NOW
+
+    job, prepared, content = job_input(tmp_path / "source.xlsx")
+    completed = CompletedPrefixSnapshot.from_execution(
+        run_prefix(prepared, clock=lambda: NOW).receipt, job.definition.normalization_parameters
+    )
+    metadata = list(job.definition.stage_metadata)
+    metadata[1] = replace(metadata[1], schema_version="different-schema")
+    changed = replace(job, definition=replace(job.definition, stage_metadata=tuple(metadata)))
+
+    # A digest collision cannot make different selected metadata acceptable.
+    def effective(_: PinnedPrefixDefinition):
+        return prepared.context
+
+    monkeypatch.setattr(PinnedPrefixDefinition, "effective_context", property(effective))
+    with pytest.raises(JobContractError):
+        validate_completion(changed, completed, content)

@@ -56,6 +56,7 @@ from procurement_intelligence_lab.platform.processing.lifecycle import (
     success_transition,
 )
 from procurement_intelligence_lab.platform.semantics.errors import (
+    ArchiveIntegrityError,
     ArchiveUnavailableError,
     SemanticContractError,
 )
@@ -93,6 +94,8 @@ class PostgresLocalPrefixJobs:
         try:
             with self.archive.source._connection() as conn:
                 yield conn
+        except ArchiveIntegrityError:
+            raise JobIntegrityError("local job prerequisite evidence is invalid") from None
         except (ArchiveUnavailableError, psycopg.Error):
             raise JobUnavailableError("local prefix job storage is unavailable") from None
 

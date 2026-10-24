@@ -203,3 +203,17 @@ def test_command_index_corruption_fails_integrity(archive_dsn: str, tmp_path: Pa
         jobs.load(job.scope, job.job_id)
     with pytest.raises(JobIntegrityError):
         jobs.start(first(job), now=NOW)
+
+
+@pytest.mark.parametrize(
+    "table", ["pil_archive_meta", "pil_planned_execution_meta", "pil_local_prefix_job_meta"]
+)
+def test_unsupported_prerequisite_versions_are_typed_job_integrity(archive_dsn: str, table: str):
+    from psycopg import sql
+
+    jobs = ready(archive_dsn)
+    with psycopg.connect(archive_dsn) as conn:
+        conn.execute(sql.SQL("ALTER TABLE {} DISABLE TRIGGER USER").format(sql.Identifier(table)))
+        conn.execute(sql.SQL("UPDATE {} SET version=99").format(sql.Identifier(table)))
+    with pytest.raises(JobIntegrityError):
+        jobs.check_ready()
