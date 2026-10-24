@@ -664,3 +664,19 @@ def build_planned_execution_archive_reader(dsn: str):
     return PlannedExecutionArchiveReader(
         build_planned_execution_archive(dsn), validate_completed_bom_prefix
     )
+
+
+def build_local_prefix_jobs(dsn: str):
+    """Explicit optional local-prefix journal; construction never initializes schemas."""
+    from procurement_intelligence_lab.platform.processing.errors import JobUnavailableError
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        archive = build_planned_execution_archive(dsn)
+    except ArchiveUnavailableError:
+        raise JobUnavailableError("local job storage requires the storage extra") from None
+    from procurement_intelligence_lab.adapters.postgres_local_prefix_jobs import (
+        PostgresLocalPrefixJobs,
+    )
+
+    return PostgresLocalPrefixJobs(archive, archive.codec)
