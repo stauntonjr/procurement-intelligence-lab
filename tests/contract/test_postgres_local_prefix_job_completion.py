@@ -285,3 +285,74 @@ def test_success_without_acknowledged_start_is_integrity_failure(archive_dsn: st
         conn.execute("DELETE FROM pil_local_prefix_job_transitions WHERE sequence=2")
     with pytest.raises(JobIntegrityError):
         jobs.load(job.scope, job.job_id)
+
+
+def test_stale_but_consistent_head_cannot_hide_committed_success(archive_dsn: str, tmp_path: Path):
+
+    jobs = ready(archive_dsn)
+    job, p, content = job_input(tmp_path / "source.xlsx")
+    jobs.submit(job, now=NOW)
+    token = jobs.start(first(job), now=NOW).token
+    with psycopg.connect(archive_dsn) as conn:
+        prior = conn.execute(
+            "SELECT sequence,version,status,attempt_id,fence,recorded_at FROM pil_local_prefix_job_heads"
+        ).fetchone()
+    assert prior is not None
+    jobs.complete(token, candidate(p, job), content, now=NOW)
+    with psycopg.connect(archive_dsn) as conn:
+        conn.execute(
+            "UPDATE pil_local_prefix_job_heads SET sequence=%s,version=%s,status=%s,attempt_id=%s,fence=%s,recorded_at=%s",
+            prior,
+        )
+    with pytest.raises(JobIntegrityError):
+        jobs.load(job.scope, job.job_id)
+    with pytest.raises(JobIntegrityError):
+        jobs.history(job.scope, job.job_id)
+
+
+def test_same_attempt_replay_compares_raw_bytes_even_under_hash_collision(
+    archive_dsn: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    from procurement_intelligence_lab.platform.processing import binding
+
+    jobs = ready(archive_dsn)
+    job, p, content = job_input(tmp_path / "source.xlsx")
+    jobs.submit(job, now=NOW)
+    token = jobs.start(first(job), now=NOW).token
+    c = candidate(p, job)
+    jobs.complete(token, c, content, now=NOW)
+
+    class Collision:
+        def hexdigest(self) -> str:
+            return job.arrival.expected_content_hash
+
+    def colliding(_: bytes):
+        return Collision()
+
+    monkeypatch.setattr(binding, "sha256", colliding)
+    altered = bytes([content[0] ^ 1]) + content[1:]
+    assert len(altered) == len(content) and altered != content
+    with pytest.raises(JobConflictError):
+        jobs.complete(token, c, altered, now=NOW)
+
+
+def test_equal_instant_different_completion_offset_conflicts(archive_dsn: str, tmp_path: Path):
+    from datetime import timezone
+
+    jobs = ready(archive_dsn)
+    job, p, content = job_input(tmp_path / "source.xlsx")
+    jobs.submit(job, now=NOW)
+    token = jobs.start(first(job), now=NOW).token
+    c = candidate(p, job)
+    receipt = jobs.complete(token, c, content, now=NOW)
+    shifted = replace(
+        c.execution, completed_at=c.execution.completed_at.astimezone(timezone(timedelta(hours=1)))
+    )
+    assert shifted.completed_at == c.execution.completed_at
+    assert shifted.receipt_digest != c.execution.receipt_digest
+    changed = CompletedPrefixSnapshot.from_execution(
+        shifted, job.definition.normalization_parameters
+    )
+    with pytest.raises(JobConflictError):
+        jobs.complete(token, changed, content, now=NOW)
+    assert jobs.load(job.scope, job.job_id).latest == receipt

@@ -10,6 +10,9 @@ and fenced abandonment. Actual captured bytes are checked before STRUCTURE. Sour
 current-attempt success commits together; first archive retention stays separate. Ambiguous
 acknowledgement and crash-left RUNNING never invent failure. Recovery/export need no original
 source/config/executor. Original execution/archive/review/dependency callers remain compatible.
+The final independent review exposed stale-head and completion-replay integrity defects; the
+verified fix pass also retains known recovery IDs in unavailable public responses. Exact review
+and qualification revisions belong to the delivery receipt, not an inference from this index.
 
 Implementation clarifications: empty context environment as well as all selection settings;
 read-only command lookup before runtime preparation on replay; a separate per-call execution

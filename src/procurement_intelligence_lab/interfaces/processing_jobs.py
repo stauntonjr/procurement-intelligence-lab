@@ -12,6 +12,9 @@ from procurement_intelligence_lab.application.archived_planned_execution import 
     execution_archive_receipt_payload,
 )
 from procurement_intelligence_lab.application.local_prefix_job_admission import pin_local_prefix_job
+from procurement_intelligence_lab.application.local_prefix_jobs import (
+    AttemptAcknowledgementUnavailable,
+)
 from procurement_intelligence_lab.application.planned_bom_execution import (
     PlannedBomExecution,
     execution_receipt_payload,
@@ -45,7 +48,10 @@ from procurement_intelligence_lab.platform.processing.contracts import (
     StartIntent,
     job_key,
 )
-from procurement_intelligence_lab.platform.processing.errors import JobContractError
+from procurement_intelligence_lab.platform.processing.errors import (
+    JobContractError,
+    JobUnavailableError,
+)
 from procurement_intelligence_lab.platform.semantics.errors import (
     SemanticContractError,
     SemanticTypeContractError,
@@ -148,6 +154,7 @@ def main() -> int:
             )
         if name == "content":
             command.add_argument("--output", type=Path, required=True)
+    recovery: dict[str, Any] = {}
     try:
         args = parser.parse_args()
         if args.command == "init":
@@ -172,6 +179,7 @@ def main() -> int:
                 normalization_parameters=tuple(sorted(normal.as_dict().items())),
                 now=now,
             )
+            recovery = {"scope": vars(job.scope), "job_id": job.job_id}
             service = build_local_prefix_job_service(
                 clock=lambda: now, journal_factory=lambda: build_local_prefix_jobs(configured_dsn())
             )
@@ -185,6 +193,7 @@ def main() -> int:
         else:
             job_key(args.job_id)
             scope = job_scope(args.scope)
+            recovery = {"scope": vars(scope), "job_id": args.job_id}
             if args.command in ("run", "retry"):
                 command = StartAttemptCommand(
                     scope,
@@ -199,6 +208,9 @@ def main() -> int:
                     journal_factory=lambda: build_local_prefix_jobs(configured_dsn()),
                 )
                 result = service.execute(command)
+                attempt = result.receipt.transition.attempt
+                assert attempt is not None
+                recovery["attempt_id"] = attempt.attempt_id
                 current = result.receipt.transition.success
                 if current is None:
                     raise JobContractError("execution returned no positive completion evidence")
@@ -221,6 +233,7 @@ def main() -> int:
                     args.attempt_id,
                     args.reason,
                 )
+                recovery["attempt_id"] = command.attempt_id
                 receipt = build_local_prefix_job_service(
                     clock=lambda: datetime.now(UTC),
                     journal_factory=lambda: build_local_prefix_jobs(configured_dsn()),
@@ -262,7 +275,16 @@ def main() -> int:
                         "output": str(args.output),
                     }
     except (SemanticContractError, SemanticTypeContractError) as exc:
-        print(json.dumps(exc.as_dict(), ensure_ascii=True), file=sys.stderr)
+        error: dict[str, Any] = dict(exc.as_dict())
+        if isinstance(exc, JobUnavailableError):
+            error.update(recovery)
+            if isinstance(exc, AttemptAcknowledgementUnavailable):
+                error.update(
+                    scope=vars(exc.token.scope),
+                    job_id=exc.token.job_id,
+                    attempt_id=exc.token.attempt_id,
+                )
+        print(json.dumps(error, ensure_ascii=True), file=sys.stderr)
         return 2
     except (ValueError, TypeError, UnicodeError, RecursionError):
         print(

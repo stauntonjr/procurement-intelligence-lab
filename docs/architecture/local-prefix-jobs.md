@@ -83,13 +83,17 @@ active token/fence and full request/output metadata, then retains source bytes/s
 completed archive binding, the full current attempt receipt and successful job transition in one
 transaction. There are no locks across executor I/O. The archive retains the first computation's
 full receipt; the attempt retains its actual current full receipt, including completion time.
-Same-attempt completion replay requires exactly that receipt and bytes, not just equal computation.
+Same-attempt completion replay requires exactly that receipt and raw bytes, including on the
+successful replay path. Reads lock the head for sharing while checking that its sequence references
+the newest immutable transition; an internally consistent older head is an integrity failure.
 
 Observed failures before publication retain a stable code/category and finite allowlisted diagnostic.
 Raw exception text, source contents and driver/DSN details are never persisted as diagnostics.
 Once publication begins, unavailable acknowledgement leaves the caller uncertain: it must not append
 FAILED. A fresh read can show SUCCEEDED with all evidence or RUNNING; no rollback is inferred from
-an error. A failure-journal outage likewise does not positively establish FAILED.
+an error. A failure-journal outage likewise does not positively establish FAILED. Unavailable CLI
+responses retain the validated scope/job ID and any acknowledged attempt ID for recovery. A lost
+START acknowledgement cannot supply an attempt ID; inspect the scoped job before taking action.
 
 RUNNING after a crash stays unresolved until a deliberate command. No lease/heartbeat timeout
 proves process death. Abandonment requires the active attempt, expected version, command key,

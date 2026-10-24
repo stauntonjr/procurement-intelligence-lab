@@ -12,6 +12,7 @@ from procurement_intelligence_lab.platform.execution.runner import run_prefix
 from procurement_intelligence_lab.platform.processing.binding import validate_completion
 from procurement_intelligence_lab.platform.processing.contracts import (
     AbandonAttemptCommand,
+    AttemptToken,
     JobDefinition,
     JobFailure,
     JobJournalReceipt,
@@ -35,6 +36,16 @@ from procurement_intelligence_lab.platform.semantics.errors import (
 )
 from procurement_intelligence_lab.ports.artifacts import ArtifactContentStore
 from procurement_intelligence_lab.ports.local_prefix_jobs import LocalPrefixJobs
+
+
+class AttemptAcknowledgementUnavailable(JobUnavailableError):
+    """An unavailable operation after this exact attempt was acknowledged."""
+
+    def __init__(self, token: AttemptToken, message: str | None = None) -> None:
+        self.token = token
+        super().__init__(
+            message or "local prefix acknowledgement unavailable; inspect retained job evidence"
+        )
 
 
 class RecordedAttemptError(SemanticContractError):
@@ -118,24 +129,30 @@ class LocalPrefixJobService:
             assert page.next_after_sequence is not None
             cursor = page.next_after_sequence
 
+    def _replay(self, journal: LocalPrefixJobs, claim: StartClaim) -> JobExecutionResult:
+        try:
+            outcome = self._historical_outcome(journal, claim)
+            return JobExecutionResult(
+                outcome,
+                claim.receipt,
+                True,
+                journal.load(claim.token.scope, claim.token.job_id).version,
+            )
+        except JobUnavailableError:
+            raise AttemptAcknowledgementUnavailable(claim.token) from None
+
     def execute(self, command: StartAttemptCommand) -> JobExecutionResult:
         journal = self.journal_factory()
         journal.check_ready()
         # Exact historical replay must not depend on current deployment support.
         if journal.lookup_command(command) is not None:
             claim = journal.start(command, now=self.clock())
-            outcome = self._historical_outcome(journal, claim)
-            return JobExecutionResult(
-                outcome, claim.receipt, True, journal.load(command.scope, command.job_id).version
-            )
+            return self._replay(journal, claim)
         view = journal.load(command.scope, command.job_id)
         prepared = self.prepare_stored(view.definition.definition)
         claim = journal.start(command, now=self.clock())
         if not claim.newly_claimed:
-            outcome = self._historical_outcome(journal, claim)
-            return JobExecutionResult(
-                outcome, claim.receipt, True, journal.load(command.scope, command.job_id).version
-            )
+            return self._replay(journal, claim)
         job = view.definition
 
         def guard(captured: CapturedOutput) -> None:
@@ -154,12 +171,20 @@ class LocalPrefixJobService:
             validate_completion(job, completed, content)
         except Exception as exc:  # noqa: BLE001 - persist only a finite safe diagnostic before publication.
             failure = classify_failure(exc)
-            journal.fail(claim.token, failure, now=self.clock())
+            try:
+                journal.fail(claim.token, failure, now=self.clock())
+            except JobUnavailableError:
+                raise AttemptAcknowledgementUnavailable(claim.token) from None
             if isinstance(exc, (SemanticContractError, SemanticTypeContractError)):
                 raise RecordedAttemptError(failure) from None
-            raise JobUnavailableError("local prefix execution failed safely") from None
+            raise AttemptAcknowledgementUnavailable(
+                claim.token, "local prefix execution failed safely; inspect retained job evidence"
+            ) from None
         # Do not extend the failure catch across publication: commit may be acknowledged late.
-        outcome = journal.complete(claim.token, completed, content, now=self.clock())
+        try:
+            outcome = journal.complete(claim.token, completed, content, now=self.clock())
+        except JobUnavailableError:
+            raise AttemptAcknowledgementUnavailable(claim.token) from None
         return JobExecutionResult(outcome, claim.receipt, False, outcome.transition.version)
 
     def abandon(self, command: AbandonAttemptCommand) -> JobJournalReceipt:

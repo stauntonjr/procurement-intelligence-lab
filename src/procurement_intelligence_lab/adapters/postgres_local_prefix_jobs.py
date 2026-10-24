@@ -258,12 +258,20 @@ class PostgresLocalPrefixJobs:
             cast(
                 LiteralString,
                 "SELECT * FROM pil_local_prefix_job_heads WHERE scope=%s AND job_id=%s"
-                + (" FOR UPDATE" if lock else ""),
+                + (" FOR UPDATE" if lock else " FOR SHARE"),
             ),
             (canonical(scope).decode(), job_id),
         ).fetchone()
         if head is None:
             raise JobIntegrityError("job head evidence is missing")
+        # Every writer locks the head before appending. Keep readers on one
+        # stable committed head while checking that it has not been rolled back.
+        latest = conn.execute(
+            "SELECT sequence FROM pil_local_prefix_job_transitions WHERE scope=%s AND job_id=%s ORDER BY sequence DESC LIMIT 1",
+            (canonical(scope).decode(), job_id),
+        ).fetchone()
+        if latest is None or latest["sequence"] != head["sequence"]:
+            raise JobIntegrityError("job head does not reference latest immutable evidence")
         t = self._transition(conn, job, head["sequence"])
         token = t.attempt
         expected = (
@@ -413,6 +421,8 @@ class PostgresLocalPrefixJobs:
                     raise JobConflictError(
                         "attempt completion conflicts with retained full receipt"
                     )
+                if self.archive.source._content(conn, completed.snapshot) != content:
+                    raise JobConflictError("attempt content conflicts with retained raw bytes")
                 return view.latest
             active(view, token)
             retained = self.archive._append_in_transaction(conn, completed, content)

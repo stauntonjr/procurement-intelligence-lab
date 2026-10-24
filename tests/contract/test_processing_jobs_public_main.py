@@ -84,6 +84,14 @@ def test_commit_then_lost_ack_public_main_recovers_actual_state(
     assert json.loads(captured.err)["code"] == "pil.infrastructure.local_prefix_job_unavailable"
     if method == "submit":
         job_id = success(run("processing_jobs", command, archive_dsn))["job_id"]
+    error = json.loads(captured.err)
+    assert error["job_id"] == job_id
+    assert error["scope"] == json.loads(scope.read_text())
+    assert "status" not in error and "processing_complete" not in error
+    if method in ("submit", "start"):
+        assert "attempt_id" not in error
+    else:
+        assert error["attempt_id"]
     shown = success(run("processing_jobs", ["show", *scoped(scope, job_id)], archive_dsn))
     assert shown["status"] == status
     assert shown["processing_complete"] == (status == "SUCCEEDED")

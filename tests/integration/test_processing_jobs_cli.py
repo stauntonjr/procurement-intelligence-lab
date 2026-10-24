@@ -262,3 +262,62 @@ def test_malformed_admission_fails_without_capture_or_journal(
         arrival.write_text(json.dumps(value))
     Path(args[1]).unlink()
     failure(run("processing_jobs", args, archive_dsn), expected)
+
+
+def test_corrupt_linked_evidence_is_never_public_success_or_empty(archive_dsn: str, tmp_path: Path):
+    import psycopg
+
+    _, scope, _, submitted = initialized(tmp_path, archive_dsn)
+    job_id = submitted["job_id"]
+    success(run("processing_jobs", start_args(scope, job_id), archive_dsn))
+    with psycopg.connect(archive_dsn) as conn:
+        conn.execute("ALTER TABLE pil_planned_executions DISABLE TRIGGER USER")
+        conn.execute("UPDATE pil_planned_executions SET payload_sha256=repeat('0',64)")
+    for kind in ("show", "result", "history", "content"):
+        args = [kind, *scoped(scope, job_id)]
+        if kind == "content":
+            args += ["--output", str(tmp_path / "must-not-exist.xlsx")]
+        failure(
+            run("processing_jobs", args, archive_dsn),
+            "pil.infrastructure.local_prefix_job_integrity_invalid",
+        )
+    assert not (tmp_path / "must-not-exist.xlsx").exists()
+
+
+def test_public_start_key_cannot_change_intent_actor_or_version(archive_dsn: str, tmp_path: Path):
+    _, scope, _, submitted = initialized(tmp_path, archive_dsn)
+    job_id = submitted["job_id"]
+    done = success(run("processing_jobs", start_args(scope, job_id), archive_dsn))
+    altered = [start_args(scope, job_id, kind="retry"), start_args(scope, job_id, version=3)]
+    actor = start_args(scope, job_id)
+    actor[actor.index("--actor") + 1] = "different-developer"
+    altered.append(actor)
+    for command in altered:
+        failure(
+            run("processing_jobs", command, archive_dsn), "pil.policy.local_prefix_job_conflict"
+        )
+    shown = success(run("processing_jobs", ["show", *scoped(scope, job_id)], archive_dsn))
+    assert shown["job_journal_receipt"] == done["job_journal_receipt"]
+
+
+def test_stale_head_is_public_integrity_failure(archive_dsn: str, tmp_path: Path):
+    import psycopg
+
+    _, scope, _, submitted = initialized(tmp_path, archive_dsn)
+    job_id = submitted["job_id"]
+    with psycopg.connect(archive_dsn) as conn:
+        prior = conn.execute(
+            "SELECT sequence,version,status,attempt_id,fence,recorded_at FROM pil_local_prefix_job_heads"
+        ).fetchone()
+    assert prior is not None
+    success(run("processing_jobs", start_args(scope, job_id), archive_dsn))
+    with psycopg.connect(archive_dsn) as conn:
+        conn.execute(
+            "UPDATE pil_local_prefix_job_heads SET sequence=%s,version=%s,status=%s,attempt_id=%s,fence=%s,recorded_at=%s",
+            prior,
+        )
+    for command in ("show", "result", "history"):
+        failure(
+            run("processing_jobs", [command, *scoped(scope, job_id)], archive_dsn),
+            "pil.infrastructure.local_prefix_job_integrity_invalid",
+        )
