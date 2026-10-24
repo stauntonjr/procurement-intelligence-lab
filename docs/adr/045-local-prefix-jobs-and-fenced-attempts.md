@@ -2,7 +2,7 @@
 
 Status: accepted by owner on 2026-10-23; approved proposal `da09f98`. Decision [#231](https://github.com/stauntonjr/procurement-intelligence-lab/issues/231),
 primary M1, parent #36. The owner approved the written lifecycle policy and instructed proceed.
-Implementation #232 has an owner-approved plan (`6dc1522`); implementation is in progress; no runtime acceptance is delivered. [Approved specification](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md).
+Implementation #232 has an owner-approved plan (`6dc1522`); implementation is owned by #232; no runtime acceptance is delivered. [Approved specification](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md).
 
 ## Context
 
@@ -55,4 +55,4 @@ review before delivery. #36 stays open for broader ingestion, worker and partial
 #13/#21/#33/#35/#37/#41/#68/#70/#75 are not completed by this decision.
 
 The owner approved this policy in written proposal `da09f98`. The [implementation plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md)
-for #232 is owner-approved at `6dc1522`; implementation is in progress; no current main runtime or storage behavior changes in this decision record.
+for #232 is owner-approved at `6dc1522`; implementation is owned by #232; no current main runtime or storage behavior changes in this decision record.

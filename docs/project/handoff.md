@@ -1,21 +1,29 @@
 # Project handoff
 
-## Approved local prefix job lifecycle; implementation in progress - 2026-10-23
+## Durable local prefix jobs - 2026-10-23
 
-Approved decision #231 (M1, parent #36), implementation #232, defines the next core increment after main87cc5cc/PR230:
-durable local submission/attempt evidence, exact scoped request idempotency, explicit retries
-and fenced abandonment around the qualified five-stage prefix. The [written design](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md)
-and accepted ADR045 separate semantic computation identity from attempt lifecycle, require
-expected captured-byte verification and atomic source/archive/current-attempt success, and keep
-legacy callers compatible. The owner approved written proposal `da09f98` on 2026-10-23 and
-instructed proceed. The
-[seven-task implementation plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md) is owner-approved at `6dc1522`; implementation is in progress, acceptance pending;
-Native/inline execution with one independent final review preserves the preceding delivery
-method. A fresh builder check reported "nothing important left"; documentation
-`make check-fast` passed. No job runtime, capability, queue, worker or implementation acceptance
-is delivered. Wider #36 and operational-agent authority remain open.
-Pre-slice stewardship uses the identical-baseline Gemini503 receipt39715621577 plus current
-direct Codex review of repository/Issues/Project; provider availability is not roadmap authority.
+Feature #232 (M1, parent #36) implements owner-approved decision #231 / ADR-045 and the
+[seven-task plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md). The trusted local
+[processing-jobs contract](../architecture/local-prefix-jobs.md) adds immutable arrivals/pinned
+inputs, scoped submission idempotency, explicit FIRST/RETRY attempts, historical command replay
+and fenced abandonment. Actual captured bytes are checked before STRUCTURE. Source/archive/full
+current-attempt success commits together; first archive retention stays separate. Ambiguous
+acknowledgement and crash-left RUNNING never invent failure. Recovery/export need no original
+source/config/executor. Original execution/archive/review/dependency callers remain compatible.
+
+Implementation clarifications: empty context environment as well as all selection settings;
+read-only command lookup before runtime preparation on replay; a separate per-call execution
+response carries original acknowledgement/historical/current-version metadata. These are recorded
+in the plan/contract; they grant no operational-agent authority. #36/#13/#21/#33/#35/#37/#75 remain
+broader work. No queue/listener/lease, automatic retry/recompute, later stage or production deployment.
+
+Exact qualification, independent review, protected-check and merged-main receipts are recorded in
+[Issue #232](https://github.com/stauntonjr/procurement-intelligence-lab/issues/232); its actual status
+distinguishes branch from main. Tests include real Postgres races/rollback/acknowledgement loss,
+public process-death/restart, clean base/storage wheels and legacy digest/wire comparison.
+Pre-slice stewardship used identical-baseline Gemini503 run39715621577 plus direct Codex review;
+provider availability is separate from roadmap evidence. Historical demo wording and duplicate
+ADR-033 numbering remain separate drift.
 
 ## Completed planned-prefix archive - 2026-10-21
 

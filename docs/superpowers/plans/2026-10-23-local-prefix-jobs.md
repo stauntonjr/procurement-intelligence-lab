@@ -10,7 +10,7 @@
 
 **Spec:** [Approved design](../specs/2026-10-23-local-prefix-jobs-design.md), owner-approved proposal `da09f989ddf1806d7e9877d7cf7c426e6fec5c37` on 2026-10-23. Decision #231 / [ADR-045](../../adr/045-local-prefix-jobs-and-fenced-attempts.md); implementation Issue #232, primary M1, native parent #36. Baseline main `87cc5ccb967e2063b348f90744aaafae741e66b1`.
 
-**Plan status:** Owner-approved at revision `6dc1522` on 2026-10-23; implementation in progress, runtime acceptance pending. Preserve established Native/inline execution with one independent final architecture/semantic review.
+**Plan status:** Owner-approved at revision `6dc1522` on 2026-10-23; implementation is tracked in #232; exact qualification/review/protected delivery receipts live there. Preserve established Native/inline execution with one independent final architecture/semantic review.
 
 ## Global Constraints
 

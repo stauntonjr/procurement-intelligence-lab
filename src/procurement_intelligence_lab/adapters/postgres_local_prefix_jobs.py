@@ -167,7 +167,7 @@ class PostgresLocalPrefixJobs:
             raise JobIntegrityError("job arrival evidence mismatch")
         return job
 
-    def _transition(
+    def _retained_transition(
         self, conn: psycopg.Connection[dict[str, Any]], job: JobDefinition, sequence: int
     ) -> JobTransition:
         row = conn.execute(
@@ -208,6 +208,42 @@ class PostgresLocalPrefixJobs:
             except SemanticContractError:
                 raise JobIntegrityError("successful job evidence is missing or invalid") from None
         return t
+
+    def _transition(
+        self,
+        conn: psycopg.Connection[dict[str, Any]],
+        job: JobDefinition,
+        sequence: int,
+    ) -> JobTransition:
+        """Validate the returned transition against its acknowledged predecessor."""
+        current = self._retained_transition(conn, job, sequence)
+        try:
+            if sequence == 1:
+                expected = submission_transition(job, now=current.recorded_at)
+            else:
+                previous = self._retained_transition(conn, job, sequence - 1)
+                view = JobView(job, JobJournalReceipt(previous))
+                if type(current.command) is StartAttemptCommand:
+                    expected = start_transition(view, current.command, now=current.recorded_at)
+                elif type(current.command) is AbandonAttemptCommand:
+                    expected = abandon_transition(view, current.command, now=current.recorded_at)
+                elif current.failure is not None and current.attempt is not None:
+                    expected = failure_transition(
+                        view, current.attempt, current.failure, now=current.recorded_at
+                    )
+                elif current.success is not None and current.attempt is not None:
+                    expected = success_transition(
+                        view, current.attempt, current.success, now=current.recorded_at
+                    )
+                else:
+                    raise JobIntegrityError("retained transition has no valid lifecycle evidence")
+            if not same(expected, current):
+                raise JobIntegrityError(
+                    "retained transition disagrees with acknowledged predecessor"
+                )
+            return current
+        except SemanticContractError:
+            raise JobIntegrityError("retained lifecycle evidence is missing or invalid") from None
 
     def _load(
         self,

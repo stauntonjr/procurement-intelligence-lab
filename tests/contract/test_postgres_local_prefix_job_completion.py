@@ -270,3 +270,18 @@ def test_failure_and_abandonment_have_one_terminal_winner(archive_dsn: str, tmp_
     assert jobs.load(job.scope, job.job_id).status in (JobStatus.FAILED, JobStatus.ABANDONED)
     assert jobs.load(job.scope, job.job_id).version == 3
     assert counts(archive_dsn) == ((0,), (0,), (0,))
+
+
+def test_success_without_acknowledged_start_is_integrity_failure(archive_dsn: str, tmp_path: Path):
+    jobs = ready(archive_dsn)
+    job, p, content = job_input(tmp_path / "source.xlsx")
+    jobs.submit(job, now=NOW)
+    token = jobs.start(first(job), now=NOW).token
+    jobs.complete(token, candidate(p, job), content, now=NOW)
+    with psycopg.connect(archive_dsn) as conn:
+        conn.execute("ALTER TABLE pil_local_prefix_job_commands DISABLE TRIGGER USER")
+        conn.execute("ALTER TABLE pil_local_prefix_job_transitions DISABLE TRIGGER USER")
+        conn.execute("DELETE FROM pil_local_prefix_job_commands")
+        conn.execute("DELETE FROM pil_local_prefix_job_transitions WHERE sequence=2")
+    with pytest.raises(JobIntegrityError):
+        jobs.load(job.scope, job.job_id)

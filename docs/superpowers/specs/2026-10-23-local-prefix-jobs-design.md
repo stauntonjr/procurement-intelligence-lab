@@ -338,7 +338,7 @@ fixture organization are routine builder choices, not new lifecycle policy.
 
 A fresh read-only builder check of proposal `eae24f0` reported "nothing important left". No
 owner-only questions or new implementation decisions were raised. The owner approved proposal `da09f98` on 2026-10-23 and instructed proceed. ADR045 is
-accepted; implementation #232 has an owner-approved seven-task plan (`6dc1522`); implementation is in progress. No product code, storage
+accepted; implementation #232 has an owner-approved seven-task plan (`6dc1522`); implementation and delivery receipts are owned by #232. No product code, storage
 capability, CLI or runtime acceptance is delivered by these docs.
 
 Pre-slice stewardship: existing hosted audit39715621577 on the identical main baseline failed
