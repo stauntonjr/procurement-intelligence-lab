@@ -1,5 +1,26 @@
 # Project handoff
 
+## Explicit planned RESOLVE prefix — 2026-10-24
+
+The owner selected RESOLVE pipeline adoption ahead of further listener/worker work.
+Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235) (M3, parent #14),
+[approved design](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md) and accepted
+ADR-046 define an explicit sixth stage with a pinned scoped internal-SKU catalog, unchanged
+normalized-exact matching, mention-bound row evidence, abstentions and atomic retained results.
+The owner approved written design `052ab47` and implementation plan `64f787b` on
+2026-10-24. The [six-stage execution/recovery contract](../architecture/planned-resolve-prefix.md)
+implements actual registered execution, atomic source/prefix/catalog retention and independently
+validated source-free recovery. [PR237](https://github.com/stauntonjr/procurement-intelligence-lab/pull/237)
+and #236 record exact final qualification, protected delivery and merged-main proof; consult their
+actual status to distinguish branch from main. The
+[retained qualification evidence](../development/evidence/issue-236/README.md) includes installed
+base3.12/base3.13/storage receipts, full legacy equality and one independent whole-branch review.
+Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, reconciliation,
+global identity and broader M3 acceptance remain subsequent work. #231/#232 are delivered on main;
+their exact receipts remain in #232. Parent #36's stale plan-pending summary is corrected while
+its listener/worker acceptance stays open. Hosted advisory40115378490 on main88d32d4 failed Gemini
+HTTP503; direct code/Issue/Project review and structural audit are separate evidence.
+
 ## Durable local prefix jobs - 2026-10-23
 
 Feature #232 (M1, parent #36) implements owner-approved decision #231 / ADR-045 and the

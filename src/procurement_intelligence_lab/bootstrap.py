@@ -8,7 +8,19 @@ if TYPE_CHECKING:
     from procurement_intelligence_lab.application.planned_bom_execution import (
         PlannedBomExecutionService,
     )
+    from procurement_intelligence_lab.application.planned_resolved_bom_execution import (
+        PlannedResolvedBomExecutionService,
+    )
+    from procurement_intelligence_lab.domains.procurement.resolution_policy import (
+        BomResolutionPolicy,
+    )
     from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
+    from procurement_intelligence_lab.platform.execution.resolution_archive import (
+        CompletedResolvedPrefixSnapshot,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import (
+        CandidateInputEvidence,
+    )
     from procurement_intelligence_lab.platform.planning.contracts import (
         ImplementationConfig,
         ImplementationDescriptor,
@@ -16,6 +28,9 @@ if TYPE_CHECKING:
     )
     from procurement_intelligence_lab.ports.local_prefix_jobs import LocalPrefixJobs
     from procurement_intelligence_lab.ports.planned_execution_archive import PlannedExecutionArchive
+    from procurement_intelligence_lab.ports.resolved_execution_archive import (
+        ResolvedExecutionArchive,
+    )
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
     LocalFileIngest,
@@ -183,6 +198,24 @@ def archive_codec():
         NormalizedOutput,
         StructuredOutput,
     )
+    from procurement_intelligence_lab.platform.execution.resolution_archive import (
+        ArchivedResolvedPrefix,
+        CompletedResolvedPrefixSnapshot,
+        ResolvedExecutionArchiveReceipt,
+        ResolvedExecutionHistoryPage,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_contracts import (
+        ResolvedPrefixExecutionReceipt,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import (
+        CandidateInputEvidence,
+        CandidateSnapshot,
+        ResolutionPolicyEvidence,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_outputs import (
+        MentionResolution,
+        ResolvedOutput,
+    )
     from procurement_intelligence_lab.platform.planning.contracts import (
         ContractRef,
         ImplementationConfig,
@@ -255,11 +288,28 @@ def archive_codec():
         ProvenanceRelation,
         TransformationEvent,
     )
-    from procurement_intelligence_lab.platform.semantics.resolution import EntityMention
+    from procurement_intelligence_lab.platform.semantics.resolution import (
+        CanonicalizedAssertion,
+        EntityMention,
+        ResolutionDecision,
+        ResolutionStatus,
+    )
     from procurement_intelligence_lab.platform.semantics.scope import StateScope
 
     return SemanticCodec(
         (
+            CandidateSnapshot,
+            CandidateInputEvidence,
+            ResolutionPolicyEvidence,
+            MentionResolution,
+            ResolvedOutput,
+            ResolvedPrefixExecutionReceipt,
+            CompletedResolvedPrefixSnapshot,
+            ResolvedExecutionArchiveReceipt,
+            ArchivedResolvedPrefix,
+            ResolvedExecutionHistoryPage,
+            ResolutionDecision,
+            CanonicalizedAssertion,
             ArtifactArrival,
             PinnedStageMetadata,
             PinnedPrefixDefinition,
@@ -325,6 +375,7 @@ def archive_codec():
             StateScope,
         ),
         (
+            ResolutionStatus,
             JobStatus,
             AttemptStatus,
             StartIntent,
@@ -742,3 +793,183 @@ def build_local_prefix_job_reader(dsn: str):
     )
 
     return LocalPrefixJobReader(build_local_prefix_jobs(dsn), validate_completed_bom_prefix)
+
+
+def bom_resolution_descriptor() -> "ImplementationDescriptor":
+    from procurement_intelligence_lab.platform.domain_packages.package import StageId
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ContractRef,
+        ImplementationDescriptor,
+    )
+
+    return ImplementationDescriptor(
+        "bom-normalized-exact-resolve",
+        "1.0",
+        "1",
+        StageId.RESOLVE,
+        ContractRef("SourceAssertion", "1.0"),
+        ContractRef("ResolutionDecision", "1.0"),
+        ("abstention", "authoritative_ids"),
+        "1.0",
+    )
+
+
+def build_planned_resolved_bom_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    normalization_policy: BomNormalizationPolicy,
+    resolution_policy: "BomResolutionPolicy",
+    candidate_input: "CandidateInputEvidence",
+    clock: Callable[[], datetime],
+    content_store: ArtifactContentStore | None = None,
+) -> "PlannedResolvedBomExecutionService":
+    from procurement_intelligence_lab.adapters.package_resolution_executor import BomResolveExecutor
+    from procurement_intelligence_lab.application.planned_resolved_bom_execution import (
+        PlannedResolvedBomExecutionService,
+    )
+    from procurement_intelligence_lab.domains.procurement.planned_resolution import (
+        BomResolve,
+        validate_bom_resolution_inputs,
+        validate_bom_resolved_output,
+    )
+    from procurement_intelligence_lab.platform.execution.identity import same
+    from procurement_intelligence_lab.platform.execution.resolution_admission import (
+        ResolveExecutorRegistration,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_contracts import (
+        ResolvedExecutionRequest,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import admit
+
+    prefix = build_planned_bom_service(
+        manifest=manifest,
+        registry=registry,
+        config=config,
+        policy=normalization_policy,
+        clock=clock,
+        content_store=content_store,
+    )
+    strategy = BomResolve(candidate_input.snapshot, resolution_policy)
+    evidence = resolution_policy.evidence
+    registration = ResolveExecutorRegistration(
+        bom_resolution_descriptor(),
+        (),
+        (evidence.reference,),
+        BomResolveExecutor(
+            strategy,
+            candidate_input.snapshot,
+            evidence,
+            strategy.audit_decisions,
+            validate_bom_resolved_output,
+        ),
+        evidence.reference.reference_id,
+    )
+
+    def validate(request: ResolvedExecutionRequest) -> None:
+        admit(
+            same(request.candidate_input.snapshot, candidate_input.snapshot)
+            and same(request.policy, evidence)
+        )
+        validate_bom_resolution_inputs(
+            request.candidate_input,
+            resolution_policy,
+            scope=request.prefix.source.scope,
+            as_of=request.prefix.captured_at,
+        )
+
+    return PlannedResolvedBomExecutionService(prefix, registration, validate, clock)
+
+
+def build_resolved_execution_archive(dsn: str):
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        from procurement_intelligence_lab.adapters.postgres_resolved_execution_archive import (
+            PostgresResolvedExecutionArchive,
+        )
+    except ImportError:
+        raise ArchiveUnavailableError(
+            "resolved archive storage capability is unavailable"
+        ) from None
+    return PostgresResolvedExecutionArchive(build_planned_execution_archive(dsn), archive_codec())
+
+
+def validate_completed_resolved_bom_prefix(completed: "CompletedResolvedPrefixSnapshot") -> None:
+    """Validate supported recorded evidence without an executor, source or config file."""
+    from procurement_intelligence_lab.domains.procurement.planned_resolution import (
+        validate_bom_resolution_inputs,
+        validate_bom_resolved_output,
+    )
+    from procurement_intelligence_lab.domains.procurement.resolution_policy import (
+        BomResolutionPolicy,
+    )
+    from procurement_intelligence_lab.platform.execution.contracts import plan_payload
+    from procurement_intelligence_lab.platform.execution.identity import encoded, same
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import (
+        load_candidate_input,
+    )
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveContractError
+
+    validate_completed_bom_prefix(completed.prefix)
+    r = completed.execution
+    policy = BomResolutionPolicy.from_parameters(r.policy.parameters)
+    candidate = load_candidate_input(r.candidate_input.raw_json)
+    if not same(policy.evidence, r.policy) or not same(candidate, r.candidate_input):
+        raise ArchiveContractError(
+            "retained resolution requires exact supported policy and catalog"
+        )
+    if plan_payload(r.plan)["stages"][5]["implementation"] != encoded(bom_resolution_descriptor()):
+        raise ArchiveContractError("retained resolution requires supported exact implementation")
+    validate_bom_resolution_inputs(
+        candidate, policy, scope=completed.scope, as_of=r.context.started_at
+    )
+    validate_bom_resolved_output(r.output)
+
+
+def build_planned_resolved_bom_archive_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    normalization_policy: BomNormalizationPolicy,
+    resolution_policy: "BomResolutionPolicy",
+    candidate_input: "CandidateInputEvidence",
+    clock: Callable[[], datetime],
+    archive_factory: Callable[[], "ResolvedExecutionArchive"],
+):
+    from procurement_intelligence_lab.application.archived_resolved_execution import (
+        ArchivedResolvedBomService,
+    )
+
+    store = MemoryArtifactContent()
+    executions = build_planned_resolved_bom_service(
+        manifest=manifest,
+        registry=registry,
+        config=config,
+        normalization_policy=normalization_policy,
+        resolution_policy=resolution_policy,
+        candidate_input=candidate_input,
+        clock=clock,
+        content_store=store,
+    )
+    return ArchivedResolvedBomService(
+        executions,
+        store,
+        archive_factory,
+        tuple(sorted(normalization_policy.as_dict().items())),
+        validate_completed_resolved_bom_prefix,
+    )
+
+
+def build_resolved_execution_archive_reader(dsn: str):
+    from procurement_intelligence_lab.application.archived_resolved_execution import (
+        ResolvedExecutionArchiveReader,
+    )
+
+    return ResolvedExecutionArchiveReader(
+        build_resolved_execution_archive(dsn),
+        validate_completed_resolved_bom_prefix,
+        lambda retained: archive_codec().dumps(retained).encode("utf-8"),
+    )

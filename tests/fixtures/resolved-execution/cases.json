@@ -1,0 +1,176 @@
+[
+  {
+    "id": "exact",
+    "mention": "GPU-A",
+    "expected_key": "GPU-A",
+    "expected_status": "resolved",
+    "source_location": {
+      "sheet": "BOM",
+      "row": 7,
+      "sku_column": "A"
+    },
+    "candidate_snapshot": {
+      "schema_version": "1.0",
+      "catalog_id": "synthetic-items",
+      "catalog_revision": "1",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "bom-stage-contract",
+        "site_id": "lab",
+        "version": "1"
+      },
+      "entity_type": "procurement_item",
+      "identifier_namespace": "internal_sku",
+      "effective_at": "2026-10-19T00:00:00+00:00",
+      "keys": [
+        "GPU-A",
+        "CPU-A"
+      ]
+    },
+    "source_rows_xml": "<row r=\"1\"><c r=\"A1\"><v>SKU</v></c><c r=\"B1\"><v>Description</v></c><c r=\"C1\"><v>Quantity</v></c><c r=\"D1\"><v>Unit Price</v></c></row><row r=\"7\"><c r=\"D7\"><v>100.50</v></c><c r=\"A7\"><v>GPU-A</v></c><c r=\"C7\"><v>0.5</v></c></row>"
+  },
+  {
+    "id": "normalized",
+    "mention": "gpu a",
+    "expected_key": "GPU-A",
+    "expected_status": "resolved",
+    "source_location": {
+      "sheet": "BOM",
+      "row": 7,
+      "sku_column": "A"
+    },
+    "candidate_snapshot": {
+      "schema_version": "1.0",
+      "catalog_id": "synthetic-items",
+      "catalog_revision": "1",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "bom-stage-contract",
+        "site_id": "lab",
+        "version": "1"
+      },
+      "entity_type": "procurement_item",
+      "identifier_namespace": "internal_sku",
+      "effective_at": "2026-10-19T00:00:00+00:00",
+      "keys": [
+        "GPU-A"
+      ]
+    },
+    "source_rows_xml": "<row r=\"1\"><c r=\"A1\"><v>SKU</v></c><c r=\"B1\"><v>Description</v></c><c r=\"C1\"><v>Quantity</v></c><c r=\"D1\"><v>Unit Price</v></c></row><row r=\"7\"><c r=\"D7\"><v>100.50</v></c><c r=\"A7\"><v>gpu a</v></c><c r=\"C7\"><v>0.5</v></c></row>"
+  },
+  {
+    "id": "ambiguous",
+    "mention": "GPU-A",
+    "expected_key": null,
+    "expected_status": "unresolved",
+    "source_location": {
+      "sheet": "BOM",
+      "row": 7,
+      "sku_column": "A"
+    },
+    "candidate_snapshot": {
+      "schema_version": "1.0",
+      "catalog_id": "synthetic-items",
+      "catalog_revision": "1",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "bom-stage-contract",
+        "site_id": "lab",
+        "version": "1"
+      },
+      "entity_type": "procurement_item",
+      "identifier_namespace": "internal_sku",
+      "effective_at": "2026-10-19T00:00:00+00:00",
+      "keys": [
+        "GPU A",
+        "GPU-A"
+      ]
+    },
+    "source_rows_xml": "<row r=\"1\"><c r=\"A1\"><v>SKU</v></c><c r=\"B1\"><v>Description</v></c><c r=\"C1\"><v>Quantity</v></c><c r=\"D1\"><v>Unit Price</v></c></row><row r=\"7\"><c r=\"D7\"><v>100.50</v></c><c r=\"A7\"><v>GPU-A</v></c><c r=\"C7\"><v>0.5</v></c></row>"
+  },
+  {
+    "id": "missing",
+    "mention": "UNKNOWN",
+    "expected_key": null,
+    "expected_status": "unresolved",
+    "source_location": {
+      "sheet": "BOM",
+      "row": 7,
+      "sku_column": "A"
+    },
+    "candidate_snapshot": {
+      "schema_version": "1.0",
+      "catalog_id": "synthetic-items",
+      "catalog_revision": "1",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "bom-stage-contract",
+        "site_id": "lab",
+        "version": "1"
+      },
+      "entity_type": "procurement_item",
+      "identifier_namespace": "internal_sku",
+      "effective_at": "2026-10-19T00:00:00+00:00",
+      "keys": [
+        "GPU-A"
+      ]
+    },
+    "source_rows_xml": "<row r=\"1\"><c r=\"A1\"><v>SKU</v></c><c r=\"B1\"><v>Description</v></c><c r=\"C1\"><v>Quantity</v></c><c r=\"D1\"><v>Unit Price</v></c></row><row r=\"7\"><c r=\"D7\"><v>100.50</v></c><c r=\"A7\"><v>UNKNOWN</v></c><c r=\"C7\"><v>0.5</v></c></row>"
+  },
+  {
+    "id": "empty",
+    "mention": "GPU-A",
+    "expected_key": null,
+    "expected_status": "unresolved",
+    "source_location": {
+      "sheet": "BOM",
+      "row": 7,
+      "sku_column": "A"
+    },
+    "candidate_snapshot": {
+      "schema_version": "1.0",
+      "catalog_id": "synthetic-items",
+      "catalog_revision": "1",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "bom-stage-contract",
+        "site_id": "lab",
+        "version": "1"
+      },
+      "entity_type": "procurement_item",
+      "identifier_namespace": "internal_sku",
+      "effective_at": "2026-10-19T00:00:00+00:00",
+      "keys": []
+    },
+    "source_rows_xml": "<row r=\"1\"><c r=\"A1\"><v>SKU</v></c><c r=\"B1\"><v>Description</v></c><c r=\"C1\"><v>Quantity</v></c><c r=\"D1\"><v>Unit Price</v></c></row><row r=\"7\"><c r=\"D7\"><v>100.50</v></c><c r=\"A7\"><v>GPU-A</v></c><c r=\"C7\"><v>0.5</v></c></row>"
+  },
+  {
+    "id": "unicode",
+    "mention": "Straße",
+    "expected_key": "STRASSE",
+    "expected_status": "resolved",
+    "source_location": {
+      "sheet": "BOM",
+      "row": 7,
+      "sku_column": "A"
+    },
+    "candidate_snapshot": {
+      "schema_version": "1.0",
+      "catalog_id": "synthetic-items",
+      "catalog_revision": "1",
+      "scope": {
+        "tenant_id": "synthetic",
+        "project_id": "bom-stage-contract",
+        "site_id": "lab",
+        "version": "1"
+      },
+      "entity_type": "procurement_item",
+      "identifier_namespace": "internal_sku",
+      "effective_at": "2026-10-19T00:00:00+00:00",
+      "keys": [
+        "STRASSE"
+      ]
+    },
+    "source_rows_xml": "<row r=\"1\"><c r=\"A1\"><v>SKU</v></c><c r=\"B1\"><v>Description</v></c><c r=\"C1\"><v>Quantity</v></c><c r=\"D1\"><v>Unit Price</v></c></row><row r=\"7\"><c r=\"D7\"><v>100.50</v></c><c r=\"A7\"><v>Straße</v></c><c r=\"C7\"><v>0.5</v></c></row>"
+  }
+]

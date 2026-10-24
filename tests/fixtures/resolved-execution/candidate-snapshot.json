@@ -1,0 +1,1 @@
+{"schema_version": "1.0", "catalog_id": "synthetic-items", "catalog_revision": "1", "scope": {"tenant_id": "synthetic", "project_id": "bom-stage-contract", "site_id": "lab", "version": "1"}, "entity_type": "procurement_item", "identifier_namespace": "internal_sku", "effective_at": "2026-10-19T00:00:00+00:00", "keys": ["GPU-A"]}

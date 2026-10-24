@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "cases_sha256": "742ec4c2dfb30fa711c80c5a5b97fd995b03a50c9d1671f79fa97d157d21bd9a",
+  "source_template": "tests/bom_stage_fixtures.py HEADER+ROW with literal case mention",
+  "purpose": "Public synthetic integration cases for the declared namespace; not held-out or general entity identity gold"
+}

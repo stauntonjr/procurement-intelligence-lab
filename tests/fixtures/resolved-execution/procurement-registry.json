@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0",
+  "implementations": [
+    {
+      "implementation_id": "local-file-capture",
+      "descriptor_version": "1.0",
+      "implementation_version": "1",
+      "stage": "INGEST",
+      "input_contract": {
+        "name": "SourceReference",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "Artifact",
+        "version": "1.0"
+      },
+      "capabilities": [],
+      "config_schema_version": "1.0",
+      "required_settings": [],
+      "optional_settings": [],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "xlsx-cell-structure",
+      "descriptor_version": "1.0",
+      "implementation_version": "1",
+      "stage": "STRUCTURE",
+      "input_contract": {
+        "name": "Artifact",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "StructuredDocument",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [],
+      "optional_settings": [],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "bom-table-map",
+      "descriptor_version": "1.0",
+      "implementation_version": "1",
+      "stage": "MAP",
+      "input_contract": {
+        "name": "StructuredDocument",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "MappedDocument",
+        "version": "1.0"
+      },
+      "capabilities": [],
+      "config_schema_version": "1.0",
+      "required_settings": [],
+      "optional_settings": [],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "bom-value-normalization",
+      "descriptor_version": "1.0",
+      "implementation_version": "1",
+      "stage": "NORMALIZE",
+      "input_contract": {
+        "name": "MappedDocument",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "NormalizedObservation",
+        "version": "1.0"
+      },
+      "capabilities": [],
+      "config_schema_version": "1.0",
+      "required_settings": [],
+      "optional_settings": [],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "bom-source-assertions",
+      "descriptor_version": "1.0",
+      "implementation_version": "1",
+      "stage": "ASSERT",
+      "input_contract": {
+        "name": "NormalizedObservation",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "SourceAssertion",
+        "version": "1.0"
+      },
+      "capabilities": [],
+      "config_schema_version": "1.0",
+      "required_settings": [],
+      "optional_settings": [],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "bom-normalized-exact-resolve",
+      "descriptor_version": "1.0",
+      "implementation_version": "1",
+      "stage": "RESOLVE",
+      "input_contract": {
+        "name": "SourceAssertion",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "ResolutionDecision",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [],
+      "optional_settings": [],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.reconcile",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "RECONCILE",
+      "input_contract": {
+        "name": "CanonicalizedAssertion",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "OperationalState",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.derive",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "DERIVE",
+      "input_contract": {
+        "name": "OperationalState",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "DerivedFact",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    },
+    {
+      "implementation_id": "fixture.detect",
+      "descriptor_version": "1.0.0",
+      "implementation_version": "fixture-only-1",
+      "stage": "DETECT",
+      "input_contract": {
+        "name": "OperationalState",
+        "version": "1.0"
+      },
+      "output_contract": {
+        "name": "Anomaly",
+        "version": "1.0"
+      },
+      "capabilities": [
+        "abstention",
+        "authoritative_ids",
+        "tables"
+      ],
+      "config_schema_version": "1.0",
+      "required_settings": [
+        "endpoint_ref"
+      ],
+      "optional_settings": [
+        "region"
+      ],
+      "provider_version": null,
+      "model_version": null
+    }
+  ]
+}
