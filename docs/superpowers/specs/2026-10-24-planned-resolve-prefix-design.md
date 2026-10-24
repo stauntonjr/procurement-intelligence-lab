@@ -1,8 +1,9 @@
 # Explicit planned RESOLVE prefix and retained identity evidence
 
-Status: proposed; owner selected the RESOLVE direction on 2026-10-24. This written design
-is not yet approved. Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235),
-primary M3, parent #14; proposed ADR-046. No implementation or runtime acceptance is claimed.
+Status: owner-approved on 2026-10-24 at written proposal revision
+`052ab479116fa35704cb3a5f970f89d19b337bea`; the owner instructed proceed with implementation
+planning. Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235),
+primary M3, parent #14; accepted ADR-046. No implementation or runtime acceptance is claimed.
 
 ## Intent and current boundary
 
@@ -35,7 +36,7 @@ wire, codec and attempt contracts. A standalone legacy resolver helper would not
 actual planned execution or durable provenance. Full RECONCILE/state adoption would add a
 separate authority decision. Those alternatives are outside this proposal.
 
-Author calls for approval: internal SKU keys only in one exact scope; a complete explicit local
+Approved author calls: internal SKU keys only in one exact scope; a complete explicit local
 candidate snapshot with no aliases; unchanged normalized-exact matching; a new opt-in six-stage
 caller and archive capability; original five-stage jobs remain five-stage. No new framework,
 external dependency, model, provider or scoring algorithm is proposed.
@@ -253,14 +254,15 @@ required deterministic protected checks, and an exact merged-main installed proo
 helper or draft spec is not acceptance. Preserve Native/inline execution and the established one
 independent final review method; do not silently multiply review loops.
 
-## Delivery sequence and unresolved approval
+## Delivery sequence and approval record
 
-This is a design proposal. A fresh-context builder check precedes handover. Owner approval of
-this committed document is required before the implementation plan or product code. After
-approval, create the smallest implementation Issue under #14, use writing-plans, then implement
+One fresh-context builder check of proposal `052ab47` reported "nothing important left".
+The owner approved that written document on 2026-10-24 and instructed proceed. This authorizes
+implementation planning; the resulting plan must be reviewed before product implementation.
+Create the smallest implementation Issue under #14, use writing-plans, then implement
 contracts, real strategy/runtime, atomic archive, actual public caller and exact-revision evidence
-as a single bounded vertical slice. Decision #235 remains open until the decision is accepted;
-implementation acceptance remains separate. No new production or model spend is authorized here.
+as a single bounded vertical slice. Decision #235's durable acceptance and implementation
+delivery remain separate. No new production or model spend is authorized here.
 
 Orientation: exact-main hosted advisory40115378490 failed Gemini HTTP503 (one request,77 files,
 snapshot `a5829e51b4d32fded2c5ec91e7a0eab5ddd95bc66336e1bb818ae996f91388b2`); no report.

@@ -1,8 +1,9 @@
 # ADR-046: Explicit planned RESOLVE prefix with pinned identity evidence
 
-Status: proposed; owner selected RESOLVE direction on 2026-10-24. Written design is pending
-approval. Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235),
-primary M3, parent #14. [Proposed design](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md).
+Status: accepted by owner on 2026-10-24 at written proposal revision
+`052ab479116fa35704cb3a5f970f89d19b337bea`; the owner instructed proceed with implementation
+planning. Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235),
+primary M3, parent #14. [Approved design](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md).
 
 ## Context
 
@@ -12,7 +13,7 @@ resolver has no adapter tying adopted row-grounded mentions to a pinned candidat
 actual planned execution. Source assertions are evidence; an identity link is a separate explicit
 decision and cannot imply reconciliation authority.
 
-## Proposed decision
+## Decision
 
 Add a separate opt-in six-stage profile on the same fixed topology and planner. Reuse the real
 first-five runner and invoke one registered ResolveStrategy. Supply an explicit immutable,
@@ -49,5 +50,6 @@ and unchanged legacy paths. Synthetic integration metrics are bounded to the dec
 not broad entity-resolution quality. #14/#42/#39/#43/#45 and broader #36 remain open. No later
 stage, queue/worker, operational-agent authority or production deployment is approved by this ADR.
 
-Owner approval of the written design precedes implementation planning and product code. Approval,
-builder review or documentation checks alone establish no runtime acceptance.
+The owner approved the written design at `052ab47` on 2026-10-24. Implementation planning is
+authorized; its plan must be reviewed before product code. Approval, builder review or
+documentation checks alone establish no runtime acceptance.
