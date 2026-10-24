@@ -285,5 +285,6 @@ The approved [completed-prefix archive](docs/architecture/planned-execution-arch
 
 The approved [local prefix jobs contract](docs/architecture/local-prefix-jobs.md) adds explicit durable submission, attempts,
 manual retry and fenced abandonment under #232. Source/archive/current-attempt success shares one
-transaction; original execution/archive callers remain compatible. This is branch implementation
-pending its recorded qualification and merged-main acceptance, not a queue deployment.
+transaction; original execution/archive callers remain compatible. Exact qualification, review and
+merged-main acceptance are recorded in [Issue #232](https://github.com/stauntonjr/procurement-intelligence-lab/issues/232).
+This is a trusted local synchronous profile; queue deployment remains outside its scope.
