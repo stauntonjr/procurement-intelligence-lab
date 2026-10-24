@@ -82,6 +82,13 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
+Next design direction, selected by the owner on 2026-10-24: decision #235 (M3, parent #14),
+[explicit planned RESOLVE prefix](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md).
+The proposed ADR-046 covers a scoped pinned internal-SKU candidate snapshot, actual sixth-stage
+execution, mention-bound evidence/abstention and atomic retention. The written design is pending
+approval; no implementation or M3 completion is claimed. Existing five-stage jobs stay unchanged;
+broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
+
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
 [durable local prefix job lifecycle](../architecture/local-prefix-jobs.md): immutable arrival and
 pinned request identity, explicit attempts/retry, fenced abandonment and atomic source/archive/

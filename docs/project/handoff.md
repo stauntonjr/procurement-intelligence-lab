@@ -1,5 +1,19 @@
 # Project handoff
 
+## Proposed planned RESOLVE prefix - 2026-10-24
+
+The owner selected RESOLVE pipeline adoption ahead of further listener/worker work.
+Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235) (M3, parent #14),
+[proposed design](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md) and proposed
+ADR-046 define an explicit sixth stage with a pinned scoped internal-SKU catalog, unchanged
+normalized-exact matching, mention-bound row evidence, abstentions and atomic retained results.
+This written design is pending owner approval; no implementation plan or product code is delivered.
+Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, reconciliation,
+global identity and broader M3 acceptance remain subsequent work. #231/#232 are delivered on main;
+their exact receipts remain in #232. Parent #36's stale plan-pending summary is corrected while
+its listener/worker acceptance stays open. Hosted advisory40115378490 on main88d32d4 failed Gemini
+HTTP503; direct code/Issue/Project review and structural audit are separate evidence.
+
 ## Durable local prefix jobs - 2026-10-23
 
 Feature #232 (M1, parent #36) implements owner-approved decision #231 / ADR-045 and the
