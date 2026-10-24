@@ -8,7 +8,16 @@ if TYPE_CHECKING:
     from procurement_intelligence_lab.application.planned_bom_execution import (
         PlannedBomExecutionService,
     )
+    from procurement_intelligence_lab.application.planned_resolved_bom_execution import (
+        PlannedResolvedBomExecutionService,
+    )
+    from procurement_intelligence_lab.domains.procurement.resolution_policy import (
+        BomResolutionPolicy,
+    )
     from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import (
+        CandidateInputEvidence,
+    )
     from procurement_intelligence_lab.platform.planning.contracts import (
         ImplementationConfig,
         ImplementationDescriptor,
@@ -742,3 +751,90 @@ def build_local_prefix_job_reader(dsn: str):
     )
 
     return LocalPrefixJobReader(build_local_prefix_jobs(dsn), validate_completed_bom_prefix)
+
+
+def bom_resolution_descriptor() -> "ImplementationDescriptor":
+    from procurement_intelligence_lab.platform.domain_packages.package import StageId
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ContractRef,
+        ImplementationDescriptor,
+    )
+
+    return ImplementationDescriptor(
+        "bom-normalized-exact-resolve",
+        "1.0",
+        "1",
+        StageId.RESOLVE,
+        ContractRef("SourceAssertion", "1.0"),
+        ContractRef("ResolutionDecision", "1.0"),
+        ("abstention", "authoritative_ids"),
+        "1.0",
+    )
+
+
+def build_planned_resolved_bom_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    normalization_policy: BomNormalizationPolicy,
+    resolution_policy: "BomResolutionPolicy",
+    candidate_input: "CandidateInputEvidence",
+    clock: Callable[[], datetime],
+    content_store: ArtifactContentStore | None = None,
+) -> "PlannedResolvedBomExecutionService":
+    from procurement_intelligence_lab.adapters.package_resolution_executor import BomResolveExecutor
+    from procurement_intelligence_lab.application.planned_resolved_bom_execution import (
+        PlannedResolvedBomExecutionService,
+    )
+    from procurement_intelligence_lab.domains.procurement.planned_resolution import (
+        BomResolve,
+        validate_bom_resolution_inputs,
+        validate_bom_resolved_output,
+    )
+    from procurement_intelligence_lab.platform.execution.identity import same
+    from procurement_intelligence_lab.platform.execution.resolution_admission import (
+        ResolveExecutorRegistration,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_contracts import (
+        ResolvedExecutionRequest,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import admit
+
+    prefix = build_planned_bom_service(
+        manifest=manifest,
+        registry=registry,
+        config=config,
+        policy=normalization_policy,
+        clock=clock,
+        content_store=content_store,
+    )
+    strategy = BomResolve(candidate_input.snapshot, resolution_policy)
+    evidence = resolution_policy.evidence
+    registration = ResolveExecutorRegistration(
+        bom_resolution_descriptor(),
+        (),
+        (evidence.reference,),
+        BomResolveExecutor(
+            strategy,
+            candidate_input.snapshot,
+            evidence,
+            strategy.audit_decisions,
+            validate_bom_resolved_output,
+        ),
+        evidence.reference.reference_id,
+    )
+
+    def validate(request: ResolvedExecutionRequest) -> None:
+        admit(
+            same(request.candidate_input.snapshot, candidate_input.snapshot)
+            and same(request.policy, evidence)
+        )
+        validate_bom_resolution_inputs(
+            request.candidate_input,
+            resolution_policy,
+            scope=request.prefix.source.scope,
+            as_of=request.prefix.captured_at,
+        )
+
+    return PlannedResolvedBomExecutionService(prefix, registration, validate, clock)

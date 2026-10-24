@@ -149,3 +149,50 @@ def resolved_parts(tmp_path: Path, *, rows: str = HEADER + ROW, keys: tuple[str,
         prefix, evidence, policy, output, tuple(entries), AT + timedelta(seconds=2)
     )
     return receipt, content
+
+
+def planned_resolved_inputs(
+    tmp_path: Path,
+    *,
+    rows: str = HEADER + ROW,
+    keys: tuple[str, ...] = ("GPU-A",),
+    source_exists: bool = True,
+):
+    from procurement_intelligence_lab import bootstrap
+    from procurement_intelligence_lab.platform.execution.contracts import ExecutionRequest
+    from procurement_intelligence_lab.platform.execution.resolution_contracts import (
+        ResolvedExecutionRequest,
+    )
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ImplementationRegistry,
+        StageSelection,
+    )
+    from tests.bom_stage_fixtures import provenance, workbook
+    from tests.contract.test_bom_stage_adapters import source
+    from tests.planned_bom_fixtures import planned_inputs
+
+    manifest, registry, config = planned_inputs()
+    descriptor = bootstrap.bom_resolution_descriptor()
+    registry = ImplementationRegistry(
+        "1.0", (*registry.implementations[:5], descriptor, *registry.implementations[6:])
+    )
+    config = replace(
+        config,
+        selections=(
+            *config.selections[:5],
+            StageSelection(
+                StageId.RESOLVE, descriptor.implementation_id, descriptor.config_schema_version
+            ),
+            *config.selections[6:],
+        ),
+    )
+    path = tmp_path / "actual.xlsx"
+    if source_exists:
+        workbook(path, rows)
+    request = ResolvedExecutionRequest(
+        ExecutionRequest(source(path), provenance().context, AT, StageId.ASSERT),
+        catalog(keys),
+        policy_evidence(),
+        StageId.RESOLVE,
+    )
+    return manifest, registry, config, request, path
