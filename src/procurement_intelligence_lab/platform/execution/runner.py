@@ -43,7 +43,12 @@ class PrefixExecution:
         require(type(self.receipt) is PrefixExecutionReceipt and self.receipt.output is self.output)
 
 
-def run_prefix(prepared: PreparedPrefix, *, clock: Callable[[], datetime]) -> PrefixExecution:
+def run_prefix(
+    prepared: PreparedPrefix,
+    *,
+    clock: Callable[[], datetime],
+    capture_guard: Callable[[CapturedOutput], None] | None = None,
+) -> PrefixExecution:
     if type(prepared) is not PreparedPrefix:
         raise PackageExecutionError("execution requires an admitted prefix")
     before = clock()
@@ -98,6 +103,8 @@ def run_prefix(prepared: PreparedPrefix, *, clock: Callable[[], datetime]) -> Pr
         require(same(result.event.provenance, p) and same(result.source, prepared.request.source))
         if isinstance(result, CapturedOutput):
             require(same(result.artifact.captured_at, prepared.request.captured_at))
+            if capture_guard is not None:
+                capture_guard(result)
         else:
             require(result.previous is inputs)
         if type(result) is MappedOutput:

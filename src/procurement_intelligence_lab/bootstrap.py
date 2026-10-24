@@ -14,6 +14,7 @@ if TYPE_CHECKING:
         ImplementationDescriptor,
         ImplementationRegistry,
     )
+    from procurement_intelligence_lab.ports.local_prefix_jobs import LocalPrefixJobs
     from procurement_intelligence_lab.ports.planned_execution_archive import PlannedExecutionArchive
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
@@ -169,6 +170,7 @@ def archive_codec():
         ExecutionHistoryPage,
     )
     from procurement_intelligence_lab.platform.execution.contracts import (
+        ExecutionRequest,
         ExecutionStatus,
         PrefixExecutionReceipt,
         ResolvedReference,
@@ -181,7 +183,33 @@ def archive_codec():
         NormalizedOutput,
         StructuredOutput,
     )
-    from procurement_intelligence_lab.platform.planning.contracts import PhysicalPlan
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ContractRef,
+        ImplementationConfig,
+        ImplementationDescriptor,
+        ImplementationRegistry,
+        PhysicalPlan,
+        StageSelection,
+    )
+    from procurement_intelligence_lab.platform.processing.contracts import (
+        AbandonAttemptCommand,
+        ArtifactArrival,
+        AttemptStatus,
+        AttemptSuccess,
+        AttemptToken,
+        JobDefinition,
+        JobFailure,
+        JobHistoryPage,
+        JobJournalReceipt,
+        JobStatus,
+        JobTransition,
+        JobView,
+        PinnedPrefixDefinition,
+        PinnedStageMetadata,
+        StartAttemptCommand,
+        StartIntent,
+        TransitionKind,
+    )
     from procurement_intelligence_lab.platform.semantics.archive import (
         ArchiveReceipt,
         DocumentSnapshot,
@@ -215,6 +243,7 @@ def archive_codec():
         StructuredElement,
     )
     from procurement_intelligence_lab.platform.semantics.epistemics import EpistemicStatus
+    from procurement_intelligence_lab.platform.semantics.errors import ErrorCategory, ErrorCode
     from procurement_intelligence_lab.platform.semantics.evidence import (
         EvidenceRef,
         RecordLocation,
@@ -231,6 +260,25 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            ArtifactArrival,
+            PinnedStageMetadata,
+            PinnedPrefixDefinition,
+            JobDefinition,
+            StartAttemptCommand,
+            AbandonAttemptCommand,
+            AttemptToken,
+            JobFailure,
+            AttemptSuccess,
+            JobTransition,
+            JobJournalReceipt,
+            JobView,
+            JobHistoryPage,
+            ExecutionRequest,
+            ContractRef,
+            ImplementationDescriptor,
+            ImplementationRegistry,
+            StageSelection,
+            ImplementationConfig,
             CompletedPrefixSnapshot,
             ExecutionArchiveReceipt,
             ArchivedPrefix,
@@ -277,6 +325,12 @@ def archive_codec():
             StateScope,
         ),
         (
+            JobStatus,
+            AttemptStatus,
+            StartIntent,
+            TransitionKind,
+            ErrorCode,
+            ErrorCategory,
             StageId,
             StageMode,
             ExecutionStatus,
@@ -611,3 +665,80 @@ def build_planned_execution_archive_reader(dsn: str):
     return PlannedExecutionArchiveReader(
         build_planned_execution_archive(dsn), validate_completed_bom_prefix
     )
+
+
+def build_local_prefix_jobs(dsn: str):
+    """Explicit optional local-prefix journal; construction never initializes schemas."""
+    from procurement_intelligence_lab.platform.processing.errors import JobUnavailableError
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        archive = build_planned_execution_archive(dsn)
+    except ArchiveUnavailableError:
+        raise JobUnavailableError("local job storage requires the storage extra") from None
+    from procurement_intelligence_lab.adapters.postgres_local_prefix_jobs import (
+        PostgresLocalPrefixJobs,
+    )
+
+    return PostgresLocalPrefixJobs(archive, archive.codec)
+
+
+def build_local_prefix_job_service(
+    *, clock: Callable[[], datetime], journal_factory: Callable[[], "LocalPrefixJobs"]
+):
+    """Reconstruct only the explicitly supported stored local BOM recipe."""
+    from procurement_intelligence_lab.application.local_prefix_job_admission import RECIPE
+    from procurement_intelligence_lab.application.local_prefix_jobs import LocalPrefixJobService
+    from procurement_intelligence_lab.domains.procurement.normalization import CountUnit
+    from procurement_intelligence_lab.platform.execution.identity import same
+    from procurement_intelligence_lab.platform.processing.contracts import PinnedPrefixDefinition
+    from procurement_intelligence_lab.platform.processing.errors import JobContractError
+    from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
+
+    store = MemoryArtifactContent()
+
+    def prepare_stored(definition: PinnedPrefixDefinition):
+        try:
+            if definition.recipe_id != RECIPE:
+                raise JobContractError("unsupported stored local-prefix recipe")
+            values = dict(definition.normalization_parameters)
+            policy = BomNormalizationPolicy(
+                CountUnit(values["quantity_unit"]),
+                values["currency"],
+                CountUnit(values["price_unit"]),
+            )
+            executions = build_planned_bom_service(
+                manifest=definition.manifest,
+                registry=definition.registry,
+                config=definition.config,
+                policy=policy,
+                clock=clock,
+                content_store=store,
+            )
+            prepared = executions.prepare(definition.request)
+            pinned = PinnedPrefixDefinition.from_prepared(
+                prepared,
+                recipe_id=RECIPE,
+                normalization_parameters=tuple(sorted(policy.as_dict().items())),
+            )
+            if not same(pinned, definition):
+                raise JobContractError(
+                    "stored definition disagrees with supported runtime metadata"
+                )
+            return prepared
+        except (SemanticContractError, ValueError, TypeError, KeyError, AttributeError):
+            raise JobContractError(
+                "stored definition is not supported by the current deployment"
+            ) from None
+
+    return LocalPrefixJobService(
+        journal_factory, prepare_stored, store, validate_completed_bom_prefix, clock
+    )
+
+
+def build_local_prefix_job_reader(dsn: str):
+    from procurement_intelligence_lab.application.local_prefix_job_reader import (
+        LocalPrefixJobReader,
+    )
+
+    return LocalPrefixJobReader(build_local_prefix_jobs(dsn), validate_completed_bom_prefix)

@@ -60,3 +60,8 @@ SQL mutations are guarded; database-owner bypass is outside this trusted local b
 There is no attempt journal, result cache, lookup-before-execution shortcut, queue,
 automatic retry/recompute, request exactly-once guarantee, later-stage execution,
 production authentication, backup/HA or deployment qualification.
+
+The approved [local prefix jobs contract](local-prefix-jobs.md) adds explicit durable submission, attempts,
+manual retry and fenced abandonment under #232. Source/archive/current-attempt success shares one
+transaction; original execution/archive callers remain compatible. This is branch implementation
+pending its recorded qualification and merged-main acceptance, not a queue deployment.

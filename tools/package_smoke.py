@@ -104,6 +104,25 @@ def main() -> int:
                 text=True,
             )
 
+        def local_jobs_probe(python: Path, environment: dict[str, str]):
+            done = subprocess.run(
+                [
+                    str(python),
+                    str(ROOT / "tools/package_local_prefix_jobs_probe.py"),
+                    str(stage_source),
+                    str(execution_context),
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                    str(execution_fixture / "procurement-registry.json"),
+                    str(execution_fixture / "procurement-config.toml"),
+                ],
+                cwd=temporary,
+                env=environment,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            print(done.stdout.strip())
+
         probe_outputs: list[str] = []
         pythons: list[Path] = []
         for index in (1, 2):
@@ -446,6 +465,9 @@ def main() -> int:
                 text=True,
             )
             print(missing_planned_archive.stdout.strip())
+            local_jobs_probe(
+                python, {**os.environ, "PIL_LOCAL_PREFIX_JOBS_EXPECT_MISSING_DRIVER": "1"}
+            )
             prefix_outputs.append(prefix_run.stdout.strip())
             print(prefix_run.stdout.strip())
             probe_outputs.append(
@@ -763,6 +785,15 @@ def main() -> int:
                     },
                     check=True,
                     text=True,
+                )
+                local_jobs_probe(
+                    python,
+                    {
+                        **os.environ,
+                        "PIL_ASSERTION_ARCHIVE_DSN": make_conninfo(
+                            base, options=f"-c search_path={schema}"
+                        ),
+                    },
                 )
             finally:
                 with psycopg.connect(base, autocommit=True) as connection:

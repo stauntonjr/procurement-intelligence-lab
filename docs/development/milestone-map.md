@@ -82,7 +82,15 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
-The next approved design is decision #228 (M2, parent #37), implementation #229:
+Feature #232 / approved decision #231 (M1, native children of #36) introduces the
+[durable local prefix job lifecycle](../architecture/local-prefix-jobs.md): immutable arrival and
+pinned request identity, explicit attempts/retry, fenced abandonment and atomic source/archive/
+current-attempt success. ADR045/design and [seven-task plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md)
+are owner-approved. Exact qualification, review, protected delivery and merged-main evidence live
+in #232; its actual status distinguishes branch from main. No queue/worker deployment, automatic
+retry/recompute, new operational authority or broader #36 completion follows.
+
+The preceding completed design is decision #228 (M2, parent #37), implementation #229:
 [completed planned-prefix archive](../superpowers/specs/2026-10-21-planned-prefix-archive-design.md),
 with atomic source/receipt retention and scoped restart reads. ADR-044/spec are owner-approved;
 the [implementation plan](../superpowers/plans/2026-10-21-planned-prefix-archive.md) is owner-approved

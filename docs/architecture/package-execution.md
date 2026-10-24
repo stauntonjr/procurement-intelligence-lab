@@ -132,3 +132,8 @@ belong to the latest-revision semantic evidence in the implementation PR. Broade
 #36/#75 and neutral/full-stage/governing-policy acceptance remain open.
 
 The approved [completed-prefix archive](planned-execution-archive.md) adds opt-in atomic retention and scoped source-free recovery under #229; default planned execution and legacy source archive contracts remain compatible. See its delivery evidence for branch versus main status.
+
+The approved [local prefix jobs contract](local-prefix-jobs.md) adds explicit durable submission, attempts,
+manual retry and fenced abandonment under #232. Source/archive/current-attempt success shares one
+transaction; original execution/archive callers remain compatible. This is branch implementation
+pending its recorded qualification and merged-main acceptance, not a queue deployment.
