@@ -1,6 +1,6 @@
 # Project handoff
 
-## Approved local prefix job lifecycle; implementation plan under review - 2026-10-23
+## Approved local prefix job lifecycle; implementation in progress - 2026-10-23
 
 Approved decision #231 (M1, parent #36), implementation #232, defines the next core increment after main87cc5cc/PR230:
 durable local submission/attempt evidence, exact scoped request idempotency, explicit retries
@@ -9,7 +9,7 @@ and accepted ADR045 separate semantic computation identity from attempt lifecycl
 expected captured-byte verification and atomic source/archive/current-attempt success, and keep
 legacy callers compatible. The owner approved written proposal `da09f98` on 2026-10-23 and
 instructed proceed. The
-[seven-task implementation plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md) awaits review;
+[seven-task implementation plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md) is owner-approved at `6dc1522`; implementation is in progress, acceptance pending;
 Native/inline execution with one independent final review preserves the preceding delivery
 method. A fresh builder check reported "nothing important left"; documentation
 `make check-fast` passed. No job runtime, capability, queue, worker or implementation acceptance

@@ -3,7 +3,7 @@
 Status: owner-approved on 2026-10-23; approved proposal `da09f989ddf1806d7e9877d7cf7c426e6fec5c37`. Decision [#231](https://github.com/stauntonjr/procurement-intelligence-lab/issues/231),
 primary M1, native parent #36. Owner instructed proceed with the recommended job/attempt/idempotency
 design after PR230, then approved the written lifecycle policy and instructed proceed. The
-[implementation plan](../plans/2026-10-23-local-prefix-jobs.md) for #232 awaits review; no product code
+[implementation plan](../plans/2026-10-23-local-prefix-jobs.md) for #232 is owner-approved at `6dc1522`; implementation is in progress, with no runtime acceptance. No product code
 or runtime acceptance is delivered by this approval record. Baseline main `87cc5ccb967e2063b348f90744aaafae741e66b1`.
 Approved [ADR-045](../../adr/045-local-prefix-jobs-and-fenced-attempts.md).
 
@@ -338,7 +338,7 @@ fixture organization are routine builder choices, not new lifecycle policy.
 
 A fresh read-only builder check of proposal `eae24f0` reported "nothing important left". No
 owner-only questions or new implementation decisions were raised. The owner approved proposal `da09f98` on 2026-10-23 and instructed proceed. ADR045 is
-accepted; implementation #232 has a seven-task plan awaiting review. No product code, storage
+accepted; implementation #232 has an owner-approved seven-task plan (`6dc1522`); implementation is in progress. No product code, storage
 capability, CLI or runtime acceptance is delivered by these docs.
 
 Pre-slice stewardship: existing hosted audit39715621577 on the identical main baseline failed

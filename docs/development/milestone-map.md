@@ -87,7 +87,7 @@ The next approved increment is M1 decision #231 / implementation #232, native ch
 It uses the qualified completed-prefix archive but adds separately reviewed request identity,
 explicit attempt/fencing policy and an atomic success journal. ADR045 is accepted;
 the owner approved written proposal `da09f98` on 2026-10-23. The
-[seven-task plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md) awaits review before implementation. No queue/worker deployment,
+[seven-task plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md) is owner-approved at `6dc1522`; implementation is in progress, runtime acceptance pending. No queue/worker deployment,
 automatic retry/recompute, new operational authority or broader #36 completion is implied.
 
 The preceding completed design is decision #228 (M2, parent #37), implementation #229:

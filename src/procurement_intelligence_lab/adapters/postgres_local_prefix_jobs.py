@@ -18,11 +18,16 @@ from procurement_intelligence_lab.adapters.postgres_planned_execution_archive im
     PostgresPlannedExecutionArchive,
 )
 from procurement_intelligence_lab.adapters.semantic_codec import SemanticCodec
-from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
+from procurement_intelligence_lab.platform.execution.archive import (
+    CompletedPrefixSnapshot,
+    same_computation,
+)
 from procurement_intelligence_lab.platform.execution.identity import canonical, same
+from procurement_intelligence_lab.platform.processing.binding import validate_completion
 from procurement_intelligence_lab.platform.processing.contracts import (
     AbandonAttemptCommand,
     ArtifactArrival,
+    AttemptSuccess,
     AttemptToken,
     JobDefinition,
     JobFailure,
@@ -44,9 +49,11 @@ from procurement_intelligence_lab.platform.processing.errors import (
 )
 from procurement_intelligence_lab.platform.processing.lifecycle import (
     abandon_transition,
+    active,
     failure_transition,
     start_transition,
     submission_transition,
+    success_transition,
 )
 from procurement_intelligence_lab.platform.semantics.errors import (
     ArchiveUnavailableError,
@@ -186,6 +193,17 @@ class PostgresLocalPrefixJobs:
             ).fetchone()
             if index is None or index["sequence"] != sequence:
                 raise JobIntegrityError("job command linkage mismatch")
+        if t.success is not None:
+            try:
+                retained = self.archive._load(conn, job.scope, t.success.retained.execution_digest)
+                content = self.archive.source._content(conn, retained.completed.snapshot)
+                validate_completion(job, t.success.completed, content)
+                if not same(retained.receipt, t.success.retained) or not same_computation(
+                    t.success.completed, retained.completed
+                ):
+                    raise JobIntegrityError("successful attempt disagrees with retained execution")
+            except SemanticContractError:
+                raise JobIntegrityError("successful job evidence is missing or invalid") from None
         return t
 
     def _load(
@@ -338,7 +356,24 @@ class PostgresLocalPrefixJobs:
         *,
         now: datetime,
     ) -> JobJournalReceipt:
-        raise JobContractError("atomic job completion is not yet implemented")
+        with self._connection() as conn:
+            self._check(conn)
+            view = self._load(conn, token.scope, token.job_id, lock=True)
+            validate_completion(view.definition, completed, content)
+            previous = view.latest.transition
+            if view.status is JobStatus.SUCCEEDED and same(previous.attempt, token):
+                if previous.success is None or not same(previous.success.completed, completed):
+                    raise JobConflictError(
+                        "attempt completion conflicts with retained full receipt"
+                    )
+                return view.latest
+            active(view, token)
+            retained = self.archive._append_in_transaction(conn, completed, content)
+            transition = success_transition(
+                view, token, AttemptSuccess(completed, retained.receipt), now=now
+            )
+            append_transition(conn, self.codec, transition)
+            return JobJournalReceipt(transition)
 
     def history(
         self, scope: StateScope, job_id: str, *, limit: int = 100, after_sequence: int = 0
@@ -367,4 +402,11 @@ class PostgresLocalPrefixJobs:
             )
 
     def content(self, scope: StateScope, job_id: str) -> bytes:
-        raise JobContractError("job content requires positively recorded success")
+        history_bounds(scope, job_id, 1, 0)
+        with self._connection() as conn:
+            self._check(conn)
+            view = self._load(conn, scope, job_id)
+            success = view.latest.transition.success
+            if success is None:
+                raise JobConflictError("job has no positively recorded success")
+            return self.archive.source._content(conn, success.completed.snapshot)
