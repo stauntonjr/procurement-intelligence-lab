@@ -6,6 +6,7 @@ from hashlib import sha256
 from pathlib import Path
 
 from procurement_intelligence_lab import bootstrap
+from procurement_intelligence_lab.domains.procurement.normalization import BomNormalizationPolicy
 from procurement_intelligence_lab.platform.domain_packages.package import StageId
 from procurement_intelligence_lab.platform.execution.contracts import ExecutionRequest
 from procurement_intelligence_lab.platform.processing.contracts import (
@@ -21,7 +22,13 @@ from tests.planned_bom_fixtures import planned_inputs
 NOW = AT + timedelta(seconds=2)
 
 
-def job_input(path: Path, *, key: str = "request-1", rows: str = HEADER + ROW):
+def job_input(
+    path: Path,
+    *,
+    key: str = "request-1",
+    rows: str = HEADER + ROW,
+    policy: BomNormalizationPolicy = POLICY,
+):
     path = workbook(path, rows)
     manifest, registry, config = planned_inputs()
     registry = replace(
@@ -32,7 +39,7 @@ def job_input(path: Path, *, key: str = "request-1", rows: str = HEADER + ROW):
     )
     config = replace(config, selections=tuple(replace(s, settings=()) for s in config.selections))
     service = bootstrap.build_planned_bom_service(
-        manifest=manifest, registry=registry, config=config, policy=POLICY, clock=lambda: NOW
+        manifest=manifest, registry=registry, config=config, policy=policy, clock=lambda: NOW
     )
     prepared = service.prepare(
         ExecutionRequest(source(path), provenance().context, AT, StageId.ASSERT)
@@ -40,7 +47,7 @@ def job_input(path: Path, *, key: str = "request-1", rows: str = HEADER + ROW):
     definition = PinnedPrefixDefinition.from_prepared(
         prepared,
         recipe_id="procurement.bom-local-prefix@1",
-        normalization_parameters=tuple(sorted(POLICY.as_dict().items())),
+        normalization_parameters=tuple(sorted(policy.as_dict().items())),
     )
     content = path.read_bytes()
     arrival = ArtifactArrival(

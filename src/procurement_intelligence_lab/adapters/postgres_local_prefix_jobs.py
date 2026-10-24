@@ -309,6 +309,14 @@ class PostgresLocalPrefixJobs:
             raise JobConflictError("command key conflicts with its retained full payload")
         return JobJournalReceipt(transition)
 
+    def lookup_command(
+        self, command: StartAttemptCommand | AbandonAttemptCommand
+    ) -> JobJournalReceipt | None:
+        with self._connection() as conn:
+            self._check(conn)
+            view = self._load(conn, command.scope, command.job_id)
+            return self._command_replay(conn, view, command)
+
     def start(self, command: StartAttemptCommand, *, now: datetime) -> StartClaim:
         with self._connection() as conn:
             self._check(conn)
