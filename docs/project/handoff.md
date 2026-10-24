@@ -9,8 +9,7 @@ ADR-046 define an explicit sixth stage with a pinned scoped internal-SKU catalog
 normalized-exact matching, mention-bound row evidence, abstentions and atomic retained results.
 The owner approved written design `052ab47` on 2026-10-24 and instructed proceed. The
 [seven-task plan](../superpowers/plans/2026-10-24-planned-resolve-prefix.md) for implementation
-[#236](https://github.com/stauntonjr/procurement-intelligence-lab/issues/236) is prepared for review
-before product code. Preserve Native/inline execution and one independent final review.
+[#236](https://github.com/stauntonjr/procurement-intelligence-lab/issues/236) was owner-approved at `64f787b` on 2026-10-24; implementation is in progress on the feature branch. Preserve Native/inline execution and one independent final review.
 No six-stage runtime implementation or main acceptance is claimed.
 Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, reconciliation,
 global identity and broader M3 acceptance remain subsequent work. #231/#232 are delivered on main;

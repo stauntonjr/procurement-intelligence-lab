@@ -10,7 +10,7 @@
 
 **Spec:** [Approved design](../specs/2026-10-24-planned-resolve-prefix-design.md), owner-approved proposal `052ab479116fa35704cb3a5f970f89d19b337bea` on 2026-10-24; [ADR-046](../../adr/046-explicit-planned-resolve-prefix.md), decision #235. Implementation [#236](https://github.com/stauntonjr/procurement-intelligence-lab/issues/236), primary M3, native parent #14. Baseline main `88d32d4f5da0f5cae500d465f80173b213ee71d0`.
 
-**Plan status:** Prepared for owner review; product implementation has not started. Preserve the established Native/inline method and one independent final architecture/semantic review. Design approval does not establish runtime acceptance or plan review.
+**Plan status:** Owner-approved on 2026-10-24 at revision `64f787b4396b903cba0b105d561aa1bb84cf06a9`; the owner instructed proceed. Implementation is tracked in #236. Preserve the established Native/inline method and one independent final architecture/semantic review. Design approval does not establish runtime acceptance or plan review.
 
 ## Global Constraints
 
@@ -195,6 +195,6 @@ canonical source ordering, catalog wire version, the domain-owned audit callback
 existing entity-resolution evaluation directory. These implement the approved semantics and
 add no policy/model choice. No spec-coverage or interface gap remains in the plan self-review.
 No product code or test output is supplied by this planning artifact; every test and expected RED/
-GREEN result above is prospective. Owner review of this committed plan precedes implementation.
+GREEN result above is prospective. The owner reviewed and approved this plan at `64f787b` before implementation.
 The approved design and this plan travel together; preserve Native/inline execution with one
 independent final review. Main remains the delivered five-stage profile until exact #236 acceptance.
