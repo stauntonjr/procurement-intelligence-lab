@@ -87,7 +87,7 @@ Next design direction, selected by the owner on 2026-10-24: decision #235 (M3, p
 Accepted ADR-046 covers a scoped pinned internal-SKU candidate snapshot, actual sixth-stage
 execution, mention-bound evidence/abstention and atomic retention. The owner approved design
 `052ab47` on 2026-10-24. The [seven-task implementation plan](../superpowers/plans/2026-10-24-planned-resolve-prefix.md)
-for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) are implemented on the branch. Exact final qualification, independent review, protected delivery and main receipts belong to #236; no broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
+for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) implement the bounded slice in PR237. Exact final qualification, independent review, protected delivery and main receipts belong to #236; its actual status distinguishes branch from main. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
 broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
