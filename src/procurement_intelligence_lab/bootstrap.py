@@ -192,6 +192,24 @@ def archive_codec():
         NormalizedOutput,
         StructuredOutput,
     )
+    from procurement_intelligence_lab.platform.execution.resolution_archive import (
+        ArchivedResolvedPrefix,
+        CompletedResolvedPrefixSnapshot,
+        ResolvedExecutionArchiveReceipt,
+        ResolvedExecutionHistoryPage,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_contracts import (
+        ResolvedPrefixExecutionReceipt,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import (
+        CandidateInputEvidence,
+        CandidateSnapshot,
+        ResolutionPolicyEvidence,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_outputs import (
+        MentionResolution,
+        ResolvedOutput,
+    )
     from procurement_intelligence_lab.platform.planning.contracts import (
         ContractRef,
         ImplementationConfig,
@@ -264,11 +282,28 @@ def archive_codec():
         ProvenanceRelation,
         TransformationEvent,
     )
-    from procurement_intelligence_lab.platform.semantics.resolution import EntityMention
+    from procurement_intelligence_lab.platform.semantics.resolution import (
+        CanonicalizedAssertion,
+        EntityMention,
+        ResolutionDecision,
+        ResolutionStatus,
+    )
     from procurement_intelligence_lab.platform.semantics.scope import StateScope
 
     return SemanticCodec(
         (
+            CandidateSnapshot,
+            CandidateInputEvidence,
+            ResolutionPolicyEvidence,
+            MentionResolution,
+            ResolvedOutput,
+            ResolvedPrefixExecutionReceipt,
+            CompletedResolvedPrefixSnapshot,
+            ResolvedExecutionArchiveReceipt,
+            ArchivedResolvedPrefix,
+            ResolvedExecutionHistoryPage,
+            ResolutionDecision,
+            CanonicalizedAssertion,
             ArtifactArrival,
             PinnedStageMetadata,
             PinnedPrefixDefinition,
@@ -334,6 +369,7 @@ def archive_codec():
             StateScope,
         ),
         (
+            ResolutionStatus,
             JobStatus,
             AttemptStatus,
             StartIntent,
@@ -838,3 +874,17 @@ def build_planned_resolved_bom_service(
         )
 
     return PlannedResolvedBomExecutionService(prefix, registration, validate, clock)
+
+
+def build_resolved_execution_archive(dsn: str):
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        from procurement_intelligence_lab.adapters.postgres_resolved_execution_archive import (
+            PostgresResolvedExecutionArchive,
+        )
+    except ImportError:
+        raise ArchiveUnavailableError(
+            "resolved archive storage capability is unavailable"
+        ) from None
+    return PostgresResolvedExecutionArchive(build_planned_execution_archive(dsn), archive_codec())

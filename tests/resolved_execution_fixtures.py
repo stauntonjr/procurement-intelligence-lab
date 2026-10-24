@@ -196,3 +196,29 @@ def planned_resolved_inputs(
         StageId.RESOLVE,
     )
     return manifest, registry, config, request, path
+
+
+def completed_resolved(tmp_path: Path):
+    from procurement_intelligence_lab import bootstrap
+    from procurement_intelligence_lab.domains.procurement.resolution_policy import (
+        BomResolutionPolicy,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_archive import (
+        CompletedResolvedPrefixSnapshot,
+    )
+    from tests.contract.test_bom_assertions import POLICY
+    from tests.planned_execution_archive_fixtures import parameters
+
+    m, r, c, q, path = planned_resolved_inputs(tmp_path)
+    service = bootstrap.build_planned_resolved_bom_service(
+        manifest=m,
+        registry=r,
+        config=c,
+        normalization_policy=POLICY,
+        resolution_policy=BomResolutionPolicy.from_parameters(q.policy.parameters),
+        candidate_input=q.candidate_input,
+        clock=lambda: AT + timedelta(seconds=1),
+    )
+    return CompletedResolvedPrefixSnapshot.from_execution(
+        service.execute(q).execution.receipt, parameters()
+    ), path.read_bytes()
