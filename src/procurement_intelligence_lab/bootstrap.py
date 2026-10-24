@@ -169,6 +169,7 @@ def archive_codec():
         ExecutionHistoryPage,
     )
     from procurement_intelligence_lab.platform.execution.contracts import (
+        ExecutionRequest,
         ExecutionStatus,
         PrefixExecutionReceipt,
         ResolvedReference,
@@ -181,7 +182,33 @@ def archive_codec():
         NormalizedOutput,
         StructuredOutput,
     )
-    from procurement_intelligence_lab.platform.planning.contracts import PhysicalPlan
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ContractRef,
+        ImplementationConfig,
+        ImplementationDescriptor,
+        ImplementationRegistry,
+        PhysicalPlan,
+        StageSelection,
+    )
+    from procurement_intelligence_lab.platform.processing.contracts import (
+        AbandonAttemptCommand,
+        ArtifactArrival,
+        AttemptStatus,
+        AttemptSuccess,
+        AttemptToken,
+        JobDefinition,
+        JobFailure,
+        JobHistoryPage,
+        JobJournalReceipt,
+        JobStatus,
+        JobTransition,
+        JobView,
+        PinnedPrefixDefinition,
+        PinnedStageMetadata,
+        StartAttemptCommand,
+        StartIntent,
+        TransitionKind,
+    )
     from procurement_intelligence_lab.platform.semantics.archive import (
         ArchiveReceipt,
         DocumentSnapshot,
@@ -215,6 +242,7 @@ def archive_codec():
         StructuredElement,
     )
     from procurement_intelligence_lab.platform.semantics.epistemics import EpistemicStatus
+    from procurement_intelligence_lab.platform.semantics.errors import ErrorCategory, ErrorCode
     from procurement_intelligence_lab.platform.semantics.evidence import (
         EvidenceRef,
         RecordLocation,
@@ -231,6 +259,25 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            ArtifactArrival,
+            PinnedStageMetadata,
+            PinnedPrefixDefinition,
+            JobDefinition,
+            StartAttemptCommand,
+            AbandonAttemptCommand,
+            AttemptToken,
+            JobFailure,
+            AttemptSuccess,
+            JobTransition,
+            JobJournalReceipt,
+            JobView,
+            JobHistoryPage,
+            ExecutionRequest,
+            ContractRef,
+            ImplementationDescriptor,
+            ImplementationRegistry,
+            StageSelection,
+            ImplementationConfig,
             CompletedPrefixSnapshot,
             ExecutionArchiveReceipt,
             ArchivedPrefix,
@@ -277,6 +324,12 @@ def archive_codec():
             StateScope,
         ),
         (
+            JobStatus,
+            AttemptStatus,
+            StartIntent,
+            TransitionKind,
+            ErrorCode,
+            ErrorCategory,
             StageId,
             StageMode,
             ExecutionStatus,
