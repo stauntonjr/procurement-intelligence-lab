@@ -1,8 +1,8 @@
 # ADR-045: Durable local prefix jobs with explicit fenced attempts
 
-Status: proposed; decision [#231](https://github.com/stauntonjr/procurement-intelligence-lab/issues/231),
-primary M1, parent #36. Owner authorized developing the next written design, not these new
-lifecycle rules or product implementation. [Proposed specification](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md).
+Status: accepted by owner on 2026-10-23; approved proposal `da09f98`. Decision [#231](https://github.com/stauntonjr/procurement-intelligence-lab/issues/231),
+primary M1, parent #36. The owner approved the written lifecycle policy and instructed proceed.
+Implementation #232 has a plan awaiting review; no runtime acceptance is delivered. [Approved specification](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md).
 
 ## Context
 
@@ -12,7 +12,7 @@ not represent submission, running/failed attempts, request idempotency or recove
 #36 calls for event/job/attempt/retry/idempotency contracts while keeping a local synchronous path.
 A restart must not turn missing acknowledgement into failure or authorize another active writer.
 
-## Proposed decision
+## Decision
 
 Add an explicit durable local job profile around the existing prefix, separate from unchanged
 execution/archive callers. Freeze a declared arrival's expected bytes and full admitted request,
@@ -38,7 +38,7 @@ undo I/O or hard-cancel computation. Check the active fence before any source/re
 same completion transaction. Abandonment and success serialize: the loser conflicts. No timeout
 expiry, leases, automatic retries, queue or external-side-effect guarantee.
 
-Propose additive explicit local_prefix_jobs/v1 initialization on supported archive capabilities.
+Add additive explicit local_prefix_jobs/v1 initialization on supported archive capabilities.
 Postgres owns mechanics; core owns transitions/identity and imports no DB/framework/procurement.
 Stored input/receipt graphs remain bounded/allowlisted and contain no secrets or callables.
 Scoped reads reconstruct stored evidence without current source/config/executor I/O. The new
@@ -54,5 +54,5 @@ It requires real concurrency/crash/fault/codec/public/installed-artifact tests a
 review before delivery. #36 stays open for broader ingestion, worker and partial-stage semantics;
 #13/#21/#33/#35/#37/#41/#68/#70/#75 are not completed by this decision.
 
-All lifecycle policy here is proposed for written owner review. A separate implementation Issue
-and plan follow approval; no current main runtime or storage behavior changes in this design.
+The owner approved this policy in written proposal `da09f98`. The [implementation plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md)
+for #232 awaits review; no current main runtime or storage behavior changes in this decision record.

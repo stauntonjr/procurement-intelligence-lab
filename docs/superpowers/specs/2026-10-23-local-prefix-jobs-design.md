@@ -1,10 +1,11 @@
 # Durable local prefix jobs and fenced attempts
 
-Status: proposed for owner review, decision [#231](https://github.com/stauntonjr/procurement-intelligence-lab/issues/231),
+Status: owner-approved on 2026-10-23; approved proposal `da09f989ddf1806d7e9877d7cf7c426e6fec5c37`. Decision [#231](https://github.com/stauntonjr/procurement-intelligence-lab/issues/231),
 primary M1, native parent #36. Owner instructed proceed with the recommended job/attempt/idempotency
-design after PR230. This document proposes lifecycle policy; no product implementation is authorized
-by the proposal alone. Baseline main `87cc5ccb967e2063b348f90744aaafae741e66b1`.
-Proposed [ADR-045](../../adr/045-local-prefix-jobs-and-fenced-attempts.md).
+design after PR230, then approved the written lifecycle policy and instructed proceed. The
+[implementation plan](../plans/2026-10-23-local-prefix-jobs.md) for #232 awaits review; no product code
+or runtime acceptance is delivered by this approval record. Baseline main `87cc5ccb967e2063b348f90744aaafae741e66b1`.
+Approved [ADR-045](../../adr/045-local-prefix-jobs-and-fenced-attempts.md).
 
 ## Intent and current evidence
 
@@ -31,12 +32,12 @@ broader control-plane/runbook work. None of these broad Issues closes with the f
 ## Approaches and recommendation
 
 The owner selected continuation through #36's local synchronous contract rather than wider stage
-adoption. These storage/lifecycle choices within that direction are the author's proposal:
+adoption. These storage/lifecycle choices within that direction are the author's calls approved with this written design:
 
 | Approach | Benefit | Cost / disposition |
 |---|---|---|
 | Frozen contracts and an in-memory coordinator | Smallest initial surface | No durable failure or unresolved-attempt evidence after restart; inadequate for this proposed acceptance |
-| Durable local journal around the qualified prefix | Explicit submission, attempts, fencing and restart reads; reuses Postgres/source retention | New lifecycle policy and additive transaction boundary; recommended for written approval |
+| Durable local journal around the qualified prefix | Explicit submission, attempts, fencing and restart reads; reuses Postgres/source retention | New lifecycle policy and additive transaction boundary; selected in the approved design |
 | Listener/queue, leases, distributed workers and automatic retries | Event-driven production direction | Adds scheduling, expiry and external-side-effect authority not established by #36's local foundation; deferred |
 
 Build on stdlib frozen dataclasses/Protocols, the current codec, optional Postgres and explicit
@@ -319,7 +320,7 @@ attempt records must include actual full current receipt, not an unrecoverable h
 Require latest-revision semantic evidence, full checks/coverage ratchet, clean package, all public/
 known-bad challenges and independent semantic/architecture review. A discovered shipped defect
 gets its own regression/challenge; an unshipped feature gap is not a shipped-defect claim.
-A new implementation Issue/plan will own this bounded acceptance after written-design approval;
+Implementation #232 and its plan own this bounded acceptance following written-design approval;
 #36 remains open for broader listeners/workers/partial-stage persistence/production processing.
 
 ## Boundaries, builder calls and delivery
@@ -329,16 +330,16 @@ selection, governing/canonical state, approval bypass, new resolution/model poli
 backup/HA/deployment/throughput guarantee, neutral or later-stage execution. Original assertions and
 existing public behaviors remain authoritative. No confidential/proprietary material.
 
-Author calls proposed for approval: durable local journal; expected-byte arrival declarations;
+Author calls approved with this design: durable local journal; expected-byte arrival declarations;
 fully pinned secret-free input recipe; immutable semantic context across attempts; explicit manual
 retry after failure/abandonment; fenced abandonment; one source/archive/current-attempt success
 transaction; historical command replay; source/config-free reads. Table/index/helper naming and
 fixture organization are routine builder choices, not new lifecycle policy.
 
 A fresh read-only builder check of proposal `eae24f0` reported "nothing important left". No
-owner-only questions or new implementation decisions were raised. This document and ADR045
-remain proposed until written owner approval. Under the brainstorming skill, implementation
-planning follows approval of this written design; no product code, storage capability, CLI or runtime acceptance is delivered by these docs.
+owner-only questions or new implementation decisions were raised. The owner approved proposal `da09f98` on 2026-10-23 and instructed proceed. ADR045 is
+accepted; implementation #232 has a seven-task plan awaiting review. No product code, storage
+capability, CLI or runtime acceptance is delivered by these docs.
 
 Pre-slice stewardship: existing hosted audit39715621577 on the identical main baseline failed
 Gemini503; a current direct Codex review of canonical docs/Issues/Project is separate. No successful

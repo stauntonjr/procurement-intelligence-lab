@@ -1,14 +1,17 @@
 # Project handoff
 
-## Proposed local prefix job lifecycle - 2026-10-23
+## Approved local prefix job lifecycle; implementation plan under review - 2026-10-23
 
-Decision #231 (M1, parent #36) proposes the next core increment after main87cc5cc/PR230:
+Approved decision #231 (M1, parent #36), implementation #232, defines the next core increment after main87cc5cc/PR230:
 durable local submission/attempt evidence, exact scoped request idempotency, explicit retries
 and fenced abandonment around the qualified five-stage prefix. The [written design](../superpowers/specs/2026-10-23-local-prefix-jobs-design.md)
-and proposed ADR045 separate semantic computation identity from attempt lifecycle, require
+and accepted ADR045 separate semantic computation identity from attempt lifecycle, require
 expected captured-byte verification and atomic source/archive/current-attempt success, and keep
-legacy callers compatible. The owner instructed development of this design; new lifecycle policy awaits
-written-design approval. A fresh builder check reported "nothing important left"; documentation
+legacy callers compatible. The owner approved written proposal `da09f98` on 2026-10-23 and
+instructed proceed. The
+[seven-task implementation plan](../superpowers/plans/2026-10-23-local-prefix-jobs.md) awaits review;
+Native/inline execution with one independent final review preserves the preceding delivery
+method. A fresh builder check reported "nothing important left"; documentation
 `make check-fast` passed. No job runtime, capability, queue, worker or implementation acceptance
 is delivered. Wider #36 and operational-agent authority remain open.
 Pre-slice stewardship uses the identical-baseline Gemini503 receipt39715621577 plus current
