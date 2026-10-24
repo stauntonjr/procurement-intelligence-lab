@@ -15,6 +15,9 @@ if TYPE_CHECKING:
         BomResolutionPolicy,
     )
     from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
+    from procurement_intelligence_lab.platform.execution.resolution_archive import (
+        CompletedResolvedPrefixSnapshot,
+    )
     from procurement_intelligence_lab.platform.execution.resolution_inputs import (
         CandidateInputEvidence,
     )
@@ -25,6 +28,9 @@ if TYPE_CHECKING:
     )
     from procurement_intelligence_lab.ports.local_prefix_jobs import LocalPrefixJobs
     from procurement_intelligence_lab.ports.planned_execution_archive import PlannedExecutionArchive
+    from procurement_intelligence_lab.ports.resolved_execution_archive import (
+        ResolvedExecutionArchive,
+    )
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
     LocalFileIngest,
@@ -888,3 +894,82 @@ def build_resolved_execution_archive(dsn: str):
             "resolved archive storage capability is unavailable"
         ) from None
     return PostgresResolvedExecutionArchive(build_planned_execution_archive(dsn), archive_codec())
+
+
+def validate_completed_resolved_bom_prefix(completed: "CompletedResolvedPrefixSnapshot") -> None:
+    """Validate supported recorded evidence without an executor, source or config file."""
+    from procurement_intelligence_lab.domains.procurement.planned_resolution import (
+        validate_bom_resolution_inputs,
+        validate_bom_resolved_output,
+    )
+    from procurement_intelligence_lab.domains.procurement.resolution_policy import (
+        BomResolutionPolicy,
+    )
+    from procurement_intelligence_lab.platform.execution.contracts import plan_payload
+    from procurement_intelligence_lab.platform.execution.identity import encoded, same
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import (
+        load_candidate_input,
+    )
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveContractError
+
+    validate_completed_bom_prefix(completed.prefix)
+    r = completed.execution
+    policy = BomResolutionPolicy.from_parameters(r.policy.parameters)
+    candidate = load_candidate_input(r.candidate_input.raw_json)
+    if not same(policy.evidence, r.policy) or not same(candidate, r.candidate_input):
+        raise ArchiveContractError(
+            "retained resolution requires exact supported policy and catalog"
+        )
+    if plan_payload(r.plan)["stages"][5]["implementation"] != encoded(bom_resolution_descriptor()):
+        raise ArchiveContractError("retained resolution requires supported exact implementation")
+    validate_bom_resolution_inputs(
+        candidate, policy, scope=completed.scope, as_of=r.context.started_at
+    )
+    validate_bom_resolved_output(r.output)
+
+
+def build_planned_resolved_bom_archive_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    normalization_policy: BomNormalizationPolicy,
+    resolution_policy: "BomResolutionPolicy",
+    candidate_input: "CandidateInputEvidence",
+    clock: Callable[[], datetime],
+    archive_factory: Callable[[], "ResolvedExecutionArchive"],
+):
+    from procurement_intelligence_lab.application.archived_resolved_execution import (
+        ArchivedResolvedBomService,
+    )
+
+    store = MemoryArtifactContent()
+    executions = build_planned_resolved_bom_service(
+        manifest=manifest,
+        registry=registry,
+        config=config,
+        normalization_policy=normalization_policy,
+        resolution_policy=resolution_policy,
+        candidate_input=candidate_input,
+        clock=clock,
+        content_store=store,
+    )
+    return ArchivedResolvedBomService(
+        executions,
+        store,
+        archive_factory,
+        tuple(sorted(normalization_policy.as_dict().items())),
+        validate_completed_resolved_bom_prefix,
+    )
+
+
+def build_resolved_execution_archive_reader(dsn: str):
+    from procurement_intelligence_lab.application.archived_resolved_execution import (
+        ResolvedExecutionArchiveReader,
+    )
+
+    return ResolvedExecutionArchiveReader(
+        build_resolved_execution_archive(dsn),
+        validate_completed_resolved_bom_prefix,
+        lambda retained: archive_codec().dumps(retained).encode("utf-8"),
+    )
