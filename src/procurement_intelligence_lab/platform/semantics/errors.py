@@ -19,6 +19,13 @@ class ErrorCategory(StrEnum):
 class ErrorCode(StrEnum):
     """Stable identifiers for implemented platform semantic failures."""
 
+    LOCAL_PREFIX_JOB_INVALID = "pil.input.local_prefix_job_invalid"
+    LOCAL_PREFIX_JOB_CONFLICT = "pil.policy.local_prefix_job_conflict"
+    LOCAL_PREFIX_JOB_BUSY = "pil.policy.local_prefix_job_busy"
+    LOCAL_PREFIX_JOB_FENCED = "pil.policy.local_prefix_job_fenced"
+    LOCAL_PREFIX_JOB_NOT_FOUND = "pil.input.local_prefix_job_not_found"
+    LOCAL_PREFIX_JOB_INTEGRITY_INVALID = "pil.infrastructure.local_prefix_job_integrity_invalid"
+    LOCAL_PREFIX_JOB_UNAVAILABLE = "pil.infrastructure.local_prefix_job_unavailable"
     SOURCE_QUERY_INVALID = "pil.input.source_query_invalid"
     PACKAGE_EXECUTION_INVALID = "pil.input.package_execution_invalid"
     PACKAGE_EXECUTION_CONTRACT_INVALID = "pil.interpretation.package_execution_contract_invalid"
