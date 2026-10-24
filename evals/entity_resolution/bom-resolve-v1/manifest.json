@@ -1,0 +1,20 @@
+{
+  "schema_version": "bom-resolve-rule-contract/v1",
+  "issue": "#236",
+  "purpose": "Synthetic development integration/evidence qualification; not held-out identity quality or broad #45 acceptance",
+  "policy": "bom-normalized-exact@1",
+  "namespace": "procurement_item/internal_sku",
+  "algorithm_change": false,
+  "cases_path": "tests/fixtures/resolved-execution/cases.json",
+  "cases_sha256": "742ec4c2dfb30fa711c80c5a5b97fd995b03a50c9d1671f79fa97d157d21bd9a",
+  "cases": 6,
+  "eligible_population": "Actual mentions in valid admitted cases; blank/null SKU rows and invalid inputs reported separately by public boundary tests",
+  "metrics": {
+    "precision": "TP/accepted; undefined if accepted=0",
+    "recall": "TP/expected unique; undefined if no expected unique",
+    "false_merge_rate": "wrong or unsupported accepted keys/accepted; undefined if accepted=0",
+    "review_load": "unresolved/eligible; undefined if eligible=0"
+  },
+  "runner": "tools/resolved_execution_probe.py",
+  "source_and_target_examples": "Every explicit source XML, candidate snapshot, expected outcome and actual decision retained in probe receipt"
+}

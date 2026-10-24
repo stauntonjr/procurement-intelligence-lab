@@ -104,6 +104,30 @@ def main() -> int:
                 text=True,
             )
 
+        def resolved_probe(python: Path, environment: dict[str, str] | None = None):
+            fixture = ROOT / "tests/fixtures/resolved-execution"
+            done = subprocess.run(
+                [
+                    str(python),
+                    str(ROOT / "tools/resolved_execution_probe.py"),
+                    str(stage_source),
+                    str(execution_context),
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                    str(fixture / "procurement-registry.json"),
+                    str(fixture / "procurement-config.toml"),
+                    str(fixture / "resolution-policy.json"),
+                    str(fixture / "candidate-snapshot.json"),
+                    str(fixture / "cases.json"),
+                    str(wheel),
+                ],
+                cwd=temporary,
+                env=environment,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            print(done.stdout.strip())
+
         def local_jobs_probe(python: Path, environment: dict[str, str]):
             done = subprocess.run(
                 [
@@ -137,6 +161,7 @@ def main() -> int:
                 cwd=temporary,
                 check=True,
             )
+            resolved_probe(python)
             probe_run = subprocess.run(
                 [str(python), str(probe)],
                 cwd=temporary,
@@ -785,6 +810,15 @@ def main() -> int:
                     },
                     check=True,
                     text=True,
+                )
+                resolved_probe(
+                    python,
+                    {
+                        **os.environ,
+                        "PIL_ASSERTION_ARCHIVE_DSN": make_conninfo(
+                            base, options=f"-c search_path={schema}"
+                        ),
+                    },
                 )
                 local_jobs_probe(
                     python,

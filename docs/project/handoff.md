@@ -1,6 +1,6 @@
 # Project handoff
 
-## Approved planned RESOLVE design; implementation plan - 2026-10-24
+## Explicit planned RESOLVE prefix — 2026-10-24
 
 The owner selected RESOLVE pipeline adoption ahead of further listener/worker work.
 Decision [#235](https://github.com/stauntonjr/procurement-intelligence-lab/issues/235) (M3, parent #14),
@@ -10,7 +10,7 @@ normalized-exact matching, mention-bound row evidence, abstentions and atomic re
 The owner approved written design `052ab47` on 2026-10-24 and instructed proceed. The
 [seven-task plan](../superpowers/plans/2026-10-24-planned-resolve-prefix.md) for implementation
 [#236](https://github.com/stauntonjr/procurement-intelligence-lab/issues/236) was owner-approved at `64f787b` on 2026-10-24; implementation is in progress on the feature branch. Preserve Native/inline execution and one independent final review.
-No six-stage runtime implementation or main acceptance is claimed.
+Tasks1–6 implement the [six-stage execution/recovery contract](../architecture/planned-resolve-prefix.md) on the branch, with actual executor, transaction and public subprocess evidence. Final clean-artifact/full-suite/review/protected delivery qualification belongs to Task7; main acceptance is recorded in #236. Do not infer merged delivery from this index.
 Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, reconciliation,
 global identity and broader M3 acceptance remain subsequent work. #231/#232 are delivered on main;
 their exact receipts remain in #232. Parent #36's stale plan-pending summary is corrected while
