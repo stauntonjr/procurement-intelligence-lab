@@ -53,6 +53,7 @@ from procurement_intelligence_lab.platform.processing.errors import (
     JobUnavailableError,
 )
 from procurement_intelligence_lab.platform.semantics.errors import (
+    ArchiveUnavailableError,
     SemanticContractError,
     SemanticTypeContractError,
 )
@@ -261,9 +262,13 @@ def main() -> int:
                     payload = view_payload(reader.show(scope, args.job_id))
                 elif args.command == "result":
                     current = reader.result(scope, args.job_id)
+                    view = reader.show(scope, args.job_id)
+                    attempt = view.latest.transition.attempt
+                    assert attempt is not None
+                    recovery["attempt_id"] = attempt.attempt_id
                     payload = {
                         **result_payload(current),
-                        **view_payload(reader.show(scope, args.job_id)),
+                        **view_payload(view),
                     }
                 else:
                     content = reader.content(scope, args.job_id)
@@ -276,7 +281,7 @@ def main() -> int:
                     }
     except (SemanticContractError, SemanticTypeContractError) as exc:
         error: dict[str, Any] = dict(exc.as_dict())
-        if isinstance(exc, JobUnavailableError):
+        if isinstance(exc, (JobUnavailableError, ArchiveUnavailableError)):
             error.update(recovery)
             if isinstance(exc, AttemptAcknowledgementUnavailable):
                 error.update(

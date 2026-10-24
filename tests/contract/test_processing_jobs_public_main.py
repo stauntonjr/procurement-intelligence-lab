@@ -192,3 +192,54 @@ raise SystemExit(cli.main())
             )
         )
         assert done["status"] == "SUCCEEDED"
+
+
+@pytest.mark.parametrize("kind", ["run", "retry", "result"])
+def test_retained_archive_outage_preserves_known_recovery_ids(
+    archive_dsn: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    kind: str,
+):
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    args, scope, content, submitted = initialized(tmp_path, archive_dsn)
+    job_id = submitted["job_id"]
+    command = start_args(scope, job_id)
+    if kind == "retry":
+        source = Path(args[1])
+        source.unlink()
+        assert run("processing_jobs", command, archive_dsn).returncode == 2
+        failed = success(run("processing_jobs", ["show", *scoped(scope, job_id)], archive_dsn))
+        assert failed["status"] == "FAILED"
+        source.write_bytes(content)
+        command = start_args(scope, job_id, kind="retry", key="retry", version=3)
+    elif kind == "result":
+        success(run("processing_jobs", command, archive_dsn))
+        command = ["result", *scoped(scope, job_id)]
+
+    class UnavailableReader:
+        def show(self, *values: Any, **kwargs: Any) -> Any:
+            raise ArchiveUnavailableError("retained archive temporarily unavailable")
+
+    def unavailable_reader(_: str):
+        return UnavailableReader()
+
+    monkeypatch.setattr(
+        processing_jobs, "build_planned_execution_archive_reader", unavailable_reader
+    )
+    monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", archive_dsn)
+    monkeypatch.setattr(sys, "argv", ["processing_jobs", *command])
+    assert processing_jobs.main() == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    error = json.loads(captured.err)
+    assert error["code"] == "pil.infrastructure.archive_unavailable"
+    assert error["scope"] == json.loads(scope.read_text())
+    assert error["job_id"] == job_id
+    assert "status" not in error and "processing_complete" not in error
+    shown = success(run("processing_jobs", ["show", *scoped(scope, job_id)], archive_dsn))
+    assert shown["status"] == "SUCCEEDED"
+    assert error["attempt_id"] == shown["attempt"]["attempt_id"]
+    assert shown["version"] == (5 if kind == "retry" else 3)
