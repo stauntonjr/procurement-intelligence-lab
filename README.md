@@ -288,3 +288,6 @@ manual retry and fenced abandonment under #232. Source/archive/current-attempt s
 transaction; original execution/archive callers remain compatible. Exact qualification, review and
 merged-main acceptance are recorded in [Issue #232](https://github.com/stauntonjr/procurement-intelligence-lab/issues/232).
 This is a trusted local synchronous profile; queue deployment remains outside its scope.
+
+The explicit six-stage execution and source-free recovery commands are documented in
+[Planned RESOLVE prefix](docs/architecture/planned-resolve-prefix.md).

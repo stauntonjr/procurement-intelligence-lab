@@ -1,0 +1,7 @@
+{
+  "entity_type": "procurement_item",
+  "identifier_namespace": "internal_sku",
+  "matching": "unique-normalized-match@1",
+  "normalization": "casefold-alnum@1",
+  "profile": "bom-normalized-exact@1"
+}
