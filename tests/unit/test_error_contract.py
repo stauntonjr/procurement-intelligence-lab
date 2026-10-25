@@ -62,6 +62,7 @@ def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
         "pil.input.source_query_invalid",
         "pil.input.package_planning_invalid",
         "pil.input.package_execution_invalid",
+        "pil.input.reconciliation_input_unsupported",
         "pil.interpretation.package_execution_contract_invalid",
         "pil.infrastructure.artifact_source_unavailable",
         "pil.infrastructure.artifact_content_invalid",

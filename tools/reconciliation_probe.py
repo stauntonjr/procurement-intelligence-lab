@@ -299,6 +299,31 @@ def main() -> int:
                 current = body["current_operation"]
                 states, decisions = current["states"], current["decisions"]
                 value = states[0]["attributes"][0]["value"] if states else None
+                items = current["domain_audit"]["items"]
+                domain_status = items[0]["decision"]["status"] if items else "empty"
+                assert domain_status == case["expected_domain_status"], (
+                    "corpus status mismatch",
+                    case["id"],
+                    domain_status,
+                )
+                assert len(states) == case["expected_state_count"], case["id"]
+                neutral_status = decisions[0]["status"] if decisions else "empty"
+                assert neutral_status == case["expected_neutral_status"], case["id"]
+                revisions = {
+                    c["claim_id"]: c["revision_id"]
+                    for item in items
+                    for c in (*item["decision"]["governing"], *item["decision"]["losing"])
+                }
+                dispositions = {
+                    revisions[claim]: reason
+                    for item in items
+                    for claim, reason in item["decision"]["dispositions"]
+                }
+                assert dispositions == case["expected_candidate_dispositions"], (
+                    "corpus eligibility/selection mismatch",
+                    case["id"],
+                    dispositions,
+                )
                 assert value == case["expected_value"], (case["id"], value)
                 assert sum(len(d["governing"]) for d in decisions) == case["expected_governing"], (
                     case["id"]

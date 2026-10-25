@@ -277,3 +277,21 @@ def test_public_unsupported_item_rows(archive_dsn: str, tmp_path: Path, case: st
         run("reconcile_resolved_package", args, archive_dsn),
         "pil.input.reconciliation_input_unsupported",
     )
+
+
+@pytest.mark.parametrize("archive", [False, True])
+def test_public_wrong_domain_rejects_before_unavailable_storage(
+    archive_dsn: str, tmp_path: Path, archive: bool
+):
+    args, _, _ = inputs(tmp_path, archive_dsn)
+    path = Path(args[args.index("--manifest") + 1])
+    value = json.loads(path.read_text())
+    value["domain"]["id"] = "inventory"
+    path.write_text(json.dumps(value))
+    result = run(
+        "reconcile_resolved_package",
+        args + (["--archive"] if archive else []),
+        "postgresql://invalid:1/must-not-connect",
+    )
+    failure(result, "pil.input.package_execution_invalid")
+    assert len(json.loads(result.stderr)["producer_recovery"]) == 1

@@ -36,6 +36,7 @@ if TYPE_CHECKING:
         ImplementationConfig,
         ImplementationDescriptor,
         ImplementationRegistry,
+        PhysicalPlan,
     )
     from procurement_intelligence_lab.ports.local_prefix_jobs import LocalPrefixJobs
     from procurement_intelligence_lab.ports.planned_execution_archive import PlannedExecutionArchive
@@ -1057,6 +1058,16 @@ def build_reconciliation_archive(dsn: str):
     return PostgresReconciliationArchive(build_resolved_execution_archive(dsn), archive_codec())
 
 
+def _supported_procurement_reconciliation_plan(plan: "PhysicalPlan") -> bool:
+    from procurement_intelligence_lab.platform.execution.contracts import plan_payload
+
+    payload = plan_payload(plan)
+    return payload["domain"]["id"] == "procurement" and payload["source_profile"] == {
+        "id": "retained-resolved-required-quantity",
+        "version": "1.0.0",
+    }
+
+
 def validate_completed_reconciliation(completed: "CompletedReconciliationSnapshot") -> None:
     from procurement_intelligence_lab.domains.procurement.reconciliation_validation import (
         validate_bom_reconciliation_output,
@@ -1071,11 +1082,7 @@ def validate_completed_reconciliation(completed: "CompletedReconciliationSnapsho
     require(type(completed) is CompletedReconciliationSnapshot)
     r = completed.execution
     plan = plan_payload(r.plan)
-    require(
-        plan["domain"]["id"] == "procurement"
-        and plan["source_profile"]
-        == {"id": "retained-resolved-required-quantity", "version": "1.0.0"}
-    )
+    require(_supported_procurement_reconciliation_plan(r.plan))
     metadata = plan["stages"][6]["implementation"]
     d = bom_reconciliation_descriptor()
     from dataclasses import asdict
@@ -1125,6 +1132,14 @@ def build_retained_reconciliation_service(
     )
     from procurement_intelligence_lab.platform.execution.reconciliation_inputs import (
         RetainedReconciliationInputs,
+    )
+    from procurement_intelligence_lab.platform.execution.resolution_inputs import admit
+    from procurement_intelligence_lab.platform.planning.planner import plan_manifest
+
+    admit(
+        _supported_procurement_reconciliation_plan(
+            plan_manifest(manifest, registry=registry, config=config)
+        )
     )
 
     def required_dsn() -> str:

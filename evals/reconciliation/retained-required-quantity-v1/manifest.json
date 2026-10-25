@@ -10,7 +10,11 @@
       "expected_value": null,
       "expected_governing": 0,
       "expected_losing": 0,
-      "changes": {}
+      "changes": {},
+      "expected_domain_status": "empty",
+      "expected_candidate_dispositions": {},
+      "expected_state_count": 0,
+      "expected_neutral_status": "empty"
     },
     {
       "id": "unique",
@@ -22,7 +26,13 @@
       "expected_value": "4",
       "expected_governing": 1,
       "expected_losing": 0,
-      "changes": {}
+      "changes": {},
+      "expected_domain_status": "governed",
+      "expected_candidate_dispositions": {
+        "r0": "governing"
+      },
+      "expected_state_count": 1,
+      "expected_neutral_status": "reconciled"
     },
     {
       "id": "shared",
@@ -37,7 +47,14 @@
       "expected_value": "4",
       "expected_governing": 2,
       "expected_losing": 0,
-      "changes": {}
+      "changes": {},
+      "expected_domain_status": "governed_shared_value",
+      "expected_candidate_dispositions": {
+        "r0": "governing",
+        "r1": "governing"
+      },
+      "expected_state_count": 1,
+      "expected_neutral_status": "reconciled"
     },
     {
       "id": "conflict",
@@ -52,7 +69,14 @@
       "expected_value": null,
       "expected_governing": 0,
       "expected_losing": 2,
-      "changes": {}
+      "changes": {},
+      "expected_domain_status": "unresolved",
+      "expected_candidate_dispositions": {
+        "r0": "conflicting_active_value",
+        "r1": "conflicting_active_value"
+      },
+      "expected_state_count": 0,
+      "expected_neutral_status": "unresolved"
     },
     {
       "id": "zero",
@@ -64,7 +88,13 @@
       "expected_value": "0",
       "expected_governing": 1,
       "expected_losing": 0,
-      "changes": {}
+      "changes": {},
+      "expected_domain_status": "governed",
+      "expected_candidate_dispositions": {
+        "r0": "governing"
+      },
+      "expected_state_count": 1,
+      "expected_neutral_status": "reconciled"
     },
     {
       "id": "fractional",
@@ -76,7 +106,13 @@
       "expected_value": "0.125",
       "expected_governing": 1,
       "expected_losing": 0,
-      "changes": {}
+      "changes": {},
+      "expected_domain_status": "governed",
+      "expected_candidate_dispositions": {
+        "r0": "governing"
+      },
+      "expected_state_count": 1,
+      "expected_neutral_status": "reconciled"
     },
     {
       "id": "superseded",
@@ -93,7 +129,14 @@
       "expected_losing": 1,
       "changes": {
         "supersedes": true
-      }
+      },
+      "expected_domain_status": "governed",
+      "expected_candidate_dispositions": {
+        "r0": "superseded",
+        "r1": "governing"
+      },
+      "expected_state_count": 1,
+      "expected_neutral_status": "reconciled"
     },
     {
       "id": "unapproved",
@@ -107,7 +150,13 @@
       "expected_losing": 1,
       "changes": {
         "approval": null
-      }
+      },
+      "expected_domain_status": "unresolved",
+      "expected_candidate_dispositions": {
+        "r0": "unapproved"
+      },
+      "expected_state_count": 0,
+      "expected_neutral_status": "unresolved"
     },
     {
       "id": "future",
@@ -121,7 +170,13 @@
       "expected_losing": 1,
       "changes": {
         "approved_at": "2026-10-19T00:00:01+00:00"
-      }
+      },
+      "expected_domain_status": "unresolved",
+      "expected_candidate_dispositions": {
+        "r0": "approval_after_as_of"
+      },
+      "expected_state_count": 0,
+      "expected_neutral_status": "unresolved"
     },
     {
       "id": "expired",
@@ -136,7 +191,13 @@
       "changes": {
         "effective_from": "2026-10-18T00:00:00+00:00",
         "effective_until": "2026-10-19T00:00:00+00:00"
-      }
+      },
+      "expected_domain_status": "unresolved",
+      "expected_candidate_dispositions": {
+        "r0": "expired"
+      },
+      "expected_state_count": 0,
+      "expected_neutral_status": "unresolved"
     },
     {
       "id": "outside-selected-supersession",
@@ -150,7 +211,13 @@
       "expected_losing": 0,
       "changes": {
         "outside_supersedes": true
-      }
+      },
+      "expected_domain_status": "governed",
+      "expected_candidate_dispositions": {
+        "r0": "governing"
+      },
+      "expected_state_count": 1,
+      "expected_neutral_status": "reconciled"
     },
     {
       "id": "missing-successor",
