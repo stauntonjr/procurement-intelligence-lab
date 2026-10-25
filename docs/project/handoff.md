@@ -1,22 +1,32 @@
 # Project handoff
 
-## Post-RESOLVE roadmap orientation — 2026-10-24
+## Retained required-quantity reconciliation — 2026-10-25
 
-The [exact-main advisory audit](audits/2026-10-24-post-resolve.md) succeeded on a8de65d.
-Its observations are separated from direct code/Issue/Project verification. The next bounded
-core slice is approved in [decision #238](https://github.com/stauntonjr/procurement-intelligence-lab/issues/238):
-[retained-producer required-quantity reconciliation](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
-accepted ADR047. Owner design approval at `2c1b759` includes the omission and duplicate-content
-admission bounds. Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
-follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24. Preserve Native/inline and one independent final review; the bounded operation
-is implemented and candidate-qualified at `0f8fd4d`: explicit retained-producer RECONCILE,
-ratified policy, one current invocation, atomic immutable retention and independently validated
-source-free recovery. [Qualification evidence](../development/evidence/issue-239/README.md) retains
-real Postgres/public/corpus/artifact/legacy/coverage results. One independent review at `1ec30d2`
-found a preadmission defect; fix `0f8fd4d` has RED/GREEN regressions and full corrected qualification.
-Exact protected PR/main-pinned proof and operational closeout belong to #239. Broader M4 remains
-open; this adds no fresh seven-stage flow, job adoption, aggregation, enterprise approval or ACT.
+[PR240](https://github.com/stauntonjr/procurement-intelligence-lab/pull/240) merged the owner-approved
+bounded M4 slice at `4591a0ccb66f1582a51d0044948ec77fba2084dd` (2026-10-25 03:57:56 UTC).
+[Main delivery receipt](../development/evidence/issue-239/main-delivery.json) records all twelve
+required checks, no unresolved review threads, exact qualified/main tree equality and the clean
+main-pinned installed Postgres proof:17 synthetic cases/0 errors, source-free recovery/export,
+two exact companion sources and both invalid-domain modes rejected before storage.
 
+The [operation contract](../architecture/retained-reconciliation.md) consumes explicitly selected
+archived RESOLVE producers, invokes only RECONCILE, applies ratified authority policy and retains
+current versus historical/first-retained evidence. It governs required_quantity or abstains;
+original five/six-stage, archive and local-job contracts stay compatible. It adds no fresh
+seven-stage flow, aggregation, enterprise approval verification, observed procurement or ACT.
+Broader M4/#20/#118 and listener/worker work remain open.
+
+[Decision #238](https://github.com/stauntonjr/procurement-intelligence-lab/issues/238),
+[implementation #239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239),
+accepted ADR047 and the [completed plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md)
+retain approval and operational closeout. [Qualification](../development/evidence/issue-239/README.md)
+records1886 passed/22 explicit browser-live skips, unchanged coverage ratchets, installed base/storage
+proofs,17 source-level cases,22 full legacy comparisons and30 challenges/known-bad rejections.
+One independent review at1ec30d2 found an admission defect; fix0f8fd4d has six RED/GREEN regressions,
+64 affected passes and full corrected qualification. Subsequent author verification is distinct
+from that independent revision; no second independent reviewer was dispatched.
+The [pre-slice advisory audit](audits/2026-10-24-post-resolve.md) succeeded on exact baselinea8de65d;
+its observations remain separate from direct code/Issue/Project and runtime evidence.
 
 ## Explicit planned RESOLVE prefix — 2026-10-24
 

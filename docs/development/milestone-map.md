@@ -95,7 +95,7 @@ Owner-approved next core slice: M4 decision #238 (native parent #20),
 accepted ADR047. The bounded implementation invokes one current RECONCILE strategy over explicitly selected validated
 archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
 The owner approved design `2c1b759`; implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
-and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; candidate qualification is retained under issue-239; exact main acceptance is recorded in #239. No broader M4 completion is claimed. Preserve Native/inline with
+and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; PR240 merged the bounded capability at4591a0c; exact main acceptance is retained under issue-239. No broader M4 completion is claimed. Preserve Native/inline with
 one independent final review. RESOLVE jobs and fresh multi-document orchestration remain deferred.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
@@ -320,8 +320,9 @@ qualification, independent review, required-check and merged-main delivery recei
 Existing source/review/dependency capabilities and broader #13/#35/#36/#37/#12/#75
 acceptance remain unchanged. [Contract](../architecture/planned-execution-archive.md).
 
-Implementation #239 is candidate-qualified through `0f8fd4d`, including the independent review's
-admission fix, real public/storage tests, clean installed wheels, source-level synthetic policy
-examples, exact legacy equality and unchanged coverage ratchets. [Evidence](evidence/issue-239/README.md)
-names tested revisions; exact protected delivery and main proof are tracked in #239. Broader M4
-and listener/worker acceptance remain open.
+Implementation #239 / decision #238 is delivered through PR240 on main
+`4591a0ccb66f1582a51d0044948ec77fba2084dd`. [Main proof](evidence/issue-239/main-delivery.json)
+binds all required checks, exact qualified tree equality and a clean installed Postgres operation,
+source-free recovery/export and exact companion source bytes. [Qualification](evidence/issue-239/README.md)
+retains review/fix revisions and unchanged legacy/coverage evidence. Broader M4/#20/#118 and
+listener/worker acceptance remain open; the bounded Issues' operational status is recorded in #239.
