@@ -8,9 +8,8 @@ core slice is approved in [decision #238](https://github.com/stauntonjr/procurem
 [retained-producer required-quantity reconciliation](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
 accepted ADR047. Owner design approval at `2c1b759` includes the omission and duplicate-content
 admission bounds. Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
-follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), awaiting
-owner plan review. Preserve Native/inline and one independent final review; product implementation
-has not started and main remains the delivered six-stage profile.
+follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24. Preserve Native/inline and one independent final review; product implementation
+has started; main remains the delivered six-stage profile.
 
 ## Explicit planned RESOLVE prefix — 2026-10-24
 

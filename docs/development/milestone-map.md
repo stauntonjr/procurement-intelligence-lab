@@ -95,8 +95,7 @@ Owner-approved next core slice: M4 decision #238 (native parent #20),
 accepted ADR047. It will invoke one current RECONCILE strategy over explicitly selected validated
 archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
 The owner approved design `2c1b759`; implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
-and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) await owner
-plan review. No product implementation or M4 completion is claimed. Preserve Native/inline with
+and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; implementation started. No delivery or M4 completion is claimed. Preserve Native/inline with
 one independent final review. RESOLVE jobs and fresh multi-document orchestration remain deferred.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the

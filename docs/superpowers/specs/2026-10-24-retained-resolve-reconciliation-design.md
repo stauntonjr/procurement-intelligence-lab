@@ -1,13 +1,13 @@
 # Required-quantity RECONCILE from retained RESOLVE producers
 
-Status: **owner-approved design at `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24; implementation plan awaiting review**.
+Status: **owner-approved design at `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24; implementation plan24d20f0 approved; implementation in progress**.
 Decision intake: [#238](https://github.com/stauntonjr/procurement-intelligence-lab/issues/238), M4, native parent #20.
 Baseline: main a8de65db7ae6b6192a937ae930859d1b205be5aa / PR237.
 The owner approved this exact written design at `2c1b759` and instructed proceed. This selects
 the retained-producer approach and the first-profile restrictions below. No product code or
 implementation acceptance is supplied here. Preserve Native/inline implementation and one
 independent final review; do not ask for a new execution method. The [executable plan](../plans/2026-10-24-retained-resolve-reconciliation.md)
-and implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239) record the next work; plan review is pending.
+and implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239) record the next work; plan24d20f0 is owner-approved.
 
 ## Intent and governing work
 
@@ -282,4 +282,4 @@ proposal now chooses strict admission bounds for both, without changing policy v
 Owner approval at `2c1b759` includes these explicit first-profile restrictions. No additional
 independent review or policy implementation occurred. Schema layout, budget values within the
 stated ceiling and delegated routine choices are frozen in the linked implementation plan,
-which awaits owner review before product implementation.
+which the owner approved at24d20f0 before product implementation.

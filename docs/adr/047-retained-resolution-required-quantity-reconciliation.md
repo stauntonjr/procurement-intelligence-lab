@@ -1,6 +1,6 @@
 # ADR-047: Reconcile retained resolution producers under required-quantity policy
 
-Status: accepted by owner approval of design `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24. Implementation plan review pending; no product acceptance.
+Status: accepted by owner approval of design `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24. Plan24d20f0 approved; implementation in progress, no product acceptance.
 
 ## Context
 
@@ -52,5 +52,5 @@ adoption from ingestion/orchestration and avoids changing the earlier delivered 
 The [owner-approved design](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md)
 contains bounds, type/error boundaries, evidence, public acceptance and required qualification.
 Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239) follows the
-[executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), pending owner plan review.
+[executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24.
 Design acceptance does not establish implementation or delivery on main.
