@@ -17,6 +17,9 @@ from procurement_intelligence_lab.platform.execution.resolution_archive import (
     ArchivedResolvedPrefix,
 )
 from procurement_intelligence_lab.platform.execution.resolution_inputs import admit
+from procurement_intelligence_lab.platform.semantics.errors import (
+    UnsupportedReconciliationInputError,
+)
 from procurement_intelligence_lab.platform.semantics.scope import StateScope
 
 
@@ -94,10 +97,12 @@ class RetainedReconciliationInputs:
         keys = tuple(p.completed.execution_digest for p in ps)
         admit(keys == tuple(sorted(set(keys))))
         artifacts = tuple(p.completed.prefix.snapshot.artifact for p in ps)
-        admit(
-            len({a.artifact_id for a in artifacts}) == len(ps)
-            and len({a.content_hash for a in artifacts}) == len(ps)
-        )
+        if len({a.artifact_id for a in artifacts}) != len(ps) or len(
+            {a.content_hash for a in artifacts}
+        ) != len(ps):
+            raise UnsupportedReconciliationInputError(
+                "selected producers repeat source artifact or content"
+            )
         admit(all(same(p.completed.scope, self.scope) for p in ps))
         catalog = ps[0].completed.execution.output.candidates
         admit(all(same(p.completed.execution.output.candidates, catalog) for p in ps))

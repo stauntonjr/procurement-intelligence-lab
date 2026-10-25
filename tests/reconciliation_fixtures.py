@@ -37,9 +37,16 @@ from tests.planning_fixtures import planning_inputs
 from tests.resolved_execution_fixtures import planned_resolved_inputs
 
 
-def producer(tmp_path: Path, rows: str = HEADER + ROW, keys: tuple[str, ...] = ("GPU-A",)):
+def producer(
+    tmp_path: Path,
+    rows: str = HEADER + ROW,
+    keys: tuple[str, ...] = ("GPU-A",),
+    content: bytes | None = None,
+):
     tmp_path.mkdir(parents=True, exist_ok=True)
     m, r, c, q, path = planned_resolved_inputs(tmp_path, rows=rows, keys=keys)
+    if content is not None:
+        path.write_bytes(content)
     service = bootstrap.build_planned_resolved_bom_service(
         manifest=m,
         registry=r,
