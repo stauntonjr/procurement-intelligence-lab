@@ -1,0 +1,11 @@
+{
+  "scope": {
+    "tenant_id": "synthetic",
+    "project_id": "bom-stage-contract",
+    "site_id": "lab",
+    "version": "1"
+  },
+  "run_id": "synthetic-reconciliation",
+  "code_revision": "1111111111111111111111111111111111111111",
+  "started_at": "2026-10-19T00:00:03+00:00"
+}

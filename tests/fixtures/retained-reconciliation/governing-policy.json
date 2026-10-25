@@ -1,0 +1,6 @@
+{
+  "profile": "retained-resolution-reconciliation/v1",
+  "policy_id": "procurement-governing-claims/v1",
+  "predicate": "required_quantity",
+  "quantity_unit": "each"
+}
