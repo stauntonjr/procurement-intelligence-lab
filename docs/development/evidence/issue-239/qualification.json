@@ -60,7 +60,13 @@
       "fix-pass.log"
     ]
   },
-  "protected_delivery": "pending",
+  "protected_delivery": {
+    "status": "merged",
+    "pr": 240,
+    "main": "4591a0ccb66f1582a51d0044948ec77fba2084dd",
+    "required_checks_passed": 12,
+    "evidence": "main-delivery.json"
+  },
   "limits": "Synthetic rule-contract qualification only; no enterprise approval verification, general ER quality, production deployment, seven-stage prefix/job or broader M4 completion. Source-free result export references companion original source bytes, not a self-contained source archive.",
   "author_fresh_pass": {
     "revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
@@ -88,5 +94,15 @@
       "corpus-oracle-red.log",
       "corpus-oracle-green.log"
     ]
+  },
+  "main_proof": {
+    "status": "passed",
+    "revision": "4591a0ccb66f1582a51d0044948ec77fba2084dd",
+    "case_count": 17,
+    "case_errors": 0,
+    "companion_sources_exact": 2,
+    "invalid_domain_modes_rejected": 2,
+    "source_free": true,
+    "evidence": "main-installed.json"
   }
 }

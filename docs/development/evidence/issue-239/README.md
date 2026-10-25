@@ -3,8 +3,9 @@
 Primary M4, Part of #20/#12; bounded implementation #239 and accepted decision #238.
 The [contract](../../../architecture/retained-reconciliation.md) and
 [approved plan](../../../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md)
-define scope. Candidate qualification is complete at the revision named in qualification.json. Exact protected
-delivery/main-pinned acceptance belongs to Issue #239; broader M4 remains open.
+define scope. PR240 merged at4591a0c with all twelve required checks. [Main delivery](main-delivery.json)
+and [installed main proof](main-installed.json) retain exact tree/wheel/revision/argv/results;
+broader M4 remains open. Candidate and independent-review revisions remain separately named.
 
 The [inline progress ledger](progress.md) records RED/GREEN evidence, exact task revisions and
 rulings. The [semantic evidence](semantic-change.json) tracks all seven applicable scenario
@@ -31,3 +32,7 @@ independent review are separate required receipts; current branch tests do not s
 The [independent review](independent-review.md) names its original revision; [fix verification](fix-pass.log)
 and the final full check record the subsequent author fix pass. The reviewer was not dispatched again.
 No optional minor findings were deferred. Current main acceptance is recorded in #239.
+
+Main proof uses the ordinary shipped clock and a new clean storage environment. It passes all17
+source-level cases and both invalid-domain modes, deletes original inputs before recovery/export,
+and compares both companion source exports byte-for-byte. No deployment or general quality claim.
