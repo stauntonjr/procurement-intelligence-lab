@@ -145,6 +145,28 @@ def main() -> int:
                 "document_at": "2026-10-19T00:00:00+00:00",
             }
 
+        authority.write_text(
+            json.dumps(
+                {
+                    "schema_version": "1.0",
+                    "producers": [
+                        record("0" * 64, {"artifact_id": "synthetic", "content_hash": "1" * 64}, 0)
+                    ],
+                }
+            )
+        )
+        valid_manifest = manifest.read_bytes()
+        wrong_domain = json.loads(valid_manifest)
+        wrong_domain["domain"]["id"] = "inventory"
+        manifest.write_text(json.dumps(wrong_domain))
+        for append in (False, True):
+            run(
+                "reconcile_resolved_package",
+                [*base, "--producer-digest", "0" * 64, *(["--archive"] if append else [])],
+                "pil.input.package_execution_invalid",
+            )
+        manifest.write_bytes(valid_manifest)
+
         if not env.get("PIL_ASSERTION_ARCHIVE_DSN"):
             authority.write_text(
                 json.dumps(
@@ -425,6 +447,7 @@ def main() -> int:
             {
                 "python": python,
                 "installed_runtime": runtime,
+                "invalid_domain_installed_modes_rejected": 2,
                 "controller_python": platform.python_version(),
                 "code_revision": args.code_revision,
                 "wheel_sha256": sha256(args.wheel.read_bytes()).hexdigest(),

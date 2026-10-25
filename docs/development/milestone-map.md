@@ -92,10 +92,10 @@ broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
 
 Owner-approved next core slice: M4 decision #238 (native parent #20),
 [retained-producer required-quantity RECONCILE](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
-accepted ADR047. It will invoke one current RECONCILE strategy over explicitly selected validated
+accepted ADR047. The bounded implementation invokes one current RECONCILE strategy over explicitly selected validated
 archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
 The owner approved design `2c1b759`; implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
-and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; implementation started. No delivery or M4 completion is claimed. Preserve Native/inline with
+and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; candidate qualification is retained under issue-239; exact main acceptance is recorded in #239. No broader M4 completion is claimed. Preserve Native/inline with
 one independent final review. RESOLVE jobs and fresh multi-document orchestration remain deferred.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
@@ -320,7 +320,8 @@ qualification, independent review, required-check and merged-main delivery recei
 Existing source/review/dependency capabilities and broader #13/#35/#36/#37/#12/#75
 acceptance remain unchanged. [Contract](../architecture/planned-execution-archive.md).
 
-Implementation #239 has committed Tasks1–6 on `codex/reconcile-design` through `4d969ef`.
-The bounded operation and actual CLI paths are implemented; qualification, independent review and
-protected delivery remain pending. [Branch evidence](evidence/issue-239/README.md) distinguishes
-installed synthetic acceptance from broader M4 completion and main status.
+Implementation #239 is candidate-qualified through `0f8fd4d`, including the independent review's
+admission fix, real public/storage tests, clean installed wheels, source-level synthetic policy
+examples, exact legacy equality and unchanged coverage ratchets. [Evidence](evidence/issue-239/README.md)
+names tested revisions; exact protected delivery and main proof are tracked in #239. Broader M4
+and listener/worker acceptance remain open.

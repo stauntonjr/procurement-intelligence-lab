@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#239",
-  "revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+  "revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
   "surfaces": [
     "retained RESOLVE required-quantity RECONCILE operation",
     "immutable Postgres reconciliation archive",
@@ -127,17 +127,55 @@
       ],
       "outcome": "passed",
       "evidence": "17 actual installed synthetic corpus cases,0 errors; source-free recovery/export and2 exact original source bytes; qualification receipt records full argv."
+    },
+    {
+      "argv": [
+        "pytest",
+        "-q",
+        "tests/contract/test_reconciliation_public_main.py",
+        "tests/integration/test_reconcile_resolved_package_cli.py::test_public_wrong_domain_rejects_before_unavailable_storage",
+        "tests/unit/test_error_contract.py",
+        "tests/contract/test_procurement_package.py",
+        "tests/unit/test_reconciliation_runner.py",
+        "tests/contract/test_archived_reconciliation.py",
+        "tests/contract/test_postgres_reconciliation_archive.py"
+      ],
+      "outcome": "passed",
+      "evidence": "fix-pass.log:64 passed in47.81s with real Postgres."
+    },
+    {
+      "argv": [
+        "make",
+        "package-smoke"
+      ],
+      "outcome": "passed",
+      "evidence": "package-smoke.log, corrected wheel123ae283..., real Postgres."
+    },
+    {
+      "argv": [
+        "make",
+        "challenges"
+      ],
+      "outcome": "passed",
+      "evidence": "challenges.json:30 passed and30 known-bad rejected at0f8fd4d."
+    },
+    {
+      "argv": [
+        "make",
+        "check"
+      ],
+      "outcome": "passed",
+      "evidence": "check.log:1886 passed/22 explicit browser-live skips; no storage skips; line 0.918, branch 0.8058; unchanged ratchet PASS."
     }
   ],
   "review": {
-    "revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+    "revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
     "mode": "self_fresh_pass",
     "findings": [
-      "Independent final review and complete qualification remain pending."
+      "Independent review at1ec30d2 identified Important domain/profile admission defect; fixed at0f8fd4d with six regressions RED->GREEN, both actual subprocess modes and64 affected tests PASS.",
+      "Author fresh pass of0f8fd4d verifies pure shared predicate before storage/invocation and preserved neutral conformance. No second independent review."
     ],
-    "unresolved_findings": [
-      "Independent final review and complete qualification remain pending."
-    ]
+    "unresolved_findings": []
   },
-  "completion": "not_ready"
+  "completion": "ready"
 }

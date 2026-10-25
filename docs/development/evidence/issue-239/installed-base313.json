@@ -41,7 +41,7 @@
         "retained-resolved-required-quantity"
       ],
       "exit_code": 0,
-      "seconds": 0.10252702199977648
+      "seconds": 0.08334944599937444
     },
     {
       "argv": [
@@ -51,7 +51,7 @@
         "procurement_intelligence_lab.interfaces.domain_package"
       ],
       "exit_code": 0,
-      "seconds": 0.10915431800003716
+      "seconds": 0.062423975999990944
     },
     {
       "argv": [
@@ -60,24 +60,77 @@
         "-m",
         "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
         "--manifest",
-        "/tmp/pil-reconciliation-installed-u_nr2vu4/operation-manifest.json",
+        "/tmp/pil-reconciliation-installed-f476tmuw/operation-manifest.json",
         "--context",
-        "/tmp/pil-reconciliation-installed-u_nr2vu4/context.json",
+        "/tmp/pil-reconciliation-installed-f476tmuw/context.json",
         "--config",
-        "/tmp/pil-reconciliation-installed-u_nr2vu4/config.toml",
+        "/tmp/pil-reconciliation-installed-f476tmuw/config.toml",
         "--registry",
-        "/tmp/pil-reconciliation-installed-u_nr2vu4/registry.json",
+        "/tmp/pil-reconciliation-installed-f476tmuw/registry.json",
         "--governing-policy",
-        "/tmp/pil-reconciliation-installed-u_nr2vu4/governing-policy.json",
+        "/tmp/pil-reconciliation-installed-f476tmuw/governing-policy.json",
         "--authority",
-        "/tmp/pil-reconciliation-installed-u_nr2vu4/authority.json",
+        "/tmp/pil-reconciliation-installed-f476tmuw/authority.json",
         "--as-of",
         "2026-10-19T00:00:00+00:00",
         "--producer-digest",
         "0000000000000000000000000000000000000000000000000000000000000000"
       ],
       "exit_code": 2,
-      "seconds": 0.15266062199953012
+      "seconds": 0.10496542999953817
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
+        "--manifest",
+        "/tmp/pil-reconciliation-installed-f476tmuw/operation-manifest.json",
+        "--context",
+        "/tmp/pil-reconciliation-installed-f476tmuw/context.json",
+        "--config",
+        "/tmp/pil-reconciliation-installed-f476tmuw/config.toml",
+        "--registry",
+        "/tmp/pil-reconciliation-installed-f476tmuw/registry.json",
+        "--governing-policy",
+        "/tmp/pil-reconciliation-installed-f476tmuw/governing-policy.json",
+        "--authority",
+        "/tmp/pil-reconciliation-installed-f476tmuw/authority.json",
+        "--as-of",
+        "2026-10-19T00:00:00+00:00",
+        "--producer-digest",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--archive"
+      ],
+      "exit_code": 2,
+      "seconds": 0.09107465299985051
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
+        "--manifest",
+        "/tmp/pil-reconciliation-installed-f476tmuw/operation-manifest.json",
+        "--context",
+        "/tmp/pil-reconciliation-installed-f476tmuw/context.json",
+        "--config",
+        "/tmp/pil-reconciliation-installed-f476tmuw/config.toml",
+        "--registry",
+        "/tmp/pil-reconciliation-installed-f476tmuw/registry.json",
+        "--governing-policy",
+        "/tmp/pil-reconciliation-installed-f476tmuw/governing-policy.json",
+        "--authority",
+        "/tmp/pil-reconciliation-installed-f476tmuw/authority.json",
+        "--as-of",
+        "2026-10-19T00:00:00+00:00",
+        "--producer-digest",
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "exit_code": 2,
+      "seconds": 0.1149321789998794
     }
   ],
   "cases": [],
@@ -87,8 +140,9 @@
     "package_path": "/tmp/pil-239-artifacts/base313/lib/python3.13/site-packages/procurement_intelligence_lab/__init__.py",
     "storage_driver_available": false
   },
+  "invalid_domain_installed_modes_rejected": 2,
   "controller_python": "3.13.14",
-  "code_revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
-  "wheel_sha256": "40758702d688fa4fa861bad0f1626f18976664f68bcae03fbcbb6e4e6a13f6b3",
+  "code_revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
+  "wheel_sha256": "123ae28337ca054de3f618ef7670e88b8514a7654e5a107f52337e7d91e46277",
   "population": "Synthetic policy integration examples; no enterprise approval or general entity-resolution quality claim."
 }

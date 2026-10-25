@@ -1,371 +1,371 @@
 {
   "schema_version": 1,
   "kind": "development-agent-public-challenge-run",
-  "revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+  "revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
   "model": "not-specified",
   "configuration": "not-specified",
-  "started_at": "2026-10-25T02:58:18.207149+00:00",
-  "completed_at": "2026-10-25T03:02:34.395915+00:00",
+  "started_at": "2026-10-25T03:16:54.939398+00:00",
+  "completed_at": "2026-10-25T03:20:25.845256+00:00",
   "results": [
     {
       "id": "C001",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.972,
+      "duration_seconds": 0.974,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.917
+      "known_bad_duration_seconds": 0.468
     },
     {
       "id": "C002",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.815,
+      "duration_seconds": 1.011,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.898
+      "known_bad_duration_seconds": 0.491
     },
     {
       "id": "C003",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 16.059,
+      "duration_seconds": 15.266,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 7.378
+      "known_bad_duration_seconds": 7.482
     },
     {
       "id": "C004",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 189.792,
+      "duration_seconds": 160.936,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 1.903
+      "known_bad_duration_seconds": 1.366
     },
     {
       "id": "C005",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.433,
+      "duration_seconds": 1.082,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.617
+      "known_bad_duration_seconds": 0.522
     },
     {
       "id": "C006",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.346,
+      "duration_seconds": 1.099,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.637
+      "known_bad_duration_seconds": 0.502
     },
     {
       "id": "C007",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.456,
+      "duration_seconds": 0.965,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.739
+      "known_bad_duration_seconds": 0.46
     },
     {
       "id": "C008",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 2.465,
+      "duration_seconds": 1.736,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 1.431
+      "known_bad_duration_seconds": 1.087
     },
     {
       "id": "C009",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.64,
+      "duration_seconds": 1.047,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.811
+      "known_bad_duration_seconds": 0.488
     },
     {
       "id": "C010",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.333,
+      "duration_seconds": 1.02,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 4,
-      "known_bad_duration_seconds": 0.628
+      "known_bad_duration_seconds": 0.489
     },
     {
       "id": "C011",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.395,
+      "duration_seconds": 0.905,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.599
+      "known_bad_duration_seconds": 0.423
     },
     {
       "id": "C012",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.428,
+      "duration_seconds": 0.94,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.724
+      "known_bad_duration_seconds": 0.448
     },
     {
       "id": "C013",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.542,
+      "duration_seconds": 0.943,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.83
+      "known_bad_duration_seconds": 0.444
     },
     {
       "id": "C014",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.611,
+      "duration_seconds": 1.142,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.788
+      "known_bad_duration_seconds": 0.533
     },
     {
       "id": "C015",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.436,
+      "duration_seconds": 0.961,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.662
+      "known_bad_duration_seconds": 0.45
     },
     {
       "id": "C016",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.695,
+      "duration_seconds": 0.978,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.784
+      "known_bad_duration_seconds": 0.468
     },
     {
       "id": "C017",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.826,
+      "duration_seconds": 1.071,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.797
+      "known_bad_duration_seconds": 0.503
     },
     {
       "id": "C018",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.711,
+      "duration_seconds": 1.089,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.745
+      "known_bad_duration_seconds": 0.515
     },
     {
       "id": "C019",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.707,
+      "duration_seconds": 1.195,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.804
+      "known_bad_duration_seconds": 0.534
     },
     {
       "id": "C020",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.435,
+      "duration_seconds": 1.044,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.673
+      "known_bad_duration_seconds": 0.479
     },
     {
       "id": "C021",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.816,
+      "duration_seconds": 1.108,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.9
+      "known_bad_duration_seconds": 0.518
     },
     {
       "id": "C022",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 2.02,
+      "duration_seconds": 1.046,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.917
+      "known_bad_duration_seconds": 0.493
     },
     {
       "id": "C023",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.681,
+      "duration_seconds": 1.107,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.704
+      "known_bad_duration_seconds": 0.512
     },
     {
       "id": "C024",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.721,
+      "duration_seconds": 1.174,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.84
+      "known_bad_duration_seconds": 0.56
     },
     {
       "id": "C025",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 2.907,
+      "duration_seconds": 2.492,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 1.414
+      "known_bad_duration_seconds": 1.211
     },
     {
       "id": "C026",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 4.066,
+      "duration_seconds": 3.541,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 2.009
+      "known_bad_duration_seconds": 1.752
     },
     {
       "id": "C027",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 2.849,
+      "duration_seconds": 2.166,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 1.446
+      "known_bad_duration_seconds": 1.046
     },
     {
       "id": "C028",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.53,
+      "duration_seconds": 1.046,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.773
+      "known_bad_duration_seconds": 0.498
     },
     {
       "id": "C029",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.254,
+      "duration_seconds": 0.928,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.573
+      "known_bad_duration_seconds": 0.435
     },
     {
       "id": "C030",
       "outcome": "passed",
       "return_code": 0,
-      "duration_seconds": 1.246,
+      "duration_seconds": 0.893,
       "prevention": "not_evaluated_public_oracle_passed",
       "detection": "public_oracle_detected_known_bad",
       "repair": "not_evaluated",
       "known_bad_outcome": "rejected",
       "known_bad_return_code": 1,
-      "known_bad_duration_seconds": 0.574
+      "known_bad_duration_seconds": 0.418
     }
   ]
 }

@@ -8,8 +8,15 @@ core slice is approved in [decision #238](https://github.com/stauntonjr/procurem
 [retained-producer required-quantity reconciliation](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
 accepted ADR047. Owner design approval at `2c1b759` includes the omission and duplicate-content
 admission bounds. Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
-follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24. Preserve Native/inline and one independent final review; product implementation
-has started. Tasks1–6 are committed through `4d969ef`: contracts, existing-policy adoption, one-stage execution, atomic retention, source-free recovery and actual CLIs. Public compatibility127 tests and installed17-case synthetic operation/recovery corpus pass; final full checks, one independent review and protected delivery remain pending. See [branch evidence](../development/evidence/issue-239/README.md). Main remains the delivered six-stage profile.
+follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24. Preserve Native/inline and one independent final review; the bounded operation
+is implemented and candidate-qualified at `0f8fd4d`: explicit retained-producer RECONCILE,
+ratified policy, one current invocation, atomic immutable retention and independently validated
+source-free recovery. [Qualification evidence](../development/evidence/issue-239/README.md) retains
+real Postgres/public/corpus/artifact/legacy/coverage results. One independent review at `1ec30d2`
+found a preadmission defect; fix `0f8fd4d` has RED/GREEN regressions and full corrected qualification.
+Exact protected PR/main-pinned proof and operational closeout belong to #239. Broader M4 remains
+open; this adds no fresh seven-stage flow, job adoption, aggregation, enterprise approval or ACT.
+
 
 ## Explicit planned RESOLVE prefix — 2026-10-24
 
@@ -27,7 +34,7 @@ and #236 record final qualification and merged-main proof. PR237 merged on 2026-
 The installed main-pinned source-free Postgres probe passed; broader M3 remains open. The
 [retained qualification evidence](../development/evidence/issue-236/README.md) includes installed
 base3.12/base3.13/storage receipts, full legacy equality and one independent whole-branch review.
-Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, reconciliation,
+Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, fresh seven-stage orchestration,
 global identity and broader M3 acceptance remain subsequent work. #231/#232 are delivered on main;
 their exact receipts remain in #232. Parent #36's stale plan-pending summary is corrected while
 its listener/worker acceptance stays open. Hosted advisory40115378490 on main88d32d4 failed Gemini

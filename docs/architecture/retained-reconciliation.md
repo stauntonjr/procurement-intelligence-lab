@@ -3,8 +3,8 @@
 Issue [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239),
 [ADR047](../adr/047-retained-resolution-required-quantity-reconciliation.md) and the
 [approved design](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md)
-define this explicit local operation. Branch implementation is undergoing qualification;
-main delivery is recorded separately in the project handoff and Issue.
+define this explicit local operation. The [qualification receipt](../development/evidence/issue-239/qualification.json) names tested
+revisions. Exact protected delivery and main-pinned acceptance are recorded in Issue #239.
 
 The caller selects one to eight already-retained [six-stage producers](planned-resolve-prefix.md)
 and supplies synthetic authority attestations. Only RECONCILE executes now, once per admitted
