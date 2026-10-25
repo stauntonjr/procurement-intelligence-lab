@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/tmp/pil-state-invariants/tools/run_challenges.py", line 287, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/pil-state-invariants/tools/run_challenges.py", line 202, in main
+    challenges = load_challenges()
+                 ^^^^^^^^^^^^^^^^^
+  File "/tmp/pil-state-invariants/tools/run_challenges.py", line 132, in load_challenges
+    raise ValueError(
+ValueError: challenge set mismatch: expected ['C001', 'C002', 'C003', 'C004', 'C005', 'C006', 'C007', 'C008', 'C009', 'C010', 'C011', 'C012', 'C013', 'C014', 'C015', 'C016', 'C017', 'C018', 'C019', 'C020', 'C021', 'C022', 'C023', 'C024', 'C025', 'C026', 'C027', 'C028', 'C029', 'C030'], found ['C001', 'C002', 'C003', 'C004', 'C005', 'C006', 'C007', 'C008', 'C009', 'C010', 'C011', 'C012', 'C013', 'C014', 'C015', 'C016', 'C017', 'C018', 'C019', 'C020', 'C021', 'C022', 'C023', 'C024', 'C025', 'C026', 'C027', 'C028', 'C029', 'C030', 'C031']

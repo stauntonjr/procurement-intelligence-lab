@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "kind": "development-agent-public-challenge-run",
+  "revision": "540db97ee6e01264a3ff925e52bc8b908fccb1a5",
+  "model": "not-evaluated",
+  "configuration": "public-oracles-with-known-bad-mutations",
+  "started_at": "2026-10-25T14:34:50.088542+00:00",
+  "completed_at": "2026-10-25T14:34:57.028583+00:00",
+  "results": [
+    {
+      "id": "C008",
+      "outcome": "passed",
+      "return_code": 0,
+      "duration_seconds": 5.799,
+      "prevention": "not_evaluated_public_oracle_passed",
+      "detection": "public_oracle_detected_known_bad",
+      "repair": "not_evaluated",
+      "known_bad_outcome": "rejected",
+      "known_bad_return_code": 1,
+      "known_bad_duration_seconds": 4.377
+    },
+    {
+      "id": "C031",
+      "outcome": "passed",
+      "return_code": 0,
+      "duration_seconds": 1.118,
+      "prevention": "not_evaluated_public_oracle_passed",
+      "detection": "public_oracle_detected_known_bad",
+      "repair": "not_evaluated",
+      "known_bad_outcome": "rejected",
+      "known_bad_return_code": 1,
+      "known_bad_duration_seconds": 0.532
+    }
+  ],
+  "source_state": {
+    "git_head": "540db97ee6e01264a3ff925e52bc8b908fccb1a5",
+    "uncommitted_guard_fix": true,
+    "subsequently_committed_as": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+    "final_source_pinned_report": "challenges.json"
+  }
+}

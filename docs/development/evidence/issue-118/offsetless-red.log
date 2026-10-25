@@ -1,0 +1,60 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_state_boundaries_reject_offsetless_timezone[expected] __________
+
+boundary = 'expected'
+
+    @pytest.mark.regression
+    @pytest.mark.parametrize("boundary", ["expected", "observed", "project", "compare"])
+    def test_state_boundaries_reject_offsetless_timezone(boundary: str) -> None:
+        as_of = AS_OF.replace(tzinfo=_OffsetlessTimezone())
+        assert as_of.tzinfo is not None and as_of.utcoffset() is None
+>       with pytest.raises(TemporalContractError, match="as_of must be timezone-aware"):
+E       Failed: DID NOT RAISE TemporalContractError
+
+tests/regression/test_state_invariants.py:129: Failed
+__________ test_state_boundaries_reject_offsetless_timezone[observed] __________
+
+boundary = 'observed'
+
+    @pytest.mark.regression
+    @pytest.mark.parametrize("boundary", ["expected", "observed", "project", "compare"])
+    def test_state_boundaries_reject_offsetless_timezone(boundary: str) -> None:
+        as_of = AS_OF.replace(tzinfo=_OffsetlessTimezone())
+        assert as_of.tzinfo is not None and as_of.utcoffset() is None
+>       with pytest.raises(TemporalContractError, match="as_of must be timezone-aware"):
+E       Failed: DID NOT RAISE TemporalContractError
+
+tests/regression/test_state_invariants.py:129: Failed
+__________ test_state_boundaries_reject_offsetless_timezone[project] ___________
+
+boundary = 'project'
+
+    @pytest.mark.regression
+    @pytest.mark.parametrize("boundary", ["expected", "observed", "project", "compare"])
+    def test_state_boundaries_reject_offsetless_timezone(boundary: str) -> None:
+        as_of = AS_OF.replace(tzinfo=_OffsetlessTimezone())
+        assert as_of.tzinfo is not None and as_of.utcoffset() is None
+>       with pytest.raises(TemporalContractError, match="as_of must be timezone-aware"):
+E       Failed: DID NOT RAISE TemporalContractError
+
+tests/regression/test_state_invariants.py:129: Failed
+__________ test_state_boundaries_reject_offsetless_timezone[compare] ___________
+
+boundary = 'compare'
+
+    @pytest.mark.regression
+    @pytest.mark.parametrize("boundary", ["expected", "observed", "project", "compare"])
+    def test_state_boundaries_reject_offsetless_timezone(boundary: str) -> None:
+        as_of = AS_OF.replace(tzinfo=_OffsetlessTimezone())
+        assert as_of.tzinfo is not None and as_of.utcoffset() is None
+>       with pytest.raises(TemporalContractError, match="as_of must be timezone-aware"):
+E       Failed: DID NOT RAISE TemporalContractError
+
+tests/regression/test_state_invariants.py:129: Failed
+=========================== short test summary info ============================
+FAILED tests/regression/test_state_invariants.py::test_state_boundaries_reject_offsetless_timezone[expected]
+FAILED tests/regression/test_state_invariants.py::test_state_boundaries_reject_offsetless_timezone[observed]
+FAILED tests/regression/test_state_invariants.py::test_state_boundaries_reject_offsetless_timezone[project]
+FAILED tests/regression/test_state_invariants.py::test_state_boundaries_reject_offsetless_timezone[compare]
+4 failed, 70 deselected in 0.12s

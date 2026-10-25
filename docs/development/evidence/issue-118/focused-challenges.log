@@ -1,0 +1,11 @@
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 0.69s
+....                                                                     [100%]
+4 passed, 70 deselected in 0.09s
+C008: State constructors enforce semantic invariants
+  $ uv run pytest -q tests/regression/test_state_invariants.py
+  known bad: rejected
+C031: Expected and observed state require an actual UTC offset
+  $ uv run pytest -q tests/regression/test_state_invariants.py -k offsetless
+  known bad: rejected

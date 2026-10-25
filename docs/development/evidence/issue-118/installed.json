@@ -1,0 +1,30 @@
+{
+  "code_revision": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+  "wheel_sha256": "8d0cc34ae0db27be753c0a870c9b6bf6c48c727477137c3b461be70aa907e054",
+  "runtime": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "package": "/tmp/pil-118-installed-nxnrmlta/venv/lib/python3.12/site-packages/procurement_intelligence_lab/__init__.py",
+    "prefix": "/tmp/pil-118-installed-nxnrmlta/venv"
+  },
+  "cwd": "/tmp/pil-118-installed-nxnrmlta",
+  "argv": [
+    "/tmp/pil-118-installed-nxnrmlta/venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--junitxml=/tmp/pil-118-installed-nxnrmlta/results.xml",
+    "/tmp/pil-118-installed-nxnrmlta/test_state.py",
+    "/tmp/pil-118-installed-nxnrmlta/test_state_invariants.py"
+  ],
+  "test_source_sha256": {
+    "tests/unit/test_state.py": "0a665cfcbbd040c331c4468f3d938f60417615c1c32a13d422fd1bd96eced1ed",
+    "tests/regression/test_state_invariants.py": "087dec43582b34088c5e963f6c4b18a30d254bab989d565fce31aacc82b9bb5f"
+  },
+  "case_count": 77,
+  "failures": 0,
+  "skips": 0,
+  "returncode": 0,
+  "stdout": "........................................................................ [ 93%]\n.....                                                                    [100%]\n77 passed in 1.04s\n",
+  "stderr": "",
+  "population": "Public deterministic/property contract cases; no production or agent-quality score."
+}

@@ -48,6 +48,17 @@ GitHub milestones are the canonical delivery taxonomy. Historical vertical imple
 - Update GitHub Issue, milestone, Project, and this map together when state changes.
 - Do not infer milestone status from branch names, PR numbers, or historical slice labels.
 
+## State-construction invariant completion — 2026-10-25
+
+The owner selected #118 (M4, follow-up to closed #47) after retained RECONCILE delivery.
+The bounded implementation preserves quantity/evidence/pair/overage behavior and enforces actual
+datetime awareness at both expected/observed constructors and both helper cutoffs. C031 protects
+the offsetless-tzinfo defect; C008 stays intact. [Qualification](evidence/issue-118/README.md)
+records1956 passed/22 browser-live skips, unchanged ratchets,77 clean-installed cases, real-Postgres
+package smoke and31 public oracle/known-bad pairs. One independent review31c1ff0 has no findings.
+Issue118 retains the actual protected delivery/main receipt and final Project status; broader M4
+and #109 remain open. No new authority, anomaly/arithmetic/freshness policy, jobs or deployment.
+
 ## Current core architecture continuation — 2026-10-19
 
 Issue #201 (M1, part of #20/#7) introduces the real procurement declaration and

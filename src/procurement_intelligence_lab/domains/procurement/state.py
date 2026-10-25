@@ -16,7 +16,10 @@ from procurement_intelligence_lab.domains.procurement.review_reconciliation impo
     HumanReconciliationDecision,
     ReconciliationReviewOutcome,
 )
-from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
+from procurement_intelligence_lab.platform.semantics.errors import (
+    SemanticContractError,
+    TemporalContractError,
+)
 from procurement_intelligence_lab.platform.semantics.evidence import EvidenceRef
 from procurement_intelligence_lab.platform.semantics.identity import stable_id
 from procurement_intelligence_lab.platform.semantics.resolution import (
@@ -58,8 +61,7 @@ class ExpectedRequirement:
         if not self.canonical_key:
             raise ValueError("canonical_key is required")
         _require_nonnegative("required_quantity", self.required_quantity)
-        if self.as_of.tzinfo is None:
-            raise ValueError("as_of must be timezone-aware")
+        _require_aware(self.as_of)
         if not self.evidence:
             raise ValueError("expected state requires evidence")
 
@@ -90,8 +92,7 @@ class ObservedProcurement:
         }
         for name, value in quantities.items():
             _require_nonnegative(name, value)
-        if self.as_of.tzinfo is None:
-            raise ValueError("as_of must be timezone-aware")
+        _require_aware(self.as_of)
         if not self.evidence:
             raise ValueError("observed state requires evidence")
 
@@ -251,6 +252,11 @@ def project_governed_required_quantity(
     return GovernedRequiredQuantityState(decision, expected)
 
 
+def _require_aware(as_of: datetime) -> None:
+    if as_of.tzinfo is None or as_of.utcoffset() is None:
+        raise TemporalContractError("as_of must be timezone-aware")
+
+
 def _require_nonnegative(name: str, value: Decimal) -> None:
     if not value.is_finite() or value < Decimal(0):
         raise ValueError(f"{name} must be a finite non-negative quantity")
@@ -285,8 +291,7 @@ def expected_requirements(
     scope: StateScope,
     as_of: datetime,
 ) -> tuple[ExpectedRequirement, ...]:
-    if as_of.tzinfo is None:
-        raise ValueError("as_of must be timezone-aware")
+    _require_aware(as_of)
     grouped: dict[str, list[OperationalBomLine]] = {}
     for line in lines:
         grouped.setdefault(line.canonical_key, []).append(line)
@@ -308,8 +313,7 @@ def compare_expected_observed(
     *,
     as_of: datetime,
 ) -> tuple[ExpectedObservedState, ...]:
-    if as_of.tzinfo is None:
-        raise ValueError("as_of must be timezone-aware")
+    _require_aware(as_of)
 
     observed_by_key: dict[tuple[StateScope, str], ObservedProcurement] = {}
     for item in observed:

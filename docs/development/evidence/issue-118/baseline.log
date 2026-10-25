@@ -1,0 +1,7 @@
+Using CPython 3.12.3 interpreter at: /usr/bin/python3
+Creating virtual environment at: .venv
+   Building procurement-intelligence-lab @ file:///tmp/pil-state-invariants
+      Built procurement-intelligence-lab @ file:///tmp/pil-state-invariants
+Installed 58 packages in 64ms
+.............                                                            [100%]
+13 passed in 0.55s

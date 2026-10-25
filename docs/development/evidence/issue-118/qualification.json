@@ -1,0 +1,44 @@
+{
+  "baseline": "9818d09566625078fb8221f3f29a29e0ff3b91e4",
+  "runtime_revision": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+  "reviewed_revision": "31c1ff0f9877d0715e7aa091b4ac5533799e3572",
+  "tests": {
+    "passed": 1956,
+    "skipped": 22,
+    "storage_skips": 0,
+    "duration_seconds": 890.21
+  },
+  "coverage": {
+    "line_percent": 91.85,
+    "branch_percent": 80.73,
+    "line_rate": "0.9185",
+    "branch_rate": "0.8073",
+    "unchanged_ratchet": "passed"
+  },
+  "wheel_sha256": "8d0cc34ae0db27be753c0a870c9b6bf6c48c727477137c3b461be70aa907e054",
+  "installed": {
+    "cases": 77,
+    "failures": 0,
+    "skips": 0
+  },
+  "focused": 83,
+  "package_smoke": "passed with real disposable Postgres",
+  "challenges": {
+    "passed": 31,
+    "known_bad_rejected": 31,
+    "agent_quality": "not evaluated"
+  },
+  "independent_review": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "focused_passed": 83,
+    "matching_package_python_files": 216
+  },
+  "protected_delivery": "pending; actual PR/main receipt and terminal closeout retained in Issue118",
+  "limits": [
+    "typed domain input boundary only; four selected time guards",
+    "browser/live opt-ins not run",
+    "no production, data-quality, enterprise authority or agent-quality claim"
+  ]
+}
