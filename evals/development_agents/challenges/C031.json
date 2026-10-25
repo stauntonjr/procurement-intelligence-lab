@@ -1,0 +1,12 @@
+{
+  "id": "C031",
+  "title": "Expected and observed state require an actual UTC offset",
+  "introducing_commit": "0ccd0a66e43d70a948e6dab5738343c047ebba47",
+  "oracle": "Both state constructors and both public helper cutoffs reject tzinfo objects whose utcoffset is None, including empty inputs.",
+  "known_bad": "Check only whether tzinfo is present, admitting offsetless naive timestamps as timezone-aware.",
+  "known_bad_mutation": [{"path": "src/procurement_intelligence_lab/domains/procurement/state.py", "find": "    if as_of.tzinfo is None or as_of.utcoffset() is None:", "replace": "    if as_of.tzinfo is None:"}],
+  "known_bad_failure_pattern": "DID NOT RAISE",
+  "test_command": ["uv", "run", "pytest", "-q", "tests/regression/test_state_invariants.py", "-k", "offsetless"],
+  "surfaces": ["domain", "state", "temporal-invariants"],
+  "prevention": ["intrinsic aware-time guard", "actual public constructor and empty-helper regressions"]
+}
