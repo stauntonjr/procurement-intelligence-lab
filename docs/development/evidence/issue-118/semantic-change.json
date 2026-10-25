@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "issue": "#118",
+  "revision": "9818d09566625078fb8221f3f29a29e0ff3b91e4",
+  "surfaces": [
+    "procurement expected/observed state constructor and helper timestamp invariants",
+    "C008/C031 public development-agent regression oracles"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/adr/020-expected-observed-state.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/implement-domain-logic/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md",
+    ".agents/skills/run-agent-challenges/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "ExpectedRequirement, ObservedProcurement and ExpectedObservedState arguments; explicit Decimal quantities, canonical key, StateScope, as_of, evidence and freshness; existing Issue118/ADR020.",
+    "authoritative_output": "Valid immutable expected/observed records or rejection; existing latest-in-scope/as-of pairing and outstanding/freshness output.",
+    "scope_as_of": "Full tenant/project/site/version equality when paired. Every material record and helper cutoff is timezone-aware (tzinfo and non-None UTC offset). Valid offsets and distinct record timestamps are preserved.",
+    "governing_policy": "ADR020/024 and Issue118 intrinsic validity; finite nonnegative quantities; overages remain representable for anomaly policy. No new authority/aggregation/unknown-value policy.",
+    "evidence_retained": "Original evidence tuples and scopes/as_of; regression RED/GREEN, property cases, public installed proof, public challenge/mutation results, exact revisions and review.",
+    "typed_failures": "Existing quantity/key/scope/evidence ValueError behavior retained. Invalid as_of raises existing TemporalContractError, a ValueError subclass, with stable temporal contract code. No new error vocabulary."
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "Empty helper inputs still validate time; missing observation remains None/UNKNOWN; empty evidence rejects."
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "All quantity fields validated independently; pair key/every scope axis; existing latest/as-of multiple-record selection preserved."
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "Naive and offsetless reject, legitimate offsets and different record times remain valid; full scope identity."
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "Negative/nonfinite reject; zero/fractional/large/nonnegative quantities and overages preserved."
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "Offsetless timestamps and missing evidence rejected at public typed boundaries."
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "Actual constructors/helpers are public Python API; clean installed execution and shipped integration callers must be qualified in Task3."
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/regression/test_state_invariants.py",
+        "tests/unit/test_state.py"
+      ],
+      "rationale": "Overages, unknown/partial freshness, valid offsets and unchanged governing policy remain valid."
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--extra",
+        "workflow",
+        "pytest",
+        "-q",
+        "tests/unit/test_state.py",
+        "tests/regression/test_state_invariants.py",
+        "tests/contract/test_governed_required_quantity_state.py"
+      ],
+      "outcome": "passed",
+      "evidence": "Baseline 13 passed; baseline.log."
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--extra",
+        "workflow",
+        "pytest",
+        "-q",
+        "tests/regression/test_state_invariants.py",
+        "-k",
+        "offsetless"
+      ],
+      "outcome": "failed",
+      "evidence": "Expected RED:4 DID NOT RAISE failures, offsetless-red.log."
+    }
+  ],
+  "review": {
+    "revision": "9818d09566625078fb8221f3f29a29e0ff3b91e4",
+    "mode": "self_fresh_pass",
+    "findings": [
+      "Initial contract/source pass confirms existing invariant coverage and offsetless timezone gap."
+    ],
+    "unresolved_findings": [
+      "Implementation, installed/full qualification and final independent review pending."
+    ]
+  },
+  "completion": "not_ready"
+}
