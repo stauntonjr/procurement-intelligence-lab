@@ -1,12 +1,13 @@
 # Required-quantity RECONCILE from retained RESOLVE producers
 
-Status: **proposed; owner direction and written-design approval pending**.
+Status: **owner-approved design at `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24; implementation plan awaiting review**.
 Decision intake: [#238](https://github.com/stauntonjr/procurement-intelligence-lab/issues/238), M4, native parent #20.
 Baseline: main a8de65db7ae6b6192a937ae930859d1b205be5aa / PR237.
-This proposal is the author's recommended continuation of core architecture. The owner's earlier
-approval delivered RESOLVE; it is not approval of this unwritten-at-that-time slice. No product
-code or implementation acceptance is supplied here. Preserve Native/inline implementation and
-one independent final review if this design is approved; do not ask for a new execution method.
+The owner approved this exact written design at `2c1b759` and instructed proceed. This selects
+the retained-producer approach and the first-profile restrictions below. No product code or
+implementation acceptance is supplied here. Preserve Native/inline implementation and one
+independent final review; do not ask for a new execution method. The [executable plan](../plans/2026-10-24-retained-resolve-reconciliation.md)
+and implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239) record the next work; plan review is pending.
 
 ## Intent and governing work
 
@@ -33,8 +34,7 @@ Issues15/46/47. Open #118 constrains state construction. #20/#12 cover package/r
 3. **Alternative direction: durable RESOLVE local jobs.** Adapt the six-stage profile into a new
    explicit job contract. This strengthens durability but leaves the governing-state gap open.
 
-These are author proposals. No owner selection is asserted. Approval of this document would
-select approach1 and the bounds below. It would not authorize the deferred alternatives.
+Owner approval selects approach1 and the bounds below. The deferred alternatives are not selected.
 
 ## Exact delivery boundary
 
@@ -279,7 +279,7 @@ proposal now chooses strict admission bounds for both, without changing policy v
    repeated capture/relabeling cannot manufacture additional governing evidence. Equal-quantity
    joint governance remains supported for distinct-content revision documents.
 
-These are proposed first-profile restrictions for the owner to approve, not owner decisions already
-made. No additional independent review or policy implementation occurred. Direction/design approval
-is still pending. Schema layout, budget values within the stated ceiling and routine implementation
-choices explicitly delegated above must be frozen in the subsequent implementation plan.
+Owner approval at `2c1b759` includes these explicit first-profile restrictions. No additional
+independent review or policy implementation occurred. Schema layout, budget values within the
+stated ceiling and delegated routine choices are frozen in the linked implementation plan,
+which awaits owner review before product implementation.

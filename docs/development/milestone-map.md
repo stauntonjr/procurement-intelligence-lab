@@ -90,12 +90,14 @@ execution, mention-bound evidence/abstention and atomic retention. The owner app
 for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) deliver the bounded slice through PR237 on main `a8de65db7ae6b6192a937ae930859d1b205be5aa`. #235/#236 are closed and Project Done; exact qualification, independent review and installed main proof are retained in #236. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
 broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
 
-Proposed next core slice: M4 decision #238 (native parent #20),
+Owner-approved next core slice: M4 decision #238 (native parent #20),
 [retained-producer required-quantity RECONCILE](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
-proposed ADR047. It would invoke one current RECONCILE strategy over explicitly selected validated
+accepted ADR047. It will invoke one current RECONCILE strategy over explicitly selected validated
 archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
-Owner direction/design approval and implementation planning are pending; no new product code or
-M4 completion is claimed. RESOLVE local jobs and fresh multi-document orchestration are alternatives.
+The owner approved design `2c1b759`; implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
+and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) await owner
+plan review. No product implementation or M4 completion is claimed. Preserve Native/inline with
+one independent final review. RESOLVE jobs and fresh multi-document orchestration remain deferred.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
 [durable local prefix job lifecycle](../architecture/local-prefix-jobs.md): immutable arrival and

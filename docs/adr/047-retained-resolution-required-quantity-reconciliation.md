@@ -1,6 +1,6 @@
 # ADR-047: Reconcile retained resolution producers under required-quantity policy
 
-Status: proposed; owner written-design approval pending.
+Status: accepted by owner approval of design `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24. Implementation plan review pending; no product acceptance.
 
 ## Context
 
@@ -10,7 +10,7 @@ ADR023/024 define predicate-specific approval/effectivity/supersession and polic
 identity. A seventh executor must not silently substitute the older aggregate/source-order rule
 for those ratified semantics.
 
-## Proposed decision
+## Decision
 
 Adopt a distinct retained-resolution-reconciliation/v1 operation that consumes explicitly selected,
 validated six-stage archive producers and invokes ReconcileStrategy exactly once for required
@@ -49,6 +49,8 @@ chosen. RESOLVE job-profile adoption remains a separate direction. Reusing a pro
 receipt is explicit and never a cache hit or new upstream invocation. This isolates authority
 adoption from ingestion/orchestration and avoids changing the earlier delivered acceptance.
 
-The [full proposed design](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md)
+The [owner-approved design](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md)
 contains bounds, type/error boundaries, evidence, public acceptance and required qualification.
-Nothing here grants authority for product implementation before owner approval and a written plan.
+Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239) follows the
+[executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), pending owner plan review.
+Design acceptance does not establish implementation or delivery on main.
