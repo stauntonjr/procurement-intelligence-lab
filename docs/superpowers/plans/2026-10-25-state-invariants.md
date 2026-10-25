@@ -33,22 +33,22 @@
 **Files:** tests/regression/test_state_invariants.py; this spec/plan; docs/development/evidence/issue-118/.
 **Interfaces:** existing ExpectedRequirement, ObservedProcurement, ExpectedObservedState, expected_requirements, compare_expected_observed public APIs, unchanged signatures.
 
-- [ ] Run the existing focused state/governed-state baseline.
-- [ ] Add parameterized/property coverage for every quantity, nonfinite/negative/zero/fractional/overage, evidence, each scope axis/key, missing/partial observations and offset preservation.
-- [ ] Add `test_state_boundaries_reject_offsetless_timezone` for both constructors and both empty-input helpers. Assert TemporalContractError with timezone-aware message. Run it and retain the expected RED.
-- [ ] Record exact semantic contract and seven scenario-family dispositions before changing source.
-- [ ] Commit contract/tests; no product code yet.
+- [x] Run the existing focused state/governed-state baseline.
+- [x] Add parameterized/property coverage for every quantity, nonfinite/negative/zero/fractional/overage, evidence, each scope axis/key, missing/partial observations and offset preservation.
+- [x] Add `test_state_boundaries_reject_offsetless_timezone` for both constructors and both empty-input helpers. Assert TemporalContractError with timezone-aware message. Run it and retain the expected RED.
+- [x] Record exact semantic contract and seven scenario-family dispositions before changing source.
+- [x] Commit contract/tests; no product code yet.
 
 ### Task 2: Minimal guard and challenge
 
 **Files:** src/procurement_intelligence_lab/domains/procurement/state.py; evals/development_agents/challenges/C031.json; tools/run_challenges.py; docs/adr/020-expected-observed-state.md.
 **Interfaces:** private `_require_aware(as_of: datetime) -> None`; existing TemporalContractError. Existing four public signatures unchanged.
 
-- [ ] Add private guard requiring `as_of.tzinfo is not None` and `as_of.utcoffset() is not None`; use it at both constructors and both helpers.
-- [ ] Rerun RED cases and complete focused state/governed-state suite; preserve all valid outputs.
-- [ ] Add C031 with introducing SHA discovered from history, mutation weakening only the offset check, and intended `DID NOT RAISE` failure. Advance explicit catalog count to31; keep C008 intact.
-- [ ] Run C008/C031 with known-bad verification; validate all manifests.
-- [ ] Update ADR-020 intrinsic boundary and commit.
+- [x] Add private guard requiring `as_of.tzinfo is not None` and `as_of.utcoffset() is not None`; use it at both constructors and both helpers.
+- [x] Rerun RED cases and complete focused state/governed-state suite; preserve all valid outputs.
+- [x] Add C031 with introducing SHA discovered from history, mutation weakening only the offset check, and intended `DID NOT RAISE` failure. Advance explicit catalog count to31; keep C008 intact.
+- [x] Run C008/C031 with known-bad verification; validate all manifests.
+- [x] Update ADR-020 intrinsic boundary and commit.
 
 ### Task 3: Qualification, review and protected delivery
 

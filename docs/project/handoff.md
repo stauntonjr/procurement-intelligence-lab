@@ -1,5 +1,26 @@
 # Project handoff
 
+## State-construction invariant completion — 2026-10-25
+
+Owner-selected [#118](https://github.com/stauntonjr/procurement-intelligence-lab/issues/118)
+(M4, follow-up to closed #47) qualifies the existing expected/observed constructor invariants.
+Candidate source `0564d705903a67fd61c690ee83eb9f4eb48ab58c` adds one shared aware-time guard:
+a tzinfo without a UTC offset is still naive and is rejected at both constructors and both public
+helper cutoffs, including empty inputs. Existing TemporalContractError preserves ValueError
+compatibility. Quantity, key/scope and evidence rules, valid offsets, overages, partial/missing
+observations and outstanding arithmetic retain their prior semantics. ADR-020 records the boundary.
+
+[Design](../superpowers/specs/2026-10-25-state-invariants-design.md),
+[plan](../superpowers/plans/2026-10-25-state-invariants.md) and
+[evidence](../development/evidence/issue-118/README.md) separate candidate qualification from main.
+Four expected offsetless RED cases become GREEN;83 focused checks and77 clean-installed public
+API/property cases pass. C008 remains intact; C031 rejects the weakened timestamp guard, and all31
+public challenges reject their known-bad equivalents. Package-smoke with real disposable Postgres
+passes. Full-suite qualification, independent review and protected delivery remain pending.
+Broader M4/#109 and previously closed #47/#115 keep their separate acceptance boundaries.
+The refreshed advisory40202523349 on main9818d09 failed Gemini503; direct repository/Issue/Project
+review and the structural audit are separate evidence, with no provider replacement claimed.
+
 ## Retained required-quantity reconciliation — 2026-10-25
 
 [PR240](https://github.com/stauntonjr/procurement-intelligence-lab/pull/240) merged the owner-approved

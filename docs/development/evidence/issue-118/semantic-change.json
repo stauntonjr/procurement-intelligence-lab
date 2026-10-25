@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#118",
-  "revision": "9818d09566625078fb8221f3f29a29e0ff3b91e4",
+  "revision": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
   "surfaces": [
     "procurement expected/observed state constructor and helper timestamp invariants",
     "C008/C031 public development-agent regression oracles"
@@ -103,7 +103,31 @@
         "tests/contract/test_governed_required_quantity_state.py"
       ],
       "outcome": "passed",
-      "evidence": "Baseline 13 passed; baseline.log."
+      "evidence": "focused-green.log:83 passed; four earlier expected RED failures retained separately."
+    },
+    {
+      "argv": [
+        "python",
+        "docs/development/evidence/issue-118/installed-probe.py",
+        "--wheel",
+        "/tmp/pil-118-artifacts/candidate/procurement_intelligence_lab-0.1.0-py3-none-any.whl",
+        "--revision",
+        "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+        "--output",
+        "docs/development/evidence/issue-118/installed.json"
+      ],
+      "outcome": "passed",
+      "evidence": "installed.json:77 copied public cases/property checks, zero failures/skips; clean installed base wheel."
+    },
+    {
+      "argv": [
+        "python",
+        "/tmp/pil-118-with-postgres.py",
+        "make",
+        "package-smoke"
+      ],
+      "outcome": "passed",
+      "evidence": "package-smoke.log:actual clean package/advertised CLI smoke with explicit real Postgres."
     },
     {
       "argv": [
@@ -111,24 +135,28 @@
         "run",
         "--extra",
         "workflow",
-        "pytest",
-        "-q",
-        "tests/regression/test_state_invariants.py",
-        "-k",
-        "offsetless"
+        "python",
+        "tools/run_challenges.py",
+        "--verify-known-bad",
+        "--results",
+        "/tmp/pil-118-challenges.json",
+        "--model",
+        "not-evaluated",
+        "--configuration",
+        "public-oracles-with-known-bad-mutations"
       ],
-      "outcome": "failed",
-      "evidence": "Expected RED:4 DID NOT RAISE failures, offsetless-red.log."
+      "outcome": "passed",
+      "evidence": "challenges.json/log:all31 pass/31 known-bad reject; no agent-quality score."
     }
   ],
   "review": {
-    "revision": "9818d09566625078fb8221f3f29a29e0ff3b91e4",
+    "revision": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
     "mode": "self_fresh_pass",
     "findings": [
-      "Initial contract/source pass confirms existing invariant coverage and offsetless timezone gap."
+      "Author source/contract pass: private guard used at all four public time boundaries; prior valid quantity/evidence/pair behavior unchanged."
     ],
     "unresolved_findings": [
-      "Implementation, installed/full qualification and final independent review pending."
+      "Full make check and final independent review pending; protected delivery not performed."
     ]
   },
   "completion": "not_ready"
