@@ -107,7 +107,7 @@
     },
     {
       "argv": [
-        "python",
+        ".venv/bin/python",
         "docs/development/evidence/issue-118/installed-probe.py",
         "--wheel",
         "/tmp/pil-118-artifacts/candidate/procurement_intelligence_lab-0.1.0-py3-none-any.whl",
@@ -121,7 +121,7 @@
     },
     {
       "argv": [
-        "python",
+        "python3",
         "/tmp/pil-118-with-postgres.py",
         "make",
         "package-smoke"
@@ -150,7 +150,7 @@
     },
     {
       "argv": [
-        "python",
+        "python3",
         "/tmp/pil-118-with-postgres.py",
         "make",
         "check"
