@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans for inline execution with one independent final review. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Execution receipt:** Qualification/review are retained under issue-118 evidence. Issue118 carries the authoritative postmerge main-installed/Project/cleanup receipt for terminal Task3 completion; checkboxes here preserve the branch checkpoint.
+
 **Goal:** Complete #118's existing constructor contract and its acceptance evidence.
 
 **Architecture:** Domain dataclasses own intrinsic validity. One private aware-time guard serves both constructors and public helpers. No new domain policy or platform topology.
@@ -55,10 +57,10 @@
 **Files:** docs/development/evidence/issue-118/; docs/project/handoff.md; docs/development/milestone-map.md; tests/integration/test_state_installed.py or equivalent retained installed command.
 **Interfaces:** clean wheel exports the same constructors/helpers; known-bad public-oracle report has no agent-quality score.
 
-- [ ] Run actual clean installed public constructors/helpers outside checkout, including offsetless rejection, valid offsets, evidence, pair mismatch and overage preservation; run package-smoke.
-- [ ] Run make check with explicit task-owned real Postgres and unchanged coverage ratchets; run all31 challenges and known-bad equivalents. Inspect failures/skips.
-- [ ] Obtain one independent whole-branch architecture/semantic review at exact revision; resolve/rebut findings, retain RED/GREEN for fixes and rerun invalidated checks.
-- [ ] Record schema-valid latest-revision semantic evidence, review disposition, commands, public proof and advisory503/direct Project audit distinction. Update handoff/map; preserve broader open work.
+- [x] Run actual clean installed public constructors/helpers outside checkout, including offsetless rejection, valid offsets, evidence, pair mismatch and overage preservation; run package-smoke.
+- [x] Run make check with explicit task-owned real Postgres and unchanged coverage ratchets; run all31 challenges and known-bad equivalents. Inspect failures/skips.
+- [x] Obtain one independent whole-branch architecture/semantic review at exact revision; resolve/rebut findings, retain RED/GREEN for fixes and rerun invalidated checks.
+- [x] Record schema-valid latest-revision semantic evidence, review disposition, commands, public proof and advisory503/direct Project audit distinction. Update handoff/map; preserve broader open work.
 - [ ] Open normal PR linking M4/#118, wait for required checks/resolved threads and merge without bypass. Verify main runtime tree matches qualification and installed proof.
 - [ ] Close #118 only on main acceptance; set Project Done, audit/read back full Project, retain terminal task receipt and remove only owned test resources/worktree.
 

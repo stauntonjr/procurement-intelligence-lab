@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#118",
-  "revision": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+  "revision": "31c1ff0f9877d0715e7aa091b4ac5533799e3572",
   "surfaces": [
     "procurement expected/observed state constructor and helper timestamp invariants",
     "C008/C031 public development-agent regression oracles"
@@ -147,17 +147,43 @@
       ],
       "outcome": "passed",
       "evidence": "challenges.json/log:all31 pass/31 known-bad reject; no agent-quality score."
+    },
+    {
+      "argv": [
+        "python",
+        "/tmp/pil-118-with-postgres.py",
+        "make",
+        "check"
+      ],
+      "outcome": "passed",
+      "evidence": "check.log:1956 passed/22 explicit browser-live skips, zero storage skips; unchanged line/branch ratchets pass. Runtime source0564d70 equals reviewed31c1ff0."
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+        "31c1ff0f9877d0715e7aa091b4ac5533799e3572",
+        "--",
+        "src",
+        "tests",
+        "tools",
+        "evals",
+        "pyproject.toml",
+        "uv.lock"
+      ],
+      "outcome": "passed",
+      "evidence": "Qualified source, tests, tool/evaluation and dependency trees equal independently reviewed revision; later changes are documentation/evidence only."
     }
   ],
   "review": {
-    "revision": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
-    "mode": "self_fresh_pass",
+    "revision": "31c1ff0f9877d0715e7aa091b4ac5533799e3572",
+    "mode": "independent_fresh_context",
     "findings": [
-      "Author source/contract pass: private guard used at all four public time boundaries; prior valid quantity/evidence/pair behavior unchanged."
+      "No Critical/Important/Minor findings. Exact review and author dispositions/costs retained in independent-review.md and progress.md. Independent83 focused passes and all216 package Python files equal installed wheel."
     ],
-    "unresolved_findings": [
-      "Full make check and final independent review pending; protected delivery not performed."
-    ]
+    "unresolved_findings": []
   },
-  "completion": "not_ready"
+  "completion": "ready"
 }

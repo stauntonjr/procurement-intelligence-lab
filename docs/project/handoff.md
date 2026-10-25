@@ -2,24 +2,27 @@
 
 ## State-construction invariant completion — 2026-10-25
 
-Owner-selected [#118](https://github.com/stauntonjr/procurement-intelligence-lab/issues/118)
-(M4, follow-up to closed #47) qualifies the existing expected/observed constructor invariants.
-Candidate source `0564d705903a67fd61c690ee83eb9f4eb48ab58c` adds one shared aware-time guard:
-a tzinfo without a UTC offset is still naive and is rejected at both constructors and both public
-helper cutoffs, including empty inputs. Existing TemporalContractError preserves ValueError
-compatibility. Quantity, key/scope and evidence rules, valid offsets, overages, partial/missing
-observations and outstanding arithmetic retain their prior semantics. ADR-020 records the boundary.
+[Issue118](https://github.com/stauntonjr/procurement-intelligence-lab/issues/118) (M4, follow-up to
+closed47) completes the existing expected/observed intrinsic validity boundary. Both constructors
+and both public helpers reject a tzinfo that supplies no UTC offset, including empty helper inputs.
+Existing TemporalContractError preserves ValueError compatibility. Quantities/evidence/full-scope
+pair rules, valid offsets, distinct record times, overages, partial/missing observations and existing
+outstanding/latest-as-of arithmetic keep their prior semantics. ADR020 describes the boundary.
 
-[Design](../superpowers/specs/2026-10-25-state-invariants-design.md),
-[plan](../superpowers/plans/2026-10-25-state-invariants.md) and
-[evidence](../development/evidence/issue-118/README.md) separate candidate qualification from main.
-Four expected offsetless RED cases become GREEN;83 focused checks and77 clean-installed public
-API/property cases pass. C008 remains intact; C031 rejects the weakened timestamp guard, and all31
-public challenges reject their known-bad equivalents. Package-smoke with real disposable Postgres
-passes. Full-suite qualification, independent review and protected delivery remain pending.
-Broader M4/#109 and previously closed #47/#115 keep their separate acceptance boundaries.
-The refreshed advisory40202523349 on main9818d09 failed Gemini503; direct repository/Issue/Project
-review and the structural audit are separate evidence, with no provider replacement claimed.
+[Qualification](../development/evidence/issue-118/README.md) pins source0564d70 and one independent
+review31c1ff0:1956 passed/22 explicit browser-live skips, zero storage skips; line91.85%/
+branch80.73%, unchanged ratchets. The clean installed wheel passes77 public API/property
+cases without failure/skip; real-Postgres package smoke and all31 public challenge/known-bad pairs
+pass. C008 stays intact; C031 protects actual datetime awareness. The reviewer independently reran83
+focused cases and verified all216 package Python files match the wheel, with no findings.
+
+The [design](../superpowers/specs/2026-10-25-state-invariants-design.md),
+[plan](../superpowers/plans/2026-10-25-state-invariants.md), exact evidence and complete review
+dispositions are retained. Issue118 records the actual protected PR, main-installed receipt and
+terminal Project/cleanup status; use that receipt to distinguish qualification from main acceptance.
+Broader M4/#109 and closed47/115 retain their separate acceptance boundaries. The refreshed advisory
+40202523349 on main9818d09 failed Gemini503; direct repository/Issue/Project review and structural
+audit are separate evidence. No provider replacement or production/data-quality claim.
 
 ## Retained required-quantity reconciliation — 2026-10-25
 

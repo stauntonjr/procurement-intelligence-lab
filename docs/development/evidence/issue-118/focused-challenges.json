@@ -31,5 +31,11 @@
       "known_bad_return_code": 1,
       "known_bad_duration_seconds": 0.532
     }
-  ]
+  ],
+  "source_state": {
+    "git_head": "540db97ee6e01264a3ff925e52bc8b908fccb1a5",
+    "uncommitted_guard_fix": true,
+    "subsequently_committed_as": "0564d705903a67fd61c690ee83eb9f4eb48ab58c",
+    "final_source_pinned_report": "challenges.json"
+  }
 }

@@ -1,0 +1,26 @@
+# SDD ledger — plan: docs/superpowers/plans/2026-10-25-state-invariants.md
+Owner instructed proceed on #118; binding Issue/ADR020. Inline implementation, one independent final whole-branch review.
+Pre-flight Task1 -> Task2: existing constructors/helpers, unchanged signatures; shared private aware-time guard matches all four callers.
+Pre-flight Task2 -> Task3: public package exports and C008/C031 exact mutation catalog; consistent.
+Baseline13 PASS. Offsetless regression4 expected DID NOT RAISE failures at all four public boundaries; no product code changed.
+Advisory40202523349 on main9818d09 failed Gemini503 (snapshot a4b9bb1758e2edb68919ff9c7b41371167ec0d54fbe5fa934160590ac7f53cf1,81 files); not roadmap evidence. Direct Issue/ADR/Project review used.
+Task 1: complete (commits 9818d09..9818d09, tests: env UV_CACHE_DIR=/tmp/pil-uv-cache uv run --extra workflow pytest -q tests/unit/test_state.py tests/regression/test_state_invariants.py tests/contract/test_governed_required_quantity_state.py -k 'not offsetless' → 79 passed, 4 deselected in 0.71s)
+Task 2: complete (commits 540db97..0564d70, tests: env UV_CACHE_DIR=/tmp/pil-uv-cache uv run --extra workflow pytest -q tests/unit/test_state.py tests/regression/test_state_invariants.py tests/contract/test_governed_required_quantity_state.py → 83 passed in 0.73s)
+Task1 contract/tests committed540db97 after79 passing non-regression-gap checks; expected4 RED retained. Task2 fixed guard at0564d70:83 PASS, C008/C031 known-bad rejected, lint/format/type pass. Only existing ValueError-compatible TemporalContractError added at four time boundaries.
+Task3 checkpoint31c1ff0:77 clean-installed cases/0 failures/0 skips; wheel8d0cc34ae0db27be753c0a870c9b6bf6c48c727477137c3b461be70aa907e054. Package-smoke with real Postgres PASS; all31 public challenges PASS/all31 known-bad rejected at0564d70. Full make check still running with no source changes; one independent whole-branch reviewer dispatched at31c1ff0, no other agents.
+Final review31c1ff0: one independent fresh reviewer, no Critical/Important/Minor findings; independently83 PASS, all216 package Python files match installed wheel; no fix pass or second reviewer needed.
+Final: Ruling: retain overage classification/component relations/sum limits in anomaly policy — Issue118 explicitly preserves overages — cost if wrong: callers need a separate classification policy.
+Final: Ruling: retain missing-observation outstanding arithmetic — unchanged documented behavior with None/UNKNOWN retained — cost if wrong: callers must consult freshness before treating the value as established completeness.
+Final: Ruling: leave equal-timestamp conflicts, duplicate aggregation and Decimal precision unchanged — no new selection/arithmetic policy in this slice — cost if wrong: existing policy/precision limitations remain.
+Final: Ruling: retain explicit freshness without inferred staleness thresholds — no such policy authorized — cost if wrong: caller-supplied freshness must carry the meaning.
+Final: Ruling: permit distinct valid record timestamps/offsets — ADR020 and current comparison allow them — cost if wrong: this operation does not enforce synchronized snapshots.
+Final: Ruling: keep arbitrary wrong runtime types/forged evidence/frozen-object mutation/adversarial stateful tzinfo outside the typed contract — demonstrated defect uses otherwise typed inputs — cost if wrong: untrusted deserialization needs its own validation boundary.
+Final: Ruling: limit awareness fix to the four selected procurement state boundaries — adjacent contracts are unchanged — cost if wrong: this patch does not qualify all governance/platform timestamp guards.
+Final: Ruling: leave broader authority/reconciliation/ingestion/storage/adapters/jobs/operational-agent work separate — no changes or completion claims — cost if wrong: these capabilities remain outside this slice.
+Final: Ruling: bound installed proof to public Python API correctness — no deployment/browser/data-quality change — cost if wrong: production/browser acceptance is not established.
+Final: Ruling: report public oracle/mutation results without agent prevention/repair scores — no model experiment ran — cost if wrong: actual agent-quality improvement remains unknown.
+Final: Ruling: use author full-suite/package evidence without independent duplication — one review independently verifies focused behavior and artifact identity — cost if wrong: reviewer relies on retained logs for those gates.
+Final: Ruling: retain protected/main/Project/cleanup steps as mandatory delivery gates — pending gates are not code findings — cost if wrong: completion cannot be claimed until they actually pass.
+Final: Ruling: separate Gemini503 and older ADR033 numbering drift from implementation — advisory failure grants no roadmap evidence — cost if wrong: provider availability/documentation drift remain unresolved here.
+Final: minor (deferred): none.
+Final full qualification at0564d70 PASS:1956 passed/22 explicit browser-live skips, zero storage skips,890.21s; line91.85%/branch80.73%, unchanged ratchets. Reviewed31c1ff0 runtime/test/tool/eval/dependency trees equal. No code findings/fix pass. Protected PR/main-installed acceptance and final Issue/Project/cleanup remain pending.
