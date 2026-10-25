@@ -82,13 +82,20 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
-Next design direction, selected by the owner on 2026-10-24: decision #235 (M3, parent #14),
+Delivered owner-selected direction: decision #235 (M3, parent #14),
 [explicit planned RESOLVE prefix](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md).
 Accepted ADR-046 covers a scoped pinned internal-SKU candidate snapshot, actual sixth-stage
 execution, mention-bound evidence/abstention and atomic retention. The owner approved design
 `052ab47` on 2026-10-24. The [seven-task implementation plan](../superpowers/plans/2026-10-24-planned-resolve-prefix.md)
-for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) implement the bounded slice in PR237. Exact final qualification, independent review, protected delivery and main receipts belong to #236; its actual status distinguishes branch from main. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
+for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) deliver the bounded slice through PR237 on main `a8de65db7ae6b6192a937ae930859d1b205be5aa`. #235/#236 are closed and Project Done; exact qualification, independent review and installed main proof are retained in #236. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
 broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
+
+Proposed next core slice: M4 decision #238 (native parent #20),
+[retained-producer required-quantity RECONCILE](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
+proposed ADR047. It would invoke one current RECONCILE strategy over explicitly selected validated
+archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
+Owner direction/design approval and implementation planning are pending; no new product code or
+M4 completion is claimed. RESOLVE local jobs and fresh multi-document orchestration are alternatives.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
 [durable local prefix job lifecycle](../architecture/local-prefix-jobs.md): immutable arrival and
