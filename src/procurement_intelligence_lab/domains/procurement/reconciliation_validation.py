@@ -18,6 +18,8 @@ from procurement_intelligence_lab.domains.procurement.retained_reconciliation im
 from procurement_intelligence_lab.platform.execution.identity import aware, same
 from procurement_intelligence_lab.platform.execution.outputs import require
 from procurement_intelligence_lab.platform.execution.reconciliation_inputs import (
+    OperationAuthorityEvidence,
+    ReconciliationPolicyEvidence,
     RetainedReconciliationInputs,
 )
 from procurement_intelligence_lab.platform.execution.reconciliation_outputs import ReconciledOutput
@@ -173,3 +175,14 @@ def validate_bom_reconciliation_output(output: ReconciledOutput) -> None:
         raise PackageExecutionContractError(
             "recorded required-quantity output violates source and governing-policy bindings"
         ) from None
+
+
+def validate_bom_reconciliation_static(
+    authority: OperationAuthorityEvidence,
+    policy: ReconciliationPolicyEvidence,
+    producer_digests: tuple[str, ...],
+) -> None:
+    BomReconciliationPolicy(policy)
+    parsed = load_bom_authority(authority.raw_json)
+    admit(same(parsed.evidence, authority))
+    admit({r.execution_digest for r in parsed.records} == set(producer_digests))

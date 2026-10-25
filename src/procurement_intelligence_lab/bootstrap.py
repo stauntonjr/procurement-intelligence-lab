@@ -973,3 +973,22 @@ def build_resolved_execution_archive_reader(dsn: str):
         validate_completed_resolved_bom_prefix,
         lambda retained: archive_codec().dumps(retained).encode("utf-8"),
     )
+
+
+def bom_reconciliation_descriptor() -> "ImplementationDescriptor":
+    from procurement_intelligence_lab.platform.domain_packages.package import StageId
+    from procurement_intelligence_lab.platform.planning.contracts import (
+        ContractRef,
+        ImplementationDescriptor,
+    )
+
+    return ImplementationDescriptor(
+        "bom-governed-required-quantity",
+        "1.0",
+        "1",
+        StageId.RECONCILE,
+        ContractRef("CanonicalizedAssertion", "1.0"),
+        ContractRef("OperationalState", "1.0"),
+        ("abstention",),
+        "1.0",
+    )
