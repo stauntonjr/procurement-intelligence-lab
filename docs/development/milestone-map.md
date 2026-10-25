@@ -319,3 +319,8 @@ retention and source-free recovery. PR #230 contains the owner-approved implemen
 qualification, independent review, required-check and merged-main delivery receipts.
 Existing source/review/dependency capabilities and broader #13/#35/#36/#37/#12/#75
 acceptance remain unchanged. [Contract](../architecture/planned-execution-archive.md).
+
+Implementation #239 has committed Tasks1–6 on `codex/reconcile-design` through `4d969ef`.
+The bounded operation and actual CLI paths are implemented; qualification, independent review and
+protected delivery remain pending. [Branch evidence](evidence/issue-239/README.md) distinguishes
+installed synthetic acceptance from broader M4 completion and main status.

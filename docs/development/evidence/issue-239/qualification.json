@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "primary_milestone": "M4",
+  "issue": "#239",
+  "baseline_revision": "a8de65db7ae6b6192a937ae930859d1b205be5aa",
+  "candidate_revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+  "wheel_sha256": {
+    "baseline": "318222913bb98e9851144d86ada7659ebc18836ed0078e8eadd3445140e4e3cb",
+    "candidate": "40758702d688fa4fa861bad0f1626f18976664f68bcae03fbcbb6e4e6a13f6b3"
+  },
+  "baseline_red": {
+    "argv": [
+      "/tmp/pil-239-artifacts/baseline-env/bin/python",
+      "-I",
+      "-m",
+      "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
+      "--help"
+    ],
+    "exit_code": 1,
+    "stderr": "/tmp/pil-239-artifacts/baseline-env/bin/python: No module named procurement_intelligence_lab.interfaces.reconcile_resolved_package"
+  },
+  "installed_probes": [
+    "installed-base312.json",
+    "installed-base313.json",
+    "installed-storage312.json"
+  ],
+  "legacy_comparison": "legacy-comparison.json",
+  "package_smoke": {
+    "status": "passed",
+    "evidence": "package-smoke.log",
+    "real_postgres": true
+  },
+  "public_compatibility": {
+    "passed": 127,
+    "evidence": "public-compatibility.log"
+  },
+  "full_check": "running",
+  "challenges": {
+    "passed": 30,
+    "known_bad_rejected": 30,
+    "evidence": "challenges.json"
+  },
+  "independent_review": "pending",
+  "protected_delivery": "pending",
+  "limits": "Synthetic rule-contract qualification only; no enterprise approval verification, general ER quality, production deployment, seven-stage prefix/job or broader M4 completion. Source-free result export references companion original source bytes, not a self-contained source archive."
+}

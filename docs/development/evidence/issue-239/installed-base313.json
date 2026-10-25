@@ -1,0 +1,94 @@
+{
+  "probe": "passed",
+  "mode": "base-missing-storage",
+  "commands": [
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-c",
+        "import json,platform,importlib.util,procurement_intelligence_lab as p; print(json.dumps({'version':platform.python_version(),'package_path':p.__file__,'storage_driver_available':importlib.util.find_spec('psycopg') is not None}))"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
+        "--help"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.reconciliation_archive",
+        "--help"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.domain_package",
+        "--source-profile",
+        "retained-resolved-required-quantity"
+      ],
+      "exit_code": 0,
+      "seconds": 0.10252702199977648
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.domain_package"
+      ],
+      "exit_code": 0,
+      "seconds": 0.10915431800003716
+    },
+    {
+      "argv": [
+        "/tmp/pil-239-artifacts/base313/bin/python",
+        "-I",
+        "-m",
+        "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
+        "--manifest",
+        "/tmp/pil-reconciliation-installed-u_nr2vu4/operation-manifest.json",
+        "--context",
+        "/tmp/pil-reconciliation-installed-u_nr2vu4/context.json",
+        "--config",
+        "/tmp/pil-reconciliation-installed-u_nr2vu4/config.toml",
+        "--registry",
+        "/tmp/pil-reconciliation-installed-u_nr2vu4/registry.json",
+        "--governing-policy",
+        "/tmp/pil-reconciliation-installed-u_nr2vu4/governing-policy.json",
+        "--authority",
+        "/tmp/pil-reconciliation-installed-u_nr2vu4/authority.json",
+        "--as-of",
+        "2026-10-19T00:00:00+00:00",
+        "--producer-digest",
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "exit_code": 2,
+      "seconds": 0.15266062199953012
+    }
+  ],
+  "cases": [],
+  "python": "/tmp/pil-239-artifacts/base313/bin/python",
+  "installed_runtime": {
+    "version": "3.13.14",
+    "package_path": "/tmp/pil-239-artifacts/base313/lib/python3.13/site-packages/procurement_intelligence_lab/__init__.py",
+    "storage_driver_available": false
+  },
+  "controller_python": "3.13.14",
+  "code_revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+  "wheel_sha256": "40758702d688fa4fa861bad0f1626f18976664f68bcae03fbcbb6e4e6a13f6b3",
+  "population": "Synthetic policy integration examples; no enterprise approval or general entity-resolution quality claim."
+}

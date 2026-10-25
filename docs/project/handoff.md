@@ -9,7 +9,7 @@ core slice is approved in [decision #238](https://github.com/stauntonjr/procurem
 accepted ADR047. Owner design approval at `2c1b759` includes the omission and duplicate-content
 admission bounds. Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
 follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24. Preserve Native/inline and one independent final review; product implementation
-has started; main remains the delivered six-stage profile.
+has started. Tasks1–6 are committed through `4d969ef`: contracts, existing-policy adoption, one-stage execution, atomic retention, source-free recovery and actual CLIs. Public compatibility127 tests and installed17-case synthetic operation/recovery corpus pass; final full checks, one independent review and protected delivery remain pending. See [branch evidence](../development/evidence/issue-239/README.md). Main remains the delivered six-stage profile.
 
 ## Explicit planned RESOLVE prefix — 2026-10-24
 

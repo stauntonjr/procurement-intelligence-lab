@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "population": "Synthetic policy integration examples; no enterprise approval or general entity-resolution quality claim.",
+  "cases": [
+    {
+      "id": "empty",
+      "producer_quantities": [
+        []
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {}
+    },
+    {
+      "id": "unique",
+      "producer_quantities": [
+        [
+          "4"
+        ]
+      ],
+      "expected_value": "4",
+      "expected_governing": 1,
+      "expected_losing": 0,
+      "changes": {}
+    },
+    {
+      "id": "shared",
+      "producer_quantities": [
+        [
+          "4"
+        ],
+        [
+          "4"
+        ]
+      ],
+      "expected_value": "4",
+      "expected_governing": 2,
+      "expected_losing": 0,
+      "changes": {}
+    },
+    {
+      "id": "conflict",
+      "producer_quantities": [
+        [
+          "4"
+        ],
+        [
+          "5"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 2,
+      "changes": {}
+    },
+    {
+      "id": "zero",
+      "producer_quantities": [
+        [
+          "0"
+        ]
+      ],
+      "expected_value": "0",
+      "expected_governing": 1,
+      "expected_losing": 0,
+      "changes": {}
+    },
+    {
+      "id": "fractional",
+      "producer_quantities": [
+        [
+          "0.125"
+        ]
+      ],
+      "expected_value": "0.125",
+      "expected_governing": 1,
+      "expected_losing": 0,
+      "changes": {}
+    },
+    {
+      "id": "superseded",
+      "producer_quantities": [
+        [
+          "4"
+        ],
+        [
+          "5"
+        ]
+      ],
+      "expected_value": "5",
+      "expected_governing": 1,
+      "expected_losing": 1,
+      "changes": {
+        "supersedes": true
+      }
+    },
+    {
+      "id": "unapproved",
+      "producer_quantities": [
+        [
+          "4"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 1,
+      "changes": {
+        "approval": null
+      }
+    },
+    {
+      "id": "future",
+      "producer_quantities": [
+        [
+          "4"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 1,
+      "changes": {
+        "approved_at": "2026-10-19T00:00:01+00:00"
+      }
+    },
+    {
+      "id": "expired",
+      "producer_quantities": [
+        [
+          "4"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 1,
+      "changes": {
+        "effective_from": "2026-10-18T00:00:00+00:00",
+        "effective_until": "2026-10-19T00:00:00+00:00"
+      }
+    },
+    {
+      "id": "outside-selected-supersession",
+      "producer_quantities": [
+        [
+          "4"
+        ]
+      ],
+      "expected_value": "4",
+      "expected_governing": 1,
+      "expected_losing": 0,
+      "changes": {
+        "outside_supersedes": true
+      }
+    },
+    {
+      "id": "missing-successor",
+      "producer_quantities": [
+        [
+          "4"
+        ],
+        []
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {
+        "supersedes": true,
+        "error": "pil.input.reconciliation_input_unsupported"
+      }
+    },
+    {
+      "id": "repeated-item",
+      "producer_quantities": [
+        [
+          "4",
+          "4"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {
+        "error": "pil.input.reconciliation_input_unsupported"
+      }
+    },
+    {
+      "id": "negative",
+      "producer_quantities": [
+        [
+          "-1"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {
+        "error": "pil.input.reconciliation_input_unsupported"
+      }
+    },
+    {
+      "id": "missing-quantity",
+      "producer_quantities": [
+        [
+          null
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {
+        "error": "pil.input.reconciliation_input_unsupported"
+      }
+    },
+    {
+      "id": "unresolved-identity",
+      "producer_quantities": [
+        [
+          "4"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {
+        "sku": "UNKNOWN",
+        "error": "pil.input.reconciliation_input_unsupported"
+      }
+    },
+    {
+      "id": "identical-content",
+      "producer_quantities": [
+        [
+          "4"
+        ],
+        [
+          "4"
+        ]
+      ],
+      "expected_value": null,
+      "expected_governing": 0,
+      "expected_losing": 0,
+      "changes": {
+        "identical": true,
+        "error": "pil.input.reconciliation_input_unsupported"
+      }
+    }
+  ]
+}

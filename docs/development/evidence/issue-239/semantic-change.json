@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "issue": "#239",
+  "revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+  "surfaces": [
+    "retained RESOLVE required-quantity RECONCILE operation",
+    "immutable Postgres reconciliation archive",
+    "installed explicit execution and source-free recovery CLIs"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md",
+    "docs/superpowers/plans/2026-10-24-retained-resolve-reconciliation.md",
+    "docs/adr/047-retained-resolution-required-quantity-reconciliation.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/implement-domain-logic/SKILL.md",
+    ".agents/skills/add-adapter/SKILL.md",
+    ".agents/skills/test-public-interface/SKILL.md",
+    ".agents/skills/release-smoke/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md",
+    ".agents/skills/architecture-plan-sync/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "One to eight exact scoped already-retained six-stage producers with source bytes, original claims and complete same semantic catalog; strict explicit synthetic authority metadata, exact manifest/registry/config/policy pins and aware operation context.",
+    "authoritative_output": "One actual current RECONCILE invocation, twelve current dispositions and separate historical producers; governed required_quantity states only, or abstentions with no state; optional first-retained immutable archive receipt. Package completion is always false.",
+    "scope_as_of": "Exact four-part source scope/version; explicit aware as-of <= started_at, producer capture <= started_at; policy uses approval/effectivity/supersession, preserves offsets and ADR024 derived scope; ingestion grants no authority.",
+    "governing_policy": "Unchanged procurement-governing-claims/v1 bound by procurement.reconcile/governed-required-quantity@1. Only one known nonnegative each quantity per item/revision; no aggregation, deletion, inferred authority or model decision.",
+    "evidence_retained": "Raw and canonical authority identities, exact selected graphs/source checksums/catalogs, quantity source paths, candidate eligibility/governing/losing dispositions, states with UNKNOWN freshness/OBSERVED numeric attributes and separate RECONCILED basis, immutable exact producer joins and distinct current/first-retained receipts.",
+    "typed_failures": "Invalid metadata/admission, unsupported reconciliation inputs, invoked-output contract failure, unavailable storage/capability, exact-scope not-found, immutable conflict, retained integrity failure and unknown commit acknowledgement remain distinct and sanitized."
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/unit/test_retained_reconciliation.py",
+        "tests/integration/test_reconcile_resolved_package_cli.py"
+      ],
+      "rationale": ""
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/unit/test_retained_reconciliation.py",
+        "tests/contract/test_postgres_reconciliation_archive.py",
+        "evals/reconciliation/retained-required-quantity-v1/manifest.json"
+      ],
+      "rationale": ""
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/unit/test_reconciliation_authority.py",
+        "tests/integration/test_reconcile_resolved_package_cli.py",
+        "tests/integration/test_reconciliation_archive_cli.py"
+      ],
+      "rationale": ""
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/unit/test_retained_reconciliation.py",
+        "tests/contract/test_reconciliation_operation.py",
+        "tests/integration/test_reconcile_resolved_package_cli.py"
+      ],
+      "rationale": ""
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/unit/test_reconciliation_authority.py",
+        "tests/unit/test_reconciliation_runner.py",
+        "tests/integration/test_reconcile_resolved_package_cli.py"
+      ],
+      "rationale": ""
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/integration/test_reconcile_resolved_package_cli.py",
+        "tests/integration/test_reconciliation_archive_cli.py",
+        "tools/reconciliation_probe.py",
+        "tools/package_smoke.py"
+      ],
+      "rationale": ""
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_archived_reconciliation.py",
+        "tests/contract/test_postgres_reconciliation_archive.py",
+        "tests/unit/test_reconciliation_runner.py"
+      ],
+      "rationale": ""
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "pytest",
+        "-q",
+        "tests/integration/test_reconcile_resolved_package_cli.py",
+        "tests/integration/test_reconciliation_archive_cli.py",
+        "tests/integration/test_execute_package_cli.py",
+        "tests/integration/test_execute_resolved_package_cli.py",
+        "tests/integration/test_planned_execution_archive_cli.py",
+        "tests/integration/test_resolved_execution_archive_cli.py",
+        "tests/integration/test_processing_jobs_cli.py"
+      ],
+      "outcome": "passed",
+      "evidence": "127 passed in122.22s with real isolated Postgres schemas; task ledger."
+    },
+    {
+      "argv": [
+        "python",
+        "tools/reconciliation_probe.py",
+        "--python",
+        "<clean-storage312-interpreter>"
+      ],
+      "outcome": "passed",
+      "evidence": "17 actual installed synthetic corpus cases,0 errors; source-free recovery/export and2 exact original source bytes; qualification receipt records full argv."
+    }
+  ],
+  "review": {
+    "revision": "4d969efa81542c4e62f0e52fc08d61a9c690bccd",
+    "mode": "self_fresh_pass",
+    "findings": [
+      "Independent final review and complete qualification remain pending."
+    ],
+    "unresolved_findings": [
+      "Independent final review and complete qualification remain pending."
+    ]
+  },
+  "completion": "not_ready"
+}

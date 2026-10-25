@@ -128,6 +128,41 @@ def main() -> int:
             )
             print(done.stdout.strip())
 
+        def reconciliation_probe(python: Path, environment: dict[str, str] | None = None):
+            revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=ROOT, check=True, capture_output=True, text=True
+            ).stdout.strip()
+            done = subprocess.run(
+                [
+                    str(python),
+                    str(ROOT / "tools/reconciliation_probe.py"),
+                    "--source",
+                    str(stage_source),
+                    "--fixtures",
+                    str(ROOT / "tests/fixtures/retained-reconciliation"),
+                    "--legacy-fixtures",
+                    str(ROOT / "tests/fixtures/resolved-execution"),
+                    "--normalization-policy",
+                    str(ROOT / "tests/fixtures/bom-stages/normalization-policy.json"),
+                    "--producer-context",
+                    str(ROOT / "tests/fixtures/bom-stages/context.json"),
+                    "--corpus",
+                    str(ROOT / "evals/reconciliation/retained-required-quantity-v1/manifest.json"),
+                    "--wheel",
+                    str(wheel),
+                    "--code-revision",
+                    revision,
+                    "--output",
+                    str(temporary / (python.parent.parent.name + "-reconciliation.json")),
+                ],
+                cwd=temporary,
+                env=environment,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            print(done.stdout.strip())
+
         def local_jobs_probe(python: Path, environment: dict[str, str]):
             done = subprocess.run(
                 [
@@ -162,6 +197,7 @@ def main() -> int:
                 check=True,
             )
             resolved_probe(python)
+            reconciliation_probe(python)
             probe_run = subprocess.run(
                 [str(python), str(probe)],
                 cwd=temporary,
@@ -821,6 +857,15 @@ def main() -> int:
                     },
                 )
                 local_jobs_probe(
+                    python,
+                    {
+                        **os.environ,
+                        "PIL_ASSERTION_ARCHIVE_DSN": make_conninfo(
+                            base, options=f"-c search_path={schema}"
+                        ),
+                    },
+                )
+                reconciliation_probe(
                     python,
                     {
                         **os.environ,
