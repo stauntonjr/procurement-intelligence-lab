@@ -1,0 +1,9 @@
+{
+  "full_json_and_codec_exactly_equal": true,
+  "operations": 22,
+  "sha256": "7c2649173accd64283a1cd070b200728368b3ebbfcec05d80efc59ebce6a0438",
+  "clock": "fixed public-main clock 2026-10-19T00:00:10Z; no fields removed",
+  "source_revision_pin": "a8de65db7ae6b6192a937ae930859d1b205be5aa",
+  "baseline_python": "/tmp/pil-239-artifacts/baseline-env/bin/python",
+  "candidate_python": "/tmp/pil-239-artifacts/storage312/bin/python"
+}

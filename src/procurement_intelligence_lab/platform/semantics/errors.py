@@ -27,6 +27,7 @@ class ErrorCode(StrEnum):
     LOCAL_PREFIX_JOB_INTEGRITY_INVALID = "pil.infrastructure.local_prefix_job_integrity_invalid"
     LOCAL_PREFIX_JOB_UNAVAILABLE = "pil.infrastructure.local_prefix_job_unavailable"
     SOURCE_QUERY_INVALID = "pil.input.source_query_invalid"
+    RECONCILIATION_INPUT_UNSUPPORTED = "pil.input.reconciliation_input_unsupported"
     PACKAGE_EXECUTION_INVALID = "pil.input.package_execution_invalid"
     PACKAGE_EXECUTION_CONTRACT_INVALID = "pil.interpretation.package_execution_contract_invalid"
     PACKAGE_PLANNING_INVALID = "pil.input.package_planning_invalid"
@@ -366,3 +367,9 @@ class PackageExecutionContractError(SemanticContractError):
 
     category = ErrorCategory.INTERPRETATION
     code = ErrorCode.PACKAGE_EXECUTION_CONTRACT_INVALID
+
+
+class UnsupportedReconciliationInputError(PackageExecutionError):
+    """Valid retained source evidence lies outside the explicit operation profile."""
+
+    code = ErrorCode.RECONCILIATION_INPUT_UNSUPPORTED

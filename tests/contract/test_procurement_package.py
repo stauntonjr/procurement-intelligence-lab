@@ -14,7 +14,9 @@ from procurement_intelligence_lab.platform.domain_packages.package import STAGE_
 def test_procurement_package_is_complete_and_keeps_late_stages_empty() -> None:
     from procurement_intelligence_lab.domains.procurement.package import PROCUREMENT_PACKAGE
 
-    (profile,) = PROCUREMENT_PACKAGE.source_profiles
+    (profile,) = tuple(
+        p for p in PROCUREMENT_PACKAGE.source_profiles if p.profile_id == "bom-table"
+    )
     assert profile.profile_id == "bom-table"
     assert tuple(binding.stage for binding in profile.bindings) == STAGE_ORDER
     assert [binding.mode for binding in profile.bindings[:9]] == [StageMode.EXECUTE] * 9

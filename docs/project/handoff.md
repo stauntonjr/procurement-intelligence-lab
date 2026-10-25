@@ -1,5 +1,23 @@
 # Project handoff
 
+## Post-RESOLVE roadmap orientation — 2026-10-24
+
+The [exact-main advisory audit](audits/2026-10-24-post-resolve.md) succeeded on a8de65d.
+Its observations are separated from direct code/Issue/Project verification. The next bounded
+core slice is approved in [decision #238](https://github.com/stauntonjr/procurement-intelligence-lab/issues/238):
+[retained-producer required-quantity reconciliation](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
+accepted ADR047. Owner design approval at `2c1b759` includes the omission and duplicate-content
+admission bounds. Implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
+follows the [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md), owner-approved at `24d20f0` on2026-10-24. Preserve Native/inline and one independent final review; the bounded operation
+is implemented and candidate-qualified at `0f8fd4d`: explicit retained-producer RECONCILE,
+ratified policy, one current invocation, atomic immutable retention and independently validated
+source-free recovery. [Qualification evidence](../development/evidence/issue-239/README.md) retains
+real Postgres/public/corpus/artifact/legacy/coverage results. One independent review at `1ec30d2`
+found a preadmission defect; fix `0f8fd4d` has RED/GREEN regressions and full corrected qualification.
+Exact protected PR/main-pinned proof and operational closeout belong to #239. Broader M4 remains
+open; this adds no fresh seven-stage flow, job adoption, aggregation, enterprise approval or ACT.
+
+
 ## Explicit planned RESOLVE prefix — 2026-10-24
 
 The owner selected RESOLVE pipeline adoption ahead of further listener/worker work.
@@ -11,11 +29,12 @@ The owner approved written design `052ab47` and implementation plan `64f787b` on
 2026-10-24. The [six-stage execution/recovery contract](../architecture/planned-resolve-prefix.md)
 implements actual registered execution, atomic source/prefix/catalog retention and independently
 validated source-free recovery. [PR237](https://github.com/stauntonjr/procurement-intelligence-lab/pull/237)
-and #236 record exact final qualification, protected delivery and merged-main proof; consult their
-actual status to distinguish branch from main. The
+and #236 record final qualification and merged-main proof. PR237 merged on 2026-10-24 at
+`a8de65db7ae6b6192a937ae930859d1b205be5aa`; #235/#236 are closed and their Project items are Done.
+The installed main-pinned source-free Postgres probe passed; broader M3 remains open. The
 [retained qualification evidence](../development/evidence/issue-236/README.md) includes installed
 base3.12/base3.13/storage receipts, full legacy equality and one independent whole-branch review.
-Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, reconciliation,
+Original five-stage execution/archive/local jobs stay compatible; six-stage jobs, fresh seven-stage orchestration,
 global identity and broader M3 acceptance remain subsequent work. #231/#232 are delivered on main;
 their exact receipts remain in #232. Parent #36's stale plan-pending summary is corrected while
 its listener/worker acceptance stays open. Hosted advisory40115378490 on main88d32d4 failed Gemini
@@ -364,7 +383,7 @@ three process recoveries and eight exact saves. Unresolved requirements retain o
 while remaining `not_assessed`. See [contract/results/limits](original-showcase-live.md).
 Unmerged; fresh held-out evaluation, full G2 and deployment remain open. No corpus expansion.
 
-## Active real-browser acceptance continuation — 2026-10-04
+## Historical real-browser acceptance continuation — 2026-10-04
 
 `codex/browser-live-acceptance`, stacked on draft PR #183, verifies a clean installed
 reviewer in actual local headless Chromium. Keyboard sign-in/focus contrast and narrow
@@ -375,7 +394,7 @@ and [compact versions/results](browser-live-results.json). This is branch work, 
 held-out quality, comprehensive accessibility or deployment. Fresh evaluation and full G2/release acceptance remain open; original tiny-fixture
 live routing is documented above; corpus expansion stays gated.
 
-## Active local browser review continuation — 2026-10-03
+## Historical local browser review continuation — 2026-10-03
 
 `codex/browser-review-workflow` is stacked on open PR #179. It adds a loopback-only
 synthetic human reviewer, owned run discovery, exact approve/reject and recovery controls,
@@ -456,7 +475,11 @@ The system preserves evidence from synthetic/semi-structured procurement documen
 - M0.2 development conventions and stable typed error contracts are complete through [PR #154](https://github.com/stauntonjr/procurement-intelligence-lab/pull/154).
 - Credentialed GitHub planning administration is reproducible through `.github/planning.json`, `tools/github_planning.py`, and `.agents/skills/manage-github-planning/SKILL.md`; the prior post-merge audit recorded eight named operating views in Project #6 and found 10 milestones, 28 labels, 25 Project fields, 98 Project items, and no missing configured planning objects. Those counts are historical, not a fresh Project audit.
 
-## Active work and PRs
+## Historical branch-time work and PRs — superseded by PR193
+
+The #175–#192 branch descriptions in this section preserve their original evidence and limits.
+PR193 merged that stack on 2026-10-05; these bullets are not a current implementation queue.
+Current core continuation is indexed at the top of this document.
 
 - Intent development on `codex/intent-contract-development`, stacked on PR182: requirement governance and document approval applicability clarified with unchanged deterministic/human authority. Final installed development regression46/48 (prior frozen pilot41/48); separate controls18/20, with safe boundary abstentions retained. The rejected candidate's unsafe date interpretations remain recorded. All prior split cases are now inspected development data, never fresh held-out evidence. See [experiment, limits and next work](intent-contract-development.md). Fresh evaluation and full G2/browser/release gates precede expansion.
 

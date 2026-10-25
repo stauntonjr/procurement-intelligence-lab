@@ -1,0 +1,6 @@
+probe exit 0
+Traceback (most recent call last):
+  File "/tmp/pil-probe-239-oracle.py", line 15, in <module>
+    assert done.returncode!=0, 'probe accepted deliberately incorrect expected domain status'
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: probe accepted deliberately incorrect expected domain status

@@ -1,0 +1,436 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+__ test_invalid_deployment_never_constructs_storage_or_executor[domain-False] __
+
+archive_dsn = <redacted task-owned connection>
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-69/test_invalid_deployment_never_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe1d297833dd0>
+capsys = <_pytest.capture.CaptureFixture object at 0xe1d297830650>
+archive = False, variant = 'domain'
+
+    @pytest.mark.parametrize("archive", [False, True])
+    @pytest.mark.parametrize("variant", ["domain", "profile", "profile-version"])
+    def test_invalid_deployment_never_constructs_storage_or_executor(
+        archive_dsn: str,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+        archive: bool,
+        variant: str,
+    ):
+        args, _, _ = inputs(tmp_path, archive_dsn)
+        manifest = Path(args[args.index("--manifest") + 1])
+        wire = json.loads(manifest.read_text())
+        config = Path(args[args.index("--config") + 1])
+        if variant == "domain":
+            wire["domain"]["id"] = "inventory"
+        elif variant == "profile":
+            wire["source_profile"]["id"] = "other"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile = "retained-resolved-required-quantity"', 'source_profile = "other"'
+                )
+            )
+        else:
+            wire["source_profile"]["version"] = "2.0.0"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile_version = "1.0.0"', 'source_profile_version = "2.0.0"'
+                )
+            )
+        manifest.write_text(json.dumps(wire))
+        monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", "<redacted connection>")
+        monkeypatch.setattr(bootstrap, "build_resolved_execution_archive_reader", forbidden)
+        monkeypatch.setattr(bootstrap, "build_reconciliation_archive", forbidden)
+        from procurement_intelligence_lab.adapters import package_reconciliation_executor
+    
+        monkeypatch.setattr(package_reconciliation_executor, "PackageReconciliationExecutor", forbidden)
+>       result = invoke(
+            reconcile_resolved_package, args + (["--archive"] if archive else []), monkeypatch, capsys
+        )
+
+tests/contract/test_reconciliation_public_main.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contract/test_reconciliation_public_main.py:31: in invoke
+    code = module.main()
+           ^^^^^^^^^^^^^
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py:87: in main
+    receipt = build_retained_reconciliation_service(**kwargs).execute(
+src/procurement_intelligence_lab/application/retained_reconciliation.py:127: in execute
+    reader = self.producer_reader_factory()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/procurement_intelligence_lab/bootstrap.py:1161: in <lambda>
+    lambda: build_resolved_execution_archive_reader(required_dsn()),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('<redacted connection>',), kwargs = {}
+
+    def forbidden(*args: Any, **kwargs: Any) -> NoReturn:
+>       raise AssertionError("invalid deployment reached storage or executor construction")
+E       AssertionError: invalid deployment reached storage or executor construction
+
+tests/contract/test_reconciliation_public_main.py:21: AssertionError
+__ test_invalid_deployment_never_constructs_storage_or_executor[domain-True] ___
+
+archive_dsn = <redacted task-owned connection>
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-69/test_invalid_deployment_never_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe1d2978315b0>
+capsys = <_pytest.capture.CaptureFixture object at 0xe1d2976bb3e0>
+archive = True, variant = 'domain'
+
+    @pytest.mark.parametrize("archive", [False, True])
+    @pytest.mark.parametrize("variant", ["domain", "profile", "profile-version"])
+    def test_invalid_deployment_never_constructs_storage_or_executor(
+        archive_dsn: str,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+        archive: bool,
+        variant: str,
+    ):
+        args, _, _ = inputs(tmp_path, archive_dsn)
+        manifest = Path(args[args.index("--manifest") + 1])
+        wire = json.loads(manifest.read_text())
+        config = Path(args[args.index("--config") + 1])
+        if variant == "domain":
+            wire["domain"]["id"] = "inventory"
+        elif variant == "profile":
+            wire["source_profile"]["id"] = "other"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile = "retained-resolved-required-quantity"', 'source_profile = "other"'
+                )
+            )
+        else:
+            wire["source_profile"]["version"] = "2.0.0"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile_version = "1.0.0"', 'source_profile_version = "2.0.0"'
+                )
+            )
+        manifest.write_text(json.dumps(wire))
+        monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", "<redacted connection>")
+        monkeypatch.setattr(bootstrap, "build_resolved_execution_archive_reader", forbidden)
+        monkeypatch.setattr(bootstrap, "build_reconciliation_archive", forbidden)
+        from procurement_intelligence_lab.adapters import package_reconciliation_executor
+    
+        monkeypatch.setattr(package_reconciliation_executor, "PackageReconciliationExecutor", forbidden)
+>       result = invoke(
+            reconcile_resolved_package, args + (["--archive"] if archive else []), monkeypatch, capsys
+        )
+
+tests/contract/test_reconciliation_public_main.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contract/test_reconciliation_public_main.py:31: in invoke
+    code = module.main()
+           ^^^^^^^^^^^^^
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py:83: in main
+    result = build_archived_reconciliation_service(**kwargs).execute(
+src/procurement_intelligence_lab/application/archived_reconciliation.py:137: in execute
+    archive = self.archive_factory()
+              ^^^^^^^^^^^^^^^^^^^^^^
+src/procurement_intelligence_lab/bootstrap.py:1191: in archive_factory
+    return build_reconciliation_archive(dsn)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('<redacted connection>',), kwargs = {}
+
+    def forbidden(*args: Any, **kwargs: Any) -> NoReturn:
+>       raise AssertionError("invalid deployment reached storage or executor construction")
+E       AssertionError: invalid deployment reached storage or executor construction
+
+tests/contract/test_reconciliation_public_main.py:21: AssertionError
+_ test_invalid_deployment_never_constructs_storage_or_executor[profile-False] __
+
+archive_dsn = <redacted task-owned connection>
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-69/test_invalid_deployment_never_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe1d2978ce120>
+capsys = <_pytest.capture.CaptureFixture object at 0xe1d2978cde80>
+archive = False, variant = 'profile'
+
+    @pytest.mark.parametrize("archive", [False, True])
+    @pytest.mark.parametrize("variant", ["domain", "profile", "profile-version"])
+    def test_invalid_deployment_never_constructs_storage_or_executor(
+        archive_dsn: str,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+        archive: bool,
+        variant: str,
+    ):
+        args, _, _ = inputs(tmp_path, archive_dsn)
+        manifest = Path(args[args.index("--manifest") + 1])
+        wire = json.loads(manifest.read_text())
+        config = Path(args[args.index("--config") + 1])
+        if variant == "domain":
+            wire["domain"]["id"] = "inventory"
+        elif variant == "profile":
+            wire["source_profile"]["id"] = "other"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile = "retained-resolved-required-quantity"', 'source_profile = "other"'
+                )
+            )
+        else:
+            wire["source_profile"]["version"] = "2.0.0"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile_version = "1.0.0"', 'source_profile_version = "2.0.0"'
+                )
+            )
+        manifest.write_text(json.dumps(wire))
+        monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", "<redacted connection>")
+        monkeypatch.setattr(bootstrap, "build_resolved_execution_archive_reader", forbidden)
+        monkeypatch.setattr(bootstrap, "build_reconciliation_archive", forbidden)
+        from procurement_intelligence_lab.adapters import package_reconciliation_executor
+    
+        monkeypatch.setattr(package_reconciliation_executor, "PackageReconciliationExecutor", forbidden)
+>       result = invoke(
+            reconcile_resolved_package, args + (["--archive"] if archive else []), monkeypatch, capsys
+        )
+
+tests/contract/test_reconciliation_public_main.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contract/test_reconciliation_public_main.py:31: in invoke
+    code = module.main()
+           ^^^^^^^^^^^^^
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py:87: in main
+    receipt = build_retained_reconciliation_service(**kwargs).execute(
+src/procurement_intelligence_lab/application/retained_reconciliation.py:127: in execute
+    reader = self.producer_reader_factory()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/procurement_intelligence_lab/bootstrap.py:1161: in <lambda>
+    lambda: build_resolved_execution_archive_reader(required_dsn()),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('<redacted connection>',), kwargs = {}
+
+    def forbidden(*args: Any, **kwargs: Any) -> NoReturn:
+>       raise AssertionError("invalid deployment reached storage or executor construction")
+E       AssertionError: invalid deployment reached storage or executor construction
+
+tests/contract/test_reconciliation_public_main.py:21: AssertionError
+__ test_invalid_deployment_never_constructs_storage_or_executor[profile-True] __
+
+archive_dsn = <redacted task-owned connection>
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-69/test_invalid_deployment_never_3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe1d29786e9f0>
+capsys = <_pytest.capture.CaptureFixture object at 0xe1d29786fdd0>
+archive = True, variant = 'profile'
+
+    @pytest.mark.parametrize("archive", [False, True])
+    @pytest.mark.parametrize("variant", ["domain", "profile", "profile-version"])
+    def test_invalid_deployment_never_constructs_storage_or_executor(
+        archive_dsn: str,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+        archive: bool,
+        variant: str,
+    ):
+        args, _, _ = inputs(tmp_path, archive_dsn)
+        manifest = Path(args[args.index("--manifest") + 1])
+        wire = json.loads(manifest.read_text())
+        config = Path(args[args.index("--config") + 1])
+        if variant == "domain":
+            wire["domain"]["id"] = "inventory"
+        elif variant == "profile":
+            wire["source_profile"]["id"] = "other"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile = "retained-resolved-required-quantity"', 'source_profile = "other"'
+                )
+            )
+        else:
+            wire["source_profile"]["version"] = "2.0.0"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile_version = "1.0.0"', 'source_profile_version = "2.0.0"'
+                )
+            )
+        manifest.write_text(json.dumps(wire))
+        monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", "<redacted connection>")
+        monkeypatch.setattr(bootstrap, "build_resolved_execution_archive_reader", forbidden)
+        monkeypatch.setattr(bootstrap, "build_reconciliation_archive", forbidden)
+        from procurement_intelligence_lab.adapters import package_reconciliation_executor
+    
+        monkeypatch.setattr(package_reconciliation_executor, "PackageReconciliationExecutor", forbidden)
+>       result = invoke(
+            reconcile_resolved_package, args + (["--archive"] if archive else []), monkeypatch, capsys
+        )
+
+tests/contract/test_reconciliation_public_main.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contract/test_reconciliation_public_main.py:31: in invoke
+    code = module.main()
+           ^^^^^^^^^^^^^
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py:83: in main
+    result = build_archived_reconciliation_service(**kwargs).execute(
+src/procurement_intelligence_lab/application/archived_reconciliation.py:137: in execute
+    archive = self.archive_factory()
+              ^^^^^^^^^^^^^^^^^^^^^^
+src/procurement_intelligence_lab/bootstrap.py:1191: in archive_factory
+    return build_reconciliation_archive(dsn)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('<redacted connection>',), kwargs = {}
+
+    def forbidden(*args: Any, **kwargs: Any) -> NoReturn:
+>       raise AssertionError("invalid deployment reached storage or executor construction")
+E       AssertionError: invalid deployment reached storage or executor construction
+
+tests/contract/test_reconciliation_public_main.py:21: AssertionError
+_ test_invalid_deployment_never_constructs_storage_or_executor[profile-version-False] _
+
+archive_dsn = <redacted task-owned connection>
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-69/test_invalid_deployment_never_4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe1d29786c710>
+capsys = <_pytest.capture.CaptureFixture object at 0xe1d29786c170>
+archive = False, variant = 'profile-version'
+
+    @pytest.mark.parametrize("archive", [False, True])
+    @pytest.mark.parametrize("variant", ["domain", "profile", "profile-version"])
+    def test_invalid_deployment_never_constructs_storage_or_executor(
+        archive_dsn: str,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+        archive: bool,
+        variant: str,
+    ):
+        args, _, _ = inputs(tmp_path, archive_dsn)
+        manifest = Path(args[args.index("--manifest") + 1])
+        wire = json.loads(manifest.read_text())
+        config = Path(args[args.index("--config") + 1])
+        if variant == "domain":
+            wire["domain"]["id"] = "inventory"
+        elif variant == "profile":
+            wire["source_profile"]["id"] = "other"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile = "retained-resolved-required-quantity"', 'source_profile = "other"'
+                )
+            )
+        else:
+            wire["source_profile"]["version"] = "2.0.0"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile_version = "1.0.0"', 'source_profile_version = "2.0.0"'
+                )
+            )
+        manifest.write_text(json.dumps(wire))
+        monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", "<redacted connection>")
+        monkeypatch.setattr(bootstrap, "build_resolved_execution_archive_reader", forbidden)
+        monkeypatch.setattr(bootstrap, "build_reconciliation_archive", forbidden)
+        from procurement_intelligence_lab.adapters import package_reconciliation_executor
+    
+        monkeypatch.setattr(package_reconciliation_executor, "PackageReconciliationExecutor", forbidden)
+>       result = invoke(
+            reconcile_resolved_package, args + (["--archive"] if archive else []), monkeypatch, capsys
+        )
+
+tests/contract/test_reconciliation_public_main.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contract/test_reconciliation_public_main.py:31: in invoke
+    code = module.main()
+           ^^^^^^^^^^^^^
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py:87: in main
+    receipt = build_retained_reconciliation_service(**kwargs).execute(
+src/procurement_intelligence_lab/application/retained_reconciliation.py:127: in execute
+    reader = self.producer_reader_factory()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/procurement_intelligence_lab/bootstrap.py:1161: in <lambda>
+    lambda: build_resolved_execution_archive_reader(required_dsn()),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('<redacted connection>',), kwargs = {}
+
+    def forbidden(*args: Any, **kwargs: Any) -> NoReturn:
+>       raise AssertionError("invalid deployment reached storage or executor construction")
+E       AssertionError: invalid deployment reached storage or executor construction
+
+tests/contract/test_reconciliation_public_main.py:21: AssertionError
+_ test_invalid_deployment_never_constructs_storage_or_executor[profile-version-True] _
+
+archive_dsn = <redacted task-owned connection>
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-69/test_invalid_deployment_never_5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe1d29760b320>
+capsys = <_pytest.capture.CaptureFixture object at 0xe1d29760bb30>
+archive = True, variant = 'profile-version'
+
+    @pytest.mark.parametrize("archive", [False, True])
+    @pytest.mark.parametrize("variant", ["domain", "profile", "profile-version"])
+    def test_invalid_deployment_never_constructs_storage_or_executor(
+        archive_dsn: str,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+        archive: bool,
+        variant: str,
+    ):
+        args, _, _ = inputs(tmp_path, archive_dsn)
+        manifest = Path(args[args.index("--manifest") + 1])
+        wire = json.loads(manifest.read_text())
+        config = Path(args[args.index("--config") + 1])
+        if variant == "domain":
+            wire["domain"]["id"] = "inventory"
+        elif variant == "profile":
+            wire["source_profile"]["id"] = "other"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile = "retained-resolved-required-quantity"', 'source_profile = "other"'
+                )
+            )
+        else:
+            wire["source_profile"]["version"] = "2.0.0"
+            config.write_text(
+                config.read_text().replace(
+                    'source_profile_version = "1.0.0"', 'source_profile_version = "2.0.0"'
+                )
+            )
+        manifest.write_text(json.dumps(wire))
+        monkeypatch.setenv("PIL_ASSERTION_ARCHIVE_DSN", "<redacted connection>")
+        monkeypatch.setattr(bootstrap, "build_resolved_execution_archive_reader", forbidden)
+        monkeypatch.setattr(bootstrap, "build_reconciliation_archive", forbidden)
+        from procurement_intelligence_lab.adapters import package_reconciliation_executor
+    
+        monkeypatch.setattr(package_reconciliation_executor, "PackageReconciliationExecutor", forbidden)
+>       result = invoke(
+            reconcile_resolved_package, args + (["--archive"] if archive else []), monkeypatch, capsys
+        )
+
+tests/contract/test_reconciliation_public_main.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contract/test_reconciliation_public_main.py:31: in invoke
+    code = module.main()
+           ^^^^^^^^^^^^^
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py:83: in main
+    result = build_archived_reconciliation_service(**kwargs).execute(
+src/procurement_intelligence_lab/application/archived_reconciliation.py:137: in execute
+    archive = self.archive_factory()
+              ^^^^^^^^^^^^^^^^^^^^^^
+src/procurement_intelligence_lab/bootstrap.py:1191: in archive_factory
+    return build_reconciliation_archive(dsn)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('<redacted connection>',), kwargs = {}
+
+    def forbidden(*args: Any, **kwargs: Any) -> NoReturn:
+>       raise AssertionError("invalid deployment reached storage or executor construction")
+E       AssertionError: invalid deployment reached storage or executor construction
+
+tests/contract/test_reconciliation_public_main.py:21: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contract/test_reconciliation_public_main.py::test_invalid_deployment_never_constructs_storage_or_executor[domain-False]
+FAILED tests/contract/test_reconciliation_public_main.py::test_invalid_deployment_never_constructs_storage_or_executor[domain-True]
+FAILED tests/contract/test_reconciliation_public_main.py::test_invalid_deployment_never_constructs_storage_or_executor[profile-False]
+FAILED tests/contract/test_reconciliation_public_main.py::test_invalid_deployment_never_constructs_storage_or_executor[profile-True]
+FAILED tests/contract/test_reconciliation_public_main.py::test_invalid_deployment_never_constructs_storage_or_executor[profile-version-False]
+FAILED tests/contract/test_reconciliation_public_main.py::test_invalid_deployment_never_constructs_storage_or_executor[profile-version-True]
+6 failed, 2 deselected in 7.17s

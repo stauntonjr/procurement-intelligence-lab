@@ -1,0 +1,468 @@
+uv run --extra workflow ruff format --check .
+666 files already formatted
+uv run --extra workflow ruff check .
+All checks passed!
+uv run --extra workflow pyright
+0 errors, 0 warnings, 0 informations
+uv run --extra workflow python tools/check_architecture.py
+architecture import checks passed
+uv run --extra workflow python tools/run_challenges.py --validate-only
+validated 30 challenge manifests
+make semantic-preflight
+make[1]: Entering directory '/tmp/pil-reconcile-implementation'
+uv run --extra workflow python tools/validate_semantic_change.py --skills --evidence docs/development/semantic-change-evidence.example.json --routing evals/development_agents/skill-routing.json
+semantic harness validation passed
+uv run --extra workflow pytest -q tests/unit/test_semantic_change_harness.py tests/unit/test_pr_contract.py
+...................................                                      [100%]
+35 passed in 0.11s
+make[1]: Leaving directory '/tmp/pil-reconcile-implementation'
+make dependabot-validate
+make[1]: Entering directory '/tmp/pil-reconcile-implementation'
+uv run --extra workflow pytest -q tests/unit/test_dependabot_config.py
+..                                                                       [100%]
+2 passed in 0.07s
+make[1]: Leaving directory '/tmp/pil-reconcile-implementation'
+make actions-supply-chain
+make[1]: Entering directory '/tmp/pil-reconcile-implementation'
+uv run --extra workflow python tools/check_actions_supply_chain.py
+GitHub Actions supply-chain check passed (27 references)
+make[1]: Leaving directory '/tmp/pil-reconcile-implementation'
+uv run --extra workflow pytest --cov=procurement_intelligence_lab --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=85
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0
+rootdir: /tmp/pil-reconcile-implementation
+configfile: pyproject.toml
+testpaths: tests
+plugins: langsmith-0.14.4, cov-7.1.0, anyio-4.15.1, hypothesis-6.168.0
+collected 1898 items
+
+tests/contract/test_agent_run_store.py .....................             [  1%]
+tests/contract/test_anomaly_assessment.py .............................. [  2%]
+......                                                                   [  3%]
+tests/contract/test_archive_public_main.py .                             [  3%]
+tests/contract/test_archived_bom_query.py .........                      [  3%]
+tests/contract/test_archived_planned_execution.py ..........             [  4%]
+tests/contract/test_archived_reconciliation.py .......                   [  4%]
+tests/contract/test_archived_resolved_execution.py .........             [  4%]
+tests/contract/test_bom_assertion_conformance.py .....                   [  5%]
+tests/contract/test_bom_assertions.py ....................               [  6%]
+tests/contract/test_bom_normalization.py ............................... [  7%]
+.                                                                        [  7%]
+tests/contract/test_bom_normalization_conformance.py .....               [  8%]
+tests/contract/test_bom_stage_adapters.py .........................      [  9%]
+tests/contract/test_bom_stage_conformance.py ..                          [  9%]
+tests/contract/test_claim_semantics.py ....                              [  9%]
+tests/contract/test_corpus_adapter.py ...................                [ 10%]
+tests/contract/test_corpus_agent_tools.py ..................             [ 11%]
+tests/contract/test_corpus_investigation.py ....                         [ 11%]
+tests/contract/test_corpus_manifest.py ...                               [ 12%]
+tests/contract/test_dependency_store.py ..............                   [ 12%]
+tests/contract/test_document_review_journal.py ..............            [ 13%]
+tests/contract/test_document_review_public_main.py .                     [ 13%]
+tests/contract/test_exact_brief_review.py .............................. [ 15%]
+......                                                                   [ 15%]
+tests/contract/test_governed_required_quantity_state.py ......           [ 15%]
+tests/contract/test_governing_claim_policy.py ........                   [ 16%]
+tests/contract/test_local_prefix_job_service.py ..............           [ 17%]
+tests/contract/test_local_qwen.py ........                               [ 17%]
+tests/contract/test_original_showcase_sources.py ......................  [ 18%]
+tests/contract/test_package_document_executors.py ..................     [ 19%]
+tests/contract/test_planned_resolved_bom_execution.py ........           [ 19%]
+tests/contract/test_postgres_archive.py ............                     [ 20%]
+tests/contract/test_postgres_local_prefix_job_completion.py ............ [ 21%]
+....                                                                     [ 21%]
+tests/contract/test_postgres_local_prefix_jobs.py ...........            [ 22%]
+tests/contract/test_postgres_planned_execution_archive.py .............. [ 22%]
+...............                                                          [ 23%]
+tests/contract/test_postgres_reconciliation_archive.py ..........        [ 24%]
+tests/contract/test_postgres_resolved_execution_archive.py ............. [ 24%]
+...............                                                          [ 25%]
+tests/contract/test_processing_jobs_public_main.py ..........            [ 26%]
+tests/contract/test_procurement_package.py F.............                [ 26%]
+tests/contract/test_question_interpretation.py ......................    [ 27%]
+tests/contract/test_reconciliation_operation.py ......                   [ 28%]
+tests/contract/test_reconciliation_review_store.py ...                   [ 28%]
+tests/contract/test_retrieval_adapter.py ..                              [ 28%]
+tests/contract/test_reviewed_bom_query.py .............                  [ 29%]
+tests/contract/test_reviewed_dependency_store.py .........               [ 29%]
+tests/contract/test_serial_review_workflow.py .......................... [ 31%]
+.....                                                                    [ 31%]
+tests/contract/test_showcase_discrepancy.py ........                     [ 31%]
+tests/contract/test_stage_contract_registry.py ..                        [ 31%]
+tests/contract/test_xlsx_coordinates.py .                                [ 31%]
+tests/integration/test_agent_run_cli.py ......                           [ 32%]
+tests/integration/test_archived_bom_query_cli.py ..........              [ 32%]
+tests/integration/test_assertion_archive_cli.py ...                      [ 32%]
+tests/integration/test_bom_assertions_cli.py ..                          [ 33%]
+tests/integration/test_bom_conformance_revision.py ......                [ 33%]
+tests/integration/test_bom_normalization_cli.py ............             [ 33%]
+tests/integration/test_bom_stages_cli.py ............................... [ 35%]
+......................................                                   [ 37%]
+tests/integration/test_brief_review_cli.py .....                         [ 37%]
+tests/integration/test_browser_recovery.py ssssssssssss                  [ 38%]
+tests/integration/test_browser_review.py ssssssss                        [ 38%]
+tests/integration/test_corpus_http.py ............                       [ 39%]
+tests/integration/test_correction_impact_cli.py ............             [ 40%]
+tests/integration/test_document_review_cli.py .....                      [ 40%]
+tests/integration/test_domain_package_cli.py .....                       [ 40%]
+tests/integration/test_execute_package_cli.py ................           [ 41%]
+tests/integration/test_execute_resolved_package_cli.py ................. [ 42%]
+.........                                                                [ 42%]
+tests/integration/test_g2_adversarial.py ...........                     [ 43%]
+tests/integration/test_g2_evidence_cli.py ....                           [ 43%]
+tests/integration/test_g2_pilot_failure.py .........                     [ 44%]
+tests/integration/test_live_intent_development.py s                      [ 44%]
+tests/integration/test_live_recovery_bindings.py ..                      [ 44%]
+tests/integration/test_live_review.py ....                               [ 44%]
+tests/integration/test_original_showcase_live.py s                       [ 44%]
+tests/integration/test_original_showcase_review.py ..........            [ 45%]
+tests/integration/test_package_planning_cli.py .............             [ 45%]
+tests/integration/test_planned_execution_archive_cli.py ................ [ 46%]
+                                                                         [ 46%]
+tests/integration/test_processing_jobs_cli.py ......................     [ 47%]
+tests/integration/test_reconcile_resolved_package_cli.py ............... [ 48%]
+...................                                                      [ 49%]
+tests/integration/test_reconciliation_archive_cli.py .......             [ 50%]
+tests/integration/test_resolved_execution_archive_cli.py ......          [ 50%]
+tests/integration/test_review_web.py ..............                      [ 51%]
+tests/integration/test_reviewed_bom_query_cli.py .........               [ 51%]
+tests/integration/test_roadmap_report_cli.py .....                       [ 51%]
+tests/integration/test_web_happy_path.py .................               [ 52%]
+tests/integration/test_workflow_cli.py .....                             [ 52%]
+tests/regression/test_anomaly_assessment_correctness.py .....            [ 53%]
+tests/regression/test_anomaly_qualification.py ..                        [ 53%]
+tests/regression/test_source_assertion_context.py ..                     [ 53%]
+tests/regression/test_stage_contract_invariants.py .                     [ 53%]
+tests/regression/test_state_invariants.py ....                           [ 53%]
+tests/unit/test_actions_supply_chain.py ..........                       [ 54%]
+tests/unit/test_agent_trajectory.py ....                                 [ 54%]
+tests/unit/test_anomalies.py .................                           [ 55%]
+tests/unit/test_anomaly_lifecycle.py ............................        [ 56%]
+tests/unit/test_anomaly_policy_identity.py ....                          [ 57%]
+tests/unit/test_architecture_boundaries.py ....                          [ 57%]
+tests/unit/test_archive_boundaries.py ....                               [ 57%]
+tests/unit/test_archive_codec.py .....................                   [ 58%]
+tests/unit/test_assertions.py ..                                         [ 58%]
+tests/unit/test_bom.py ..                                                [ 58%]
+tests/unit/test_bom_normalization_policy.py ..........                   [ 59%]
+tests/unit/test_bom_stage_context.py ..........                          [ 59%]
+tests/unit/test_challenges.py ........                                   [ 60%]
+tests/unit/test_chat.py ..                                               [ 60%]
+tests/unit/test_cli.py ..                                                [ 60%]
+tests/unit/test_corpus_evaluation.py .............                       [ 61%]
+tests/unit/test_correction_dependencies.py ..........                    [ 61%]
+tests/unit/test_coverage_ratchet.py ...                                  [ 61%]
+tests/unit/test_dependabot_config.py ..                                  [ 61%]
+tests/unit/test_dependencies.py .......................                  [ 63%]
+tests/unit/test_document_reviews.py ......                               [ 63%]
+tests/unit/test_document_stages.py ....                                  [ 63%]
+tests/unit/test_documentation.py .                                       [ 63%]
+tests/unit/test_domain_package_compiler.py ..............                [ 64%]
+tests/unit/test_error_contract.py .F................                     [ 65%]
+tests/unit/test_evidence.py ..                                           [ 65%]
+tests/unit/test_evidence_contract.py ...                                 [ 65%]
+tests/unit/test_evidence_service.py .                                    [ 65%]
+tests/unit/test_fresh_g2_cohort.py ......................                [ 66%]
+tests/unit/test_g2_adversarial_scoring.py .........                      [ 67%]
+tests/unit/test_g2_evidence.py .....................................     [ 69%]
+tests/unit/test_g2_pilot_runner.py ...................                   [ 70%]
+tests/unit/test_g2_pilot_scoring.py ...................                  [ 71%]
+tests/unit/test_github_planning.py .........                             [ 71%]
+tests/unit/test_harness.py .                                             [ 71%]
+tests/unit/test_identity.py ..                                           [ 71%]
+tests/unit/test_ledger.py ...                                            [ 72%]
+tests/unit/test_live_review_page.py .                                    [ 72%]
+tests/unit/test_local_prefix_job_codec.py .......                        [ 72%]
+tests/unit/test_local_prefix_job_contracts.py ...............            [ 73%]
+tests/unit/test_local_prefix_job_lifecycle.py ........                   [ 73%]
+tests/unit/test_normalized_document_stages.py ........                   [ 74%]
+tests/unit/test_package_execution.py .................                   [ 75%]
+tests/unit/test_package_execution_contracts.py ......................... [ 76%]
+.....................                                                    [ 77%]
+tests/unit/test_package_planning.py .................................... [ 79%]
+..............................                                           [ 80%]
+tests/unit/test_pipeline.py .                                            [ 80%]
+tests/unit/test_planned_bom_resolution.py .................              [ 81%]
+tests/unit/test_planned_execution_archive.py .......................     [ 83%]
+tests/unit/test_planned_execution_archive_codec.py ................      [ 83%]
+tests/unit/test_platform_semantics.py ..........                         [ 84%]
+tests/unit/test_pr_contract.py ......................                    [ 85%]
+tests/unit/test_procurement_documents.py .............                   [ 86%]
+tests/unit/test_provenance.py .....                                      [ 86%]
+tests/unit/test_question_item_mentions.py .......                        [ 86%]
+tests/unit/test_reconciliation.py .                                      [ 86%]
+tests/unit/test_reconciliation_archive_codec.py ...                      [ 87%]
+tests/unit/test_reconciliation_authority.py ....                         [ 87%]
+tests/unit/test_reconciliation_contracts.py ..........                   [ 87%]
+tests/unit/test_reconciliation_review_service.py ..                      [ 87%]
+tests/unit/test_reconciliation_runner.py .....                           [ 88%]
+tests/unit/test_record_demo_story.py ......                              [ 88%]
+tests/unit/test_resolution.py ..                                         [ 88%]
+tests/unit/test_resolution_inputs.py .........................           [ 89%]
+tests/unit/test_resolved_execution.py ......                             [ 90%]
+tests/unit/test_resolved_execution_archive_codec.py ......               [ 90%]
+tests/unit/test_resolved_execution_contracts.py ....                     [ 90%]
+tests/unit/test_retained_reconciliation.py .....................         [ 91%]
+tests/unit/test_retrieval_projection.py ....                             [ 92%]
+tests/unit/test_review.py ..                                             [ 92%]
+tests/unit/test_review_page.py ...                                       [ 92%]
+tests/unit/test_review_page_recovery.py ............                     [ 93%]
+tests/unit/test_review_reconciliation.py ...........                     [ 93%]
+tests/unit/test_review_workflows.py ...                                  [ 93%]
+tests/unit/test_reviewed_source_queries.py .........................     [ 95%]
+tests/unit/test_roadmap_review.py ...............                        [ 95%]
+tests/unit/test_runtime_identity.py .                                    [ 95%]
+tests/unit/test_semantic_change_harness.py .............                 [ 96%]
+tests/unit/test_source_sku_query.py ..........................           [ 97%]
+tests/unit/test_state.py ...                                             [ 98%]
+tests/unit/test_universal_stage_semantics.py ........................    [ 99%]
+tests/unit/test_web.py ........                                          [ 99%]
+tests/unit/test_xlsx_adapter.py ...                                      [100%]
+
+=================================== FAILURES ===================================
+_______ test_procurement_package_is_complete_and_keeps_late_stages_empty _______
+
+    @pytest.mark.contract
+    def test_procurement_package_is_complete_and_keeps_late_stages_empty() -> None:
+        from procurement_intelligence_lab.domains.procurement.package import PROCUREMENT_PACKAGE
+    
+>       (profile,) = PROCUREMENT_PACKAGE.source_profiles
+        ^^^^^^^^^^
+E       ValueError: too many values to unpack (expected 1)
+
+tests/contract/test_procurement_package.py:17: ValueError
+___________ test_platform_semantic_error_codes_are_stable_and_unique ___________
+
+    def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
+>       assert {code.value for code in ErrorCode} == {
+            "pil.input.local_prefix_job_invalid",
+            "pil.input.local_prefix_job_not_found",
+            "pil.policy.local_prefix_job_conflict",
+            "pil.policy.local_prefix_job_busy",
+            "pil.policy.local_prefix_job_fenced",
+            "pil.infrastructure.local_prefix_job_integrity_invalid",
+            "pil.infrastructure.local_prefix_job_unavailable",
+            "pil.input.archive_contract_invalid",
+            "pil.input.archive_not_found",
+            "pil.policy.archive_conflict",
+            "pil.infrastructure.archive_integrity_invalid",
+            "pil.infrastructure.archive_unavailable",
+            "pil.input.dependency_contract_invalid",
+            "pil.input.dependency_not_found",
+            "pil.policy.dependency_conflict",
+            "pil.infrastructure.dependency_integrity_invalid",
+            "pil.infrastructure.dependency_unavailable",
+            "pil.input.source_query_invalid",
+            "pil.input.package_planning_invalid",
+            "pil.input.package_execution_invalid",
+            "pil.interpretation.package_execution_contract_invalid",
+            "pil.infrastructure.artifact_source_unavailable",
+            "pil.infrastructure.artifact_content_invalid",
+            "pil.input.source_reference_unsupported",
+            "pil.interpretation.document_structure_invalid",
+            "pil.interpretation.schema_mapping_invalid",
+            "pil.input.document_stage_invalid",
+            "pil.interpretation.normalization_invalid",
+            "pil.interpretation.source_assertion_invalid",
+            "pil.input.document_review_contract_invalid",
+            "pil.input.document_review_not_found",
+            "pil.policy.document_review_conflict",
+            "pil.infrastructure.document_review_integrity_invalid",
+            "pil.infrastructure.document_review_unavailable",
+            "pil.input.normalization_policy_invalid",
+            "pil.input.domain_package_invalid",
+            "pil.input.brief_not_found",
+            "pil.policy.brief_review_conflict",
+            "pil.infrastructure.brief_store_unavailable",
+            "pil.infrastructure.workflow_unavailable",
+            "pil.policy.workflow_budget_exceeded",
+            "pil.infrastructure.agent_tool_admission_failed",
+            "pil.transient.agent_tool_timeout",
+            "pil.infrastructure.agent_tool_unavailable",
+            "pil.input.agent_tool_invalid_result",
+            "pil.input.agent_run_not_found",
+            "pil.policy.agent_run_conflict",
+            "pil.infrastructure.agent_run_store_unavailable",
+            "pil.input.semantic_contract_violation",
+            "pil.input.semantic_type_contract_violation",
+            "pil.input.scope_contract_violation",
+            "pil.policy.scope_mismatch",
+            "pil.input.temporal_contract_violation",
+            "pil.policy.contract_violation",
+            "pil.policy.reconciliation_no_governing_source",
+            "pil.authorization.authority_contract_violation",
+            "pil.authorization.scope_mismatch",
+            "pil.authorization.request_scope_denied",
+            "pil.policy.idempotency_contract_violation",
+        }
+E       AssertionError: assert {'pil.authori...ailable', ...} == {'pil.authori...ailable', ...}
+E         
+E         Extra items in the left set:
+E         'pil.input.reconciliation_input_unsupported'
+E         Use -v to get more diff
+
+tests/unit/test_error_contract.py:44: AssertionError
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                                                               Stmts   Miss Branch BrPart   Cover   Missing
+-------------------------------------------------------------------------------------------------------------------------------
+src/procurement_intelligence_lab/__main__.py                                          39      2      4      2  90.70%   117, 123
+src/procurement_intelligence_lab/adapters/langgraph_review.py                        233     15     62     15  89.83%   85, 135, 137, 159, 203, 218, 235, 240, 243->250, 263, 266, 269, 275, 298, 300, 333, 362->368
+src/procurement_intelligence_lab/adapters/local_artifacts.py                          56      4     14      4  88.57%   33, 36, 46, 87
+src/procurement_intelligence_lab/adapters/local_qwen.py                               55      9     12      5  79.10%   94, 117, 119, 163, 165, 180, 187, 189-190
+src/procurement_intelligence_lab/adapters/memory_ledger.py                            18      1      4      1  90.91%   25
+src/procurement_intelligence_lab/adapters/memory_retrieval.py                         59      6     20      5  86.08%   58, 64, 73, 87, 99, 107
+src/procurement_intelligence_lab/adapters/package_document_executors.py               65      2      0      0  96.92%   53-54
+src/procurement_intelligence_lab/adapters/postgres_archive.py                        120      9     40      9  88.75%   64, 94, 122, 139, 150, 156, 168, 193, 215
+src/procurement_intelligence_lab/adapters/postgres_dependencies.py                   126      8     44      3  92.35%   96, 124, 126-128, 132, 155-156
+src/procurement_intelligence_lab/adapters/postgres_dependency_corrections.py          62      8     30      3  85.87%   57, 92, 95-100, 104, 123
+src/procurement_intelligence_lab/adapters/postgres_document_reviews.py               144     10     46      7  91.05%   85, 93, 107, 111, 122, 158, 174, 177-178, 232
+src/procurement_intelligence_lab/adapters/postgres_local_prefix_jobs.py              242     17     82     16  89.81%   125, 126->129, 138, 141, 143-144, 161, 167, 186, 207, 239, 241, 266, 298, 303, 375, 400, 468
+src/procurement_intelligence_lab/adapters/postgres_planned_execution_archive.py      100      6     30      6  90.77%   66, 78, 99, 106, 135, 169
+src/procurement_intelligence_lab/adapters/postgres_reconciliation_archive.py         106      9     38      9  87.50%   64, 78, 106, 118, 123, 151, 177, 185, 208
+src/procurement_intelligence_lab/adapters/postgres_resolved_execution_archive.py      96      7     28      7  88.71%   57, 70, 84, 91, 122, 152, 158
+src/procurement_intelligence_lab/adapters/semantic_codec.py                          188      8    106      8  94.56%   47, 107, 115, 123, 163, 203, 212, 215
+src/procurement_intelligence_lab/adapters/showcase_sources.py                         90      9     38      9  85.94%   38, 65, 69, 72, 77, 81, 84, 96, 105
+src/procurement_intelligence_lab/adapters/sqlite_agent_runs.py                       109      9     20      5  89.15%   34, 40, 92-93, 122, 152, 155, 187, 225
+src/procurement_intelligence_lab/adapters/sqlite_briefs.py                           184     13     60     12  89.75%   51, 81, 107, 185, 193, 197, 226, 264, 295, 303, 325, 361, 374
+src/procurement_intelligence_lab/adapters/sqlite_interpretation.py                    61      4     10      2  91.55%   37, 60, 64, 72
+src/procurement_intelligence_lab/adapters/sqlite_reconciliation_reviews.py            92      5     18      4  91.82%   70, 73, 109, 182, 198
+src/procurement_intelligence_lab/adapters/synthetic_corpus.py                        156     15     62     12  87.61%   47, 53, 91, 153, 157, 160, 170, 186, 199, 204, 237, 245, 262, 265-266
+src/procurement_intelligence_lab/adapters/xlsx.py                                     76      4     14      4  91.11%   71, 94, 154, 161
+src/procurement_intelligence_lab/adapters/xlsx_cells.py                              116     22     60     19  74.43%   34, 80-84, 88, 93, 104, 107, 112, 117, 123, 132, 144, 150-152, 153->148, 157, 167, 170, 179, 190, 194
+src/procurement_intelligence_lab/adapters/xlsx_structure.py                          117     20     62     11  77.09%   45, 75->79, 119, 155, 169, 192-215, 217, 224, 228, 230-233, 235
+src/procurement_intelligence_lab/application/agent_trajectory.py                      54      2     24      2  94.87%   34, 103
+src/procurement_intelligence_lab/application/anomaly_service.py                       29      1      6      1  94.29%   43
+src/procurement_intelligence_lab/application/archived_bom_queries.py                  63      4     10      2  91.78%   66, 175-176, 178
+src/procurement_intelligence_lab/application/archived_documents.py                    59      1      4      2  95.24%   66, 86->88
+src/procurement_intelligence_lab/application/archived_planned_execution.py            67      1      4      1  97.18%   54
+src/procurement_intelligence_lab/application/archived_reconciliation.py               89     10      8      2  87.63%   88->exit, 114->117, 139-150, 232-233
+src/procurement_intelligence_lab/application/archived_resolved_execution.py           70      1      4      1  97.30%   49
+src/procurement_intelligence_lab/application/asserted_document_stages.py              62      1      6      1  97.06%   80
+src/procurement_intelligence_lab/application/chat.py                                  14      2      6      2  80.00%   27, 29
+src/procurement_intelligence_lab/application/corpus_agent_tools.py                    90      5     22      5  91.07%   58, 60, 66, 111, 154
+src/procurement_intelligence_lab/application/corpus_payloads.py                       17      1      4      1  90.48%   50
+src/procurement_intelligence_lab/application/document_reviews.py                      48      1      6      1  96.30%   63
+src/procurement_intelligence_lab/application/evidence_service.py                      60      1     10      1  97.14%   116
+src/procurement_intelligence_lab/application/exact_brief_review.py                    70      1     12      2  96.34%   101->105, 132
+src/procurement_intelligence_lab/application/local_prefix_job_reader.py               35      7      6      2  73.17%   27->exit, 30-31, 41-44, 49
+src/procurement_intelligence_lab/application/local_prefix_jobs.py                    110      7     18      3  90.62%   122-124, 129-130, 142, 155
+src/procurement_intelligence_lab/application/original_showcase.py                     32      4     12      2  86.36%   59-61, 63
+src/procurement_intelligence_lab/application/pipeline.py                              41      2     10      3  90.20%   77->83, 79, 92
+src/procurement_intelligence_lab/application/question_review.py                       70      2     10      1  96.25%   53, 84
+src/procurement_intelligence_lab/application/reconciliation_review.py                 50      3      8      3  89.66%   67, 77, 90
+src/procurement_intelligence_lab/application/retained_reconciliation.py               88      1     10      1  97.96%   145
+src/procurement_intelligence_lab/application/reviewed_bom_queries.py                  78      6     20      4  89.80%   78, 189, 195, 219-220, 222
+src/procurement_intelligence_lab/application/showcase.py                             214      7     44      5  95.35%   148, 171-172, 233, 237, 435, 558
+src/procurement_intelligence_lab/bootstrap.py                                        306     47     18      3  83.33%   98, 455-456, 491-492, 519-520, 763-767, 779-780, 827, 943-944, 971, 975, 1055-1056, 1104-1155, 1183-1202
+src/procurement_intelligence_lab/domains/procurement/anomalies.py                    196      2     30      3  97.79%   256->273, 414, 441
+src/procurement_intelligence_lab/domains/procurement/anomaly_assessment.py           540     39    216     38  89.81%   87, 109, 144, 146, 164, 186, 188, 190, 208, 210, 227, 229, 231, 233, 323, 326, 333, 335, 337, 359, 361, 363, 365, 367, 555, 567, 623, 635, 719, 816, 915, 927, 1049, 1253, 1335-1336, 1381, 1461, 1534
+src/procurement_intelligence_lab/domains/procurement/document_reviews.py              24      3     14      3  84.21%   15, 44, 52
+src/procurement_intelligence_lab/domains/procurement/governance.py                   177     24     86     24  81.75%   92, 95, 99, 102, 104, 106, 108, 110, 119, 121, 123, 142, 144, 147, 151, 154, 162, 192, 243, 251, 266, 271, 277, 339
+src/procurement_intelligence_lab/domains/procurement/mapping.py                       56      6     32      6  86.36%   39, 42, 47, 50, 56, 58
+src/procurement_intelligence_lab/domains/procurement/normalization.py                 87      1     34      1  98.35%   80
+src/procurement_intelligence_lab/domains/procurement/observation_assertions.py        61      3     32      3  93.55%   50, 63, 79
+src/procurement_intelligence_lab/domains/procurement/po.py                            78      1     22      1  98.00%   28
+src/procurement_intelligence_lab/domains/procurement/reconciliation_policy.py        133      5     20      0  96.73%   85-86, 265-267
+src/procurement_intelligence_lab/domains/procurement/review_reconciliation.py         61      3     28      3  93.26%   80, 84, 86
+src/procurement_intelligence_lab/domains/procurement/reviewed_source_queries.py      129      9     28      7  89.81%   52, 60, 70, 103, 123, 128-129, 150, 191
+src/procurement_intelligence_lab/domains/procurement/source_queries.py                97      6     32      4  92.25%   77, 96, 107, 110, 113-114
+src/procurement_intelligence_lab/domains/procurement/state.py                        154     18     64     18  82.57%   59, 62, 64, 83, 94, 96, 110, 136, 139, 141, 143, 145, 204, 216-217, 230, 289, 312, 320->315
+src/procurement_intelligence_lab/interfaces/agent_runs.py                             68     19     14      4  64.63%   59, 70, 108-142, 152-154, 160
+src/procurement_intelligence_lab/interfaces/archived_bom_query.py                     77      9     18      4  86.32%   31, 38, 48, 54, 88-89, 111-112, 128
+src/procurement_intelligence_lab/interfaces/assertion_archive.py                      57      1     16      1  97.26%   81
+src/procurement_intelligence_lab/interfaces/bom_normalization_policy.py               33      1     12      1  95.56%   25
+src/procurement_intelligence_lab/interfaces/bom_stages.py                             87      7     24      5  89.19%   31, 52, 59-60, 100, 157, 175
+src/procurement_intelligence_lab/interfaces/briefs.py                                 61      9     16      4  80.52%   46-48, 106, 114, 116, 127-128, 147
+src/procurement_intelligence_lab/interfaces/correction_impact.py                      82      9     20      5  86.27%   38, 41, 43-44, 70, 94-95, 103, 130
+src/procurement_intelligence_lab/interfaces/document_review.py                       121      3     54      3  96.57%   51, 64, 213
+src/procurement_intelligence_lab/interfaces/domain_package.py                         19     19      2      0   0.00%   3-39
+src/procurement_intelligence_lab/interfaces/execute_package.py                       113     22     26     10  76.98%   37, 44-45, 47, 55, 61, 69-70, 72, 84-85, 96, 103-104, 112, 115, 118, 175, 186, 191-192, 196
+src/procurement_intelligence_lab/interfaces/execute_resolved_package.py               41     41      8      0   0.00%   3-92
+src/procurement_intelligence_lab/interfaces/live_review.py                            64     40     14      1  32.05%   76-149, 153
+src/procurement_intelligence_lab/interfaces/plan_package.py                           30     30      2      0   0.00%   3-61
+src/procurement_intelligence_lab/interfaces/planned_execution_archive.py              82     55     24      2  27.36%   34, 38-44, 48-54, 61, 65-66, 72-119, 123
+src/procurement_intelligence_lab/interfaces/processing_job_inputs.py                  31      7      6      3  72.97%   17, 20, 37, 46-47, 55-56
+src/procurement_intelligence_lab/interfaces/processing_jobs.py                       136     28     34      7  79.41%   64, 68-69, 91, 105-108, 121, 162-163, 188-189, 217, 242-243, 252-255, 262, 274-276, 284->292, 294-301, 305
+src/procurement_intelligence_lab/interfaces/reconcile_resolved_package.py             62     62     10      0   0.00%   3-116
+src/procurement_intelligence_lab/interfaces/reconciliation_archive.py                 57     57     20      0   0.00%   3-88
+src/procurement_intelligence_lab/interfaces/reconciliation_inputs.py                  30     30      4      0   0.00%   3-67
+src/procurement_intelligence_lab/interfaces/resolution_inputs.py                      17     17      2      0   0.00%   3-39
+src/procurement_intelligence_lab/interfaces/resolved_execution_archive.py             58     58     18      0   0.00%   3-110
+src/procurement_intelligence_lab/interfaces/review_page.py                            22      1      2      1  91.67%   104
+src/procurement_intelligence_lab/interfaces/review_sources.py                         35      3      4      1  89.74%   51, 55-56
+src/procurement_intelligence_lab/interfaces/review_web.py                            251     31     82     11  87.39%   102, 242, 245, 260, 285, 289, 318, 363, 395, 416, 421, 436, 439-440, 444-471, 475
+src/procurement_intelligence_lab/interfaces/reviewed_bom_query.py                     73     73     16      0   0.00%   3-123
+src/procurement_intelligence_lab/interfaces/web.py                                   200     21     54      4  89.37%   730-731, 732->743, 734->743, 830-847, 857, 861-869, 873
+src/procurement_intelligence_lab/interfaces/workflow.py                               93      7     16      1  90.83%   78-79, 130-132, 186, 206
+src/procurement_intelligence_lab/platform/domain_packages/compiler.py                153     22     82     18  82.98%   100, 146, 162, 164, 172, 212-219, 222, 224, 233-240, 245->243, 268, 293-294, 297-298, 301-302, 308, 319, 346, 381
+src/procurement_intelligence_lab/platform/domain_packages/contract_registry.py        52      1     16      1  97.06%   104
+src/procurement_intelligence_lab/platform/execution/archive.py                       126      4     12      0  97.10%   31-32, 142-143
+src/procurement_intelligence_lab/platform/execution/contracts.py                     174      4     54      4  96.49%   118, 121, 137, 145
+src/procurement_intelligence_lab/platform/execution/executors.py                      33      1     10      1  95.35%   37
+src/procurement_intelligence_lab/platform/execution/identity.py                       57      6     28      4  88.24%   41, 44, 55, 59, 71-72
+src/procurement_intelligence_lab/platform/execution/outputs.py                       198      6     20      0  97.25%   72, 109, 155, 202, 250, 340
+src/procurement_intelligence_lab/platform/execution/plan_validation.py                75     12     42     12  79.49%   53, 59, 76, 79, 83, 97, 114, 119, 124, 129, 147, 149
+src/procurement_intelligence_lab/platform/execution/reconciliation_inputs.py          70      2      8      0  97.44%   43-44
+src/procurement_intelligence_lab/platform/execution/resolution_contracts.py           83      1      0      0  98.80%   80
+src/procurement_intelligence_lab/platform/execution/resolution_outputs.py             87      1      8      0  98.95%   149
+src/procurement_intelligence_lab/platform/execution/runner.py                         70      3     26      3  93.75%   53, 57, 130
+src/procurement_intelligence_lab/platform/planning/contracts.py                      136     10     44      8  90.00%   40-41, 62, 100, 103, 128, 144, 148, 151, 174
+src/procurement_intelligence_lab/platform/planning/inputs.py                         109      4     24      2  95.49%   94, 111-112, 195
+src/procurement_intelligence_lab/platform/planning/planner.py                         79      2     36      2  96.52%   60, 64
+src/procurement_intelligence_lab/platform/processing/contracts.py                    295      2     18      0  99.36%   69-70
+src/procurement_intelligence_lab/platform/processing/lifecycle.py                     47      1      8      1  96.36%   104
+src/procurement_intelligence_lab/platform/semantics/actions.py                        89      1     48      1  98.54%   111
+src/procurement_intelligence_lab/platform/semantics/agent_runs.py                    125     13     58     12  86.34%   19, 24, 26, 36, 102, 140, 142, 152, 154, 169, 172, 175, 187
+src/procurement_intelligence_lab/platform/semantics/anomalies.py                      55      2     10      2  93.85%   59, 61
+src/procurement_intelligence_lab/platform/semantics/anomaly_lifecycle.py             103     12     50      9  84.97%   55, 61, 65, 99, 123-125, 127, 129, 131, 179, 184
+src/procurement_intelligence_lab/platform/semantics/archive.py                        79      7     32      7  87.39%   104, 123, 130, 136, 144, 146, 154
+src/procurement_intelligence_lab/platform/semantics/assertions.py                     64      1     18      1  97.56%   94
+src/procurement_intelligence_lab/platform/semantics/briefs.py                         98      9     30      9  85.94%   24, 66, 68, 77, 102, 104, 108, 125, 127
+src/procurement_intelligence_lab/platform/semantics/decisions.py                      82      5     32      5  91.23%   33, 46, 48, 101, 111
+src/procurement_intelligence_lab/platform/semantics/dependencies.py                  193      7     78      7  94.83%   44, 48, 119, 154, 194, 260, 301
+src/procurement_intelligence_lab/platform/semantics/derivation.py                     42      3     16      3  89.66%   36, 45, 47
+src/procurement_intelligence_lab/platform/semantics/document_lineage.py               35      1     22      1  96.49%   44
+src/procurement_intelligence_lab/platform/semantics/document_reviews.py              155      5     56      5  95.26%   68, 96, 107, 159, 161
+src/procurement_intelligence_lab/platform/semantics/documents.py                      73      6     26      6  87.88%   27, 29, 44, 75, 96, 99
+src/procurement_intelligence_lab/platform/semantics/errors.py                        192      2      6      2  97.98%   112, 164
+src/procurement_intelligence_lab/platform/semantics/evidence.py                       99      3     30      3  95.35%   42, 44, 160
+src/procurement_intelligence_lab/platform/semantics/identity.py                       10      1      2      1  83.33%   14
+src/procurement_intelligence_lab/platform/semantics/interpretation.py                101     18     54     18  76.77%   33, 55, 58, 86, 88, 97, 100, 103, 107, 125, 129, 131, 133, 135, 141, 149, 160, 163
+src/procurement_intelligence_lab/platform/semantics/ledger.py                         18      2      4      2  81.82%   22, 24
+src/procurement_intelligence_lab/platform/semantics/observations.py                   40      4     14      4  85.19%   39, 41, 43, 52
+src/procurement_intelligence_lab/platform/semantics/prediction.py                     80      3     36      3  94.83%   36, 95, 109
+src/procurement_intelligence_lab/platform/semantics/provenance.py                     79      6     14      6  87.10%   48, 50, 84, 129, 131, 133
+src/procurement_intelligence_lab/platform/semantics/reconciliation.py                 55      6     20      6  84.00%   37, 39, 71, 75, 79, 86
+src/procurement_intelligence_lab/platform/semantics/resolution.py                     69      5     20      5  88.76%   34, 36, 38, 99, 106
+src/procurement_intelligence_lab/platform/semantics/retrieval.py                      65      7     16      7  82.72%   39, 41, 43, 63, 65, 67, 97
+src/procurement_intelligence_lab/platform/semantics/scope.py                          34      2      6      2  90.00%   35, 62
+src/procurement_intelligence_lab/platform/semantics/state.py                          69     12     30     11  74.75%   39, 41, 43-44, 48, 50, 52, 68, 70, 72, 77, 90
+src/procurement_intelligence_lab/platform/semantics/values.py                          9      1      4      1  84.62%   20
+src/procurement_intelligence_lab/ports/assertion_ledger.py                             5      5      0      0   0.00%   3-10
+src/procurement_intelligence_lab/ports/retrieval.py                                    6      6      0      0   0.00%   3-15
+-------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                              14329   1357   3738    603  88.28%
+
+81 files skipped due to complete coverage.
+Coverage XML written to file coverage.xml
+Required test coverage of 85% reached. Total coverage: 88.28%
+=========================== short test summary info ============================
+SKIPPED [1] tests/integration/test_browser_recovery.py:95: explicit installed-browser opt-in required
+SKIPPED [4] tests/integration/test_browser_recovery.py:123: explicit installed-browser opt-in required
+SKIPPED [1] tests/integration/test_browser_recovery.py:157: explicit installed-browser opt-in required
+SKIPPED [1] tests/integration/test_browser_recovery.py:196: explicit installed-browser opt-in required
+SKIPPED [1] tests/integration/test_browser_recovery.py:239: explicit installed-browser opt-in required
+SKIPPED [1] tests/integration/test_browser_recovery.py:266: explicit installed-browser opt-in required
+SKIPPED [3] tests/integration/test_browser_recovery.py:294: explicit installed-browser opt-in required
+SKIPPED [2] tests/integration/test_browser_review.py:111: explicit installed-browser opt-in required
+SKIPPED [1] tests/integration/test_browser_review.py:136: explicit installed-browser opt-in required
+SKIPPED [2] tests/integration/test_browser_review.py:199: explicit installed-browser opt-in required
+SKIPPED [3] tests/integration/test_browser_review.py:484: explicit installed-browser opt-in required
+SKIPPED [1] tests/integration/test_live_intent_development.py:28: explicit local live opt-in required
+SKIPPED [1] tests/integration/test_original_showcase_live.py:37: explicit original installed live-browser opt-in required
+FAILED tests/contract/test_procurement_package.py::test_procurement_package_is_complete_and_keeps_late_stages_empty
+FAILED tests/unit/test_error_contract.py::test_platform_semantic_error_codes_are_stable_and_unique
+============ 2 failed, 1874 passed, 22 skipped in 929.34s (0:15:29) ============
+make: *** [Makefile:36: check] Error 1

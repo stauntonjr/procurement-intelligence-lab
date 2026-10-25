@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "primary_milestone": "M4",
+  "issue": "#239",
+  "baseline_revision": "a8de65db7ae6b6192a937ae930859d1b205be5aa",
+  "candidate_revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
+  "wheel_sha256": {
+    "baseline": "318222913bb98e9851144d86ada7659ebc18836ed0078e8eadd3445140e4e3cb",
+    "candidate": "123ae28337ca054de3f618ef7670e88b8514a7654e5a107f52337e7d91e46277"
+  },
+  "baseline_red": {
+    "argv": [
+      "/tmp/pil-239-artifacts/baseline-env/bin/python",
+      "-I",
+      "-m",
+      "procurement_intelligence_lab.interfaces.reconcile_resolved_package",
+      "--help"
+    ],
+    "exit_code": 1,
+    "stderr": "/tmp/pil-239-artifacts/baseline-env/bin/python: No module named procurement_intelligence_lab.interfaces.reconcile_resolved_package"
+  },
+  "installed_probes": [
+    "installed-base312.json",
+    "installed-base313.json",
+    "installed-storage312.json"
+  ],
+  "legacy_comparison": "legacy-comparison.json",
+  "package_smoke": {
+    "status": "passed",
+    "evidence": "package-smoke.log",
+    "real_postgres": true
+  },
+  "public_compatibility": {
+    "passed": 127,
+    "evidence": "public-compatibility.log"
+  },
+  "full_check": {
+    "status": "passed",
+    "revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
+    "passed": 1886,
+    "skipped": 22,
+    "skip_boundary": "existing explicit browser/live opt-ins; zero storage skips",
+    "line_rate": "0.918",
+    "branch_rate": "0.8058",
+    "ratchet_unchanged": true,
+    "evidence": "check.log"
+  },
+  "challenges": {
+    "passed": 30,
+    "known_bad_rejected": 30,
+    "evidence": "challenges.json"
+  },
+  "independent_review": {
+    "revision": "1ec30d23817d92dd56b75698610ea23693bbe990",
+    "important_findings": 1,
+    "fixed_by": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
+    "affected_tests_passed": 64,
+    "evidence": [
+      "independent-review.md",
+      "fix-pass.log"
+    ]
+  },
+  "protected_delivery": "pending",
+  "limits": "Synthetic rule-contract qualification only; no enterprise approval verification, general ER quality, production deployment, seven-stage prefix/job or broader M4 completion. Source-free result export references companion original source bytes, not a self-contained source archive.",
+  "author_fresh_pass": {
+    "revision": "0f8fd4dec6a116686e0aeb69a409cda4bb9271e5",
+    "runtime_change": "Existing domain/profile ID/version predicate moved to pure bootstrap admission and reused in retained validation; no neutral/domain policy change.",
+    "review_result": "No unresolved code findings. Corrected full check/coverage ratchet and all required candidate qualification pass; protected delivery/main proof remain pending."
+  },
+  "initial_full_check": {
+    "passed": 1874,
+    "skipped": 22,
+    "failed": 2,
+    "line_rate": "0.9053",
+    "ratchet": "0.9088",
+    "disposition": "Two stale additive-profile/error-code assertions corrected; real public-main coverage added without weakening ratchets; final full rerun pending.",
+    "evidence": "initial-check.log"
+  },
+  "installed_invalid_domain_rejections": {
+    "base312": 2,
+    "base313": 2,
+    "storage312": 2
+  },
+  "corpus_oracle_counterexample": {
+    "wrong_expected_status_rejected": true,
+    "evidence": [
+      "incorrect-corpus-status-counterexample.json",
+      "corpus-oracle-red.log",
+      "corpus-oracle-green.log"
+    ]
+  }
+}

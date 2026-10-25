@@ -1,5 +1,7 @@
 """Side-effect-free procurement requirements, not implementation availability."""
 
+from dataclasses import replace
+
 from procurement_intelligence_lab.domains.procurement.source_schema import BOM_TABLE_SCHEMA
 from procurement_intelligence_lab.platform.domain_packages.package import (
     DomainPackage,
@@ -11,7 +13,7 @@ from procurement_intelligence_lab.platform.domain_packages.package import (
 
 BOM_PROFILE_ID = "bom-table"
 
-PROCUREMENT_PACKAGE = DomainPackage(
+_bom_package = DomainPackage(
     schema_version="1.0",
     domain_id="procurement",
     domain_version="0.1.0",
@@ -82,6 +84,31 @@ PROCUREMENT_PACKAGE = DomainPackage(
                     neutral_semantics="no_decisions_or_recommendations",
                 ),
                 StageBinding(StageId.ACT, StageMode.EMPTY, neutral_semantics="no_action_attempted"),
+            ),
+        ),
+    ),
+)
+
+
+# Additive operation profile; the original selected bom-table manifest bytes stay unchanged.
+RECONCILIATION_PROFILE_ID = "retained-resolved-required-quantity"
+_base = _bom_package.source_profiles[0]
+PROCUREMENT_PACKAGE = replace(
+    _bom_package,
+    source_profiles=(
+        *_bom_package.source_profiles,
+        SourceProfile(
+            RECONCILIATION_PROFILE_ID,
+            "1.0.0",
+            tuple(
+                replace(
+                    b,
+                    policy_refs=("procurement.reconcile/governed-required-quantity@1",),
+                    eval_suite_ref="procurement.reconcile/governed-required-quantity@1",
+                )
+                if b.stage is StageId.RECONCILE
+                else b
+                for b in _base.bindings
             ),
         ),
     ),

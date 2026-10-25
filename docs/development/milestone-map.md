@@ -82,13 +82,21 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
-Next design direction, selected by the owner on 2026-10-24: decision #235 (M3, parent #14),
+Delivered owner-selected direction: decision #235 (M3, parent #14),
 [explicit planned RESOLVE prefix](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md).
 Accepted ADR-046 covers a scoped pinned internal-SKU candidate snapshot, actual sixth-stage
 execution, mention-bound evidence/abstention and atomic retention. The owner approved design
 `052ab47` on 2026-10-24. The [seven-task implementation plan](../superpowers/plans/2026-10-24-planned-resolve-prefix.md)
-for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) implement the bounded slice in PR237. Exact final qualification, independent review, protected delivery and main receipts belong to #236; its actual status distinguishes branch from main. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
+for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) deliver the bounded slice through PR237 on main `a8de65db7ae6b6192a937ae930859d1b205be5aa`. #235/#236 are closed and Project Done; exact qualification, independent review and installed main proof are retained in #236. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
 broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
+
+Owner-approved next core slice: M4 decision #238 (native parent #20),
+[retained-producer required-quantity RECONCILE](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
+accepted ADR047. The bounded implementation invokes one current RECONCILE strategy over explicitly selected validated
+archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
+The owner approved design `2c1b759`; implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
+and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; candidate qualification is retained under issue-239; exact main acceptance is recorded in #239. No broader M4 completion is claimed. Preserve Native/inline with
+one independent final review. RESOLVE jobs and fresh multi-document orchestration remain deferred.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
 [durable local prefix job lifecycle](../architecture/local-prefix-jobs.md): immutable arrival and
@@ -311,3 +319,9 @@ retention and source-free recovery. PR #230 contains the owner-approved implemen
 qualification, independent review, required-check and merged-main delivery receipts.
 Existing source/review/dependency capabilities and broader #13/#35/#36/#37/#12/#75
 acceptance remain unchanged. [Contract](../architecture/planned-execution-archive.md).
+
+Implementation #239 is candidate-qualified through `0f8fd4d`, including the independent review's
+admission fix, real public/storage tests, clean installed wheels, source-level synthetic policy
+examples, exact legacy equality and unchanged coverage ratchets. [Evidence](evidence/issue-239/README.md)
+names tested revisions; exact protected delivery and main proof are tracked in #239. Broader M4
+and listener/worker acceptance remain open.

@@ -291,3 +291,8 @@ This is a trusted local synchronous profile; queue deployment remains outside it
 
 The explicit six-stage execution and source-free recovery commands are documented in
 [Planned RESOLVE prefix](docs/architecture/planned-resolve-prefix.md).
+
+The explicit operation over archived RESOLVE producers is documented in
+[Retained required-quantity reconciliation](docs/architecture/retained-reconciliation.md).
+It retains policy decisions, abstentions and governed quantity evidence separately from historical
+producer executions. Branch qualification and main delivery are tracked in #239.
