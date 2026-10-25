@@ -198,6 +198,23 @@ def archive_codec():
         NormalizedOutput,
         StructuredOutput,
     )
+    from procurement_intelligence_lab.platform.execution.reconciliation_archive import (
+        ArchivedReconciliation,
+        CompletedReconciliationSnapshot,
+        ReconciliationArchiveReceipt,
+        ReconciliationHistoryPage,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_contracts import (
+        ReconciliationOperationReceipt,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_inputs import (
+        OperationAuthorityEvidence,
+        ReconciliationPolicyEvidence,
+        RetainedReconciliationInputs,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_outputs import (
+        ReconciledOutput,
+    )
     from procurement_intelligence_lab.platform.execution.resolution_archive import (
         ArchivedResolvedPrefix,
         CompletedResolvedPrefixSnapshot,
@@ -288,6 +305,10 @@ def archive_codec():
         ProvenanceRelation,
         TransformationEvent,
     )
+    from procurement_intelligence_lab.platform.semantics.reconciliation import (
+        ReconciliationDecision,
+        ReconciliationStatus,
+    )
     from procurement_intelligence_lab.platform.semantics.resolution import (
         CanonicalizedAssertion,
         EntityMention,
@@ -295,9 +316,26 @@ def archive_codec():
         ResolutionStatus,
     )
     from procurement_intelligence_lab.platform.semantics.scope import StateScope
+    from procurement_intelligence_lab.platform.semantics.state import (
+        OperationalState,
+        StateAttribute,
+        StateFreshness,
+    )
 
     return SemanticCodec(
         (
+            OperationAuthorityEvidence,
+            ReconciliationPolicyEvidence,
+            RetainedReconciliationInputs,
+            ReconciledOutput,
+            ReconciliationOperationReceipt,
+            CompletedReconciliationSnapshot,
+            ReconciliationArchiveReceipt,
+            ArchivedReconciliation,
+            ReconciliationHistoryPage,
+            ReconciliationDecision,
+            OperationalState,
+            StateAttribute,
             CandidateSnapshot,
             CandidateInputEvidence,
             ResolutionPolicyEvidence,
@@ -375,6 +413,8 @@ def archive_codec():
             StateScope,
         ),
         (
+            ReconciliationStatus,
+            StateFreshness,
             ResolutionStatus,
             JobStatus,
             AttemptStatus,
@@ -992,3 +1032,15 @@ def bom_reconciliation_descriptor() -> "ImplementationDescriptor":
         ("abstention",),
         "1.0",
     )
+
+
+def build_reconciliation_archive(dsn: str):
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        from procurement_intelligence_lab.adapters.postgres_reconciliation_archive import (
+            PostgresReconciliationArchive,
+        )
+    except ImportError:
+        raise ArchiveUnavailableError("optional storage capability is unavailable") from None
+    return PostgresReconciliationArchive(build_resolved_execution_archive(dsn), archive_codec())
