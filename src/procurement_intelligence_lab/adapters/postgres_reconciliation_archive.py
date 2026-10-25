@@ -150,7 +150,7 @@ class PostgresReconciliationArchive:
             if row is None:
                 raise ArchiveIntegrityError("reconciliation insert produced no receipt")
             self._append_links(conn, completed)
-            return ArchivedReconciliation(
+            retained = ArchivedReconciliation(
                 completed,
                 ReconciliationArchiveReceipt(
                     completed.scope,
@@ -160,6 +160,8 @@ class PostgresReconciliationArchive:
                     tuple(p.receipt for p in completed.execution.output.inputs.recorded_producers),
                 ),
             )
+            self.codec.dumps(retained)
+            return retained
 
     def _load(
         self, conn: psycopg.Connection[dict[str, Any]], scope: StateScope, execution_digest: str
@@ -204,7 +206,7 @@ class PostgresReconciliationArchive:
                 stored = self.resolved._load(conn, scope, link["producer_execution_digest"])
                 if canonical(stored) != canonical(p):
                     raise ArchiveIntegrityError("reconciliation recorded producer graph mismatch")
-            return ArchivedReconciliation(
+            retained = ArchivedReconciliation(
                 completed,
                 ReconciliationArchiveReceipt(
                     scope,
@@ -214,6 +216,8 @@ class PostgresReconciliationArchive:
                     tuple(p.receipt for p in ps),
                 ),
             )
+            self.codec.dumps(retained)
+            return retained
         except (SemanticContractError, ValueError, TypeError, KeyError, AttributeError):
             raise ArchiveIntegrityError(
                 "retained reconciliation evidence or producer joins are invalid"

@@ -89,3 +89,13 @@ def test_eight_records_are_valid_but_duplicate_revisions_are_not(tmp_path: Path)
     wire["producers"][1]["revision_id"] = "rev-0"
     with pytest.raises(PackageExecutionError):
         load_bom_authority(json.dumps(wire).encode())
+
+
+def test_required_authority_times_cannot_be_null_in_direct_construction(tmp_path: Path):
+    p, _ = producer(tmp_path)
+    r = load_bom_authority(json.dumps(metadata((p,))).encode()).records[0]
+    from typing import cast
+
+    for key in ("effective_from", "document_at"):
+        with pytest.raises(PackageExecutionError):
+            replace(r, **{key: cast(Any, None)})

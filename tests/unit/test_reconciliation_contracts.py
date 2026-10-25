@@ -95,3 +95,10 @@ def test_invalid_output_membership_is_contract_failure(tmp_path: Path):
         replace(r.output, outside_predicate_ids=("foreign",))
     with pytest.raises(PackageExecutionError):
         OperationAuthorityEvidence("x", b"x" * 65537, b"{}")
+
+
+@pytest.mark.parametrize("audit", [b"\xff", b'{"x":1,"x":2}', b'{"x":NaN}', b'{ "x":1}', b"[]"])
+def test_domain_audit_is_canonical_unambiguous_json(tmp_path: Path, audit: bytes):
+    r = empty_receipt(tmp_path)
+    with pytest.raises(PackageExecutionContractError):
+        replace(r.output, domain_audit=audit)

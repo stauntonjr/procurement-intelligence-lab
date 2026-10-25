@@ -120,7 +120,9 @@ class BomAuthorityRecord:
         admit((self.approval_record_ref is None) == (self.approved_at is None))
         if self.approval_record_ref is not None:
             identifier(self.approval_record_ref)
-        for v in (self.approved_at, self.effective_from, self.effective_until, self.document_at):
+        aware(self.effective_from)
+        aware(self.document_at)
+        for v in (self.approved_at, self.effective_until):
             if v is not None:
                 aware(v)
         admit(self.effective_until is None or self.effective_until > self.effective_from)

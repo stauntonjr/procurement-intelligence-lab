@@ -37,7 +37,9 @@ from procurement_intelligence_lab.platform.planning.contracts import (
 )
 from procurement_intelligence_lab.platform.planning.planner import plan_manifest
 from procurement_intelligence_lab.platform.semantics.errors import (
+    ArchiveContractError,
     ArchiveIntegrityError,
+    PackageExecutionContractError,
     UnsupportedReconciliationInputError,
 )
 from procurement_intelligence_lab.platform.semantics.provenance import ProvenanceContext
@@ -62,6 +64,7 @@ class RetainedReconciliationService:
     ]
 
     expected_descriptor: ImplementationDescriptor
+    validate_receipt: Callable[[ReconciliationOperationReceipt], None]
 
     def preflight(
         self,
@@ -159,4 +162,10 @@ class RetainedReconciliationService:
         )
         receipt = run_reconciliation(prepared, clock=self.clock)
         self.validate_output(receipt.output)
+        try:
+            self.validate_receipt(receipt)
+        except ArchiveContractError:
+            raise PackageExecutionContractError(
+                "reconciliation result exceeds its operation evidence bound"
+            ) from None
         return receipt

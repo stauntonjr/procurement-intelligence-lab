@@ -1,9 +1,11 @@
 """One actual reconciliation output with exhaustive source-claim membership."""
 
+import json
 from dataclasses import dataclass
 from hashlib import sha256
+from typing import Any
 
-from procurement_intelligence_lab.platform.execution.identity import digest, same
+from procurement_intelligence_lab.platform.execution.identity import canonical, digest, same
 from procurement_intelligence_lab.platform.execution.outputs import event, immutable_output, require
 from procurement_intelligence_lab.platform.execution.reconciliation_inputs import (
     RetainedReconciliationInputs,
@@ -43,6 +45,26 @@ class ReconciledOutput:
             and self.outside_predicate_ids == tuple(sorted(set(self.outside_predicate_ids)))
         )
         require(type(self.domain_audit) is bytes and 0 < len(self.domain_audit) <= 4 * 1024 * 1024)
+
+        def pairs(items: list[tuple[str, Any]]) -> dict[str, Any]:
+            obj: dict[str, Any] = {}
+            for key, value in items:
+                require(key not in obj)
+                obj[key] = value
+            return obj
+
+        def invalid_constant(value: str) -> None:
+            require(False)
+
+        try:
+            audit = json.loads(
+                self.domain_audit.decode("utf-8"),
+                object_pairs_hook=pairs,
+                parse_constant=invalid_constant,
+            )
+            require(type(audit) is dict and canonical(audit) == self.domain_audit)
+        except (ValueError, UnicodeError, RecursionError):
+            require(False)
         require(
             self.provenance.component_kind is ComponentKind.DETERMINISTIC
             and self.provenance.policy_version == self.inputs.policy.reference.reference_id

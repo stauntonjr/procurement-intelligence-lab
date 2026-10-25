@@ -108,6 +108,7 @@ def service(tmp_path: Path, *, empty: bool = True):
         lambda: AT + timedelta(seconds=4),
         validate_bom_reconciliation_static,
         bom_reconciliation_descriptor(),
+        lambda _: None,
     )
     args: dict[str, Any] = {
         "scope": SCOPE,

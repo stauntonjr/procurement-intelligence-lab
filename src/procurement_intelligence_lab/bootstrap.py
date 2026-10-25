@@ -15,7 +15,18 @@ if TYPE_CHECKING:
         BomResolutionPolicy,
     )
     from procurement_intelligence_lab.platform.execution.archive import CompletedPrefixSnapshot
+    from procurement_intelligence_lab.platform.execution.reconciliation_archive import (
+        CompletedReconciliationSnapshot,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_contracts import (
+        ReconciliationOperationReceipt,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_inputs import (
+        OperationAuthorityEvidence,
+        ReconciliationPolicyEvidence,
+    )
     from procurement_intelligence_lab.platform.execution.resolution_archive import (
+        ArchivedResolvedPrefix,
         CompletedResolvedPrefixSnapshot,
     )
     from procurement_intelligence_lab.platform.execution.resolution_inputs import (
@@ -1044,3 +1055,162 @@ def build_reconciliation_archive(dsn: str):
     except ImportError:
         raise ArchiveUnavailableError("optional storage capability is unavailable") from None
     return PostgresReconciliationArchive(build_resolved_execution_archive(dsn), archive_codec())
+
+
+def validate_completed_reconciliation(completed: "CompletedReconciliationSnapshot") -> None:
+    from procurement_intelligence_lab.domains.procurement.reconciliation_validation import (
+        validate_bom_reconciliation_output,
+    )
+    from procurement_intelligence_lab.platform.execution.contracts import plan_payload
+    from procurement_intelligence_lab.platform.execution.identity import same
+    from procurement_intelligence_lab.platform.execution.outputs import require
+    from procurement_intelligence_lab.platform.execution.reconciliation_archive import (
+        CompletedReconciliationSnapshot,
+    )
+
+    require(type(completed) is CompletedReconciliationSnapshot)
+    r = completed.execution
+    plan = plan_payload(r.plan)
+    require(
+        plan["domain"]["id"] == "procurement"
+        and plan["source_profile"]
+        == {"id": "retained-resolved-required-quantity", "version": "1.0.0"}
+    )
+    metadata = plan["stages"][6]["implementation"]
+    d = bom_reconciliation_descriptor()
+    from dataclasses import asdict
+
+    advertised = asdict(d)
+    for key in ("capabilities", "required_settings", "optional_settings"):
+        advertised[key] = sorted(advertised[key])
+    require(same(metadata, advertised))
+    for p in r.output.inputs.recorded_producers:
+        validate_completed_resolved_bom_prefix(p.completed)
+        validate_completed_bom_prefix(p.retained_prefix.completed)
+    validate_bom_reconciliation_output(r.output)
+    archive_codec().dumps(completed)
+
+
+def build_retained_reconciliation_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    policy: "ReconciliationPolicyEvidence",
+    authority: "OperationAuthorityEvidence",
+    dsn: str | None,
+    clock: Callable[[], datetime],
+):
+    import json
+
+    from procurement_intelligence_lab.adapters.package_reconciliation_executor import (
+        PackageReconciliationExecutor,
+    )
+    from procurement_intelligence_lab.application.retained_reconciliation import (
+        RetainedReconciliationService,
+    )
+    from procurement_intelligence_lab.domains.procurement.reconciliation_validation import (
+        validate_bom_reconciliation_inputs,
+        validate_bom_reconciliation_output,
+        validate_bom_reconciliation_static,
+    )
+    from procurement_intelligence_lab.domains.procurement.retained_reconciliation import (
+        BomRetainedReconcileStrategy,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_admission import (
+        ReconcileExecutorRegistration,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_archive import (
+        CompletedReconciliationSnapshot,
+    )
+    from procurement_intelligence_lab.platform.execution.reconciliation_inputs import (
+        RetainedReconciliationInputs,
+    )
+
+    def required_dsn() -> str:
+        from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+        if not dsn or not dsn.strip():
+            raise ArchiveUnavailableError("explicit archive configuration is required")
+        return dsn
+
+    def measure(p: "ArchivedResolvedPrefix") -> tuple[int, int]:
+        raw = archive_codec().dumps(p)
+        return len(raw.encode("utf-8")), len(json.loads(raw)["records"])
+
+    def factory(inputs: RetainedReconciliationInputs):
+        return ReconcileExecutorRegistration(
+            bom_reconciliation_descriptor(),
+            (),
+            (policy.reference,),
+            PackageReconciliationExecutor(
+                BomRetainedReconcileStrategy(inputs), validate_bom_reconciliation_output
+            ),
+            policy.reference.reference_id,
+        )
+
+    def validate_receipt(r: "ReconciliationOperationReceipt") -> None:
+        validate_completed_reconciliation(CompletedReconciliationSnapshot(r))
+
+    return RetainedReconciliationService(
+        manifest,
+        registry,
+        config,
+        policy,
+        authority,
+        lambda: build_resolved_execution_archive_reader(required_dsn()),
+        measure,
+        factory,
+        lambda i, t: validate_bom_reconciliation_inputs(i, started_at=t),
+        validate_bom_reconciliation_output,
+        clock,
+        validate_bom_reconciliation_static,
+        bom_reconciliation_descriptor(),
+        validate_receipt,
+    )
+
+
+def build_archived_reconciliation_service(
+    *,
+    manifest: bytes,
+    registry: "ImplementationRegistry",
+    config: "ImplementationConfig",
+    policy: "ReconciliationPolicyEvidence",
+    authority: "OperationAuthorityEvidence",
+    dsn: str | None,
+    clock: Callable[[], datetime],
+):
+    from procurement_intelligence_lab.application.archived_reconciliation import (
+        ArchivedReconciliationService,
+    )
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    def archive_factory():
+        if not dsn or not dsn.strip():
+            raise ArchiveUnavailableError("explicit archive configuration is required")
+        return build_reconciliation_archive(dsn)
+
+    service = build_retained_reconciliation_service(
+        manifest=manifest,
+        registry=registry,
+        config=config,
+        policy=policy,
+        authority=authority,
+        dsn=dsn,
+        clock=clock,
+    )
+    return ArchivedReconciliationService(
+        service, archive_factory, validate_completed_reconciliation
+    )
+
+
+def build_reconciliation_archive_reader(dsn: str):
+    from procurement_intelligence_lab.application.archived_reconciliation import (
+        ReconciliationArchiveReader,
+    )
+
+    return ReconciliationArchiveReader(
+        build_reconciliation_archive(dsn),
+        validate_completed_reconciliation,
+        lambda retained: archive_codec().dumps(retained).encode("utf-8"),
+    )
