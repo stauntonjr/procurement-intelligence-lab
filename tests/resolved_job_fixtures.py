@@ -5,6 +5,7 @@ from hashlib import sha256
 from pathlib import Path
 
 from procurement_intelligence_lab import bootstrap
+from procurement_intelligence_lab.domains.procurement.normalization import BomNormalizationPolicy
 from procurement_intelligence_lab.domains.procurement.resolution_policy import BomResolutionPolicy
 from procurement_intelligence_lab.platform.execution.resolution_admission import (
     PreparedResolvedPrefix,
@@ -26,9 +27,17 @@ def job_input(
     key: str = "request-1",
     rows: str = HEADER + ROW,
     keys: tuple[str, ...] = ("GPU-A",),
+    policy: BomNormalizationPolicy = POLICY,
 ):
-    path.mkdir(parents=True, exist_ok=True)
-    m, r, c, q, source = planned_resolved_inputs(path, rows=rows, keys=keys)
+    directory = path.parent if path.suffix else path
+    directory.mkdir(parents=True, exist_ok=True)
+    m, r, c, q, source = planned_resolved_inputs(directory, rows=rows, keys=keys)
+    if path.suffix and path != source:
+        from tests.contract.test_bom_stage_adapters import source as source_reference
+
+        source.rename(path)
+        source = path
+        q = replace(q, prefix=replace(q.prefix, source=source_reference(path)))
     r = replace(
         r,
         implementations=tuple(
@@ -40,7 +49,7 @@ def job_input(
         manifest=m,
         registry=r,
         config=c,
-        normalization_policy=POLICY,
+        normalization_policy=policy,
         resolution_policy=BomResolutionPolicy.from_parameters(q.policy.parameters),
         candidate_input=q.candidate_input,
         clock=lambda: NOW,
@@ -49,7 +58,7 @@ def job_input(
     definition = PinnedResolvedPrefixDefinition.from_prepared(
         prepared,
         recipe_id="procurement.bom-local-resolved-prefix@1",
-        normalization_parameters=tuple(sorted(POLICY.as_dict().items())),
+        normalization_parameters=tuple(sorted(policy.as_dict().items())),
     )
     content = source.read_bytes()
     arrival = ArtifactArrival(

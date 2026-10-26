@@ -1319,3 +1319,30 @@ def build_resolved_prefix_job_service(
     return ResolvedPrefixJobService(
         journal_factory, prepare_stored, store, validate_completed_resolved_bom_prefix, clock
     )
+
+
+def build_resolved_prefix_jobs(dsn: str):
+    from procurement_intelligence_lab.platform.processing.resolved_errors import (
+        ResolvedJobUnavailableError,
+    )
+    from procurement_intelligence_lab.platform.semantics.errors import ArchiveUnavailableError
+
+    try:
+        archive = build_resolved_execution_archive(dsn)
+    except ArchiveUnavailableError:
+        raise ResolvedJobUnavailableError("resolved jobs require the storage extra") from None
+    from procurement_intelligence_lab.adapters.postgres_resolved_prefix_jobs import (
+        PostgresResolvedPrefixJobs,
+    )
+
+    return PostgresResolvedPrefixJobs(archive, archive.codec)
+
+
+def build_resolved_prefix_job_reader(dsn: str):
+    from procurement_intelligence_lab.application.resolved_prefix_job_reader import (
+        ResolvedPrefixJobReader,
+    )
+
+    return ResolvedPrefixJobReader(
+        build_resolved_prefix_jobs(dsn), validate_completed_resolved_bom_prefix
+    )

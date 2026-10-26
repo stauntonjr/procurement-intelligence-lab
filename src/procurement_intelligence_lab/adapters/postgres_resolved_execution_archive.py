@@ -77,9 +77,7 @@ class PostgresResolvedExecutionArchive:
         with self.prefix.source._connection() as conn:
             self._check(conn)
 
-    def append(
-        self, completed: CompletedResolvedPrefixSnapshot, content: bytes
-    ) -> ArchivedResolvedPrefix:
+    def _validated_payload(self, completed: CompletedResolvedPrefixSnapshot, content: bytes) -> str:
         if type(completed) is not CompletedResolvedPrefixSnapshot:
             raise ArchiveContractError("resolved archive requires a complete typed computation")
         artifact = completed.prefix.snapshot.artifact
@@ -89,47 +87,63 @@ class PostgresResolvedExecutionArchive:
             or sha256(content).hexdigest() != artifact.content_hash
         ):
             raise ArchiveContractError("resolved archive requires exact captured source bytes")
-        payload = self.codec.dumps(completed)
+        return self.codec.dumps(completed)
+
+    def append(
+        self, completed: CompletedResolvedPrefixSnapshot, content: bytes
+    ) -> ArchivedResolvedPrefix:
+        # Preserve pre-connection rejection on the existing public caller.
+        self._validated_payload(completed, content)
         with self.prefix.source._connection() as conn:
             self._check(conn)
-            retained_prefix = self.prefix._append_in_transaction(conn, completed.prefix, content)
-            conn.execute("LOCK TABLE pil_resolved_executions IN SHARE ROW EXCLUSIVE MODE")
-            row = conn.execute(
-                "SELECT execution_digest FROM pil_resolved_executions WHERE scope=%s AND execution_digest=%s",
-                (_scope(completed.scope), completed.execution_digest),
-            ).fetchone()
-            if row is not None:
-                retained = self._load(conn, completed.scope, completed.execution_digest)
-                if not same_resolved_computation(completed, retained.completed):
-                    raise ArchiveConflictError(
-                        "resolved execution identity conflicts with retained computation"
-                    )
-                return retained
-            row = conn.execute(
-                "INSERT INTO pil_resolved_executions(scope,execution_digest,retained_receipt_digest,snapshot_id,prefix_execution_digest,retained_prefix_receipt_digest,payload,payload_sha256) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING sequence",
-                (
-                    _scope(completed.scope),
-                    completed.execution_digest,
-                    completed.execution.receipt_digest,
-                    completed.prefix.snapshot.snapshot_id,
-                    completed.prefix.execution_digest,
-                    retained_prefix.receipt.retained_receipt_digest,
-                    payload,
-                    sha256(payload.encode()).hexdigest(),
-                ),
-            ).fetchone()
-            if row is None:
-                raise ArchiveIntegrityError("resolved execution insert produced no receipt")
-            return ArchivedResolvedPrefix(
-                completed,
-                ResolvedExecutionArchiveReceipt(
-                    row["sequence"],
-                    completed.execution_digest,
-                    completed.execution.receipt_digest,
-                    retained_prefix.receipt,
-                ),
-                retained_prefix,
-            )
+            return self._append_in_transaction(conn, completed, content)
+
+    def _append_in_transaction(
+        self,
+        conn: psycopg.Connection[dict[str, Any]],
+        completed: CompletedResolvedPrefixSnapshot,
+        content: bytes,
+    ) -> ArchivedResolvedPrefix:
+        """Caller owns prerequisite checks, lock ordering and commit."""
+        payload = self._validated_payload(completed, content)
+        retained_prefix = self.prefix._append_in_transaction(conn, completed.prefix, content)
+        conn.execute("LOCK TABLE pil_resolved_executions IN SHARE ROW EXCLUSIVE MODE")
+        row = conn.execute(
+            "SELECT execution_digest FROM pil_resolved_executions WHERE scope=%s AND execution_digest=%s",
+            (_scope(completed.scope), completed.execution_digest),
+        ).fetchone()
+        if row is not None:
+            retained = self._load(conn, completed.scope, completed.execution_digest)
+            if not same_resolved_computation(completed, retained.completed):
+                raise ArchiveConflictError(
+                    "resolved execution identity conflicts with retained computation"
+                )
+            return retained
+        row = conn.execute(
+            "INSERT INTO pil_resolved_executions(scope,execution_digest,retained_receipt_digest,snapshot_id,prefix_execution_digest,retained_prefix_receipt_digest,payload,payload_sha256) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING sequence",
+            (
+                _scope(completed.scope),
+                completed.execution_digest,
+                completed.execution.receipt_digest,
+                completed.prefix.snapshot.snapshot_id,
+                completed.prefix.execution_digest,
+                retained_prefix.receipt.retained_receipt_digest,
+                payload,
+                sha256(payload.encode()).hexdigest(),
+            ),
+        ).fetchone()
+        if row is None:
+            raise ArchiveIntegrityError("resolved execution insert produced no receipt")
+        return ArchivedResolvedPrefix(
+            completed,
+            ResolvedExecutionArchiveReceipt(
+                row["sequence"],
+                completed.execution_digest,
+                completed.execution.receipt_digest,
+                retained_prefix.receipt,
+            ),
+            retained_prefix,
+        )
 
     def _load(
         self, conn: psycopg.Connection[dict[str, Any]], scope: StateScope, execution_digest: str
