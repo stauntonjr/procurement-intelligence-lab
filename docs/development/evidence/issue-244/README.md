@@ -33,3 +33,18 @@ algorithm/model changed and no previously shipped semantic defect was repaired, 
 challenge/known-bad pairs are retained without a new defect challenge. Current versus first-retained
 source/prefix/resolved/attempt evidence stays explicit. No worker/queue/lease/automatic retry,
 RECONCILE job, fresh seven-stage execution or new operational authority is added.
+
+[Independent review](independent-review.md) covers exact revisiona4fc686: no findings,122
+independent focused passes/zero skips, two extra public historical/retry/deleted-input scenarios
+and286 package files equal the final wheel. It deliberately leaves production infrastructure,
+held-out identity quality and later-stage authority outside this profile; all author rulings and
+their costs are recorded there and in the progress ledger. The final author evidence refresh preserves that independent revision; only documentation/evidence
+changes follow it unless a correction is explicitly recorded. Required deterministic and main
+acceptance gates remain separate.
+
+The initial full check had2077 passes/22 explicit browser-live skips and one failure: the exhaustive
+stable ErrorCode inventory omitted the seven approved additive resolved-job strings. A focused
+RED reproduced that omission; the explicit expected set was extended with exactly those seven
+literals, preserving all old strings, category closure and uniqueness. All18 error-contract tests
+then passed. Runtime/package bytes remain identical to the independent reviewed wheel. The final
+full rerun, rather than that failed initial run, is the completion gate; both logs are retained.

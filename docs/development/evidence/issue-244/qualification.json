@@ -22,7 +22,14 @@
     "evidence": "challenges.json"
   },
   "independent_review": {
-    "status": "pending"
+    "status": "passed",
+    "revision": "a4fc6862ea923494035c9be41c8595c8a0bb24e3",
+    "important": 0,
+    "critical": 0,
+    "minor": 0,
+    "independent_tests_passed": 122,
+    "independent_tests_skipped": 0,
+    "evidence": "independent-review.md"
   },
   "completion": "not_ready"
 }

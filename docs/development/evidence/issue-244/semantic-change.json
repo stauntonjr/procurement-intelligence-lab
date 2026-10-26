@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#244",
-  "revision": "36b93784978a8a574289d2f2ff14f49ef059ac47",
+  "revision": "a4fc6862ea923494035c9be41c8595c8a0bb24e3",
   "surfaces": [
     "durable six-stage local jobs",
     "atomic source/prefix/resolved/attempt publication",
@@ -31,54 +31,117 @@
     {
       "id": "empty_missing_unknown",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "tests/contract/test_resolved_job_service.py::test_empty_and_duplicate_rows_keep_their_source_meaning",
+        "tests/contract/test_resolved_job_service.py::test_identity_abstention_is_a_completed_job_not_zero_or_failure"
+      ],
+      "rationale": "Empty and unresolved results retain source evidence; successful job execution is distinct from universal identity resolution."
     },
     {
       "id": "multiplicity_conflict",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "tests/contract/test_postgres_resolved_jobs.py::test_raw_catalog_is_request_evidence_and_first_retention_stays_separate",
+        "tests/contract/test_postgres_resolved_jobs.py::test_concurrent_claims_execute_only_one_invocation",
+        "tests/contract/test_resolved_job_service.py::test_two_real_service_calls_grant_only_one_six_stage_invocation"
+      ],
+      "rationale": "Separate jobs can share computation while retaining current raw evidence; exact keys and real races prevent duplicate grant."
     },
     {
       "id": "scope_time",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "tests/unit/test_resolved_job_contracts.py",
+        "tests/contract/test_postgres_resolved_jobs.py::test_equal_instant_different_completion_offset_conflicts",
+        "tests/integration/test_resolved_processing_jobs_cli.py::test_resolution_admission_is_complete_before_storage_or_capture"
+      ],
+      "rationale": "Exact scopes, catalog/source/context time, actual-offset and lifecycle counters fail closed; same instant does not erase offset evidence."
     },
     {
       "id": "numeric_boundaries",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "tests/contract/test_resolved_job_service.py::test_job_path_preserves_fractional_zero_negative_and_unresolved",
+        "tests/unit/test_resolved_job_lifecycle.py"
+      ],
+      "rationale": "Zero/fraction/negative/unknown retain inherited normalization semantics; counters/cursors and lifecycle boundaries are explicit."
     },
     {
       "id": "unsupported_malformed",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "tests/integration/test_resolved_processing_jobs_cli.py::test_resolution_admission_is_complete_before_storage_or_capture",
+        "tests/unit/test_resolved_job_contracts.py",
+        "tests/unit/test_resolved_job_codec.py"
+      ],
+      "rationale": "Malformed/oversize/deep/cross-profile/unsupported pins fail before capture/storage; codec is allowlisted."
     },
     {
       "id": "public_artifact",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "docs/development/evidence/issue-244/installed.json",
+        "tests/contract/test_resolved_processing_jobs_public_main.py",
+        "docs/development/evidence/issue-244/package-smoke.log"
+      ],
+      "rationale": "Clean base/storage Python3.12/3.13 real shipped callers, every operation, source-free restart/recovery and uncertain acknowledgements."
     },
     {
       "id": "safe_counterexample",
       "disposition": "applicable",
-      "evidence": [],
-      "rationale": "Pending planned executable qualification; no completion claimed."
+      "evidence": [
+        "docs/development/evidence/issue-244/legacy-comparison.json",
+        "tests/contract/test_postgres_resolved_jobs.py::test_every_publication_checkpoint_rolls_back_all_new_evidence",
+        "tests/contract/test_postgres_resolved_jobs.py::test_stale_but_consistent_head_cannot_hide_committed_success"
+      ],
+      "rationale": "Full legacy JSON/codec/rejection equality; stale head, active fence and transaction checkpoints prevent false success, not only happy-path persistence."
     }
   ],
-  "commands": [],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--extra",
+        "workflow",
+        "python",
+        "docs/development/evidence/issue-244/qualify_artifacts.py",
+        "--wheel",
+        "/tmp/pil-244-artifacts/final-dist/procurement_intelligence_lab-0.1.0-py3-none-any.whl",
+        "--artifacts",
+        "/tmp/pil-244-artifacts/final-probes",
+        "--python312",
+        "/usr/bin/python3.12",
+        "--python313",
+        "/tmp/pil-244-python/cpython-3.13.14-linux-aarch64-gnu/bin/python3.13",
+        "--output",
+        "/tmp/pil-244-artifacts/final-installed.json"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/installed.json"
+    },
+    {
+      "argv": [
+        "make",
+        "package-smoke"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/package-smoke.log"
+    },
+    {
+      "argv": [
+        "make",
+        "challenges"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/challenges.json"
+    }
+  ],
   "review": {
-    "revision": "36b93784978a8a574289d2f2ff14f49ef059ac47",
-    "mode": "self_fresh_pass",
+    "revision": "a4fc6862ea923494035c9be41c8595c8a0bb24e3",
+    "mode": "independent_fresh_context",
     "findings": [],
-    "unresolved_findings": [
-      "Implementation and final review pending."
-    ]
+    "unresolved_findings": []
   },
   "completion": "not_ready"
 }
