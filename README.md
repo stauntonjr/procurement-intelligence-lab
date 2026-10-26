@@ -297,3 +297,8 @@ The explicit operation over archived RESOLVE producers is documented in
 [Retained required-quantity reconciliation](docs/architecture/retained-reconciliation.md).
 It retains policy decisions, abstentions and governed quantity evidence separately from historical
 producer executions. Branch qualification and main delivery are tracked in #239.
+
+The separate [durable RESOLVE job profile](docs/architecture/local-resolved-prefix-jobs.md)
+uses explicit pinned submissions, FIRST/RETRY attempts, fenced abandonment and atomic six-stage
+retention. It preserves the original five-stage job caller and exposes source-free scoped recovery;
+Issue #244 records exact qualification and main-delivery status.

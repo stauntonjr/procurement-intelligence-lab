@@ -6,7 +6,8 @@ Issue [#236](https://github.com/stauntonjr/procurement-intelligence-lab/issues/2
 define this opt-in profile. It invokes INGEST, STRUCTURE, MAP, NORMALIZE, ASSERT and
 RESOLVE once per execution. All twelve stage dispositions remain visible; the last six
 are NOT_EXECUTED and package completion is false. The original ASSERT-only execution,
-archives and local processing jobs retain their contracts. Local jobs do not accept RESOLVE.
+archives and original local processing jobs retain their contracts. The original five-stage job
+caller does not accept RESOLVE; #244 adds a separate [durable six-stage job profile](local-resolved-prefix-jobs.md).
 
 The caller supplies a bounded local catalog in the declared `procurement_item` /
 `internal_sku` namespace. This is explicit identifier matching, not an authoritative
