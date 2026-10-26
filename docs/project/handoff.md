@@ -1,5 +1,20 @@
 # Project handoff
 
+## Proposed durable RESOLVE jobs — 2026-10-25
+
+The owner selected durable local jobs through RESOLVE after PR243/#20.
+[#244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244) (M1, native child of
+#36), [written proposal](../superpowers/specs/2026-10-25-resolved-prefix-jobs-design.md) and proposed
+ADR048 define an additive six-stage profile with pinned catalog/policy/runtime inputs, unchanged
+explicit attempts/fencing, atomic source/prefix/resolved/current-attempt success and source-free
+recovery. Direction is selected; this written design is not yet approved. Product implementation
+has not started. Existing five-stage jobs and six-stage execution/archive remain unchanged.
+
+The [pre-slice audit](audits/2026-10-25-resolved-jobs.md) failed Gemini HTTP503 on main7426724;
+direct source/Issue/Project review and structural audit are separate evidence. Issue244/Project
+track the exact proposal revision and approval state. Broader #36/M3 and seven-stage orchestration
+remain outside this slice. Preserve Native/inline implementation and one independent final review.
+
 ## Shared semantic vocabulary — 2026-10-25
 
 [#20](https://github.com/stauntonjr/procurement-intelligence-lab/issues/20) consolidates the

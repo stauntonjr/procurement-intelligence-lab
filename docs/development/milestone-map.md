@@ -102,6 +102,14 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
+Selected next runtime direction: M1 [#244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244),
+native child of #36, [durable local RESOLVE jobs](../superpowers/specs/2026-10-25-resolved-prefix-jobs-design.md).
+The additive six-stage job namespace/capability preserves ADR045 attempts and ADR046 execution,
+pinning full catalog audit evidence and publishing source/prefix/resolved/attempt success atomically.
+ADR048 and the written proposal are pending owner approval; implementation has not started and no
+new runtime acceptance is claimed. Existing five-stage v1 jobs remain unchanged. Broader #36/M3,
+RECONCILE jobs, queues/workers and fresh seven-stage orchestration remain subsequent work.
+
 Delivered owner-selected direction: decision #235 (M3, parent #14),
 [explicit planned RESOLVE prefix](../superpowers/specs/2026-10-24-planned-resolve-prefix-design.md).
 Accepted ADR-046 covers a scoped pinned internal-SKU candidate snapshot, actual sixth-stage
