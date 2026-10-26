@@ -1,0 +1,9 @@
+{
+  "full_json_and_codec_exactly_equal": true,
+  "operations": 25,
+  "sha256": "86523eaf44ce2c732cea51ee6a99abc87a870acce0d152b22ed3f7c27b5b8bb6",
+  "clock": "fixed public-main clock 2026-10-19T00:00:10Z; no fields removed",
+  "source_revision_pin": "7426724078af1038ad8b009b8cccf236e31dec82",
+  "baseline_python": "/home/jrs/procurement-intelligence-lab/.venv/bin/python",
+  "candidate_python": "/tmp/pil-resolve-jobs-design/.venv/bin/python"
+}
