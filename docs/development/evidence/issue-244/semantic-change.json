@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "issue": "#244",
+  "revision": "2ab7580ff2c4c4d35da5e12e9c10047beeb66569",
+  "surfaces": [
+    "durable six-stage local jobs",
+    "atomic source/prefix/resolved/attempt publication",
+    "new explicit CLI and source-free recovery"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/development/agent-loop.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/implement-domain-logic/SKILL.md",
+    ".agents/skills/add-adapter/SKILL.md",
+    ".agents/skills/test-public-interface/SKILL.md",
+    ".agents/skills/release-smoke/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "Approved #244 design; exact artifact arrival and all pinned prefix/catalog/raw resolution policy/registration data; scoped explicit command and attempt evidence",
+    "authoritative_output": "Typed resolved job journal and full current-attempt six-stage success plus separate first-retained source/prefix/resolved receipts",
+    "scope_as_of": "Exact tenant/project/site/version; pinned source/capture/context/catalog times; fixed-offset monotonic server lifecycle times and CAS/fences",
+    "governing_policy": "ADR045 explicit lifecycle/uncertainty and accepted ADR048; unchanged ADR046 normalized-exact matching/abstention",
+    "evidence_retained": "Full request/raw catalog/source bytes, six actual stage events, all source claims/resolution outcomes, current versus historical/first retention and command acknowledgements",
+    "typed_failures": "Resolved-job invalid/not-found, conflict/busy/fenced, integrity-invalid/unavailable with finite sanitized diagnostics; uncertain acknowledgement is never FAILED"
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_resolved_job_service.py::test_empty_and_duplicate_rows_keep_their_source_meaning",
+        "tests/contract/test_resolved_job_service.py::test_identity_abstention_is_a_completed_job_not_zero_or_failure"
+      ],
+      "rationale": "Empty and unresolved results retain source evidence; successful job execution is distinct from universal identity resolution."
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_postgres_resolved_jobs.py::test_raw_catalog_is_request_evidence_and_first_retention_stays_separate",
+        "tests/contract/test_postgres_resolved_jobs.py::test_concurrent_claims_execute_only_one_invocation",
+        "tests/contract/test_resolved_job_service.py::test_two_real_service_calls_grant_only_one_six_stage_invocation"
+      ],
+      "rationale": "Separate jobs can share computation while retaining current raw evidence; exact keys and real races prevent duplicate grant."
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/unit/test_resolved_job_contracts.py",
+        "tests/contract/test_postgres_resolved_jobs.py::test_equal_instant_different_completion_offset_conflicts",
+        "tests/integration/test_resolved_processing_jobs_cli.py::test_resolution_admission_is_complete_before_storage_or_capture"
+      ],
+      "rationale": "Exact scopes, catalog/source/context time, actual-offset and lifecycle counters fail closed; same instant does not erase offset evidence."
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/contract/test_resolved_job_service.py::test_job_path_preserves_fractional_zero_negative_and_unresolved",
+        "tests/unit/test_resolved_job_lifecycle.py"
+      ],
+      "rationale": "Zero/fraction/negative/unknown retain inherited normalization semantics; counters/cursors and lifecycle boundaries are explicit."
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": [
+        "tests/integration/test_resolved_processing_jobs_cli.py::test_resolution_admission_is_complete_before_storage_or_capture",
+        "tests/unit/test_resolved_job_contracts.py",
+        "tests/unit/test_resolved_job_codec.py"
+      ],
+      "rationale": "Malformed/oversize/deep/cross-profile/unsupported pins fail before capture/storage; codec is allowlisted."
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": [
+        "docs/development/evidence/issue-244/installed.json",
+        "tests/contract/test_resolved_processing_jobs_public_main.py",
+        "docs/development/evidence/issue-244/package-smoke.log"
+      ],
+      "rationale": "Clean base/storage Python3.12/3.13 real shipped callers, every operation, source-free restart/recovery and uncertain acknowledgements."
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": [
+        "docs/development/evidence/issue-244/legacy-comparison.json",
+        "tests/contract/test_postgres_resolved_jobs.py::test_every_publication_checkpoint_rolls_back_all_new_evidence",
+        "tests/contract/test_postgres_resolved_jobs.py::test_stale_but_consistent_head_cannot_hide_committed_success"
+      ],
+      "rationale": "Full legacy JSON/codec/rejection equality; stale head, active fence and transaction checkpoints prevent false success, not only happy-path persistence."
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--extra",
+        "workflow",
+        "python",
+        "docs/development/evidence/issue-244/qualify_artifacts.py",
+        "--wheel",
+        "/tmp/pil-244-artifacts/final-dist/procurement_intelligence_lab-0.1.0-py3-none-any.whl",
+        "--artifacts",
+        "/tmp/pil-244-artifacts/final-probes",
+        "--python312",
+        "/usr/bin/python3.12",
+        "--python313",
+        "/tmp/pil-244-python/cpython-3.13.14-linux-aarch64-gnu/bin/python3.13",
+        "--output",
+        "/tmp/pil-244-artifacts/final-installed.json"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/installed.json"
+    },
+    {
+      "argv": [
+        "make",
+        "package-smoke"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/package-smoke.log"
+    },
+    {
+      "argv": [
+        "make",
+        "challenges"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/challenges.json"
+    },
+    {
+      "argv": [
+        "make",
+        "check"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/check.log"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--extra",
+        "workflow",
+        "python",
+        "docs/development/evidence/issue-244/legacy-comparison.py",
+        "/home/jrs/procurement-intelligence-lab/.venv/bin/python",
+        "/tmp/pil-resolve-jobs-design/.venv/bin/python",
+        "/tmp/pil-resolve-jobs-design",
+        "/tmp/pil-244-dsn.txt",
+        "/tmp/pil-244-legacy.json"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/legacy-comparison.json"
+    }
+  ],
+  "review": {
+    "revision": "2ab7580ff2c4c4d35da5e12e9c10047beeb66569",
+    "mode": "self_fresh_pass",
+    "findings": [],
+    "unresolved_findings": []
+  },
+  "completion": "ready"
+}

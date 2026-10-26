@@ -10,7 +10,7 @@ from procurement_intelligence_lab.platform.execution.contracts import (
     StageExecutionEntry,
 )
 from procurement_intelligence_lab.platform.execution.identity import aware, same
-from procurement_intelligence_lab.platform.execution.outputs import require
+from procurement_intelligence_lab.platform.execution.outputs import CapturedOutput, require
 from procurement_intelligence_lab.platform.execution.resolution_admission import (
     PreparedResolvedPrefix,
 )
@@ -43,13 +43,16 @@ class ResolvedPrefixExecution:
 
 
 def run_resolved_prefix(
-    prepared: PreparedResolvedPrefix, *, clock: Callable[[], datetime]
+    prepared: PreparedResolvedPrefix,
+    *,
+    clock: Callable[[], datetime],
+    capture_guard: Callable[[CapturedOutput], None] | None = None,
 ) -> ResolvedPrefixExecution:
     admit(type(prepared) is PreparedResolvedPrefix)
     before = clock()
     aware(before)
     admit(before >= prepared.request.prefix.captured_at)
-    prefix = run_prefix(prepared.prefix, clock=clock)
+    prefix = run_prefix(prepared.prefix, clock=clock, capture_guard=capture_guard)
     reg = prepared.registration
     inputs = resolution_input_ids(
         prefix.output, prepared.request.candidate_input.snapshot, prepared.request.policy

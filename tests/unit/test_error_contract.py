@@ -42,6 +42,13 @@ def test_failure_categories_are_a_closed_stable_vocabulary() -> None:
 
 def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
     assert {code.value for code in ErrorCode} == {
+        "pil.input.resolved_prefix_job_invalid",
+        "pil.input.resolved_prefix_job_not_found",
+        "pil.policy.resolved_prefix_job_conflict",
+        "pil.policy.resolved_prefix_job_busy",
+        "pil.policy.resolved_prefix_job_fenced",
+        "pil.infrastructure.resolved_prefix_job_integrity_invalid",
+        "pil.infrastructure.resolved_prefix_job_unavailable",
         "pil.input.local_prefix_job_invalid",
         "pil.input.local_prefix_job_not_found",
         "pil.policy.local_prefix_job_conflict",

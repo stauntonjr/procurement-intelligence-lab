@@ -1,0 +1,82 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_platform_semantic_error_codes_are_stable_and_unique ___________
+
+    def test_platform_semantic_error_codes_are_stable_and_unique() -> None:
+>       assert {code.value for code in ErrorCode} == {
+            "pil.input.local_prefix_job_invalid",
+            "pil.input.local_prefix_job_not_found",
+            "pil.policy.local_prefix_job_conflict",
+            "pil.policy.local_prefix_job_busy",
+            "pil.policy.local_prefix_job_fenced",
+            "pil.infrastructure.local_prefix_job_integrity_invalid",
+            "pil.infrastructure.local_prefix_job_unavailable",
+            "pil.input.archive_contract_invalid",
+            "pil.input.archive_not_found",
+            "pil.policy.archive_conflict",
+            "pil.infrastructure.archive_integrity_invalid",
+            "pil.infrastructure.archive_unavailable",
+            "pil.input.dependency_contract_invalid",
+            "pil.input.dependency_not_found",
+            "pil.policy.dependency_conflict",
+            "pil.infrastructure.dependency_integrity_invalid",
+            "pil.infrastructure.dependency_unavailable",
+            "pil.input.source_query_invalid",
+            "pil.input.package_planning_invalid",
+            "pil.input.package_execution_invalid",
+            "pil.input.reconciliation_input_unsupported",
+            "pil.interpretation.package_execution_contract_invalid",
+            "pil.infrastructure.artifact_source_unavailable",
+            "pil.infrastructure.artifact_content_invalid",
+            "pil.input.source_reference_unsupported",
+            "pil.interpretation.document_structure_invalid",
+            "pil.interpretation.schema_mapping_invalid",
+            "pil.input.document_stage_invalid",
+            "pil.interpretation.normalization_invalid",
+            "pil.interpretation.source_assertion_invalid",
+            "pil.input.document_review_contract_invalid",
+            "pil.input.document_review_not_found",
+            "pil.policy.document_review_conflict",
+            "pil.infrastructure.document_review_integrity_invalid",
+            "pil.infrastructure.document_review_unavailable",
+            "pil.input.normalization_policy_invalid",
+            "pil.input.domain_package_invalid",
+            "pil.input.brief_not_found",
+            "pil.policy.brief_review_conflict",
+            "pil.infrastructure.brief_store_unavailable",
+            "pil.infrastructure.workflow_unavailable",
+            "pil.policy.workflow_budget_exceeded",
+            "pil.infrastructure.agent_tool_admission_failed",
+            "pil.transient.agent_tool_timeout",
+            "pil.infrastructure.agent_tool_unavailable",
+            "pil.input.agent_tool_invalid_result",
+            "pil.input.agent_run_not_found",
+            "pil.policy.agent_run_conflict",
+            "pil.infrastructure.agent_run_store_unavailable",
+            "pil.input.semantic_contract_violation",
+            "pil.input.semantic_type_contract_violation",
+            "pil.input.scope_contract_violation",
+            "pil.policy.scope_mismatch",
+            "pil.input.temporal_contract_violation",
+            "pil.policy.contract_violation",
+            "pil.policy.reconciliation_no_governing_source",
+            "pil.authorization.authority_contract_violation",
+            "pil.authorization.scope_mismatch",
+            "pil.authorization.request_scope_denied",
+            "pil.policy.idempotency_contract_violation",
+        }
+E       AssertionError: assert {'pil.authori...ailable', ...} == {'pil.authori...ailable', ...}
+E         
+E         Extra items in the left set:
+E         'pil.policy.resolved_prefix_job_conflict'
+E         'pil.policy.resolved_prefix_job_busy'
+E         'pil.input.resolved_prefix_job_not_found'
+E         'pil.infrastructure.resolved_prefix_job_unavailable'
+E         'pil.policy.resolved_prefix_job_fenced'...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+tests/unit/test_error_contract.py:44: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_error_contract.py::test_platform_semantic_error_codes_are_stable_and_unique
+1 failed in 0.09s

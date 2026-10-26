@@ -1,0 +1,26 @@
+Task3 initial expected missing-feature RED, before implementation.
+Original full log retained in commit f4137b2 at this path.
+Original sha256: 71a5483435ded213b577dba64b2ecba065db21033ecb0827ccdfef165bda795d
+
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                            [100%]
+=================================== FAILURES ===================================
+____________ test_explicit_capability_and_scoped_submission_replay _____________
+
+archive_dsn = "user=postgres dbname=pil_archive host=127.0.0.1 port=32769 options='-c search_path=pil_test_20b111bd121447d49f7f8b121190f404'"
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-138/test_explicit_capability_and_s0')
+
+    def test_explicit_capability_and_scoped_submission_replay(archive_dsn: str, tmp_path: Path):
+>       jobs = bootstrap.build_resolved_prefix_jobs(archive_dsn)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'procurement_intelligence_lab.bootstrap' has no attribute 'build_resolved_prefix_jobs'. Did you mean: 'build_local_prefix_jobs'?
+
+
+Repeated identical missing-builder traces omitted; original summary follows:
+FAILED tests/contract/test_resolved_job_service.py::test_job_path_preserves_fractional_zero_negative_and_unresolved[0]
+FAILED tests/contract/test_resolved_job_service.py::test_job_path_preserves_fractional_zero_negative_and_unresolved[-2]
+FAILED tests/contract/test_resolved_job_service.py::test_job_path_preserves_fractional_zero_negative_and_unresolved[None]
+FAILED tests/contract/test_resolved_job_service.py::test_failure_journal_outage_leaves_running_unresolved
+FAILED tests/contract/test_resolved_job_service.py::test_empty_and_duplicate_rows_keep_their_source_meaning[True]
+FAILED tests/contract/test_resolved_job_service.py::test_empty_and_duplicate_rows_keep_their_source_meaning[False]
+FAILED tests/contract/test_resolved_job_service.py::test_command_acknowledgement_separates_historical_replay_from_new_execution
+45 failed in 6.83s

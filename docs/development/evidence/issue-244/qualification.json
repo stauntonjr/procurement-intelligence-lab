@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "issue": "#244",
+  "primary_milestone": "M1",
+  "baseline_revision": "7426724078af1038ad8b009b8cccf236e31dec82",
+  "qualified_package_revision": "d53be4f96da68cf8a4886d189bda1b06a658ddbc",
+  "installed": "installed.json",
+  "legacy": "legacy-comparison.json",
+  "package_smoke": {
+    "status": "passed",
+    "evidence": "package-smoke.log",
+    "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562"
+  },
+  "full_check": {
+    "status": "passed",
+    "revision": "2ab7580ff2c4c4d35da5e12e9c10047beeb66569",
+    "passed": 2078,
+    "skipped": 22,
+    "duration": "1042.23s (0:17:22)",
+    "skip_boundary": "22 existing explicit installed-browser/live opt-ins; zero storage skips",
+    "line_rate": "0.9204",
+    "branch_rate": "0.8075",
+    "ratchet_unchanged": true,
+    "evidence": "check.log"
+  },
+  "challenges": {
+    "status": "passed",
+    "count": 31,
+    "known_bad_rejected": 31,
+    "evidence": "challenges.json"
+  },
+  "independent_review": {
+    "status": "passed",
+    "revision": "a4fc6862ea923494035c9be41c8595c8a0bb24e3",
+    "important": 0,
+    "critical": 0,
+    "minor": 0,
+    "independent_tests_passed": 122,
+    "independent_tests_skipped": 0,
+    "evidence": "independent-review.md"
+  },
+  "completion": "ready",
+  "final_author_revision": "2ab7580ff2c4c4d35da5e12e9c10047beeb66569",
+  "post_review_change": {
+    "runtime_package_files_changed": 0,
+    "test_only": "tests/unit/test_error_contract.py: seven approved literals added to explicit expected ErrorCode set",
+    "red": "error-inventory-red.log",
+    "green": "error-inventory-green.log",
+    "error_contract_passed": 18
+  }
+}

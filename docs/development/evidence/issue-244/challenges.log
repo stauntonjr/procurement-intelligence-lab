@@ -1,0 +1,231 @@
+uv run --extra workflow python tools/run_challenges.py --verify-known-bad --results artifacts/challenges/latest.json
+.                                                                        [100%]
+1 passed in 0.07s
+.                                                                        [100%]
+1 passed in 0.07s
+.................                                                        [100%]
+17 passed in 7.81s
+Building source distribution...
+Building wheel from source distribution...
+Successfully built /tmp/procurement-package-smoke-qi1sbiec/dist/procurement_intelligence_lab-0.1.0.tar.gz
+Successfully built /tmp/procurement-package-smoke-qi1sbiec/dist/procurement_intelligence_lab-0.1.0-py3-none-any.whl
+WARNING: The directory '/home/jrs/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing ./dist/procurement_intelligence_lab-0.1.0-py3-none-any.whl
+Installing collected packages: procurement-intelligence-lab
+Successfully installed procurement-intelligence-lab-0.1.0
+WARNING: The directory '/home/jrs/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing ./dist/procurement_intelligence_lab-0.1.0-py3-none-any.whl
+Installing collected packages: procurement-intelligence-lab
+Successfully installed procurement-intelligence-lab-0.1.0
+Using Python 3.12.3 environment at: venv-1
+Resolved 43 packages in 5ms
+Installed 43 packages in 8ms
+ + aiosqlite==0.22.1
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + certifi==2026.7.22
+ + charset-normalizer==3.5.0
+ + distro==1.9.0
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpcore2==2.13.1
+ + httpx==0.28.1
+ + httpx2==2.13.1
+ + idna==3.18
+ + jsonpatch==1.33
+ + jsonpointer==3.1.1
+ + langchain-core==1.6.6
+ + langchain-protocol==0.0.19
+ + langgraph==1.2.12
+ + langgraph-checkpoint==4.2.0
+ + langgraph-checkpoint-sqlite==3.1.1
+ + langgraph-prebuilt==1.1.0
+ + langgraph-sdk==0.4.5
+ + langsmith==0.14.4
+ + orjson==3.12.0
+ + ormsgpack==1.12.2
+ + packaging==26.3
+ + psycopg==3.3.6
+ + psycopg-binary==3.3.6
+ + pydantic==2.13.4
+ + pydantic-core==2.46.4
+ + pyyaml==6.0.3
+ + requests==2.34.2
+ + requests-toolbelt==1.0.0
+ + sniffio==1.3.1
+ + sqlite-vec==0.1.9
+ + tenacity==9.1.4
+ + truststore==0.10.4
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + urllib3==2.7.0
+ + uuid-utils==0.17.1
+ + websockets==16.1.1
+ + xxhash==4.0.1
+ + zstandard==0.25.0
+{"actual_stages": 5, "export_equal": true, "legacy_reader": true, "logical_stages": 12, "planned_execution_archive_smoke": "passed", "policy_distinct": true, "retry_retains_first": true, "source_deleted": true}
+{"reviewed_source_query_smoke": "passed", "explicit_capability": true, "original_query_unchanged": true, "source_deleted": true, "retry_equal": true, "export_equal": true}
+{"storage_package_smoke": "passed", "document_review_smoke": "passed", "correction_impact_smoke": "passed", "actual_source_query_smoke": "passed", "reviewed_source_query_smoke": "passed", "assertions": 8, "source_deleted": true, "retry_equal": true, "export_equal": true}
+{"actual_stages": 6, "code_revision": "test-revision", "corpus_counts": {"abstention_review_load": 0.5, "accepted": 3, "eligible": 6, "expected_unique": 3, "false_merge": 0, "false_merge_rate": 0.0, "false_negative": 0, "population": "synthetic declared-namespace development mentions; rule-contract labels only", "precision": 1.0, "recall": 1.0, "true_positive": 3, "unresolved": 3}, "execution_digest": "18df48ede236cc5220d7607674f13185e8b65aa418cf8ad7082ed117a1391f1f", "first_five_digest": "715e4caa07926ef374f0f630396ffebebc8edeae5e17b85bf403a5591702585d", "logical_stages": 12, "python": "3.12.3", "resolved_prefix_probe": "passed", "storage": {"missing_extra_typed": true, "reason": "No explicit disposable DSN", "status": "not_requested"}, "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562"}
+{"probe": "passed", "mode": "base-missing-storage", "python": "/tmp/procurement-package-smoke-qi1sbiec/venv-1/bin/python", "installed_runtime": {"version": "3.12.3", "package_path": "/tmp/procurement-package-smoke-qi1sbiec/venv-1/lib/python3.12/site-packages/procurement_intelligence_lab/__init__.py", "storage_driver_available": false}, "invalid_domain_installed_modes_rejected": 2, "controller_python": "3.12.3", "code_revision": "afe47df310725db3d2f0780c5bf42eee42dd23a8", "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562", "population": "Synthetic policy integration examples; no enterprise approval or general entity-resolution quality claim."}
+{"planned_execution_archive_missing_driver": "passed"}
+{"local_prefix_jobs_missing_driver": "passed"}
+{"actual_stages": 5, "code_revision": "test-revision", "duplicates_and_unknown_preserved": true, "execution_digest": "f119223a473d1a821f67b2366c7fcfc345599d981fcb69d6aca22672183da03c", "logical_stages": 12, "package_complete": false, "planned_prefix_smoke": "passed", "prefix_complete": true, "source_hash": "d24ebb7abddc3986eec3dda1fee5a8f498f39a2e30118810dfeb2f04d65e6292", "variation_digest": "e5499adb7e8f2830555e2478fc227d2fec9d10f1e90c4e4fb823f49f136852cf"}
+{"actual_stages": 6, "code_revision": "test-revision", "corpus_counts": {"abstention_review_load": 0.5, "accepted": 3, "eligible": 6, "expected_unique": 3, "false_merge": 0, "false_merge_rate": 0.0, "false_negative": 0, "population": "synthetic declared-namespace development mentions; rule-contract labels only", "precision": 1.0, "recall": 1.0, "true_positive": 3, "unresolved": 3}, "execution_digest": "02a2f8f6f6da9702c96edc7ef6dc6e74278ed2fed465b0d78a7e0b2820b7eea4", "first_five_digest": "1fd48f5e00dc7dd61b9f4ec3dfc89f3ef5a6c1d83b3bc0334ab8851b5598dbce", "logical_stages": 12, "python": "3.12.3", "resolved_prefix_probe": "passed", "storage": {"missing_extra_typed": true, "reason": "No explicit disposable DSN", "status": "not_requested"}, "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562"}
+{"probe": "passed", "mode": "base-missing-storage", "python": "/tmp/procurement-package-smoke-qi1sbiec/venv-2/bin/python", "installed_runtime": {"version": "3.12.3", "package_path": "/tmp/procurement-package-smoke-qi1sbiec/venv-2/lib/python3.12/site-packages/procurement_intelligence_lab/__init__.py", "storage_driver_available": false}, "invalid_domain_installed_modes_rejected": 2, "controller_python": "3.12.3", "code_revision": "afe47df310725db3d2f0780c5bf42eee42dd23a8", "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562", "population": "Synthetic policy integration examples; no enterprise approval or general entity-resolution quality claim."}
+{"planned_execution_archive_missing_driver": "passed"}
+{"local_prefix_jobs_missing_driver": "passed"}
+{"actual_stages": 5, "code_revision": "test-revision", "duplicates_and_unknown_preserved": true, "execution_digest": "f119223a473d1a821f67b2366c7fcfc345599d981fcb69d6aca22672183da03c", "logical_stages": 12, "package_complete": false, "planned_prefix_smoke": "passed", "prefix_complete": true, "source_hash": "d24ebb7abddc3986eec3dda1fee5a8f498f39a2e30118810dfeb2f04d65e6292", "variation_digest": "e5499adb7e8f2830555e2478fc227d2fec9d10f1e90c4e4fb823f49f136852cf"}
+{"actual_stages": 5, "code_revision": "test-revision", "duplicates_and_unknown_preserved": true, "execution_digest": "f119223a473d1a821f67b2366c7fcfc345599d981fcb69d6aca22672183da03c", "logical_stages": 12, "package_complete": false, "planned_prefix_smoke": "passed", "prefix_complete": true, "source_hash": "d24ebb7abddc3986eec3dda1fee5a8f498f39a2e30118810dfeb2f04d65e6292", "variation_digest": "e5499adb7e8f2830555e2478fc227d2fec9d10f1e90c4e4fb823f49f136852cf"}
+{"actual_stages": 6, "code_revision": "test-revision", "corpus_counts": {"abstention_review_load": 0.5, "accepted": 3, "eligible": 6, "expected_unique": 3, "false_merge": 0, "false_merge_rate": 0.0, "false_negative": 0, "population": "synthetic declared-namespace development mentions; rule-contract labels only", "precision": 1.0, "recall": 1.0, "true_positive": 3, "unresolved": 3}, "execution_digest": "d673cbb53671d9bc340ff8f0faf52caed5ed13110fb9dbdde3bf6f76293ad7ab", "first_five_digest": "321a03838c60c2a9128129308f66325a6071452a8694d4b025bbfe9ac6a63d0c", "logical_stages": 12, "python": "3.12.3", "resolved_prefix_probe": "passed", "storage": {"input_files_deleted": true, "source_and_catalog_exact": true, "source_deleted": true, "status": "passed"}, "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562"}
+{"actual_stages": 5, "current_and_retained_distinct": true, "explicit_retry_and_abandonment": true, "legacy_assertions_equal": true, "local_prefix_jobs_smoke": "passed", "logical_stages": 12, "restart_result_export_equal": true, "source_and_config_deleted": true}
+{"probe": "passed", "mode": "storage", "case_count": 17, "case_errors": 0, "recovery": {"input_files_deleted": true, "result_export_sha256": "918e8658081502f89e31c663d2f9a23f6af37a20f548053203dba5488529c66d", "companion_sources_exact": 2}, "python": "/tmp/procurement-package-smoke-qi1sbiec/venv-1/bin/python", "installed_runtime": {"version": "3.12.3", "package_path": "/tmp/procurement-package-smoke-qi1sbiec/venv-1/lib/python3.12/site-packages/procurement_intelligence_lab/__init__.py", "storage_driver_available": true}, "invalid_domain_installed_modes_rejected": 2, "controller_python": "3.12.3", "code_revision": "d53be4f96da68cf8a4886d189bda1b06a658ddbc", "wheel_sha256": "08348d09b17b7fa6cc5db97a8aec069e862d68e253bd573df748deeca8303562", "population": "Synthetic policy integration examples; no enterprise approval or general entity-resolution quality claim."}
+package smoke test passed
+.                                                                        [100%]
+1 passed in 0.07s
+..                                                                       [100%]
+2 passed in 0.08s
+..                                                                       [100%]
+2 passed in 0.06s
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 0.68s
+.                                                                        [100%]
+1 passed in 0.10s
+.                                                                        [100%]
+1 passed in 0.07s
+.                                                                        [100%]
+1 passed in 0.06s
+..                                                                       [100%]
+2 passed in 0.07s
+.                                                                        [100%]
+1 passed in 0.07s
+.....                                                                    [100%]
+5 passed in 0.08s
+.                                                                        [100%]
+1 passed in 0.07s
+.                                                                        [100%]
+1 passed in 0.08s
+.                                                                        [100%]
+1 passed in 0.09s
+..                                                                       [100%]
+2 passed, 10 deselected in 0.10s
+....                                                                     [100%]
+4 passed, 8 deselected in 0.12s
+..                                                                       [100%]
+2 passed, 10 deselected in 0.11s
+....                                                                     [100%]
+4 passed, 8 deselected in 0.14s
+.                                                                        [100%]
+1 passed, 3 deselected in 0.11s
+.                                                                        [100%]
+1 passed, 3 deselected in 0.12s
+.                                                                        [100%]
+1 passed, 5 deselected in 0.20s
+...                                                                      [100%]
+3 passed, 15 deselected in 0.81s
+.                                                                        [100%]
+1 passed, 35 deselected in 1.34s
+.                                                                        [100%]
+1 passed, 35 deselected in 0.58s
+.                                                                        [100%]
+1 passed, 7 deselected in 0.07s
+.......                                                                  [100%]
+7 passed, 8 deselected in 0.06s
+.                                                                        [100%]
+1 passed, 1 deselected in 0.06s
+....                                                                     [100%]
+4 passed, 70 deselected in 0.08s
+C001: Claims use governed resolved state
+  $ uv run pytest -q tests/contract/test_claim_semantics.py::test_unresolved_identity_cannot_become_an_authoritative_gpu_claim
+  known bad: rejected
+C002: Sparse XLSX coordinates preserve fields
+  $ uv run pytest -q tests/contract/test_xlsx_coordinates.py
+  known bad: rejected
+C003: Default browser flow carries required scope
+  $ uv run pytest -q tests/integration/test_web_happy_path.py
+  known bad: rejected
+C004: Installed wheel runs the advertised demo
+  $ uv run python tools/package_smoke.py
+  known bad: rejected
+C005: Reconciliation selects a governing claim
+  $ uv run pytest -q tests/unit/test_reconciliation.py
+  known bad: rejected
+C006: Claim traces are specific and truthful
+  $ uv run pytest -q tests/contract/test_claim_semantics.py::test_each_claim_trace_contains_only_material_source_evidence tests/unit/test_evidence_contract.py::test_incomplete_price_and_unresolved_identity_abstain_from_canonical_state
+  known bad: rejected
+C007: Adapters reject unsupported capabilities
+  $ uv run pytest -q tests/contract/test_retrieval_adapter.py
+  known bad: rejected
+C008: State constructors enforce semantic invariants
+  $ uv run pytest -q tests/regression/test_state_invariants.py
+  known bad: rejected
+C009: Platform semantics do not depend on a concrete vertical
+  $ uv run pytest -q tests/unit/test_architecture_boundaries.py::test_platform_never_imports_a_vertical
+  known bad: rejected
+C010: Every logical stage contract resolves to a concrete platform type
+  $ uv run pytest -q tests/unit/test_universal_stage_semantics.py::test_every_catalog_contract_resolves_to_a_concrete_type
+  known bad: rejected
+C011: Generated Dependabot pull requests use a bounded machine contract
+  $ uv run pytest -q tests/unit/test_pr_contract.py::test_pr_contract_main_accepts_bounded_dependabot_generated_body
+  known bad: rejected
+C012: Missing purchase order requires positive coverage evidence
+  $ uv run pytest -q tests/regression/test_anomaly_qualification.py
+  known bad: rejected
+C013: Revision staleness requires explicit supersession evidence
+  $ uv run pytest -q tests/regression/test_anomaly_qualification.py::test_unequal_revision_labels_do_not_prove_supersession
+  known bad: rejected
+C014: PO assertions are qualified before line reconciliation
+  $ uv run pytest -q tests/regression/test_anomaly_assessment_correctness.py
+  known bad: rejected
+C015: Anomaly identity binds assessment context
+  $ uv run pytest -q tests/regression/test_anomaly_assessment_correctness.py::test_changed_assessment_context_cannot_inherit_lifecycle_history
+  known bad: rejected
+C016: Late commitment rejects superseded required schedules
+  $ uv run pytest -q tests/regression/test_anomaly_assessment_correctness.py::test_superseded_required_schedule_cannot_drive_late_commitment
+  known bad: rejected
+C017: Browser review displays the durable saved brief identity
+  $ uv run pytest -q tests/unit/test_live_review_page.py::test_live_page_exact_review_and_clarification_wiring
+  known bad: rejected
+C018: Failed replacement preserves the exact persisted browser brief
+  $ uv run pytest -q tests/unit/test_review_page_recovery.py -k retain
+  known bad: rejected
+C019: Browser failure messages do not expose private transport fragments
+  $ uv run pytest -q tests/unit/test_review_page_recovery.py -k 'malformed or json'
+  known bad: rejected
+C020: Locked browser callbacks cannot issue follow-up history reads
+  $ uv run pytest -q tests/unit/test_review_page_recovery.py -k lock
+  known bad: rejected
+C021: Malformed successful replacement preserves exact review authority
+  $ uv run pytest -q tests/unit/test_review_page_recovery.py -k success
+  known bad: rejected
+C022: Non-applicability retains observed failures
+  $ uv run pytest -q tests/unit/test_agent_trajectory.py -k non_applicability
+  known bad: rejected
+C023: Completion closes recorded causal path
+  $ uv run pytest -q tests/unit/test_agent_trajectory.py -k terminal_event
+  known bad: rejected
+C024: CLI build identity binds code bytes
+  $ uv run pytest -q tests/integration/test_agent_run_cli.py -k build_identity
+  known bad: rejected
+C025: Malformed tool output cannot record success
+  $ uv run pytest -q tests/contract/test_corpus_agent_tools.py -k 'invalid_port_output or malformed_nested'
+  known bad: rejected
+C026: Saved replay survives active version replacement
+  $ uv run pytest -q tests/contract/test_exact_brief_review.py -k saved_version_replay
+  known bad: rejected
+C027: Vanished item maps to stale brief conflict
+  $ uv run pytest -q tests/contract/test_exact_brief_review.py -k vanished_item
+  known bad: rejected
+C028: Human reconciliation remains prospective and retains conflicting evidence
+  $ uv run pytest -q tests/contract/test_governing_claim_policy.py -k human_selection_is_prospective_and_retains_losing_claim
+  known bad: rejected
+C029: Roadmap reports require substantive sections
+  $ uv run pytest -q tests/unit/test_roadmap_review.py -k parse_report
+  known bad: rejected
+C030: Null source claims require unresolved derivation context
+  $ uv run pytest -q tests/regression/test_source_assertion_context.py -k null_without_context
+  known bad: rejected
+C031: Expected and observed state require an actual UTC offset
+  $ uv run pytest -q tests/regression/test_state_invariants.py -k offsetless
+  known bad: rejected

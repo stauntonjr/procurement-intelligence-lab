@@ -1,5 +1,24 @@
 # Project handoff
 
+## Durable local RESOLVE jobs — 2026-10-25
+
+The owner approved design36b9378 for M1
+[#244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244), native child of #36.
+Accepted ADR048, the [approved design](../superpowers/specs/2026-10-25-resolved-prefix-jobs-design.md)
+and [implementation plan](../superpowers/plans/2026-10-25-resolved-prefix-jobs.md) define the additive
+six-stage profile. The [public contract](../architecture/local-resolved-prefix-jobs.md) pins exact
+catalog/policy/runtime inputs, preserves explicit attempts/fencing, publishes
+source/prefix/resolved/current-attempt success atomically and supports source-free recovery.
+Original five-stage jobs keep their namespace, graph and public outputs.
+
+[Qualification](../development/evidence/issue-244/README.md) separates source revision, clean installed
+artifacts, compatibility and independent review. Issue244 records protected PR/main delivery and
+terminal Project status; those receipts, rather than this design status, establish main acceptance.
+The [pre-slice audit](audits/2026-10-25-resolved-jobs.md) failed Gemini HTTP503 on main7426724;
+direct source/Issue/Project review and structural audit are separate evidence. No provider
+replacement is inferred. Broader #36/M3, queues/workers/listeners, RECONCILE jobs and fresh
+seven-stage orchestration remain open. Preserve Native/inline and one independent final review.
+
 ## Shared semantic vocabulary — 2026-10-25
 
 [#20](https://github.com/stauntonjr/procurement-intelligence-lab/issues/20) consolidates the
@@ -12,8 +31,8 @@ verification and delivery status. Broader M0–M9 acceptance remains separate.
 
 The [pre-slice audit](audits/2026-10-25-shared-vocabulary.md) succeeded on main03b0826; direct
 repository/Issue/Project review is retained separately. Shared architecture descriptions now
-reflect delivered planning and bounded execution. Fresh seven-stage orchestration and RESOLVE
-jobs remain subsequent work, alongside broader candidate-generation/benchmark work under M3.
+reflect delivered planning and bounded execution. The additive RESOLVE jobs slice is indexed above. Fresh seven-stage orchestration and broader
+candidate-generation/benchmark work under M3 remain subsequent work.
 
 ## State-construction invariant completion — 2026-10-25
 
