@@ -43,6 +43,7 @@ if TYPE_CHECKING:
     from procurement_intelligence_lab.ports.resolved_execution_archive import (
         ResolvedExecutionArchive,
     )
+    from procurement_intelligence_lab.ports.resolved_prefix_jobs import ResolvedPrefixJobs
 
 from procurement_intelligence_lab.adapters.local_artifacts import (
     LocalFileIngest,
@@ -1254,4 +1255,67 @@ def build_reconciliation_archive_reader(dsn: str):
         build_reconciliation_archive(dsn),
         validate_completed_reconciliation,
         lambda retained: archive_codec().dumps(retained).encode("utf-8"),
+    )
+
+
+def build_resolved_prefix_job_service(
+    *, clock: Callable[[], datetime], journal_factory: Callable[[], "ResolvedPrefixJobs"]
+):
+    """Reconstruct only the exact supported pinned six-stage local job recipe."""
+    from procurement_intelligence_lab.application.resolved_prefix_job_admission import RECIPE
+    from procurement_intelligence_lab.application.resolved_prefix_jobs import (
+        ResolvedPrefixJobService,
+    )
+    from procurement_intelligence_lab.domains.procurement.normalization import CountUnit
+    from procurement_intelligence_lab.domains.procurement.resolution_policy import (
+        BomResolutionPolicy,
+    )
+    from procurement_intelligence_lab.platform.execution.identity import same
+    from procurement_intelligence_lab.platform.processing.resolved_contracts import (
+        PinnedResolvedPrefixDefinition,
+    )
+    from procurement_intelligence_lab.platform.processing.resolved_errors import (
+        ResolvedJobContractError,
+    )
+    from procurement_intelligence_lab.platform.semantics.errors import SemanticContractError
+
+    store = MemoryArtifactContent()
+
+    def prepare_stored(d: PinnedResolvedPrefixDefinition):
+        try:
+            if d.recipe_id != RECIPE:
+                raise ResolvedJobContractError("unsupported stored resolved-job recipe")
+            values = dict(d.prefix.normalization_parameters)
+            normal = BomNormalizationPolicy(
+                CountUnit(values["quantity_unit"]),
+                values["currency"],
+                CountUnit(values["price_unit"]),
+            )
+            policy = BomResolutionPolicy.from_parameters(d.policy.parameters)
+            service = build_planned_resolved_bom_service(
+                manifest=d.prefix.manifest,
+                registry=d.prefix.registry,
+                config=d.prefix.config,
+                normalization_policy=normal,
+                resolution_policy=policy,
+                candidate_input=d.candidate_input,
+                clock=clock,
+                content_store=store,
+            )
+            prepared = service.prepare(d.resolved_request)
+            expected = PinnedResolvedPrefixDefinition.from_prepared(
+                prepared,
+                recipe_id=RECIPE,
+                normalization_parameters=tuple(sorted(normal.as_dict().items())),
+            )
+            if not same(d, expected):
+                raise ResolvedJobContractError("stored pins disagree with supported runtime")
+            return prepared
+        except (SemanticContractError, ValueError, TypeError, KeyError, AttributeError):
+            raise ResolvedJobContractError(
+                "stored resolved definition is unsupported by the current deployment"
+            ) from None
+
+    return ResolvedPrefixJobService(
+        journal_factory, prepare_stored, store, validate_completed_resolved_bom_prefix, clock
     )

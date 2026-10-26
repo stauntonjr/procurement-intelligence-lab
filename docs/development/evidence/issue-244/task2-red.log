@@ -1,0 +1,59 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+___________ test_guard_observes_one_actual_capture_before_structure ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-134/test_guard_observes_one_actual0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf244cb05b4d0>
+
+    def test_guard_observes_one_actual_capture_before_structure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        job,p,raw=job_input(tmp_path)
+        captures=[]
+        monkeypatch.setattr(StructureExecutor,'invoke',forbidden)
+        def guard(captured: Any):
+            captures.append(captured.artifact.content_hash)
+            raise ResolvedJobContractError('declared byte mismatch')
+        with pytest.raises(ResolvedJobContractError):
+>           run_resolved_prefix(p,clock=lambda:NOW,capture_guard=guard)
+E           TypeError: run_resolved_prefix() got an unexpected keyword argument 'capture_guard'
+
+tests/unit/test_resolved_job_execution.py:27: TypeError
+__________________ test_guard_success_keeps_six_actual_stages __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-134/test_guard_success_keeps_six_a0')
+
+    def test_guard_success_keeps_six_actual_stages(tmp_path: Path):
+        _,p,_=job_input(tmp_path)
+        seen=[]
+>       done=run_resolved_prefix(p,clock=lambda:NOW,capture_guard=lambda c:seen.append(c.artifact.artifact_id))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_resolved_prefix() got an unexpected keyword argument 'capture_guard'
+
+tests/unit/test_resolved_job_execution.py:34: TypeError
+_ test_pinned_preparation_does_not_construct_persistence_and_rejects_unsupported_recipe _
+
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-134/test_pinned_preparation_does_n0')
+
+    def test_pinned_preparation_does_not_construct_persistence_and_rejects_unsupported_recipe(tmp_path: Path):
+        job,p,_=job_input(tmp_path)
+>       service=bootstrap.build_resolved_prefix_job_service(clock=lambda:NOW,journal_factory=forbidden)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'procurement_intelligence_lab.bootstrap' has no attribute 'build_resolved_prefix_job_service'. Did you mean: 'build_local_prefix_job_service'?
+
+tests/unit/test_resolved_job_execution.py:42: AttributeError
+__ test_preparation_rejects_unrecognized_pinned_implementation_before_storage __
+
+tmp_path = PosixPath('/tmp/pytest-of-jrs/pytest-134/test_preparation_rejects_unrec0')
+
+    def test_preparation_rejects_unrecognized_pinned_implementation_before_storage(tmp_path: Path):
+        job,_,_=job_input(tmp_path)
+>       service=bootstrap.build_resolved_prefix_job_service(clock=lambda:NOW,journal_factory=forbidden)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'procurement_intelligence_lab.bootstrap' has no attribute 'build_resolved_prefix_job_service'. Did you mean: 'build_local_prefix_job_service'?
+
+tests/unit/test_resolved_job_execution.py:51: AttributeError
+=========================== short test summary info ============================
+FAILED tests/unit/test_resolved_job_execution.py::test_guard_observes_one_actual_capture_before_structure
+FAILED tests/unit/test_resolved_job_execution.py::test_guard_success_keeps_six_actual_stages
+FAILED tests/unit/test_resolved_job_execution.py::test_pinned_preparation_does_not_construct_persistence_and_rejects_unsupported_recipe
+FAILED tests/unit/test_resolved_job_execution.py::test_preparation_rejects_unrecognized_pinned_implementation_before_storage
+4 failed in 0.18s
