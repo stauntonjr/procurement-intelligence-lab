@@ -81,13 +81,15 @@ explicit missing-link and abstention states rather than fabricate provenance.
 
 ## Delivered runtime boundary and acceptance evidence
 
-At baseline main `03b0826`, contracts exist for all twelve logical stages. Actual package execution
+Contracts exist for all twelve logical stages. Actual package execution
 is bounded: [#226](https://github.com/stauntonjr/procurement-intelligence-lab/issues/226) executes
 INGEST through ASSERT; [#236](https://github.com/stauntonjr/procurement-intelligence-lab/issues/236)
 adds explicit RESOLVE; [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
 invokes only RECONCILE over selected validated retained RESOLVE producers. This does not establish
-a fresh seven-stage multi-document run. Local durable jobs remain five-stage under
-[#232](https://github.com/stauntonjr/procurement-intelligence-lab/issues/232). Procurement has no
+a fresh seven-stage multi-document run. Original local durable jobs remain five-stage under
+[#232](https://github.com/stauntonjr/procurement-intelligence-lab/issues/232); the additive
+[RESOLVE jobs profile](local-resolved-prefix-jobs.md) under #244 wraps six actual stages with
+separate pins, identifiers and retention. Its Issue records exact main acceptance. Procurement has no
 PREDICT, DECIDE or ACT executors/policies under this package contract; separate showcase paths do
 not prove full-package execution. Broader Issue and milestone acceptance remains independent.
 

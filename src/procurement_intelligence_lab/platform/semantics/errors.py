@@ -24,7 +24,9 @@ class ErrorCode(StrEnum):
     RESOLVED_PREFIX_JOB_BUSY = "pil.policy.resolved_prefix_job_busy"
     RESOLVED_PREFIX_JOB_FENCED = "pil.policy.resolved_prefix_job_fenced"
     RESOLVED_PREFIX_JOB_NOT_FOUND = "pil.input.resolved_prefix_job_not_found"
-    RESOLVED_PREFIX_JOB_INTEGRITY_INVALID = "pil.infrastructure.resolved_prefix_job_integrity_invalid"
+    RESOLVED_PREFIX_JOB_INTEGRITY_INVALID = (
+        "pil.infrastructure.resolved_prefix_job_integrity_invalid"
+    )
     RESOLVED_PREFIX_JOB_UNAVAILABLE = "pil.infrastructure.resolved_prefix_job_unavailable"
     LOCAL_PREFIX_JOB_INVALID = "pil.input.local_prefix_job_invalid"
     LOCAL_PREFIX_JOB_CONFLICT = "pil.policy.local_prefix_job_conflict"

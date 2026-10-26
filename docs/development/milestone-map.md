@@ -102,12 +102,13 @@ global freshness, result materialization and general/automatic recomputation ope
 
 ## Ratified horizontal domain-platform workstream
 
-Selected next runtime direction: M1 [#244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244),
+Owner-approved bounded runtime slice: M1 [#244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244),
 native child of #36, [durable local RESOLVE jobs](../superpowers/specs/2026-10-25-resolved-prefix-jobs-design.md).
 The additive six-stage job namespace/capability preserves ADR045 attempts and ADR046 execution,
 pinning full catalog audit evidence and publishing source/prefix/resolved/attempt success atomically.
-ADR048 and the written proposal are pending owner approval; implementation has not started and no
-new runtime acceptance is claimed. Existing five-stage v1 jobs remain unchanged. Broader #36/M3,
+The owner approved design36b9378; accepted ADR048 and the implementation plan govern delivery.
+[Qualification](evidence/issue-244/README.md) and Issue244 distinguish branch verification from
+protected main acceptance. Existing five-stage v1 jobs remain unchanged. Broader #36/M3,
 RECONCILE jobs, queues/workers and fresh seven-stage orchestration remain subsequent work.
 
 Delivered owner-selected direction: decision #235 (M3, parent #14),
@@ -124,7 +125,8 @@ accepted ADR047. The bounded implementation invokes one current RECONCILE strate
 archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.
 The owner approved design `2c1b759`; implementation [#239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
 and its [executable plan](../superpowers/plans/2026-10-24-retained-resolve-reconciliation.md) are owner-approved at `24d20f0`; PR240 merged the bounded capability at4591a0c; exact main acceptance is retained under issue-239. No broader M4 completion is claimed. Preserve Native/inline with
-one independent final review. RESOLVE jobs and fresh multi-document orchestration remain deferred.
+one independent final review. RESOLVE jobs are tracked separately under #244 above; fresh
+multi-document orchestration remains deferred.
 
 Feature #232 / approved decision #231 (M1, native children of #36) introduces the
 [durable local prefix job lifecycle](../architecture/local-prefix-jobs.md): immutable arrival and
