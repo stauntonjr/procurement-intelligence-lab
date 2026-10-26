@@ -59,6 +59,15 @@ package smoke and31 public oracle/known-bad pairs. One independent review31c1ff0
 Issue118 retains the actual protected delivery/main receipt and final Project status; broader M4
 and #109 remain open. No new authority, anomaly/arithmetic/freshness policy, jobs or deployment.
 
+## Shared vocabulary consolidation — 2026-10-25
+
+M0 [#20](https://github.com/stauntonjr/procurement-intelligence-lab/issues/20) indexes accepted
+artifact-through-action semantics in the [shared glossary](../architecture/semantic-model.md),
+with governing Issue/type references and explicit evidence, epistemic and authority distinctions.
+Existing stage-registry, universal-contract and invariant tests check ordering and typed semantics;
+this documentation slice changes no runtime contract. The Issue retains exact review/verification
+and main-delivery status. Broader M0/M3/M4 and orchestration/job work stay open.
+
 ## Current core architecture continuation — 2026-10-19
 
 Issue #201 (M1, part of #20/#7) introduces the real procurement declaration and
@@ -101,7 +110,7 @@ execution, mention-bound evidence/abstention and atomic retention. The owner app
 for #236 is owner-approved at `64f787b`; the [explicit six-stage runtime and recovery commands](../architecture/planned-resolve-prefix.md) deliver the bounded slice through PR237 on main `a8de65db7ae6b6192a937ae930859d1b205be5aa`. #235/#236 are closed and Project Done; exact qualification, independent review and installed main proof are retained in #236. No broader M3 completion is claimed. Existing five-stage jobs stay unchanged;
 broader #14/#42/#39/#43/#45 and listener/worker work under #36 remain open.
 
-Owner-approved next core slice: M4 decision #238 (native parent #20),
+Delivered core slice: M4 decision #238 (native parent #20),
 [retained-producer required-quantity RECONCILE](../superpowers/specs/2026-10-24-retained-resolve-reconciliation-design.md),
 accepted ADR047. The bounded implementation invokes one current RECONCILE strategy over explicitly selected validated
 archived six-stage producers using ratified policy v1. It does not claim fresh seven-stage execution.

@@ -2,6 +2,10 @@
 
 Status: implementation contract for [Issue #151](https://github.com/stauntonjr/procurement-intelligence-lab/issues/151).
 
+The [shared semantic vocabulary](semantic-model.md) links each concept to its evidence,
+authority boundary and governing Issue. The catalog below defines schedulable stages; adjacent
+concepts such as mentions and reconciliation decisions remain explicit contracts.
+
 ## Meaning of complete
 
 The universal logical pipeline is **semantically complete** when every stage has:
@@ -66,10 +70,13 @@ The semantic contracts are reusable definitions, not claims of deployed capabili
   [BOM unit/currency policy](../domains/procurement/bom-normalization.md), preserving raw source fields;
 - existing procurement behavior executes through DETECT with the limitations documented in the
   procurement semantic model;
-- no procurement `DomainPackage` is yet wired to the runtime;
+- the procurement `DomainPackage` is wired to actual synchronous INGEST-through-ASSERT execution
+  under #226 and explicit RESOLVE execution under #236; #239 invokes only RECONCILE over selected
+  validated retained RESOLVE producers, not a fresh seven-stage run;
 - PREDICT, DECIDE, and ACT have no procurement executors or policies;
 - Issue #205 supplies descriptor admission and deterministic logical-to-physical planning
-  ([contract](runtime-planning.md)); stage execution and semantic execution traces remain future work; and
+  ([contract](runtime-planning.md)); the bounded execution paths above retain actual stage events
+  and receipts. Full-package execution and general neutral-stage execution remain subsequent work; and
 - a second production vertical remains an M9 proof, while the inventory fixture is only a
   portability counterexample.
 

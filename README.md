@@ -105,7 +105,8 @@ uses SQLite, and search, vector, and graph systems are replaceable projections.
 Core semantics are framework-independent Python dataclasses behind ports and
 adapters.
 
-Read the [procurement semantic model](docs/domains/procurement/semantic-model.md),
+Read the [shared semantic vocabulary](docs/architecture/semantic-model.md),
+[procurement semantic model](docs/domains/procurement/semantic-model.md),
 [logical-stage contracts and runtime limits](docs/architecture/universal-stage-semantics.md),
 [evidence drill-down](docs/architecture/evidence-and-ux.md), and
 [prospective reconciliation contract](docs/adr/034-prospective-human-reconciliation.md)

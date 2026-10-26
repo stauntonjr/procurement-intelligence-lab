@@ -2,9 +2,14 @@
 
 The system has a semantic core, application use cases, ports, adapters, interfaces, observability, and evaluation. Ingestion is append-oriented and evidence-preserving. Canonical procurement state is a projection of governed assertions, never a replacement for the ledger.
 
-The first vertical slice is synthetic XLSX/PDF BOM → structure → mapping → normalization → source assertions → simple deterministic resolution → canonical BOM → Postgres/CLI. Chat, agents, graph, forecasting, and fleet-scale claims are later milestones.
+The initial vertical used synthetic XLSX BOMs. The current package executes a bounded XLSX prefix
+through RESOLVE and a separate RECONCILE operation over retained producers; fresh seven-stage
+orchestration remains subsequent work. The evidence-review showcase is a separate delivered path.
+Forecasting and fleet-scale claims remain outside the qualified package execution boundary.
+See the [shared semantic vocabulary and runtime limits](semantic-model.md),
+[planned RESOLVE prefix](planned-resolve-prefix.md) and [retained reconciliation](retained-reconciliation.md).
 
-The ratified horizontal platform contract keeps that semantic sequence while making procurement a declarative domain package. Platform-owned stage definitions, semantic contracts, and strategy interfaces; domain-owned bindings, records, policy parameters, and algorithms; and deployment-owned implementation configuration remain separate. The deterministic compiler emits a language-neutral manifest; a future runtime planner will combine it with a source profile and capability registry without branching on the domain name. See [Platform semantics and vertical ownership](platform-semantics.md), [Domain packages and stage planning](domain-package-and-stage-planning.md), the [conformance contract](domain-package-conformance.md), the [domain vertical registry](domain-verticals.md), and [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md). The registry names procurement as the only active production vertical and records the gate for the next one.
+The ratified horizontal platform contract keeps that semantic sequence while making procurement a declarative domain package. Platform-owned stage definitions, semantic contracts, and strategy interfaces; domain-owned bindings, records, policy parameters, and algorithms; and deployment-owned implementation configuration remain separate. The deterministic compiler emits a language-neutral manifest; the runtime planner combines it with a source profile and capability registry without branching on the domain name. See [Platform semantics and vertical ownership](platform-semantics.md), [Domain packages and stage planning](domain-package-and-stage-planning.md), the [conformance contract](domain-package-conformance.md), the [domain vertical registry](domain-verticals.md), and [ADR-022](../adr/022-domain-semantics-and-physical-stage-planning.md). The registry names procurement as the only active production vertical and records the gate for the next one; that classification does not establish production readiness.
 
 ## Boundaries
 
