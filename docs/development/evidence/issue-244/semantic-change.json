@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": "#244",
-  "revision": "a4fc6862ea923494035c9be41c8595c8a0bb24e3",
+  "revision": "2ab7580ff2c4c4d35da5e12e9c10047beeb66569",
   "surfaces": [
     "durable six-stage local jobs",
     "atomic source/prefix/resolved/attempt publication",
@@ -135,13 +135,38 @@
       ],
       "outcome": "passed",
       "evidence": "docs/development/evidence/issue-244/challenges.json"
+    },
+    {
+      "argv": [
+        "make",
+        "check"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/check.log"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--extra",
+        "workflow",
+        "python",
+        "docs/development/evidence/issue-244/legacy-comparison.py",
+        "/home/jrs/procurement-intelligence-lab/.venv/bin/python",
+        "/tmp/pil-resolve-jobs-design/.venv/bin/python",
+        "/tmp/pil-resolve-jobs-design",
+        "/tmp/pil-244-dsn.txt",
+        "/tmp/pil-244-legacy.json"
+      ],
+      "outcome": "passed",
+      "evidence": "docs/development/evidence/issue-244/legacy-comparison.json"
     }
   ],
   "review": {
-    "revision": "a4fc6862ea923494035c9be41c8595c8a0bb24e3",
-    "mode": "independent_fresh_context",
+    "revision": "2ab7580ff2c4c4d35da5e12e9c10047beeb66569",
+    "mode": "self_fresh_pass",
     "findings": [],
     "unresolved_findings": []
   },
-  "completion": "not_ready"
+  "completion": "ready"
 }

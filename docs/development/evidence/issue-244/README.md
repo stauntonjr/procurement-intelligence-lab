@@ -48,3 +48,9 @@ RED reproduced that omission; the explicit expected set was extended with exactl
 literals, preserving all old strings, category closure and uniqueness. All18 error-contract tests
 then passed. Runtime/package bytes remain identical to the independent reviewed wheel. The final
 full rerun, rather than that failed initial run, is the completion gate; both logs are retained.
+
+Final qualification at `2ab7580ff2c4c4d35da5e12e9c10047beeb66569`: 2078 passed/22 explicit browser-live skips, zero
+storage skips; line92.04%/branch80.75%, unchanged ratchets.
+All286 package files still match the independently reviewed wheel. The completed semantic artifact
+records this later author fresh pass, while independent-review.md preserves the separate original
+independent revision. Subsequent qualification commits change evidence/documentation only.
