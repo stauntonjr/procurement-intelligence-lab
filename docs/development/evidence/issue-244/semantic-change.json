@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "issue": "#244",
+  "revision": "36b93784978a8a574289d2f2ff14f49ef059ac47",
+  "surfaces": [
+    "durable six-stage local jobs",
+    "atomic source/prefix/resolved/attempt publication",
+    "new explicit CLI and source-free recovery"
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "docs/development/agent-loop.md"
+  ],
+  "skills": [
+    ".agents/skills/semantic-change-loop/SKILL.md",
+    ".agents/skills/implement-domain-logic/SKILL.md",
+    ".agents/skills/add-adapter/SKILL.md",
+    ".agents/skills/test-public-interface/SKILL.md",
+    ".agents/skills/release-smoke/SKILL.md",
+    ".agents/skills/review-semantic-change/SKILL.md"
+  ],
+  "contract": {
+    "authoritative_inputs": "Approved #244 design; exact artifact arrival and all pinned prefix/catalog/raw resolution policy/registration data; scoped explicit command and attempt evidence",
+    "authoritative_output": "Typed resolved job journal and full current-attempt six-stage success plus separate first-retained source/prefix/resolved receipts",
+    "scope_as_of": "Exact tenant/project/site/version; pinned source/capture/context/catalog times; fixed-offset monotonic server lifecycle times and CAS/fences",
+    "governing_policy": "ADR045 explicit lifecycle/uncertainty and accepted ADR048; unchanged ADR046 normalized-exact matching/abstention",
+    "evidence_retained": "Full request/raw catalog/source bytes, six actual stage events, all source claims/resolution outcomes, current versus historical/first retention and command acknowledgements",
+    "typed_failures": "Resolved-job invalid/not-found, conflict/busy/fenced, integrity-invalid/unavailable with finite sanitized diagnostics; uncertain acknowledgement is never FAILED"
+  },
+  "scenarios": [
+    {
+      "id": "empty_missing_unknown",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    },
+    {
+      "id": "multiplicity_conflict",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    },
+    {
+      "id": "scope_time",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    },
+    {
+      "id": "numeric_boundaries",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    },
+    {
+      "id": "unsupported_malformed",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    },
+    {
+      "id": "public_artifact",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    },
+    {
+      "id": "safe_counterexample",
+      "disposition": "applicable",
+      "evidence": [],
+      "rationale": "Pending planned executable qualification; no completion claimed."
+    }
+  ],
+  "commands": [],
+  "review": {
+    "revision": "36b93784978a8a574289d2f2ff14f49ef059ac47",
+    "mode": "self_fresh_pass",
+    "findings": [],
+    "unresolved_findings": [
+      "Implementation and final review pending."
+    ]
+  },
+  "completion": "not_ready"
+}

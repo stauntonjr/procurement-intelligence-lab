@@ -1,6 +1,6 @@
 # ADR-048: Durable local RESOLVE jobs with pinned catalog evidence
 
-Status: proposed; not owner-approved and not implemented. Primary M1,
+Status: accepted by owner “continue” after the published written design36b9378 was presented for implementation approval. Product implementation/acceptance remain separate. Primary M1,
 [Issue #244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244), parent #36.
 [Written proposal](../superpowers/specs/2026-10-25-resolved-prefix-jobs-design.md).
 
@@ -12,7 +12,7 @@ The owner selected durable RESOLVE jobs as the next runtime direction after PR24
 records validate exact five-stage types, metadata, snapshots and codecs; widening them in place
 would violate their frozen request and evidence contract.
 
-## Proposed decision
+## Decision
 
 Add a distinct `local_resolved_prefix_jobs/v1` capability, recipe and public caller. Pin the full
 existing first-five definition plus exact catalog audit bytes, resolution policy and sixth-stage
@@ -41,5 +41,5 @@ fault qualification, installed/public proof and frozen legacy comparisons. It in
 identity algorithm, model, queue, lease, automatic retry, RECONCILE job, external side effect or
 operational-agent authority. Broader #36/#14/#39/#43/#45 and linked Issue criteria remain open.
 
-Approval of this proposal authorizes implementation planning; design/review alone does not establish
+Owner approval authorizes implementation of this bounded design; design/review alone does not establish
 runtime or main acceptance. The Issue and final implementation receipt must record those separately.

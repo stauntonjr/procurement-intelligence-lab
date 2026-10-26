@@ -1,9 +1,9 @@
 # Durable local RESOLVE jobs
 
-Status: proposed for owner review. The owner selected this runtime direction after PR243; this
-written proposal is not yet approved and provides no runtime acceptance. Primary M1,
+Status: owner-approved at published revision36b9378 by the subsequent “continue” instruction.
+The unchanged semantic contract below is approved for implementation, not runtime acceptance. Primary M1,
 [Issue #244](https://github.com/stauntonjr/procurement-intelligence-lab/issues/244), native parent #36.
-Baseline: main `7426724078af1038ad8b009b8cccf236e31dec82`. Proposed ADR048 records the boundary.
+Baseline: main `7426724078af1038ad8b009b8cccf236e31dec82`. Accepted ADR048 records the boundary.
 
 ## Intent and constraints
 
@@ -35,7 +35,7 @@ Developer actor labels remain provenance, not production authentication or opera
    it cannot establish one atomic six-stage job success and changes retry/publication semantics.
 
 The owner selected durable RESOLVE jobs as the direction; option1 and the detailed choices below
-are the author's proposed implementation, subject to approval of this document.
+are the author's engineering choices accepted by approval of this written document.
 
 ## Inputs and identities
 

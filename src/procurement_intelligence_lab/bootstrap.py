@@ -272,6 +272,20 @@ def archive_codec():
         StartIntent,
         TransitionKind,
     )
+    from procurement_intelligence_lab.platform.processing.resolved_contracts import (
+        PinnedResolutionMetadata,
+        PinnedResolvedPrefixDefinition,
+        ResolvedAbandonAttemptCommand,
+        ResolvedAttemptSuccess,
+        ResolvedAttemptToken,
+        ResolvedJobDefinition,
+        ResolvedJobHistoryPage,
+        ResolvedJobJournalReceipt,
+        ResolvedJobTransition,
+        ResolvedJobView,
+        ResolvedStartAttemptCommand,
+        ResolvedStartClaim,
+    )
     from procurement_intelligence_lab.platform.semantics.archive import (
         ArchiveReceipt,
         DocumentSnapshot,
@@ -336,6 +350,18 @@ def archive_codec():
 
     return SemanticCodec(
         (
+            PinnedResolutionMetadata,
+            PinnedResolvedPrefixDefinition,
+            ResolvedJobDefinition,
+            ResolvedStartAttemptCommand,
+            ResolvedAbandonAttemptCommand,
+            ResolvedAttemptToken,
+            ResolvedAttemptSuccess,
+            ResolvedJobTransition,
+            ResolvedJobJournalReceipt,
+            ResolvedStartClaim,
+            ResolvedJobView,
+            ResolvedJobHistoryPage,
             OperationAuthorityEvidence,
             ReconciliationPolicyEvidence,
             RetainedReconciliationInputs,
