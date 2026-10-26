@@ -1,0 +1,17 @@
+{
+  "baseline": "03b08260e8888f77840a47354d968f561019e861",
+  "changed_files": [
+    "README.md",
+    "docs/adr/047-retained-resolution-required-quantity-reconciliation.md",
+    "docs/architecture/overview.md",
+    "docs/architecture/universal-stage-semantics.md",
+    "docs/development/milestone-map.md",
+    "docs/domains/procurement/semantic-model.md",
+    "docs/project/handoff.md",
+    "docs/architecture/semantic-model.md",
+    "docs/project/audits/2026-10-25-shared-vocabulary.md"
+  ],
+  "local_link_targets_checked": 241,
+  "missing_targets": [],
+  "runtime_test_tool_example_package_ci_eval_diff_empty": true
+}

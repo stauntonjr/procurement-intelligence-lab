@@ -1,0 +1,31 @@
+{
+  "issue_count": 128,
+  "label_count": 31,
+  "milestone_count": 10,
+  "missing": {
+    "fields": [],
+    "labels": [],
+    "milestones": [],
+    "views": []
+  },
+  "project": {
+    "field_count": 25,
+    "id": "PVT_kwHOAiy8Ic4BgORL",
+    "item_count": 129,
+    "managed_views": [
+      "Architecture decisions",
+      "Evaluation results",
+      "Evidence-gated queue",
+      "Harness hardening",
+      "Milestone roadmap",
+      "Planning drift",
+      "Review readiness",
+      "Semantic challenges"
+    ],
+    "number": 6,
+    "title": "Procurement Intelligence Lab",
+    "view_count": 11
+  },
+  "repository": "stauntonjr/procurement-intelligence-lab",
+  "viewer": "stauntonjr"
+}

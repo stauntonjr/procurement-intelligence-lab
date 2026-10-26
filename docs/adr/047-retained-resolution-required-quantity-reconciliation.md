@@ -1,6 +1,10 @@
 # ADR-047: Reconcile retained resolution producers under required-quantity policy
 
-Status: accepted by owner approval of design `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24. Plan24d20f0 approved; implementation in progress, no product acceptance.
+Status: accepted by owner approval of design `2c1b759768cfd577c3d9e4a589b655d390b46c9f` on 2026-10-24.
+Approved plan24d20f0 is delivered through PR240 on main4591a0c, with the main receipt indexed by
+PR241 at9818d09. [Issue #239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239)
+and [main-delivery evidence](../development/evidence/issue-239/main-delivery.json) retain exact
+protected delivery and bounded installed acceptance; broader M4 remains open.
 
 ## Context
 

@@ -1,5 +1,20 @@
 # Project handoff
 
+## Shared semantic vocabulary — 2026-10-25
+
+[#20](https://github.com/stauntonjr/procurement-intelligence-lab/issues/20) consolidates the
+[shared glossary](../architecture/semantic-model.md) from accepted ADR-003/ADR-022 and existing
+typed contracts. It links artifact-through-action concepts to their governing Issues and
+distinguishes source claims, resolved identity, policy-backed governing claims, state, forecasts,
+recommendations, approval and action results. This is documentation of existing semantics;
+it changes no runtime behavior, policy, schema or authority. The Issue records exact review,
+verification and delivery status. Broader M0–M9 acceptance remains separate.
+
+The [pre-slice audit](audits/2026-10-25-shared-vocabulary.md) succeeded on main03b0826; direct
+repository/Issue/Project review is retained separately. Shared architecture descriptions now
+reflect delivered planning and bounded execution. Fresh seven-stage orchestration and RESOLVE
+jobs remain subsequent work, alongside broader candidate-generation/benchmark work under M3.
+
 ## State-construction invariant completion — 2026-10-25
 
 [Issue118](https://github.com/stauntonjr/procurement-intelligence-lab/issues/118) (M4, follow-up to
@@ -38,7 +53,8 @@ archived RESOLVE producers, invokes only RECONCILE, applies ratified authority p
 current versus historical/first-retained evidence. It governs required_quantity or abstains;
 original five/six-stage, archive and local-job contracts stay compatible. It adds no fresh
 seven-stage flow, aggregation, enterprise approval verification, observed procurement or ACT.
-Broader M4/#20/#118 and listener/worker work remain open.
+Broader M4 and listener/worker work remain open. #118 is delivered above; #20's shared-vocabulary
+documentation is indexed above, with its actual status retained in the Issue.
 
 [Decision #238](https://github.com/stauntonjr/procurement-intelligence-lab/issues/238),
 [implementation #239](https://github.com/stauntonjr/procurement-intelligence-lab/issues/239),

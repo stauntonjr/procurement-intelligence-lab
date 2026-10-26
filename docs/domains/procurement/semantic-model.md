@@ -1,5 +1,9 @@
 # Semantic model
 
+The [shared semantic vocabulary](../../architecture/semantic-model.md) defines the concepts,
+their evidence and authority distinctions, and the governing Issue contracts. This page records
+procurement-specific meanings; it does not redefine the platform glossary or stage topology.
+
 ```text
 Artifact → [Structuring transformation event] → StructuredDocument
 → [Mapping transformation event] → MappedDocument → Normalized observations
